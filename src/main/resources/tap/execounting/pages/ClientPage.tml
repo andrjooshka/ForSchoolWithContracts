@@ -1,0 +1,52 @@
+<html t:type="layout" t:pageTitle="${client.name}" 
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" 
+	xmlns:p="tapestry:parameter">
+
+	<span style="position: absolute; top: 100px; right: 150px;">
+		<t:form>
+			<t:checkbox t:id="switchEditor" value="editorActiveAlways" onclick="this.form.submit();"/>
+			<t:label for="switchEditor"/>
+		</t:form>
+	</span>
+	
+	<!--stats-->
+	<table class="stats">
+		<tr>
+			<th>Занимается у:</th>
+			<td>${currentTeachersInfo}</td>
+		</tr>
+		<tr>
+			<th>С нами с:</th>
+			<td>${firstContractDate}</td>
+		</tr>
+		<tr>
+			<th>Баланс:</th>
+			<td>${client.balance}</td>
+		</tr>
+		<tr>
+			<th>Действующих договоров:</th>
+			<td>${client.activeContracts.size()}</td>
+		</tr>
+		<tr>
+			<th>Всего договоров:</th>
+			<td>${client.contracts.size()}</td>
+		</tr>
+		<tr>
+			<th>На сумму:</th>
+			<td>${client.return}</td>
+		</tr>
+	</table>
+	
+	<t:zone t:id="ezone">
+		<t:if test="editorActive">
+			<t:editors.addcontract t:id="editor"/>
+			<p:else>
+				<t:eventlink event="addContract" zone="ezone">Добавить договор</t:eventlink>
+			</p:else>
+		</t:if>
+	</t:zone>
+	
+	<t:loop source="contracts" value="contract">
+		<t:showcontract contract="contract" />
+	</t:loop>
+</html>

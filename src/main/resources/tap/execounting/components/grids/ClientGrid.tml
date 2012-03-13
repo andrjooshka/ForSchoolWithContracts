@@ -1,0 +1,32 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+	
+	<div>
+		<t:form>
+			<t:label for="nameFilter"/>
+			<t:textfield t:id="nameFilter" value="nameFilter"/>
+			<t:submit value="Обновить"/>
+		</t:form>
+	</div>
+	<t:zone t:id="ezone">
+		<t:if test="editorActive">
+			<t:editors.addclient t:id="editor"/>
+		</t:if>
+	</t:zone>
+	
+	<t:actionlink t:id="add" zone="ezone">Добавить нового</t:actionlink>
+	<br/>
+	<t:grid source="source" model="model" row="unit" rowsPerPage="message:rowsperpage" 
+		pagerPosition="top"	reorder="delete">
+		<p:teachersCell>
+			${teachers}
+		</p:teachersCell>
+	    <p:deleteCell>
+			<t:form t:id="DeleteForm" context="unit">
+				<t:submit value="message:delete-label"/>
+			</t:form>
+		</p:deleteCell>
+		<p:editCell>
+			<t:actionlink t:id="edit" zone="ezone" context="unit">Edit</t:actionlink>
+		</p:editCell>
+	</t:grid>
+</t:container>

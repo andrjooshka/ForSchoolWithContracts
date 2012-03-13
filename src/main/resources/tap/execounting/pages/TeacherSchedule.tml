@@ -1,0 +1,44 @@
+<html t:type="layout"
+		t:pageTitle="Личное расписание : ${teacher.name}"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+        
+        <div style="position:relative; padding-top: 100px;">
+	        <div class="controller">
+	        	<h4>Контроллер времени</h4>
+	        	<t:actionlink t:id="weekbackward">неделю назад </t:actionlink>
+	        	<t:actionlink t:id="weekforward">неделю вперед</t:actionlink>
+	        	
+	        	<t:form t:id="datecontroller">
+	        		<t:datefield value="firstdate" /><br/>
+	        		<t:submit value="message:submit-label"/>
+	        	</t:form>
+	        </div>
+	        <t:zone t:id="editZone" elementName="div">
+	        	<t:if test="adding">
+	        		<t:editors.addevent t:id="eventEditor"/>
+	        	</t:if>
+	        </t:zone>
+	        <t:actionlink t:id="addNew" zone="editZone">Добавить новое занятие</t:actionlink>
+	        <table class="data">
+	        	<tr>
+	        		<t:loop source="datedata" value="singledate">
+	        			<th class="rb lb wb">
+	        				${singledate}
+	        			</th>
+	        		</t:loop>
+	        	</tr>
+	        	<t:loop source="rows" value="row">
+	        		<tr>
+	        			<t:loop source="dates" value="date">
+	        				<td class="rb lb">
+	        					<t:if test="event">
+	        						<t:showevent event="event"/>
+	        					</t:if>
+	        				</td>
+	        			</t:loop>
+	        		</tr>
+	        	</t:loop>
+	        </table>
+	    </div>    
+</html>

@@ -1,0 +1,30 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+	<t:if test="updatemode">
+		Договор от ${con.date} : Редактирование
+		<p:else>
+			Новый договор
+		</p:else>
+	</t:if> 
+	<div>
+		<t:beaneditform object="con" submitlabel="message:submit-label" 
+		exclude="id,clientId,freeze" reorder="teacherId,typeId,contractTypeId">
+			<p:contractTypeId>
+				<t:label for="contractTypeSelect"/>
+				<t:select t:id="contractTypeSelect" value="con.contractTypeId" 
+				model="contractTypeIdsModel"/>
+			</p:contractTypeId>
+			<p:date>
+				<t:label for="date"/>
+				<t:datefield t:id="date" value="con.date" validate="required"/>
+			</p:date>
+			<p:typeId>
+				<t:label for="etypes" />
+				<t:textfield t:id="etypes" value="etype" t:mixins="AutoComplete"/>
+			</p:typeId>
+			<p:teacherId>
+				<t:label for="teachers" />
+				<t:textfield t:id="teachers" value="teacher" t:mixins="AutoComplete"/> 
+			</p:teacherId>
+		</t:beaneditform>
+	</div>
+</t:container>

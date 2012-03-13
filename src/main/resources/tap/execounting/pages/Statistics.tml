@@ -1,0 +1,133 @@
+<html t:type="layout" t:pageTitle="Статистика"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+        <!-- Most of the page content, including <head>, <body>, etc. tags, comes from Layout.tml -->
+        
+        <div>
+        	<h3>Сводка</h3>
+        	<t:zone t:id="statZone" id="statZone">
+	        	<table class="stats">
+	        		<tr>
+	        			<th>
+	        				Всего занятий:
+	        			</th>
+	        			<td>
+	        				${events.size()}
+	        			</td>
+	        		</tr>
+	        		<tr>
+	        			<th>
+	        				Денег:
+	        			</th>
+	        			<td>
+	        				${money}
+	        			</td>
+	        		</tr>
+	        		<tr>
+	        			<th>
+	        				Доля школы:
+	        			</th>
+	        			<td>
+	        				${share}
+	        			</td>
+	        		</tr>
+	        		<tr>
+	        			<th>
+	        				Указанный процент:
+	        			</th>
+	        			<td>
+	        				${percentedMoney}
+	        			</td>
+	        		</tr>
+	        	</table>
+        	</t:zone>
+        </div>
+
+		<br/>
+		<br/>
+		<t:form t:id="FilterForm" zone="resultZone">
+			<table class="filters">
+				<tr>
+					<th>
+						Педагог
+					</th>
+					
+					<th>
+						Школа
+					</th>
+					
+					<th>
+						Класс
+					</th>
+					
+					<th>
+						Тип занятия
+					</th>
+				</tr>
+				
+				<tr class="bb">
+					<td>
+						<t:select model="teacherSelect" value="teacherId"  blankOption="ALWAYS" 
+						blankLabel="message:blank-label" t:validate="none"/>
+					</td>
+					
+					<td>
+						<t:select model="facilitySelect" t:id="facilityId" value="facilityId"  blankOption="ALWAYS"
+						 blankLabel="message:blank-label" t:validate="none" zone="roomZone"/>
+					</td>
+					 
+					 <td>
+					<t:zone t:id="roomZone">
+						<t:select model="roomSelect" value="roomId" blankOption="ALWAYS" 
+						blankLabel="message:blank-label" t:validate="none"/>
+					</t:zone>
+					</td>
+					
+					<td>
+				    	<t:select model="typeSelect" value="typeId" blankOption="ALWAYS" 
+				    	blankLabel="message:blank-label"  t:validate="none"/>
+			    	</td>
+			    	
+			    </tr>
+			    <tr>
+			    	<th>
+						Статус
+					</th>					
+					
+					<th>
+						Дата 1
+					</th>
+					
+					<th>
+						Дата 2
+					</th>
+					<th>
+						Раcсчитываемый процент
+					</th>
+			    </tr>
+			    <tr>
+			    	<td>
+				    	<t:select model="boolSelect" value="state" 
+				    	blankLabel="message:blank-label" t:validate="none"/>
+			    	</td>
+			    	
+			    	<td>
+			    		<t:datefield value="date1" />
+			    	</td>
+			    	
+			    	<td>
+			    		<t:datefield value="date2" />
+			    	</td>
+			    	<td>
+			    		<t:textfield value="percent"/>
+			    	</td>
+			    </tr>
+	    	</table>
+	    	<t:submit value="Обновить" />
+	    </t:form>
+	    
+	    <t:zone t:id="resultZone" id="resultZone">
+	    	<t:grids.eventgrid source="events"/>
+	    </t:zone>
+
+</html>

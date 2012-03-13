@@ -1,0 +1,60 @@
+<html t:type="layout" pageTitle="${facility.name} : Расписание"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+        <h3 t:type="zone" t:id="datelabelZone" id="datelabelZone">
+        	Дата: ${formatteddate}
+        </h3>
+        <div class="controlled">
+        
+        	<!--controller-->
+        	<span class="controller">
+        		<t:form t:id="controlpanel" zone="resultszone">
+        			<table>
+        				<tr>
+	        				<th>Школа:</th>
+		        			<td><t:select model="facilityselect" value="facilityId" blankoption="never"/></td>
+		        		</tr>
+		        		<tr>
+		        			<th>Дата:</th>
+		        			<td><t:datefield  t:id="datecontroller" value="currentDate"/></td>
+		        		</tr>
+        			</table>
+        			<t:submit value="message:submit-label"/>
+        		</t:form>
+        	</span>
+        	
+        	
+        	<t:eventlink t:event="add" zone="editorZone">Добавить новое событие</t:eventlink>
+        	<t:zone t:id="editorZone">
+        		<t:if test="adding">
+        			<t:editors.addevent t:id="eventEditor"/>
+        		</t:if>
+        	</t:zone>
+        	<t:zone t:id="resultszone" id="resultszone">
+	        	<table class="kate">
+	        		<tr>
+	        			<t:loop source="facility.rooms" value="room">
+		        			<th>
+		        			${room.name}
+		        			</th>
+	        			</t:loop>
+	        		</tr>
+	        		
+	        		<t:loop source="rows" value="row">
+	        			<tr>
+		        			<t:loop source="facility.rooms" value="room">
+			        			<td>
+			        			<t:if test="event">
+	        						<t:showevent event="event"/>
+	        					</t:if>	
+			        			</td>
+			        		</t:loop>
+	        			</tr>
+	        		</t:loop>
+	        		
+	        	</table>
+	        </t:zone>
+        </div>
+
+
+</html>

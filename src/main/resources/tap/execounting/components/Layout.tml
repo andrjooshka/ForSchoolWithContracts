@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+    xmlns:p="tapestry:parameter">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title>${pageTitle}</title>
+</head>
+<body id="homepage">
+	<!--start header-->
+	<div class="wrapper bs" id="header">
+		<ul class="nav">
+			<t:security.authenticated>
+				<li><span style="float: left;">${user?.fullName}</span></li>
+				<li>
+					<a href="#" t:type="pageLink" t:page="general">Расписания</a>
+				</li>
+				<li>
+					<a href="#" t:type="pageLink" t:page="clients">Ученики</a>
+				</li>
+				<li>
+					<a href="#" t:type="pageLink" t:page="statistics">Статистика</a>
+				</li>
+				<li>
+					<a href="#" t:type="pageLink" t:page="crud">Работа с БД</a>
+				</li>
+				<li>
+					<a href="#" t:type="pageLink" t:page="settings">Настройки</a>
+				</li>
+				<li class="last">
+					<a href="#" t:type="actionlink" t:id="logout" id="logout">Выход</a>
+				</li>
+			</t:security.authenticated>
+		</ul>
+	</div>
+	<!--end header-->
+	<!-- start page -->
+        <div id="page">
+            <!-- start content -->
+            <div id="content">
+                <div class="post">
+                    <div class="pagetitle">
+                        <h3>${pageTitle}</h3>
+                    </div>
+                    <div class="entry">
+                        <t:body/>
+                    </div>
+                </div>
+            </div>
+            <!-- end content -->
+            <br style="clear: both;"/>
+        </div>
+        <!-- end page -->
+        <!-- start footer -->
+	<!-- <div id="footer">
+            <p class="legal">
+                &copy;2011 management. All Rights Reserved.
+            </p>
+        </div>-->
+        <!-- end footer -->
+</body>
+</html>
