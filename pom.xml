@@ -104,7 +104,7 @@ of testing facilities designed for use with TestNG (http://testng.org/), so it's
         <dependency>
 		  <groupId>se.unbound</groupId>
 		  <artifactId>tapestry-tagselect</artifactId>
-		  <version>1.4.1</version>
+		  <version>${tagselect-version}</version>
 		</dependency>
 
     </dependencies>
@@ -169,9 +169,11 @@ of testing facilities designed for use with TestNG (http://testng.org/), so it's
     </repositories>
 
     <properties>
+	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <tapestry-release-version>5.3.2</tapestry-release-version>
         <servlet-api-release-version>2.5</servlet-api-release-version>
         <testng-release-version>5.14.9</testng-release-version>
         <easymock-release-version>3.0</easymock-release-version>
+        <tagselect-version>1.4.1</tagselect-version>
     </properties>
 </project>
