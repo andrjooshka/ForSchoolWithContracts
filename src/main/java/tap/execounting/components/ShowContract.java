@@ -174,8 +174,9 @@ public class ShowContract {
 	public String getEventInfo() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("#" + loopEvent.getId() + " от: ");
-		calendar.setTime(loopEvent.getDate());
-		sb.append(calendar.stringByTuple("day", "month", "year"));
+		if(loopEvent.getDate()!=null)
+			sb.append(calendar.setTime(loopEvent.getDate()).stringByTuple("day", "month", "year"));
+		else sb.append("нет информации о дате");
 
 		return sb.toString();
 	}

@@ -6,7 +6,7 @@ import java.util.TimeZone;
 public interface SuperCalendar {
 	
 	Date getTime();
-	void setTime(Date time);
+	SuperCalendar setTime(Date time);
 	
 	TimeZone getTimeZone();
 	void setTimeZone(TimeZone timeZone);

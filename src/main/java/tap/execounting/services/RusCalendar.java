@@ -87,8 +87,9 @@ public class RusCalendar implements SuperCalendar {
 		return cal.getTime();
 	}
 
-	public void setTime(Date time) {
+	public SuperCalendar setTime(Date time) {
 		cal.setTime(time);
+		return this;
 	}
 
 	public TimeZone getTimeZone() {

@@ -25,11 +25,7 @@
 				<t:select t:id="room" model="roomSelect" value="event.roomid" blankOption="ALWAYS" blankLabel="message:blank-label"/>
 			</t:zone>
 		</p:roomId>
-		
-		<p:date>
-			<t:label for="date"/>
-			<t:datefield t:id="date" format="yyyy-MM-dd HH:mm:ss" validate="required" value="event.date"/>
-		</p:date>
+
 		
 		<p:typeId>
 			<t:label for="eventTypes"/>
@@ -43,6 +39,20 @@
 			<div t:type="tag/tagselect" style="width: 300px; margin-left: 35%;" t:id="clientfield" t:value="clientnames"/>
 		</p:clients>
 		
+				
+		<p:date >
+			<!--input type="text" class="datepicker" /-->
+			<p style="height: 200px;">
+				<t:label for="date"/>
+				<div t:type="datefield" t:id="date" format="yyyy-MM-dd HH:mm" validate="required" value="event.date"/>
+			</p>
+		</p:date>
+		
 	</t:beaneditform>
 	</div>
+	<script>
+		$(function(){
+			$(".datepicker").datepicker();
+		});
+	</script>
 </t:container>

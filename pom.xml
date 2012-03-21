@@ -106,7 +106,7 @@ of testing facilities designed for use with TestNG (http://testng.org/), so it's
 		  <artifactId>tapestry-tagselect</artifactId>
 		  <version>${tagselect-version}</version>
 		</dependency>
-
+		
     </dependencies>
     <build>
         <finalName>execounting</finalName>

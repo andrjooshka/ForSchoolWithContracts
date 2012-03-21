@@ -412,11 +412,44 @@ table.contract{ width: 1000px;}
 
 
 
-
-
-
-
-
+div.datePicker {
+	font-size: 10px;
+	padding: 0px;
+}
+div.datePicker table{
+	font-size: 10px;
+	height: 50px;
+	padding: 0px;
+}
+div.datePicker tr{
+	font-size: 10px;
+	height: 10px;
+}
+div.datePicker td{
+	font-size: 10px;
+	height: 10px;
+}
+div.datePicker th{
+	font-size: 10px;
+	height: 10px;
+}
+div.datePicker div.footer, table.footerTable{
+	font-size: 10px;
+	height: 10px;
+}
+table.footerTable td{
+	height: 15px;
+}
+div.datePicker div.header, table.headerTable{
+	height: 20px;
+}
+table.headerTable tr, table.headerTable td{
+	height: 20px;
+	padding: 0px;
+}
+td.labelContainer{
+	header: 20px;
+}
 
 
 
