@@ -15,7 +15,11 @@
 			      	</p:else>
 		      	</t:if>
 	      	</div>
-      	
+      		
+      		<t:form>
+      		<t:datefield value="date" hidetextfield="true"/>
+			</t:form>
+			      	
 	      	<t:if test="schoolMode">
 	      		<ul>
 		      		<t:loop source="facilities" value="facility">

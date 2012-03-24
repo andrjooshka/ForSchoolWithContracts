@@ -1,5 +1,6 @@
 package tap.execounting.pages;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -37,6 +38,8 @@ public class General {
 	private Zone showZone;
 	@InjectPage
 	private SchoolSchedule schoolPage;
+	@Property
+	private Date date;
 	
 	@InjectPage
 	private TeacherSchedule ts;
