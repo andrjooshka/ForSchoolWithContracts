@@ -6,9 +6,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import tap.execounting.services.SuperCalendar;
-
-import org.apache.tapestry5.ajax.MultiZoneUpdate;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
@@ -16,6 +13,7 @@ import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 
 import tap.execounting.components.editors.AddEvent;
 import tap.execounting.dal.CrudServiceDAO;
@@ -23,6 +21,7 @@ import tap.execounting.data.FacilitySelectModel;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Room;
+import tap.execounting.services.SuperCalendar;
 
 public class SchoolSchedule {
 
@@ -33,6 +32,8 @@ public class SchoolSchedule {
 	private Request request;
 	@Inject
 	private SuperCalendar sc;
+	@Inject
+	private AjaxResponseRenderer renderer;
 
 	//page components
 	@Component
@@ -105,7 +106,7 @@ public class SchoolSchedule {
 	Object onSuccessFromControlPanel(){
 		refreshEvents();
 		facility = dao.find(Facility.class, facilityId);
-		return request.isXHR() ? new MultiZoneUpdate(resultsZone).add(datelabelZone) : null; 
+		return request.isXHR() ? renderer.addRender(resultsZone).addRender(datelabelZone) : null; 
 	}
 	
 	Object onAdd(){

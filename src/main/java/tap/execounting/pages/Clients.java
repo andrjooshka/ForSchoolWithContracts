@@ -4,17 +4,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import tap.execounting.services.SuperCalendar;
-
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.SelectModel;
-import org.apache.tapestry5.ajax.MultiZoneUpdate;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 
@@ -24,6 +22,7 @@ import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.ContractType;
 import tap.execounting.entities.Payment;
+import tap.execounting.services.SuperCalendar;
 
 public class Clients {
 
@@ -35,6 +34,8 @@ public class Clients {
 	private Zone statZone;
 	@Inject
 	private Request request;
+	@Inject
+	private AjaxResponseRenderer ajaxResponseRenderer;
 	@Inject
 	private CrudServiceDAO dao;
 	@Inject
@@ -253,7 +254,7 @@ public class Clients {
 
 	// events
 	Object onSubmit() {
-		return request.isXHR() ? new MultiZoneUpdate(statZone).add(gridZone)
+		return request.isXHR() ? ajaxResponseRenderer.addRender(gridZone).addRender(statZone)
 				: null;
 	}
 

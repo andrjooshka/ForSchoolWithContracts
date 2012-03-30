@@ -1,4 +1,8 @@
-<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+<t:container 
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" 
+	xmlns:p="tapestry:parameter"
+	xmlns:j="tapestry-library:jquery">
+	
 	<t:if test="updatemode">
 		Событие ${event.id} : Редактирование
 		<p:else>
@@ -26,6 +30,10 @@
 			</t:zone>
 		</p:roomId>
 
+		<p:date>
+			<t:label for="date"/>
+			<t:datefield t:id="date" value="event.date" style="z-index: 3000;" />
+		</p:date>
 		
 		<p:typeId>
 			<t:label for="eventTypes"/>
@@ -36,23 +44,10 @@
 		<!--clients-->
 		<p:clients>
 			<t:label for="clientfield"/>
-			<div t:type="tag/tagselect" style="width: 300px; margin-left: 35%;" t:id="clientfield" t:value="clientnames"/>
+			<div t:type="tag/tagselect" style="width: 300px; margin-left: 35%; z-index: 0;" t:id="clientfield" t:value="clientnames"/>
 		</p:clients>
 		
-				
-		<p:date >
-			<!--input type="text" class="datepicker" /-->
-			<p style="height: 200px;">
-				<t:label for="date"/>
-				<div t:type="datefield" t:id="date" format="yyyy-MM-dd HH:mm" validate="required" value="event.date"/>
-			</p>
-		</p:date>
 		
 	</t:beaneditform>
 	</div>
-	<script>
-		$(function(){
-			$(".datepicker").datepicker();
-		});
-	</script>
 </t:container>

@@ -413,7 +413,8 @@ table.contract th{ width: 200px;}
 
 
 
-
+.datepicker{z-index: 100;}
+.clearfix { z-index: 0;}
 
 
 

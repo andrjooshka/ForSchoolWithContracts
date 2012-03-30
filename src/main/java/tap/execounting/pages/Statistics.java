@@ -3,15 +3,14 @@ package tap.execounting.pages;
 import java.util.Date;
 import java.util.List;
 
-
 import org.apache.tapestry5.SelectModel;
-import org.apache.tapestry5.ajax.MultiZoneUpdate;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -35,6 +34,8 @@ public class Statistics {
 	private Session session;
 	@Inject
 	private Request request;
+	@Inject
+	private AjaxResponseRenderer renderer;
 
 	// page components
 	@SuppressWarnings("unused")
@@ -148,7 +149,7 @@ public class Statistics {
 	}
 
 	Object onSubmitFromFilterForm() {
-		return request.isXHR() ? new MultiZoneUpdate(resultZone).add(statZone)
+		return request.isXHR() ? renderer.addRender(resultZone).addRender(statZone)
 				: null;
 	}
 
