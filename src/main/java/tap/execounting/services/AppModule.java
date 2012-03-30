@@ -2,10 +2,7 @@ package tap.execounting.services;
 
 import java.io.IOException;
 
-import tap.execounting.dal.DataModule;
-import tap.execounting.dal.HibernateModule;
-
-import org.apache.tapestry5.*;
+import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
@@ -19,9 +16,10 @@ import org.apache.tapestry5.services.RequestFilter;
 import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.validator.ValidatorMacro;
-import org.got5.tapestry5.jquery.JQuerySymbolConstants;
 import org.slf4j.Logger;
 
+import tap.execounting.dal.DataModule;
+import tap.execounting.dal.HibernateModule;
 import tap.execounting.security.AuthenticationFilter;
 
 /**
@@ -66,7 +64,7 @@ public class AppModule
         // you can extend this list of locales (it's a comma separated series of locale names;
         // the first locale name is the default when there's no reasonable match).
         configuration.add(SymbolConstants.SUPPORTED_LOCALES, "ru,en");
-        configuration.add(JQuerySymbolConstants.SUPPRESS_PROTOTYPE, "false");
+        //configuration.add(JQuerySymbolConstants.SUPPRESS_PROTOTYPE, "false");
     }
     
     @Contribute(ValidatorMacro.class)
