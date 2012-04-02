@@ -1,0 +1,27 @@
+<html t:type="layout"
+		t:pageTitle="главная"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+      
+      <div>
+      	<h2>Расписания</h2>
+      	
+      </div>
+      
+      <div>
+      	<h2>Клиенты</h2>
+      </div>
+      
+      <div>
+      	<h2>Занятия</h2>
+      </div>
+      
+      <div>
+      	<h2>База данных</h2>
+      </div>
+      
+      <div>
+      	<h2>Настройки</h2>
+      </div>
+      
+</html>

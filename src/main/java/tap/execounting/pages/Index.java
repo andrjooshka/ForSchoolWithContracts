@@ -6,9 +6,6 @@ import tap.execounting.services.Authenticator;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 
-/**
- * Start page of application tapestry5-hotel-booking.
- */
 @AnonymousAccess
 public class Index
 {
@@ -17,6 +14,6 @@ public class Index
 
     public Object onActivate()
     {
-        return authenticator.isLoggedIn() ? General.class : Signin.class;
+        return authenticator.isLoggedIn() ? Home.class : Signin.class;
     }
 }

@@ -3,7 +3,7 @@ package tap.execounting.security;
 import java.io.IOException;
 
 import tap.execounting.annotations.AnonymousAccess;
-import tap.execounting.pages.General;
+import tap.execounting.pages.Schedules;
 import tap.execounting.pages.Signin;
 import tap.execounting.services.Authenticator;
 
@@ -38,7 +38,7 @@ public class AuthenticationFilter implements ComponentRequestFilter
 
     private final Authenticator authenticator;
 
-    private String defaultPage = General.class.getSimpleName();
+    private String defaultPage = Schedules.class.getSimpleName();
 
     private String signinPage = Signin.class.getSimpleName();
 

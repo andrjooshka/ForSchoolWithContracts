@@ -1,8 +1,6 @@
 package tap.execounting.pages;
 
-import java.util.Date;
 import java.util.List;
-
 
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.InjectPage;
@@ -18,7 +16,7 @@ import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;
 
 
-public class General {
+public class Schedules {
 	
 	@Inject
 	private CrudServiceDAO dao;
@@ -38,8 +36,6 @@ public class General {
 	private Zone showZone;
 	@InjectPage
 	private SchoolSchedule schoolPage;
-	@Property
-	private Date date;
 	
 	@InjectPage
 	private TeacherSchedule ts;

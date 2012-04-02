@@ -14,13 +14,16 @@
 			<t:security.authenticated>
 				<li><span style="float: left;">${user?.fullName}</span></li>
 				<li>
-					<a href="#" t:type="pageLink" t:page="general">Расписания</a>
+					<a href="#" t:type="pageLink" t:page="home">домик</a>
 				</li>
 				<li>
-					<a href="#" t:type="pageLink" t:page="clients">Ученики</a>
+					<a href="#" t:type="pageLink" t:page="schedules">Расписания</a>
 				</li>
 				<li>
-					<a href="#" t:type="pageLink" t:page="statistics">Статистика</a>
+					<a href="#" t:type="pageLink" t:page="clients">Клиенты</a>
+				</li>
+				<li>
+					<a href="#" t:type="pageLink" t:page="statistics">Занятия</a>
 				</li>
 				<li>
 					<a href="#" t:type="pageLink" t:page="crud">Работа с БД</a>
@@ -40,9 +43,6 @@
             <!-- start content -->
             <div id="content">
                 <div class="post">
-                    <div class="pagetitle">
-                        <h3>${pageTitle}</h3>
-                    </div>
                     <div class="entry">
                         <t:body/>
                     </div>

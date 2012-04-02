@@ -14,52 +14,48 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.entities.User;
 
-
 /**
- * Layout component for pages of application tapestry5-hotel-booking.
+ * Layout component for pages of application.
  */
-@Import(stylesheet =
-{ "context:/layout/style.css" })
-public class Layout
-{
-    @Property
-    private String pageName;
-
-    @SuppressWarnings("unused")
-    @Property
-    @Parameter(required = true, defaultPrefix = BindingConstants.LITERAL)
-    private String pageTitle;
-
-    @SuppressWarnings("unused")
-    @Property
-    @Parameter(defaultPrefix = BindingConstants.LITERAL)
-    private Block sidebar;
-    
-    @SuppressWarnings("unused")
+@Import(stylesheet = { "context:/layout/oldstyle.css" })
+public class Layout {
 	@Property
-    @Parameter(defaultPrefix = BindingConstants.LITERAL)
-    private String sidebarTitle;
+	private String pageName;
 
-    @Inject
-    private ComponentResources resources;
+	@SuppressWarnings("unused")
+	@Property
+	@Parameter(required = true, defaultPrefix = BindingConstants.LITERAL)
+	private String pageTitle;
 
-    @Inject
-    private Authenticator authenticator;
+	@SuppressWarnings("unused")
+	@Property
+	@Parameter(defaultPrefix = BindingConstants.LITERAL)
+	private Block sidebar;
 
-    public String getClassForPageName()
-    {
-        return resources.getPageName().equalsIgnoreCase(pageName) ? "current_page_item" : null;
-    }
+	@SuppressWarnings("unused")
+	@Property
+	@Parameter(defaultPrefix = BindingConstants.LITERAL)
+	private String sidebarTitle;
 
-    public User getUser()
-    {
-        return authenticator.isLoggedIn() ? authenticator.getLoggedUser() : null;
-    }
+	@Inject
+	private ComponentResources resources;
 
-    @Log
-    public Object onActionFromLogout()
-    {
-        authenticator.logout();
-        return Index.class;
-    }
+	@Inject
+	private Authenticator authenticator;
+
+	public String getClassForPageName() {
+		return resources.getPageName().equalsIgnoreCase(pageName) ? "current_page_item"
+				: null;
+	}
+
+	public User getUser() {
+		return authenticator.isLoggedIn() ? authenticator.getLoggedUser()
+				: null;
+	}
+
+	@Log
+	public Object onActionFromLogout() {
+		authenticator.logout();
+		return Index.class;
+	}
 }
