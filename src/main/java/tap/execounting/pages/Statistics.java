@@ -55,9 +55,9 @@ public class Statistics {
 	private SelectModel boolSelect;
 	@Component
 	private Zone roomZone;
-	@Component(id = "resultZone")
+	@Component
 	private Zone resultZone;
-	@Component(id = "statZone")
+	@Component
 	private Zone statZone;
 
 	// page properties
@@ -148,9 +148,8 @@ public class Statistics {
 		return roomZone.getBody();
 	}
 
-	Object onSubmitFromFilterForm() {
-		return request.isXHR() ? renderer.addRender(resultZone).addRender(statZone)
-				: null;
+	void onSubmitFromFilterForm() {
+		if(request.isXHR()) renderer.addRender(resultZone).addRender(statZone);
 	}
 
 	void onPrepareForRender() {

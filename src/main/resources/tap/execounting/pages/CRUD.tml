@@ -3,11 +3,13 @@
       	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       	xmlns:p="tapestry:parameter">
         
-        <ul class="nav">
+        <ul class="nav child">
         	<t:loop source="tabs" value="tab">
-        		<li class="${cssForLi}">
-        			<t:eventlink event="switchtab" context="tab">${tab}</t:eventlink>
-        		</li>
+        		<t:eventlink event="switchtab" context="tab" class="${last}">
+	        		<li class="${cssForLi}">
+	        			${tab}
+	        		</li>
+        		</t:eventlink>
         	</t:loop>
         </ul>
         

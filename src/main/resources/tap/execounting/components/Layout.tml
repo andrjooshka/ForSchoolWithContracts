@@ -13,30 +13,44 @@
 		<div class="wrapper bs" id="header">
 			<ul class="nav">
 				<span style="float: left;">
-					<li class="last">${user?.fullName}</li>
+					<li class="last" style="line-height:30px;">${user?.fullName}</li>
 				</span>
 				<span style="float: right; margin-right: 5%;">
-					<li>
-						<a href="#" t:type="pageLink" t:page="home">домик</a>
-					</li>
-					<li class="${cssForLi('Расписания')}">
-						<a href="#" t:type="pageLink" t:page="schedules">Расписания</a>
-					</li>
-					<li class="${cssForLi('Клиенты')}">
-						<a href="#" t:type="pageLink" t:page="clients">Клиенты</a>
-					</li>
-					<li class="${cssForLi('Занятия')}">
-						<a href="#" t:type="pageLink" t:page="statistics">Занятия</a>
-					</li>
-					<li class="${cssForLi('Работа с БД')}">
-						<a href="#" t:type="pageLink" t:page="crud">Работа с БД</a>
-					</li>
-					<li class="${cssForLi('Настройки')}">
-						<a href="#" t:type="pageLink" t:page="settings">Настройки</a>
-					</li>
-					<li class="last">
-						<a href="#" t:type="actionlink" t:id="logout" id="logout">Выход</a>
-					</li>
+					<a href="#" t:type="pageLink" t:page="home">
+						<li>
+							домик
+						</li>
+					</a>
+					<a href="#" t:type="pageLink" t:page="schedules">
+						<li class="${cssForLi('Расписания')}">
+							Расписания
+						</li>
+					</a>
+					<a href="#" t:type="pageLink" t:page="clients">
+						<li class="${cssForLi('Клиенты')}">
+							Клиенты
+						</li>
+					</a>
+					<a href="#" t:type="pageLink" t:page="statistics">
+						<li class="${cssForLi('Занятия')}">
+							Занятия
+						</li>
+					</a>
+					<a href="#" t:type="pageLink" t:page="crud">
+						<li class="${cssForLi('Работа с БД')}">
+							Работа с БД
+						</li>
+					</a>
+					<a href="#" t:type="pageLink" t:page="settings">
+						<li class="${cssForLi('Настройки')}">
+							Настройки
+						</li>
+					</a>
+					<a href="#" t:type="actionlink" t:id="logout" id="logout" class="last">
+						<li>
+							Выход
+						</li>
+					</a>
 				</span>
 			</ul>
 		</div>

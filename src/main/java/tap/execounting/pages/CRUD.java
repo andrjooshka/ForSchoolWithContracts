@@ -7,14 +7,13 @@ public class CRUD {
 
 	@Persist
 	@Property
-	private String selectedTab; // event, type, client, facility, teacher
-	@SuppressWarnings("unused")
+	private String selectedTab;
 	@Property
 	private String tab;
 
 	void onActivate() {
 		if (selectedTab == null)
-			selectedTab = "Clients";
+			selectedTab = "Клиенты";
 	}
 
 	public String[] getTabs() {
@@ -23,16 +22,12 @@ public class CRUD {
 	}
 
 	void onSwitchTab(String tab){
-		System.out.println("\n\n" + tab + "\n\n");
-		
-//		if(tab.equals("Клиенты")) selectedTab="Clients";
-//		if(tab.equals("Учителя")) selectedTab="Teachers";
-//		if(tab.equals("")) selectedTab="Events";
-//		if(tab.equals("Типы событий")) selectedTab="EventTypes";
-//		if(tab.equals("Школы")) selectedTab="Facilities";
 		selectedTab = tab;
-		System.out.println("\n\n" + selectedTab + "\n\n");
-		
+	}
+	
+	public String getLast(){
+		if(tab.equals("Школы")) return "last";
+		return "";
 	}
 	
 	public String getCssForLi(){
