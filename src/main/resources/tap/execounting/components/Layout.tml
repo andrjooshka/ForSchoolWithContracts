@@ -8,12 +8,12 @@
 	<title>${pageTitle}</title>
 </head>
 <body id="homepage">
-	<!--start header-->
-	<div class="wrapper bs" id="header">
-		<ul class="nav">
-			<t:security.authenticated>
+	<t:security.authenticated>
+		<!--start header-->
+		<div class="wrapper bs" id="header">
+			<ul class="nav">
 				<span style="float: left;">
-					<li>${user?.fullName}</li>
+					<li class="last">${user?.fullName}</li>
 				</span>
 				<span style="float: right; margin-right: 5%;">
 					<li>
@@ -38,10 +38,10 @@
 						<a href="#" t:type="actionlink" t:id="logout" id="logout">Выход</a>
 					</li>
 				</span>
-			</t:security.authenticated>
-		</ul>
-	</div>
-	<!--end header-->
+			</ul>
+		</div>
+		<!--end header-->
+	</t:security.authenticated>
 	<!-- start page -->
         <div id="page">
             <!-- start content -->
