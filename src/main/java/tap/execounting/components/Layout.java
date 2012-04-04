@@ -17,7 +17,7 @@ import tap.execounting.entities.User;
 /**
  * Layout component for pages of application.
  */
-@Import(stylesheet = { "context:/layout/oldstyle.css" })
+@Import(stylesheet = { "context:/layout/style.css" })
 public class Layout {
 	@Property
 	private String pageName;

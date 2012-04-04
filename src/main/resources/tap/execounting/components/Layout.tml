@@ -12,28 +12,32 @@
 	<div class="wrapper bs" id="header">
 		<ul class="nav">
 			<t:security.authenticated>
-				<li><span style="float: left;">${user?.fullName}</span></li>
-				<li>
-					<a href="#" t:type="pageLink" t:page="home">домик</a>
-				</li>
-				<li>
-					<a href="#" t:type="pageLink" t:page="schedules">Расписания</a>
-				</li>
-				<li>
-					<a href="#" t:type="pageLink" t:page="clients">Клиенты</a>
-				</li>
-				<li>
-					<a href="#" t:type="pageLink" t:page="statistics">Занятия</a>
-				</li>
-				<li>
-					<a href="#" t:type="pageLink" t:page="crud">Работа с БД</a>
-				</li>
-				<li>
-					<a href="#" t:type="pageLink" t:page="settings">Настройки</a>
-				</li>
-				<li class="last">
-					<a href="#" t:type="actionlink" t:id="logout" id="logout">Выход</a>
-				</li>
+				<span style="float: left;">
+					<li>${user?.fullName}</li>
+				</span>
+				<span style="float: right; margin-right: 5%;">
+					<li>
+						<a href="#" t:type="pageLink" t:page="home">домик</a>
+					</li>
+					<li>
+						<a href="#" t:type="pageLink" t:page="schedules">Расписания</a>
+					</li>
+					<li>
+						<a href="#" t:type="pageLink" t:page="clients">Клиенты</a>
+					</li>
+					<li>
+						<a href="#" t:type="pageLink" t:page="statistics">Занятия</a>
+					</li>
+					<li>
+						<a href="#" t:type="pageLink" t:page="crud">Работа с БД</a>
+					</li>
+					<li>
+						<a href="#" t:type="pageLink" t:page="settings">Настройки</a>
+					</li>
+					<li class="last">
+						<a href="#" t:type="actionlink" t:id="logout" id="logout">Выход</a>
+					</li>
+				</span>
 			</t:security.authenticated>
 		</ul>
 	</div>
