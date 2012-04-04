@@ -1,4 +1,4 @@
-<html t:type="layout" t:pageTitle="${client.name}" 
+<html t:type="layout" t:pageTitle="Клиенты" 
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" 
 	xmlns:p="tapestry:parameter"
 	xmlns:j="tapestry-library:jquery">

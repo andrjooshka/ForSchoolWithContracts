@@ -18,19 +18,25 @@ public class CRUD {
 	}
 
 	public String[] getTabs() {
-		return new String[] { "Клиенты", "Учителя", "События", "Типы событий",
+		return new String[] { "Клиенты", "Учителя", "Занятия", "Предметы",
 				"Школы" };
 	}
 
 	void onSwitchTab(String tab){
 		System.out.println("\n\n" + tab + "\n\n");
 		
-		if(tab.equals("Клиенты")) selectedTab="Clients";
-		if(tab.equals("Учителя")) selectedTab="Teachers";
-		if(tab.equals("События")) selectedTab="Events";
-		if(tab.equals("Типы событий")) selectedTab="EventTypes";
-		if(tab.equals("Школы")) selectedTab="Facilities";
-		
+//		if(tab.equals("Клиенты")) selectedTab="Clients";
+//		if(tab.equals("Учителя")) selectedTab="Teachers";
+//		if(tab.equals("")) selectedTab="Events";
+//		if(tab.equals("Типы событий")) selectedTab="EventTypes";
+//		if(tab.equals("Школы")) selectedTab="Facilities";
+		selectedTab = tab;
 		System.out.println("\n\n" + selectedTab + "\n\n");
+		
+	}
+	
+	public String getCssForLi(){
+		if(tab.equals(selectedTab)) return "activeMenuItem";
+		return "";
 	}
 }

@@ -27,16 +27,6 @@ public class Layout {
 	@Parameter(required = true, defaultPrefix = BindingConstants.LITERAL)
 	private String pageTitle;
 
-	@SuppressWarnings("unused")
-	@Property
-	@Parameter(defaultPrefix = BindingConstants.LITERAL)
-	private Block sidebar;
-
-	@SuppressWarnings("unused")
-	@Property
-	@Parameter(defaultPrefix = BindingConstants.LITERAL)
-	private String sidebarTitle;
-
 	@Inject
 	private ComponentResources resources;
 
@@ -60,7 +50,14 @@ public class Layout {
 	}
 	
 	public String cssForLi(String link){
-		return "";
+		link = link.toLowerCase();
+		String ptitle = pageTitle.toLowerCase();
+		boolean active = false;
+		
+		active = ptitle.equals(link);
+		
+		
+		return active ? "activeMenuItem" : "";
 	}
 }
 

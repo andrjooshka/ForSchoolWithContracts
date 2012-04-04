@@ -1,24 +1,17 @@
 <html 	t:type="layout"
-		t:pageTitle="Работа с базой данных"
+		t:pageTitle="Работа с БД"
       	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       	xmlns:p="tapestry:parameter">
         
         <ul class="nav">
         	<t:loop source="tabs" value="tab">
-        		<li>
-        		<t:eventlink event="switchtab" context="tab">
-	        		<t:if test="tab.equals(selectedTab)">
-	        				<strong>${tab}</strong>
-	        			<p:else>
-	        				${tab}
-	        			</p:else>
-	        		</t:if>
-	        	</t:eventlink>
+        		<li class="${cssForLi}">
+        			<t:eventlink event="switchtab" context="tab">${tab}</t:eventlink>
         		</li>
         	</t:loop>
         </ul>
         
-        <t:if test="selectedTab.equals('Clients')">
+        <!--t:if test="selectedTab.equals('Clients')">
         	<t:grids.clientgrid/>
         </t:if>
         <t:if test="selectedTab.equals('Teachers')">
@@ -31,6 +24,22 @@
         	<t:grids.typegrid/>
         </t:if>
         <t:if test="selectedTab.equals('Facilities')">
+        	<t:grids.facilitygrid/>
+        </t:if-->
+        
+        <t:if test="selectedTab.equals('Клиенты')">
+        	<t:grids.clientgrid/>
+        </t:if>
+        <t:if test="selectedTab.equals('Учителя')">
+        	<t:grids.teachergrid/>
+        </t:if>
+        <t:if test="selectedTab.equals('Занятия')">
+        	<t:grids.lessongrid/>
+        </t:if>
+        <t:if test="selectedTab.equals('Предметы')">
+        	<t:grids.typegrid/>
+        </t:if>
+        <t:if test="selectedTab.equals('Школы')">
         	<t:grids.facilitygrid/>
         </t:if>
 
