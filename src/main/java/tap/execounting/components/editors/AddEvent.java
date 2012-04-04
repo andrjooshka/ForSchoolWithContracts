@@ -89,9 +89,9 @@ public class AddEvent {
 		event = e;
 	}
 
-	public void setup(Event e, boolean save) {
+	public void setup(Event e, boolean update) {
 		setup(e);
-		updateMode = false;
+		updateMode = update;
 	}
 
 	public void setup(Teacher t) {
@@ -114,46 +114,82 @@ public class AddEvent {
 		updateMode = false;
 	}
 
-	void onSubmit() {
-		EventType evet = null;
+	EventType checkType() {
+		EventType eventType = null;
 		List<EventType> etypes = dao.findWithNamedQuery(EventType.ALL);
 		for (EventType et : etypes)
 			if (et.getTitle().equals(etype)) {
-				evet = et;
+				eventType = et;
 				break;
 			}
 
-		if (evet == null)
+		if (eventType == null)
 			throw new IllegalArgumentException("Тип занятий " + etype
 					+ " не найден");
-		event.setTypeId(evet.getId());
+		return eventType;
+	}
+
+	Client findClient(String name) {
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("name", name);
+		Client c = dao.findUniqueWithNamedQuery(Client.BY_NAME, params);
+		if (c == null)
+			throw new IllegalArgumentException("Клиент с именем '" + name
+					+ "' не найден");
+		return c;
+	}
+
+	void onSubmit() {
+		EventType eventType = checkType();
+
+		event.setTypeId(eventType.getId());
 
 		for (String name : clientNames) {
-			System.out.println("\n" + name);
+			// the procedure standard for each client follows
 			if (name != null && name.length() > 3) {
-				HashMap<String, Object> params = new HashMap<String, Object>();
-				params.put("name", name);
-				Client c = dao.findUniqueWithNamedQuery(Client.BY_NAME, params);
-				if (c == null)
-					throw new IllegalArgumentException("Клиент с именем '"
-							+ name + "' не найден");
+				Client c = findClient(name);
 
-				//event type check
+				// source dependent from updatemode
+				List<Contract> source = updateMode ? c.getContracts() : c
+						.getActiveContracts();
+
+				// event type check for compatibility with existing contracts of
+				// the client
 				boolean typeMatch = false;
-				for (Contract con : c.getActiveContracts()) {
+				List<Contract> candidates = new ArrayList<Contract>();
+				for (Contract con : source) {
+					// typeMatch = con.getTypeId() == evet.getId(); //strict
+					// type_id check;
+					typeMatch = con.getEventType().getTypeTitle()
+							.equals(eventType.getTypeTitle()); // soft check
 					
-					//typeMatch = con.getTypeId() == evet.getId(); //strict type_id check;
-					typeMatch = con.getEventType().getTypeTitle().
-							equals(evet.getTypeTitle()); //soft check
-					if (typeMatch) {
-						event.addContract(con);
+					if (event.haveContract(con)) {
+						typeMatch = con.getEventType().getTypeTitle()
+								.equals(eventType.getTypeTitle());
+						if (!typeMatch) {
+							throw new IllegalArgumentException(String.format(
+									"Ошибка: сохраняемое занятие для клиента %s, имеет тип (%s), отличный " +
+									"от типа договора (%s) к которому оно прикреплено. Если вы хотите перекинуть это занятие" +
+									"в другой договор - " +
+									"то сначала удалите его из текущего.",
+									name, eventType.getTitle(), con.getEventType().getTitle()));
+						}
+						candidates.clear();
 						break;
 					}
+
+					if (typeMatch) {
+						candidates.add(con);
+					}
+				}
+				if (candidates.size() > 0) {
+					sort(candidates); // by date ascending
+					event.addContract(candidates.get(0));
 				}
 				if (!typeMatch)
 					throw new IllegalArgumentException(String.format(
 							"По клиенту %s договора на %s не найдено", name,
-							evet.getTitle()));
+							eventType.getTitle()));
 
 			}
 		}
@@ -163,6 +199,18 @@ public class AddEvent {
 		} else {
 			dao.create(event);
 		}
+	}
+
+	private void sort(List<Contract> list) {
+		for (int i = 0; i < list.size() - 1; i++)
+			for (int j = list.size() - 1; j > i; j--) {
+				Contract icon = list.get(i);
+				Contract jcon = list.get(j);
+				if (icon.getDate().after(jcon.getDate())) {
+					list.set(j, icon);
+					list.set(i, jcon);
+				}
+			}
 	}
 
 	Object onValueChangedFromFacilityId(int facilityId) {

@@ -31,8 +31,10 @@
 		</p:roomId>
 
 		<p:date>
+			<div style="height: 250px;">
 			<t:label for="date"/>
-			<t:datefield t:id="date" value="event.date" style="z-index: 3000;" />
+			<t:datefield t:id="date" value="event.date" />
+			</div>
 		</p:date>
 		
 		<p:typeId>

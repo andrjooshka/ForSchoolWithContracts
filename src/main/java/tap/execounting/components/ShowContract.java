@@ -91,11 +91,11 @@ public class ShowContract {
 		addingEvent = true;
 		newEvent = new Event();
 		newEvent.setTypeId(con.getTypeId());
-		newEvent.getContracts().add(con);
+		newEvent.addContract(con);
 		Client c = dao.find(Client.class, con.getClientId());
 		newEvent.getClients().add(c);
 		newEvent.setHostId(con.getTeacherId());
-		eventEditor.setup(newEvent, true);
+		eventEditor.setup(newEvent, false);
 
 		return eventZone.getBody();
 	}
@@ -126,8 +126,7 @@ public class ShowContract {
 	
 	Object onEditEvent(Event e) {
 		addingEvent = true;
-		//newEvent = e;
-		eventEditor.setup(e);
+		eventEditor.setup(e,true);
 
 		return request.isXHR() ? eventZone.getBody() : null;
 	}

@@ -39,7 +39,7 @@ public class ShowEvent {
 	private AddEvent editor;
 
 	Object onEdit(Event e) {
-		editor.setup(e);
+		editor.setup(e,true);
 		updateMode = true;
 		return bodyZone.getBody();
 	}

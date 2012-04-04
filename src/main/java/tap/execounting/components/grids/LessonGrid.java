@@ -46,7 +46,7 @@ public class LessonGrid {
 	
 	Object onActionFromEdit(Event c) {
 		editorActive = true;
-		editor.setup(c);
+		editor.setup(c, true);
 		return ezone.getBody();
 	}
 

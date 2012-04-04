@@ -204,4 +204,10 @@ public class Event implements Comparable<Event> {
 
 		return total;
 	}
+
+	public boolean haveContract(Contract con) {
+		for(Contract c : getContracts())
+			if(c.getId()==con.getId()) return true;
+		return false;
+	}
 }
