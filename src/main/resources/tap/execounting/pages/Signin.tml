@@ -3,7 +3,7 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-	<form t:type="form" class="full-form" t:id="loginForm">
+	<form t:type="form" class="full-form" t:id="loginForm" style="margin-top: 10%; margin-left: 35%;">
 		<t:errors />	
 		<table class="login">
 			<tr>

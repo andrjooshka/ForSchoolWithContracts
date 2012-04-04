@@ -19,19 +19,19 @@
 					<li>
 						<a href="#" t:type="pageLink" t:page="home">домик</a>
 					</li>
-					<li>
+					<li class="${cssForLi('Расписания')}">
 						<a href="#" t:type="pageLink" t:page="schedules">Расписания</a>
 					</li>
-					<li>
+					<li class="${cssForLi('Клиенты')}">
 						<a href="#" t:type="pageLink" t:page="clients">Клиенты</a>
 					</li>
-					<li>
+					<li class="${cssForLi('Занятия')}">
 						<a href="#" t:type="pageLink" t:page="statistics">Занятия</a>
 					</li>
-					<li>
+					<li class="${cssForLi('Работа с БД')}">
 						<a href="#" t:type="pageLink" t:page="crud">Работа с БД</a>
 					</li>
-					<li>
+					<li class="${cssForLi('Настройки')}">
 						<a href="#" t:type="pageLink" t:page="settings">Настройки</a>
 					</li>
 					<li class="last">
@@ -57,11 +57,11 @@
         </div>
         <!-- end page -->
         <!-- start footer -->
-	<!-- <div id="footer">
+		<!--div id="footer">
             <p class="legal">
-                &copy;2011 management. All Rights Reserved.
+                &copy;2012 management. All Rights Reserved.
             </p>
-        </div>-->
+        </div-->
         <!-- end footer -->
 </body>
 </html>

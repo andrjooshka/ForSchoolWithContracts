@@ -58,4 +58,26 @@ public class Layout {
 		authenticator.logout();
 		return Index.class;
 	}
+	
+	public String cssForLi(String link){
+		return "";
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
