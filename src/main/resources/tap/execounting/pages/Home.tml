@@ -2,26 +2,43 @@
 		t:pageTitle="главная"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
-      
-      <div>
-      	<h2>Расписания</h2>
-      	
-      </div>
-      
-      <div>
-      	<h2>Клиенты</h2>
-      </div>
-      
-      <div>
-      	<h2>Занятия</h2>
-      </div>
-      
-      <div>
-      	<h2>База данных</h2>
-      </div>
-      
-      <div>
-      	<h2>Настройки</h2>
-      </div>
-      
+    <div style="margin-left:35%;">
+	    
+	    <t:pagelink page="schedules" style="margin-top: 0px">
+		    <div class="buttondiv">
+		    	<h2>Расписания</h2>
+		    	Расписание школ и учителей
+		    </div>
+	    </t:pagelink>
+	    
+	    <t:pagelink page="clients">
+		    <div class="buttondiv">
+		     	<h2>Клиенты</h2>
+		     	Сводка и отчеты по клиентам
+		    </div>
+	    </t:pagelink>
+	      
+	    <t:pagelink page="statistics">
+		    <div class="buttondiv">
+		      	<h2>Занятия</h2>
+		      	Сводка по проведенным и запланированным занятиям, калькуляция выручки
+		    </div>
+	    </t:pagelink>
+	    
+	    <t:pagelink page="CRUD">
+		    <div class="buttondiv">
+		      	<h2>База данных</h2>
+		      	Редактирование информации о: филиалах, клиентах, предметах, учителях и занятиях
+		    </div>
+	    </t:pagelink>
+	      
+	    <t:pagelink page="settings">
+		    <div class="buttondiv">
+		      	<h2>Настройки</h2>
+		      	Смена пароля
+		    </div>
+	    </t:pagelink>
+	    
+	</div>
+  
 </html>
