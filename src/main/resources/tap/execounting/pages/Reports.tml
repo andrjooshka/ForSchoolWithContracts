@@ -1,0 +1,42 @@
+<html t:type="layout"
+		t:pageTitle="Клиенты"
+      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+      xmlns:p="tapestry:parameter">
+      
+      <div>
+      	<h3>Осталось не более 2 занятий</h3>
+      	<t:grid source="endingLessons" model="modelOfEnding" row="client">
+      		<p:nameCell>
+      			<t:eventlink event="details" context="client">${client.name}</t:eventlink>
+      		</p:nameCell>
+      		<p:endingInfoCell>
+      			${endingInfo}
+      		</p:endingInfoCell>
+      	</t:grid>
+      </div>
+      
+      <div>
+      	<h3>Платеж в ближайшие 2 недели</h3>
+      	<t:grid source="schedPayments" model="modelOfPayments" row="client">
+      		<p:nameCell>
+      			<t:eventlink event="details" context="client">${client.name}</t:eventlink>
+      		</p:nameCell>
+      		<p:paymentsInfoCell>
+      			${paymentInfo}
+      		</p:paymentsInfoCell>
+      	</t:grid>
+      </div>
+      
+      <div>
+      	<h3>Должники</h3>
+      	<t:grid source="debtors" model="modelOfDebtors" row="client">
+      		<p:nameCell>
+      			<t:eventlink event="details" context="client">${client.name}</t:eventlink>
+      		</p:nameCell>
+      		<p:debtInfoCell>
+      			${debtInfo}
+      		</p:debtInfoCell>
+      	</t:grid>
+      </div>
+      
+</html>

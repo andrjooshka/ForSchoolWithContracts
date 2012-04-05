@@ -19,6 +19,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import tap.execounting.services.RusCalendar;
+import tap.execounting.services.SuperCalendar;
+
 @Entity
 @Table(name = "contracts")
 @NamedQueries({
@@ -286,10 +289,21 @@ public class Contract implements Comparable<Contract> {
 		int remaining = 0;
 		try {
 			remaining = getLessonsNumber() - getEvents().size();
+			for (Event e : getEvents())
+				if (!e.getState())
+					remaining++;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return remaining;
+	}
+
+	public List<Event> getScheduledLessons() {
+		List<Event> events = new ArrayList<Event>();
+		for (Event e : getEvents())
+			if (!e.getState())
+				events.add(e);
+		return events;
 	}
 
 	public boolean isComplete() {
@@ -327,4 +341,41 @@ public class Contract implements Comparable<Contract> {
 	public ContractType getContractType() {
 		return contractType;
 	}
+
+	public List<Payment> getPlannedPayments(int days) {
+		SuperCalendar calendar = new RusCalendar();
+		calendar.addDays(days);
+		List<Payment> list = getPlannedPayments();
+		
+		Payment p;
+		for(int i = list.size()-1;i>=0;i--){
+			p = list.get(i);
+			if(p.getDate().after(calendar.getTime())) list.remove(i);
+		}
+		return list;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

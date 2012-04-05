@@ -2,6 +2,12 @@
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" 
 	xmlns:p="tapestry:parameter">
 	
+	<ul class="nav child">
+		<t:pagelink page="reports" class="last">
+			<li>Отчеты</li>
+		</t:pagelink>
+	</ul>
+	
 	<t:form>
 		<h4>Фильтры</h4>
 		<table class="filters">
