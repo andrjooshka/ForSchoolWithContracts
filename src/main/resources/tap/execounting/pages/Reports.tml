@@ -3,40 +3,50 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
       
-      <div>
-      	<h3>Осталось не более 2 занятий</h3>
-      	<t:grid source="endingLessons" model="modelOfEnding" row="client">
-      		<p:nameCell>
-      			<t:eventlink event="details" context="client">${client.name}</t:eventlink>
-      		</p:nameCell>
-      		<p:endingInfoCell>
-      			${endingInfo}
-      		</p:endingInfoCell>
-      	</t:grid>
-      </div>
+	<span style="position: absolute; top: 70px; right: 70px;">
+		<t:form>
+			<t:checkbox t:id="switchPages" value="switchPages" onclick="this.form.submit();"/>
+			<t:label for="switchPages"/>
+		</t:form>
+	</span>
       
-      <div>
-      	<h3>Платеж в ближайшие 2 недели</h3>
-      	<t:grid source="schedPayments" model="modelOfPayments" row="client">
-      		<p:nameCell>
-      			<t:eventlink event="details" context="client">${client.name}</t:eventlink>
-      		</p:nameCell>
-      		<p:paymentsInfoCell>
-      			${paymentInfo}
-      		</p:paymentsInfoCell>
-      	</t:grid>
-      </div>
-      
-      <div>
-      	<h3>Должники</h3>
-      	<t:grid source="debtors" model="modelOfDebtors" row="client">
-      		<p:nameCell>
-      			<t:eventlink event="details" context="client">${client.name}</t:eventlink>
-      		</p:nameCell>
-      		<p:debtInfoCell>
-      			${debtInfo}
-      		</p:debtInfoCell>
-      	</t:grid>
-      </div>
+	<div style="margin-top:20px;">
+	  	<h3>Осталось не более 2 занятий</h3>
+	  	<t:grid source="endingLessons" model="modelOfEnding" row="client" 
+	  	pagerPosition="${pagerPosition}" rowsPerPage="${rows}">
+	  		<p:nameCell>
+	  			<t:eventlink event="details" context="client">${client.name}</t:eventlink>
+	  		</p:nameCell>
+	  		<p:endingInfoCell>
+	  			${endingInfo}
+	  		</p:endingInfoCell>
+	  	</t:grid>
+	</div>
+	  
+	<div style="margin-top:30px;">
+	  	<h3>Платеж в ближайшие 2 недели</h3>
+	  	<t:grid source="schedPayments" model="modelOfPayments" row="client" 
+	  	pagerPosition="${pagerPosition}" rowsPerPage="${rows}">
+	  		<p:nameCell>
+	  			<t:eventlink event="details" context="client">${client.name}</t:eventlink>
+	  		</p:nameCell>
+	  		<p:paymentsInfoCell>
+	  			${paymentInfo}
+	  		</p:paymentsInfoCell>
+	  	</t:grid>
+	</div>
+	  
+	<div style="margin-top:30px;">
+		<h3>Должники</h3>
+	  	<t:grid source="debtors" model="modelOfDebtors" row="client" 
+	  	pagerPosition="${pagerPosition}" rowsPerPage="${rows}">
+	  		<p:nameCell>
+	  			<t:eventlink event="details" context="client">${client.name}</t:eventlink>
+	  		</p:nameCell>
+	  		<p:debtInfoCell>
+	  			${debtInfo}
+			</p:debtInfoCell>
+		</t:grid>
+	</div>
       
 </html>

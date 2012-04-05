@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.annotations.InjectPage;
+import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -160,5 +161,16 @@ public class Reports {
 		@SuppressWarnings("unchecked")
 		List<Contract> list = criteria.list();
 		return list;
+	}
+	
+	@Property
+	@Persist
+	private boolean switchPages;
+	
+	public String getPagerPosition(){
+		return switchPages ? "top" : "none";
+	}
+	public int getRows(){
+		return switchPages ? 20 : 100000;
 	}
 }
