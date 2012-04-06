@@ -109,7 +109,7 @@ a:hover {
 	padding-right: 20px;
 }
 
-.buttondiv { /* Gradient */
+a div.buttondiv { /* Gradient */
 	background: #f6f8f9; /* Old browsers */
 	background: -moz-linear-gradient(top, #f6f8f9 0%, #e5ebee 50%, #d7dee3 51%, #f5f7f9
 		100%); /* FF3.6+ */
@@ -136,6 +136,7 @@ a:hover {
 	padding-left: 20px;
 	padding-right: 20px;
 	padding-top: 10px;
+	text-decoration: none;
 }
 
 .nav a {
@@ -389,7 +390,7 @@ table.data td,table.t-data-grid td {
 }
 
 table.data td:nth-of-type(even),table.t-data-grid td:nth-of-type(even) {
-	background-color: #eee;
+	background-color: #f2f9fe;
 }
 
 table.t-data-grid th.title {

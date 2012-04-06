@@ -62,7 +62,8 @@ public class ClientGrid {
 		return ezone.getBody();
 	}
 
-	void onSubmitFromDeleteForm(Client c) {
+	void onActionFromDelete(Client c) {
+		System.out.println("\n\nfrom actionfromdelete:" + c.getId());
 		dao.delete(Client.class, c.getId());
 	}
 
@@ -72,8 +73,7 @@ public class ClientGrid {
 					componentResources.getMessages());
 			model.exclude("return", "balance", "state", "firstContractDate", "studentInfo");
 			model.add("teachers", null);
-			model.add("Delete", null);
-			model.add("Edit", null);
+			model.add("Action", null);
 		}
 	}
 
