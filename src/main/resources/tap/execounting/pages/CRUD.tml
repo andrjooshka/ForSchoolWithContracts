@@ -13,36 +13,22 @@
         	</t:loop>
         </ul>
         
-        <!--t:if test="selectedTab.equals('Clients')">
-        	<t:grids.clientgrid/>
-        </t:if>
-        <t:if test="selectedTab.equals('Teachers')">
-        	<t:grids.teachergrid/>
-        </t:if>
-        <t:if test="selectedTab.equals('Events')">
-        	<t:grids.lessongrid/>
-        </t:if>
-        <t:if test="selectedTab.equals('EventTypes')">
-        	<t:grids.typegrid/>
-        </t:if>
-        <t:if test="selectedTab.equals('Facilities')">
-        	<t:grids.facilitygrid/>
-        </t:if-->
-        
-        <t:if test="selectedTab.equals('Клиенты')">
-        	<t:grids.clientgrid/>
-        </t:if>
-        <t:if test="selectedTab.equals('Учителя')">
-        	<t:grids.teachergrid/>
-        </t:if>
-        <t:if test="selectedTab.equals('Занятия')">
-        	<t:grids.lessongrid/>
-        </t:if>
-        <t:if test="selectedTab.equals('Предметы')">
-        	<t:grids.typegrid/>
-        </t:if>
-        <t:if test="selectedTab.equals('Школы')">
-        	<t:grids.facilitygrid/>
-        </t:if>
+        <div style="margin-top: 30px;" class="crudcontainer">
+	        <t:if test="selectedTab.equals('Клиенты')">
+	        	<t:grids.clientgrid/>
+	        </t:if>
+	        <t:if test="selectedTab.equals('Учителя')">
+	        	<t:grids.teachergrid/>
+	        </t:if>
+	        <t:if test="selectedTab.equals('Занятия')">
+	        	<t:grids.lessongrid/>
+	        </t:if>
+	        <t:if test="selectedTab.equals('Предметы')">
+	        	<t:grids.typegrid/>
+	        </t:if>
+	        <t:if test="selectedTab.equals('Школы')">
+	        	<t:grids.facilitygrid/>
+	        </t:if>
+        </div>
 
 </html>
