@@ -2,8 +2,18 @@
 		t:pageTitle="Клиенты"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
+    
+    <ul class="nav child">
+		<t:pagelink page="clients">
+			<li>Сводка</li>
+		</t:pagelink>
+		<t:pagelink page="reports" class="activeMenuItem last">
+			<li>Отчеты</li>
+		</t:pagelink>
+	</ul>
+    
       
-	<span style="position: absolute; top: 70px; right: 70px;">
+	<span style="position: absolute; top: 90px; right: 70px;">
 		<t:form>
 			<t:checkbox t:id="switchPages" value="switchPages" onclick="this.form.submit();"/>
 			<t:label for="switchPages"/>

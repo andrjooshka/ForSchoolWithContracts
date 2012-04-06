@@ -52,7 +52,7 @@ public class TypeGrid {
 		return ezone.getBody();
 	}
 
-	void onSubmitFromDeleteForm(EventType c) {
+	void onDelete(EventType c) {
 		dao.delete(EventType.class, c.getId());
 	}
 
@@ -61,8 +61,7 @@ public class TypeGrid {
 			model = beanModelSource.createDisplayModel(EventType.class,
 					componentResources.getMessages());
 			model.exclude("id", "typeTitle");
-			model.add("Delete", null);
-			model.add("Edit", null);
+			model.add("Action", null);
 		}
 	}
 }

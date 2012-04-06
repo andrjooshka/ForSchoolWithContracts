@@ -1,10 +1,6 @@
 package tap.execounting.components;
 
-import tap.execounting.pages.Index;
-import tap.execounting.services.Authenticator;
-
 import org.apache.tapestry5.BindingConstants;
-import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Log;
@@ -13,6 +9,8 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.entities.User;
+import tap.execounting.pages.Index;
+import tap.execounting.services.Authenticator;
 
 /**
  * Layout component for pages of application.
@@ -22,7 +20,6 @@ public class Layout {
 	@Property
 	private String pageName;
 
-	@SuppressWarnings("unused")
 	@Property
 	@Parameter(required = true, defaultPrefix = BindingConstants.LITERAL)
 	private String pageTitle;

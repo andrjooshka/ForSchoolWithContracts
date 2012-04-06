@@ -1,8 +1,8 @@
 <t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 	
 	<div>
-		<t:form>
-			<t:label for="nameFilter"/>
+		<t:form style="margin-bottom:20px;">
+			<t:label for="nameFilter" style="margin-right:10px;"/>
 			<t:textfield t:id="nameFilter" value="nameFilter"/>
 			<t:submit value="Обновить"/>
 		</t:form>
@@ -21,8 +21,13 @@
 			${teachers}
 		</p:teachersCell>
 		<p:actionCell>
-			<t:actionlink t:id="edit" zone="ezone" context="unit">Edit</t:actionlink>
-			<t:actionlink t:id="delete" context="unit">Delete</t:actionlink>
+			<t:actionlink t:id="edit" zone="ezone" context="unit">
+				<img src="icons/pencil icon.PNG" class="icons"  />
+			</t:actionlink>
+			
+			<t:eventlink event="delete" context="unit">
+				<img src="icons/trash.png" class="icons" />
+			</t:eventlink>
 		</p:actionCell>
 	</t:grid>
 </t:container>

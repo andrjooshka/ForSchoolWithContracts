@@ -56,7 +56,7 @@ public class LessonGrid {
 		return ezone.getBody();
 	}
 
-	void onSubmitFromDeleteForm(Event c) {
+	void onDelete(Event c) {
 		dao.delete(Event.class, c.getId());
 	}
 
@@ -64,9 +64,8 @@ public class LessonGrid {
 		if (model == null) {
 			model = beanModelSource.createDisplayModel(Event.class,
 					componentResources.getMessages());
-			model.add("Delete", null);
 			model.add("Clients", null);
-			model.add("Edit", null);
+			model.add("Action", null);
 			model.exclude("id");
 		}
 	}

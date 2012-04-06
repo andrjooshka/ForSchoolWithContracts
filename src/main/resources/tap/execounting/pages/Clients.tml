@@ -3,6 +3,9 @@
 	xmlns:p="tapestry:parameter">
 	
 	<ul class="nav child">
+		<t:pagelink page="clients" class="activeMenuItem">
+			<li>Сводка</li>
+		</t:pagelink>
 		<t:pagelink page="reports" class="last">
 			<li>Отчеты</li>
 		</t:pagelink>

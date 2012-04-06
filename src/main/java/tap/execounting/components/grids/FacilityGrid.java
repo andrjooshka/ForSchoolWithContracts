@@ -52,7 +52,7 @@ public class FacilityGrid {
 		return ezone.getBody();
 	}
 
-	void onSubmitFromDeleteForm(Facility c) {
+	void onDelete(Facility c) {
 		dao.delete(Facility.class, c.getFacilityId());
 	}
 
@@ -60,8 +60,7 @@ public class FacilityGrid {
 		if (model == null) {
 			model = beanModelSource.createDisplayModel(Facility.class,
 					componentResources.getMessages());
-			model.add("Delete", null);
-			model.add("Edit", null);
+			model.add("Action", null);
 			model.exclude("facilityId");
 		}
 	}

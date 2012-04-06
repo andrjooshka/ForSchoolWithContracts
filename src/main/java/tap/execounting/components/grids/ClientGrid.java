@@ -62,8 +62,10 @@ public class ClientGrid {
 		return ezone.getBody();
 	}
 
-	void onActionFromDelete(Client c) {
-		System.out.println("\n\nfrom actionfromdelete:" + c.getId());
+	void onDelete(Client c) {
+		if(c.getContracts().size()>0)
+			throw new IllegalArgumentException("У данного заключены с вами договора, пожалуйста сначала удалите их.");
+		else
 		dao.delete(Client.class, c.getId());
 	}
 

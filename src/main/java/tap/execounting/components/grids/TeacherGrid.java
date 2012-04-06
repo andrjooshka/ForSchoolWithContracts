@@ -62,7 +62,7 @@ public class TeacherGrid {
 		return tzone.getBody();
 	}
 
-	void onSubmitFromDeleteForm(Teacher c) {
+	void onDelete(Teacher c) {
 		dao.delete(Teacher.class, c.getId());
 	}
 
@@ -70,8 +70,7 @@ public class TeacherGrid {
 		if (model == null) {
 			model = beanModelSource.createDisplayModel(Teacher.class,
 					componentResources.getMessages());
-			model.add("Delete", null);
-			model.add("Edit", null);
+			model.add("Action", null);
 			
 			model.exclude("id");
 			for (String pn : model.getPropertyNames())
