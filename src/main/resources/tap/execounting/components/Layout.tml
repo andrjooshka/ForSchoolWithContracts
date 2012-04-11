@@ -17,7 +17,7 @@
 				</span>
 				<span style="float: right; margin-right: 5%;">
 					<a href="#" t:type="pageLink" t:page="home">
-						<li class="${cssForLi('Расписания')}">
+						<li class="${cssForLi('главная')}">
 							<img src="icons/home.png" style="height: 15px; width:19px;"/>
 						</li>
 					</a>

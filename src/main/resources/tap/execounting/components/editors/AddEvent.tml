@@ -1,7 +1,6 @@
 <t:container 
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" 
-	xmlns:p="tapestry:parameter"
-	xmlns:j="tapestry-library:jquery">
+	xmlns:p="tapestry:parameter">
 	
 	<t:if test="updatemode">
 		Событие ${event.id} : Редактирование
@@ -31,10 +30,8 @@
 		</p:roomId>
 
 		<p:date>
-			<div style="height: 250px;">
 			<t:label for="date"/>
 			<t:datefield t:id="date" value="event.date" />
-			</div>
 		</p:date>
 		
 		<p:typeId>
