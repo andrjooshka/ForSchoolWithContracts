@@ -4,26 +4,25 @@
         <h3 t:type="zone" t:id="datelabelZone" id="datelabelZone">
         	Дата: ${formatteddate}
         </h3>
-        <div class="controlled">
         
-        	<!--controller-->
-        	<span class="controller">
-        		<t:form t:id="controlpanel" zone="resultszone">
-        			<table>
-        				<tr>
-	        				<th>Школа:</th>
-		        			<td><t:select model="facilityselect" value="facilityId" blankoption="never"/></td>
-		        		</tr>
-		        		<tr>
-		        			<th>Дата:</th>
-		        			<td><t:datefield  t:id="datecontroller" value="currentDate"/></td>
-		        		</tr>
-        			</table>
-        			<t:submit value="message:submit-label"/>
-        		</t:form>
-        	</span>
-        	
-        	
+    	<!--controller-->
+    	<div style="position: absolute; top:70px;right:5%;height:80px;margin-bottom:30px;">
+    		<t:form t:id="controlpanel" zone="resultszone">
+    			<table>
+    				<tr>
+        				<th>Школа:</th>
+	        			<td><t:select model="facilityselect" value="facilityId" blankoption="never"/></td>
+	        		</tr>
+	        		<tr>
+	        			<th>Дата:</th>
+	        			<td><t:datefield  t:id="datecontroller" value="currentDate"/></td>
+	        		</tr>
+    			</table>
+    			<t:submit value="message:submit-label"/>
+    		</t:form>
+    	</div>
+    	
+    	<div style="position: absolute; top:180px;right:5%;left:5%;width:90%">
         	<t:eventlink t:event="add" zone="editorZone">Добавить новое событие</t:eventlink>
         	<t:zone t:id="editorZone">
         		<t:if test="adding">
@@ -55,6 +54,4 @@
 	        	</table>
 	        </t:zone>
         </div>
-
-
 </html>

@@ -103,10 +103,10 @@ public class SchoolSchedule {
 		refreshEvents();
 	}
 	
-	Object onSuccessFromControlPanel(){
+	void onSuccessFromControlPanel(){
 		refreshEvents();
 		facility = dao.find(Facility.class, facilityId);
-		return request.isXHR() ? renderer.addRender(resultsZone).addRender(datelabelZone) : null; 
+		if(request.isXHR()) renderer.addRender(resultsZone).addRender(datelabelZone); 
 	}
 	
 	Object onAdd(){

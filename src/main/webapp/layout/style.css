@@ -302,13 +302,6 @@ a div.buttondiv { /* Gradient */
 	color: #6B4A45;
 }
 
-.controller {
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	height: 40px;
-}
-
 table {
 	width: 100%;
 	margin-top: 10px;

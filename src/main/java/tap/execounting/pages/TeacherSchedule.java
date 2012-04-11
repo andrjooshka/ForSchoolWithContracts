@@ -109,7 +109,6 @@ public class TeacherSchedule {
 	}
 
 	public void setup(Teacher t) {
-		System.out.println("\n\nTeacherSchedule.Setup");
 		this.teacher = t;
 
 		firstDate = new RusCalendar();
@@ -137,9 +136,6 @@ public class TeacherSchedule {
 	public Event getEvent() {
 		int column = firstDate.rangeInDays(date);
 		Event result = eventsArrayCached[column][row - 1];
-		System.out.printf("Row %d \tColumn %d \tDate: %s \tEvent date: %s\n",
-				row - 1, column, date, result != null ? result.getDate()
-						: result);
 
 		return result;
 	}
@@ -165,9 +161,6 @@ public class TeacherSchedule {
 
 	public List<Event> datedEvents() {
 		HashMap<String, Object> params = new HashMap<String, Object>(3);
-		System.out.printf(
-				"\n\n Loading events from db; Date1: %s, date2: %s\n\n",
-				firstDate.getTime(), secondDate.getTime());
 		params.put("teacherId", teacher.getId());
 		params.put("earlierDate", firstDate.getTime());
 		params.put("laterDate", secondDate.getTime());
@@ -195,7 +188,6 @@ public class TeacherSchedule {
 
 	private Event[][] getEventsArray() throws Exception {
 		// preparations for processing
-		System.out.println("\n\nprocessnig events");
 		int length = datesRange();
 		List<Event> eventsToProcess = datedEvents();
 

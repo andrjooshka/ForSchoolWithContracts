@@ -3,7 +3,9 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
         
-        <div style="position:relative; padding-top: 100px;">
+        <div class="controlled">
+        	<h3>Расписание : ${teacher.name}</h3>
+        
 	        <div class="controller">
 	        	<h4>Контроллер времени</h4>
 	        	<t:actionlink t:id="weekbackward">неделю назад </t:actionlink>
