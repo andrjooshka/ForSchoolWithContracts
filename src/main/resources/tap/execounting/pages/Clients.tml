@@ -13,7 +13,7 @@
 	
 	<t:form>
 		<h4>Фильтры</h4>
-		<table class="filters">
+		<table class="filters panel">
 			<tr>
 				<th colspan="2" class="rb">
 					Планируемые платежи
@@ -97,7 +97,7 @@
 	
 	<t:zone t:id="statZone">
 		<h4>Счетчики</h4>
-		<table class="filters">
+		<table class="filters panel">
 			<tr>
 				<th colspan="3" style="border-right: 1px solid #303030;">
 					<strong>Договора</strong>

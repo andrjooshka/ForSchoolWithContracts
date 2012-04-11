@@ -12,7 +12,7 @@
 		pagerPosition="top">
 	    <p:actionCell>
 			<t:actionlink t:id="edit" zone="ezone" context="unit">
-				<img src="icons/pencil icon.PNG" class="icons"  />
+				<img src="icons/edit.png" class="icons"  />
 			</t:actionlink>
 			
 			<t:eventlink event="delete" context="unit">

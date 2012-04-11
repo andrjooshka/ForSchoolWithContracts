@@ -390,12 +390,7 @@ table.t-data-grid th.title {
 	color: white;
 }
 /* Filter tables */
-table.filters {
-	-moz-border-radius: 5px;
-	-khtml-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	box-shadow: 0 0 3px 0px #000;
-}
+
 
 table.filters th {
 	text-align: center;
@@ -457,8 +452,9 @@ table.contract th {
 }
 
 .icons {
-	height: 25px;
+	height: 30px;
 	width: 30px;
+	padding: 4px;
 	margin-top: 2px;
 	margin-left: 10px;
 	-moz-border-radius: 5px;
@@ -496,6 +492,7 @@ div.t-beaneditor {
 
 th.Action.t-last {
 	width: 100px;
+	text-align: center;
 }
 
 t-zone {
@@ -503,4 +500,11 @@ t-zone {
 }
 .crudcontainer div.t-zone {
 	max-width: 730px;
+}
+
+.panel {
+	-moz-border-radius: 5px;
+	-khtml-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	box-shadow: 0 0 3px 0px #000;
 }

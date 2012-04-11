@@ -46,7 +46,7 @@
 		<br/>
 		<br/>
 		<t:form t:id="FilterForm" zone="resultZone">
-			<table class="filters">
+			<table class="filters panel">
 				<tr>
 					<th>
 						Педагог

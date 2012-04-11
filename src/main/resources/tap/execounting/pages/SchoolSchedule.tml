@@ -1,28 +1,30 @@
-<html t:type="layout" pageTitle="${facility.name} : Расписание"
+<html t:type="layout" pageTitle="Расписания"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
-        <h3 t:type="zone" t:id="datelabelZone" id="datelabelZone">
+      
+        <h3 t:type="zone" t:id="datelabelZone" id="datelabelZone" style="max-width:400px;">
+        	Расписание школы : ${facility.name}<br/>
         	Дата: ${formatteddate}
         </h3>
         
     	<!--controller-->
-    	<div style="position: absolute; top:70px;right:5%;height:80px;margin-bottom:30px;">
-    		<t:form t:id="controlpanel" zone="resultszone">
-    			<table>
-    				<tr>
-        				<th>Школа:</th>
-	        			<td><t:select model="facilityselect" value="facilityId" blankoption="never"/></td>
-	        		</tr>
-	        		<tr>
-	        			<th>Дата:</th>
-	        			<td><t:datefield  t:id="datecontroller" value="currentDate"/></td>
-	        		</tr>
-    			</table>
-    			<t:submit value="message:submit-label"/>
-    		</t:form>
-    	</div>
+		<t:form t:id="controlpanel" zone="resultszone">
+			<table class="panel" 
+			style="position: absolute; top:50px;right:5%;height:120px;margin-bottom:30px; width: 300px;">
+				<tr>
+    				<th>Школа:</th>
+        			<td><t:select model="facilityselect" value="facilityId" blankoption="never"/></td>
+        		</tr>
+        		<tr>
+        			<th>Дата:</th>
+        			<td><t:datefield  t:id="datecontroller" value="currentDate"/></td>
+        		</tr>
+        		<tr><td colspan="2" style="padding-left:10px;"><t:submit value="message:submit-label"/></td></tr>
+			</table>
+		</t:form>
     	
-    	<div style="position: absolute; top:180px;right:5%;left:5%;width:90%">
+    	<div 
+    	style="position: absolute; top:180px;right:5%;left:5%;width:90%">
         	<t:eventlink t:event="add" zone="editorZone">Добавить новое событие</t:eventlink>
         	<t:zone t:id="editorZone">
         		<t:if test="adding">

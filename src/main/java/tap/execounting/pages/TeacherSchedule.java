@@ -6,9 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 
-import tap.execounting.services.RusCalendar;
-import tap.execounting.services.SuperCalendar;
-
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
@@ -18,19 +15,24 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.components.editors.AddEvent;
 import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.data.TeacherSelectModel;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;
+import tap.execounting.services.RusCalendar;
+import tap.execounting.services.SuperCalendar;
 
 public class TeacherSchedule {
-
-	@Property
 	@Persist
-	private Teacher teacher;
+	private int teacherId;
 
 	@SuppressWarnings("unused")
 	@Property
 	private boolean adding;
+
+	@SuppressWarnings("unused")
+	@Property
+	private TeacherSelectModel teacherSelectModel;
 
 	@SuppressWarnings("unused")
 	@Property
@@ -101,7 +103,7 @@ public class TeacherSchedule {
 	Object onActionFromAddNew() {
 		try {
 			adding = true;
-			eventEditor.setup(teacher);
+			eventEditor.setup(getTeacher());
 			return editZone.getBody();
 		} catch (Exception exc) {
 			return null;
@@ -109,11 +111,12 @@ public class TeacherSchedule {
 	}
 
 	public void setup(Teacher t) {
-		this.teacher = t;
+		setTeacher(t);
 
 		firstDate = new RusCalendar();
-		firstDate.minHoursMinutes();
 		secondDate = new RusCalendar();
+
+		firstDate.minHoursMinutes();
 		secondDate.addDays(7);
 		secondDate.maxHoursMinutes();
 	}
@@ -161,7 +164,7 @@ public class TeacherSchedule {
 
 	public List<Event> datedEvents() {
 		HashMap<String, Object> params = new HashMap<String, Object>(3);
-		params.put("teacherId", teacher.getId());
+		params.put("teacherId", getTeacher().getId());
 		params.put("earlierDate", firstDate.getTime());
 		params.put("laterDate", secondDate.getTime());
 		return dao.findWithNamedQuery(Event.BY_TEACHER_ID_AND_DATE, params);
@@ -255,6 +258,8 @@ public class TeacherSchedule {
 
 	@SetupRender
 	void onPrepareForRender() {
+		teacherSelectModel = new TeacherSelectModel(dao);
+
 		StringBuilder sb = new StringBuilder();
 		sb.append("datedEvents().size(): " + datedEvents().size());
 		sb.append("\nschedule size: " + datesRange());
@@ -265,5 +270,21 @@ public class TeacherSchedule {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public int getTeacherId() {
+		return teacherId;
+	}
+
+	public void setTeacherId(int teacherId) {
+		this.teacherId = teacherId;
+	}
+
+	public Teacher getTeacher() {
+		return dao.find(Teacher.class, teacherId);
+	}
+
+	public void setTeacher(Teacher teacher) {
+		this.teacherId = teacher.getId();
 	}
 }
