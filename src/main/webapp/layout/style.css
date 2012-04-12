@@ -60,19 +60,6 @@ a:hover {
 	text-decoration: none;
 }
 
-#wrapper {
-	margin: 0 auto;
-	padding: 0;
-}
-
-.wrapper {
-	width: 100%;
-	margin: 0 auto;
-	padding: 0px 0px;
-	border-left: 1px solid #cccccc;
-	border-right: 1px solid #cccccc;
-}
-
 .clearer {
 	clear: both;
 }
@@ -212,20 +199,6 @@ a div.buttondiv { /* Gradient */
 	-moz-border-radius: 5px;
 	-khtml-border-radius: 5px;
 	-webkit-border-radius: 5px;
-}
-
-.bs {
-	box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.3);
-	-moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.3);
-	-webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.3);
-}
-
-/* Header */
-#header {
-	overflow: hidden;
-	width: 100%;
-	height: 40px;
-	margin: 0px auto 10px auto;
 }
 
 /* Page */
@@ -507,4 +480,14 @@ t-zone {
 	-khtml-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	box-shadow: 0 0 3px 0px #000;
+}
+
+.sider {
+	margin-top: 2px;
+	width: 250px;
+	list-style: none;
+	padding: 5px;
+}
+.sider li{
+	display: table-cell;
 }
