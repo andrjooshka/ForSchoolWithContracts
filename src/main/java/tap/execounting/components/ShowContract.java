@@ -189,4 +189,8 @@ public class ShowContract {
 		String response = contract.isFreeze() ? "разморозить" : "заморозить";
 		return response;
 	}
+	
+	public String getLockImg(){
+		return contract.isFreeze()? "icons/ulock.png" : "icons/lock.png";
+	}
 }

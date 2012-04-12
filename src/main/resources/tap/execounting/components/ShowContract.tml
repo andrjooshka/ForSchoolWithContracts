@@ -10,7 +10,20 @@
 			<t:editors.addcontract t:id="editor"/>
 			
 			<p:else>
-				<table class="entity contract">
+				<ul class="panel">
+					<li>
+						<img src="${lockImg}" class="icons" style="padding: 3px 6px" />
+					</li>
+											
+					<li>
+						<img src="icons/edit.png" class="icons" />
+					</li>
+						<img src="icons/trash.png" class="icons" />
+					<li>
+					
+					</li>
+				</ul>
+				<table class="entity contract panel">
 					<!--controls-->
 					<tr>
 						<td>
