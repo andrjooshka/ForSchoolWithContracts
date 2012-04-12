@@ -434,6 +434,7 @@ table.contract th {
 	-khtml-border-radius: 5px;
 	-webkit-border-radius: 5px;
 	box-shadow: 0 0 3px 0px #000;
+	
 }
 
 /*beaneditor*/
@@ -479,15 +480,20 @@ t-zone {
 	-moz-border-radius: 5px;
 	-khtml-border-radius: 5px;
 	-webkit-border-radius: 5px;
+	border-radius: 5px;
 	box-shadow: 0 0 3px 0px #000;
 }
 
 .sider {
 	margin-top: 2px;
-	width: 250px;
+	width: 160px;
 	list-style: none;
 	padding: 5px;
-}
+	position: relative;
+	left: 830px;
+	top: 13px;
+	}
 .sider li{
 	display: table-cell;
+	padding-top: 6px;
 }

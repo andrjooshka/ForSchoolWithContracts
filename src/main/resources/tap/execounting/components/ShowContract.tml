@@ -12,7 +12,7 @@
 			<p:else>
 				<ul class="sider panel">
 					<li>
-						<img src="${lockImg}" class="icons" style="padding: 3px 6px" />
+						<img src="${lockImg}" class="icons" style="padding: 4px 6px; width: 25px;" />
 					</li>
 											
 					<li>
