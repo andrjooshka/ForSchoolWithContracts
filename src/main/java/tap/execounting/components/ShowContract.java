@@ -191,6 +191,6 @@ public class ShowContract {
 	}
 	
 	public String getLockImg(){
-		return contract.isFreeze()? "icons/ulock.png" : "icons/lock.png";
+		return contract.isFreeze()? "icons/lock.png" : "icons/ulock.png";
 	}
 }
