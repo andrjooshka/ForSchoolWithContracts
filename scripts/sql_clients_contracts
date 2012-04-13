@@ -1,0 +1,2 @@
+select * from music.clients join music.contracts
+on music.clients.client_id = music.contracts.client_id;

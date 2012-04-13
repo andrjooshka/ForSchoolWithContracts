@@ -1,0 +1,6 @@
+select clients.client_id, name, contracts.contract_id, contracts.type_id as "con_type_id", 
+events.event_id, events.date, events.type_id as "ev_type_id" from music.clients join music.contracts
+on music.clients.client_id = music.contracts.client_id
+join events_contracts on contracts.contract_id = events_contracts.contract_id
+join events on events_contracts.event_id = events.event_id
+where clients.client_id = 10;

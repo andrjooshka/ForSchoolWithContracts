@@ -17,7 +17,6 @@ color:WindowText;
 cursor:default;
 font-weight:400!important;
 -moz-user-select:none;
-padding:0;
 height: 0px; /*��� ������ �� ������ ����� � ������� � ����� ������*/
 border: 1px solid black;
 width: 18px;
@@ -84,19 +83,20 @@ border-width:1px;
 }
 
 .xdatePicker .previousButton {
-background:buttonface url("../images/arrow.left.png") no-repeat center center;
+background:buttonface url("../images/prev.png") no-repeat center center;
 }
 
 .xdatePicker .nextButton {
-background:buttonface url("../images/arrow.right.png") no-repeat center center;
+background:buttonface url("../images/next.png") no-repeat center center;
 }
 
-.xdatePicker .previousButton,.datePicker .nextButton {
+.xdatePicker .previousButton,.xdatePicker .nextButton {
 width:14px;
 height:14px;
+border-radius: 6px;
 }
 
-.xdatePicker .todayButton,.datePicker .noneButton {
+.xdatePicker .todayButton, .xdatePicker .noneButton {
 -moz-border-radius: 15px;
 -khtml-border-radius: 15px;
 -webkit-border-radius: 15px;
@@ -109,7 +109,7 @@ line-height: 16px; /* This value + 4px + 4px (top and bottom padding of SPAN) mu
 height: 24px; /* Height of button background height */
 padding-left: 8px; /* Width of left menu image */
 text-decoration: none;
-width:50px;
+width:70px;
 }
 
 .xdatePicker .labelPopup {
@@ -142,5 +142,6 @@ width:100%;
 }
 
 .xdatePicker .footer,.xdatePicker .grid {
-padding:3px;
+padding: 0px;
+margin: 0px;
 }

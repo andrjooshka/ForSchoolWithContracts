@@ -3,8 +3,8 @@
       xmlns:p="tapestry:parameter">
       
         <h3 t:type="zone" t:id="datelabelZone" id="datelabelZone" style="max-width:400px;">
-        	Расписание школы : ${facility.name}<br/>
-        	Дата: ${formatteddate}
+        	Расписание школы : ${facility.name}<br/><br/>
+        	${formatteddate}
         </h3>
         
     	<!--controller-->

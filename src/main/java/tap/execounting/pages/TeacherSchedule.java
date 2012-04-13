@@ -287,4 +287,8 @@ public class TeacherSchedule {
 	public void setTeacher(Teacher teacher) {
 		this.teacherId = teacher.getId();
 	}
+	
+	public String getFormattedDate() {
+		return firstDate.dateString();
+	}
 }
