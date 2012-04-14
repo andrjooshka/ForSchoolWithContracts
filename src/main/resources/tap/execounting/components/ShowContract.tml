@@ -13,20 +13,20 @@
 				<ul class="sider panel">
 					<li>
 						<t:eventlink t:id="freeze" context="contract">
-							<img src="${lockImg}" alt="${freezeLabel}" class="icons" 
+							<img src="${lockImg}" title="${freezeLabel}" alt="${freezeLabel}" class="icons" 
 							style="padding: 4px 6px; width: 25px;" />
 						</t:eventlink>
 					</li>
 											
 					<li>
 						<t:eventlink event="edit" zone="contractBody${contract.id}" context="contract">
-							<img src="icons/edit.png" alt="редактировать" class="icons" />
+							<img src="icons/edit.png" title="редактировать" alt="редактировать" class="icons" />
 						</t:eventlink>
 					</li>
 						
 					<li>
 						<t:eventlink event="delete" context="contract">
-							<img src="icons/trash.png" class="icons" />
+							<img src="icons/trash.png" title="удалить" alt="удалить" class="icons" />
 						</t:eventlink>
 					</li>
 				</ul>
