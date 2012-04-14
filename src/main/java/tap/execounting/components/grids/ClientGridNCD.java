@@ -106,4 +106,10 @@ public class ClientGridNCD {
 
 		return sb.toString();
 	}
+	
+	public String getCssForBalance(){
+		if(unit.getBalance()<0) return "debtor";
+		if(unit.getBalance()>0) return "creditor";
+		return "neutral";
+	}
 }

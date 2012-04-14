@@ -562,8 +562,20 @@ div.t-data-grid-pager span.current {
 	background-image: linear-gradient(to bottom,#E6E6E6 0,gainsboro 100%);
 }
 
-
-
+/* Balance css */
+.debtor, .neutral, .creditor {
+	margin-right: 3px;
+}
+.debtor {
+	background: #EEAAAA;
+}
+.creditor {
+	background: #AEA;
+}
+table.t-data-grid td.balance {
+	text-align: right;
+	padding-right: 3px;
+}
 
 
 

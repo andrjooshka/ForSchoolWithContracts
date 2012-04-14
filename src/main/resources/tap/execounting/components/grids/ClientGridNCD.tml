@@ -8,15 +8,18 @@
 			</t:actionlink>
 		</p:nameCell>
 		<p:contractsCell>
-			<span style="width: 3000px">
-				<t:loop source="contracts" value="loopContract">
-					${contractInfo}
-					<br/>
-				</t:loop>
-			</span>
+			<t:loop source="contracts" value="loopContract">
+				${contractInfo}
+				<br/>
+			</t:loop>
 		</p:contractsCell>
 		<p:teachersCell>
 			${teachers}
 		</p:teachersCell>
+		<p:balanceCell>
+			<span class="${cssForBalance}">
+				${unit.balance}
+			</span>
+		</p:balanceCell>
 	</t:grid>
 </t:container>
