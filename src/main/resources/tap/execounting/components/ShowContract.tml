@@ -14,7 +14,7 @@
 					<li>
 						<t:eventlink t:id="freeze" context="contract">
 							<img src="${lockImg}" title="${freezeLabel}" alt="${freezeLabel}" class="icons" 
-							style="padding: 4px 6px; width: 25px;" />
+							style="padding: 4px 8px; width: 23px;" />
 						</t:eventlink>
 					</li>
 											

@@ -7,35 +7,35 @@
 	    <t:pagelink page="schedules" style="margin-top: 0px;" class="homelink">
 		    <div class="buttondiv">
 		    	<h2>Расписания</h2>
-		    	Расписание школ и учителей
+		    	<div>Расписание школ и учителей</div>
 		    </div>
 	    </t:pagelink>
 	    
 	    <t:pagelink page="clients" class="homelink">
 		    <div class="buttondiv">
 		     	<h2>Клиенты</h2>
-		     	Сводка и отчеты по клиентам
+		     	<div>Сводка и отчеты по клиентам</div>
 		    </div>
 	    </t:pagelink>
 	      
 	    <t:pagelink page="statistics" class="homelink">
 		    <div class="buttondiv">
 		      	<h2>Занятия</h2>
-		      	Сводка по проведенным и запланированным занятиям, калькуляция выручки
+		      	<div>Сводка по проведенным и запланированным занятиям, калькуляция выручки</div>
 		    </div>
 	    </t:pagelink>
 	    
 	    <t:pagelink page="CRUD" class="homelink">
 		    <div class="buttondiv">
 		      	<h2>База данных</h2>
-		      	Редактирование информации о: филиалах, клиентах, предметах, учителях и занятиях
+		      	<div>Редактирование информации о: филиалах, клиентах, предметах, учителях и занятиях</div>
 		    </div>
 	    </t:pagelink>
 	      
 	    <t:pagelink page="settings" class="homelink">
 		    <div class="buttondiv">
 		      	<h2>Настройки</h2>
-		      	Смена пароля
+		      	<div>Смена пароля</div>
 		    </div>
 	    </t:pagelink>
 	    
