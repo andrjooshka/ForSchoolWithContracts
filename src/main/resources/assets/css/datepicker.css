@@ -3,7 +3,7 @@ div.datePicker {
 	width: 200px;
 	cursor: default;
 	-moz-user-focus: normal;
-	padding: 4px;
+	padding: 3px;
 	border: 1px solid #AAA;
 	border-radius: 5px;
 	z-index: 30;
@@ -99,9 +99,9 @@ tr.daysRow td {
 }
 
 .datePicker .previousButton,.datePicker .nextButton {
-	width: 16px;
-	height: 16px;
-	border-radius: 5px;
+	width: 14px;
+	height: 14px;
+	border-radius: 6px;
 	box-shadow: inset 0px 0px 1px 0px white;
 }
 
@@ -156,8 +156,12 @@ tr.daysRow td {
 	min-width: 130px;
 	background: Window;
 	border: 1px solid #CCC;
-	padding: 1px;
+	padding: 5px 10px;
 	border-radius: 5px;
+}
+
+.datePicker .labelContainer {
+	text-align: center;
 }
 
 .datePicker .labelPopup a {
@@ -190,7 +194,7 @@ tr.daysRow td {
 
 .datePicker table {
 	margin: 0px;
-	border-spacing: 3px 2px;
+	border-spacing: 2px;
 	border-collapse: separate;
 	empty-cells: hide;
 	border-collapse: separate;
