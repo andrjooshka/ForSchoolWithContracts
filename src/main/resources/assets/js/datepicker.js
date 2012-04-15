@@ -115,7 +115,7 @@ DatePicker.prototype.create = function (doc)
 
 	// create elements
     this._el = doc.createElement("div");
-    this._el.className = "xdatePicker";
+    this._el.className = "datePicker";
 
 	// header
     var div = doc.createElement("div");

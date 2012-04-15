@@ -184,7 +184,7 @@ div.buttondiv {
 
 .homelink {
 	text-decoration: none;
-	text-shadow: 0 1px 0 #AAA;
+	text-shadow: #CCC 2px 1px 5px;
 	width: 350px;
 }
 

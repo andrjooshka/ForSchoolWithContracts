@@ -1,150 +1,216 @@
-.xdatePicker {
-border:1px solid WindowText;
-background:Window;
-width:200px;
-cursor:default;
--moz-user-focus:normal;
-padding:0;
-border-spacing: 0px;
-height: 0px; /*��� ������ �� ������ ����� � ��������*/
-z-index: 30;
+div.datePicker {
+	background: Window;
+	width: 200px;
+	cursor: default;
+	-moz-user-focus: normal;
+	padding: 4px;
+	border: 1px solid #AAA;
+	border-radius: 5px;
+	z-index: 30;
 }
 
-.xdatePicker td {
-font:small-caption;
-text-align:center;
-color:WindowText;
-cursor:default;
-font-weight:400!important;
--moz-user-select:none;
-padding:0;
-height: 0px; /*��� ������ �� ������ ����� � ������� � ����� ������*/
-border: 1px solid black;
-width: 18px;
-padding: 3px;
-font-size: 11px;
-background: #fafafa; /* Old browsers */
-background: -moz-linear-gradient(top,  #fafafa 0%, #ececec 50%, #dddddd 51%, #f1f1f1 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fafafa), color-stop(50%,#ececec), color-stop(51%,#dddddd), color-stop(100%,#f1f1f1)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top,  #fafafa 0%,#ececec 50%,#dddddd 51%,#f1f1f1 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top,  #fafafa 0%,#ececec 50%,#dddddd 51%,#f1f1f1 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top,  #fafafa 0%,#ececec 50%,#dddddd 51%,#f1f1f1 100%); /* IE10+ */
-background: linear-gradient(top,  #fafafa 0%,#ececec 50%,#dddddd 51%,#f1f1f1 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fafafa', endColorstr='#f1f1f1',GradientType=0 ); /* IE6-9 */
+.datePicker .gridTable td {
+	font: small-caption;
+	text-align: right;
+	padding-right: 2px;
+	color: WindowText;
+	cursor: default;
+	font-weight: 400 !important;
+	-moz-user-select: none;
+	height: 0px; /*��� ������ �� ������ ����� � ������� � ����� ������*/
+	border: 1px solid #CCC;
+	width: 18px;
+	font-size: 11px;
+	background: #fafafa; /* Old browsers */
+	background: -moz-linear-gradient(top, #fafafa 0%, #ececec 50%, #dddddd 51%, #f1f1f1
+		100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fafafa),
+		color-stop(50%, #ececec), color-stop(51%, #dddddd),
+		color-stop(100%, #f1f1f1) ); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #fafafa 0%, #ececec 50%, #dddddd 51%,
+		#f1f1f1 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #fafafa 0%, #ececec 50%, #dddddd 51%, #f1f1f1
+		100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #fafafa 0%, #ececec 50%, #dddddd 51%, #f1f1f1
+		100%); /* IE10+ */
+	background: linear-gradient(top, #fafafa 0%, #ececec 50%, #dddddd 51%, #f1f1f1 100%);
+	/* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient(              startColorstr='#fafafa',
+		endColorstr='#f1f1f1', GradientType=0 ); /* IE6-9 */
 }
 
-.xdatePicker td.red {
-color:red;
+.datePicker td.red {
+	color: red;
 }
 
-.xdatePicker .header {
-background:Window;
-border-bottom:1px solid WindowText;
-padding:3px;
+.datePicker .header {
+	padding: 0px;
 }
 
-.xdatePicker .gridTable td {
-width:14.3%;
+.datePicker .gridTable .daysRow td {
+	font-weight: 700 !important;
+	border: 0px;
+	border-bottom: 1px solid ThreeDDarkShadow;
+	background: none;
+	padding: 3px 0px;
 }
 
-.xdatePicker .gridTable .daysRow td {
-font-weight:700!important;
-border-bottom:1px solid ThreeDDarkShadow;
+.datePicker .grid .gridTable .upperLine {
+	width: 100%;
+	height: 2px;
+	overflow: hidden;
+	background: transparent;
 }
 
-.xdatePicker .grid .gridTable .upperLine {
-width:100%;
-height:2px;
-overflow:hidden;
-background:transparent;
+.datePicker td.today {
+	font-weight: 700 !important;
 }
 
-.xdatePicker td.today {
-font-weight:700!important;
+.datePicker td.selected {
+	background: Highlight;
+	color: HighlightText !important;
 }
 
-.xdatePicker td.selected {
-background:Highlight;
-color:HighlightText!important;
+.datePicker td .topLabel {
+	color: CaptionText;
+	display: block;
+	font-weight: 700 !important;
+	width: 100%;
+	text-decoration: none;
 }
 
-.xdatePicker td .topLabel {
-color:CaptionText;
-display:block;
-font-weight:700!important;
-width:100%;
-text-decoration:none;
+.datePicker button {
+	font: Caption;
+	font-weight: 400 !important;
+	display: block;
+	border-width: 1px;
 }
 
-.xdatePicker button {
-font:Caption;
-font-weight:400!important;
-display:block;
-border-width:1px;
+.datePicker .previousButton,.datePicker .nextButton {
+	width: 14px;
+	height: 14px;
+	border-radius: 5px;
+	box-shadow: inset 0px 0px 1px 0px white;
 }
 
-.xdatePicker .previousButton {
-background:buttonface url("../images/arrow.left.png") no-repeat center center;
-border-radius: 10px;
+.datePicker .previousButton {
+	background: buttonface url("../images/prev.png") no-repeat center center;
 }
 
-.xdatePicker .nextButton {
-background:buttonface url("../images/arrow.right.png") no-repeat center center;
-border-radius: 10px;
+.datePicker .nextButton {
+	background: buttonface url("../images/next.png") no-repeat center center;
 }
 
-.xdatePicker .previousButton,.xdatePicker .nextButton {
-width:14px;
-height:14px;
+.datePicker .todayButton,.datePicker .noneButton {
+	-moz-border-radius: 10px;
+	-khtml-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+	display: block;
+	float: left;
+	font: normal 13px Tahoma; /* Change 13px as desired */
+	line-height: 16px;
+	/* This value + 4px + 4px (top and bottom padding of SPAN) must equal height of button background (default is 24px) */
+	height: 24px; /* Height of button background height */
+	padding-left: 8px; /* Width of left menu image */
+	text-decoration: none;
+	width: 70px;
+	background: rgb(255, 255, 255); /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%,
+		rgba(243, 243, 243, 1) 50%, rgba(237, 237, 237, 1) 51%,
+		rgba(255, 255, 255, 1) 100% ); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255,
+		255, 255, 1) ), color-stop(50%, rgba(243, 243, 243, 1) ),
+		color-stop(51%, rgba(237, 237, 237, 1) ),
+		color-stop(100%, rgba(255, 255, 255, 1) ) ); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%,
+		rgba(243, 243, 243, 1) 50%, rgba(237, 237, 237, 1) 51%,
+		rgba(255, 255, 255, 1) 100% ); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, rgba(255, 255, 255, 1) 0%,
+		rgba(243, 243, 243, 1) 50%, rgba(237, 237, 237, 1) 51%,
+		rgba(255, 255, 255, 1) 100% ); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, rgba(255, 255, 255, 1) 0%,
+		rgba(243, 243, 243, 1) 50%, rgba(237, 237, 237, 1) 51%,
+		rgba(255, 255, 255, 1) 100% ); /* IE10+ */
+	background: linear-gradient(top, rgba(255, 255, 255, 1) 0%,
+		rgba(243, 243, 243, 1) 50%, rgba(237, 237, 237, 1) 51%,
+		rgba(255, 255, 255, 1) 100% ); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient(            startColorstr='#ffffff',
+		endColorstr='#ffffff', GradientType=0 ); /* IE6-9 */
 }
 
-.xdatePicker .todayButton,.xdatePicker .noneButton {
--moz-border-radius: 15px;
--khtml-border-radius: 15px;
--webkit-border-radius: 15px;
-border-radius:15px;
-background: transparent url("../images/button.gif") no-repeat top left;
-display: block;
-float: left;
-font: normal 13px Tahoma; /* Change 13px as desired */
-line-height: 16px; /* This value + 4px + 4px (top and bottom padding of SPAN) must equal height of button background (default is 24px) */
-height: 24px; /* Height of button background height */
-padding-left: 8px; /* Width of left menu image */
-text-decoration: none;
-width:50px;
+.datePicker .labelPopup {
+	position: absolute;
+	min-width: 130px;
+	background: Window;
+	border: 1px solid WindowText;
+	padding: 1px;
 }
 
-.xdatePicker .labelPopup {
-position:absolute;
-min-width:130px;
-background:Window;
-border:1px solid WindowText;
-padding:1px;
+.datePicker .labelPopup a {
+	width: 100%;
+	display: block;
+	color: WindowText;
+	text-decoration: none;
+	white-space: nowrap;
 }
 
-.xdatePicker .labelPopup a {
-width:100%;
-display:block;
-color:WindowText;
-text-decoration:none;
-white-space:nowrap;
+.datePicker .labelPopup a:hover {
+	background: Highlight;
+	color: HighlightText;
 }
 
-.xdatePicker .labelPopup a:hover {
-background:Highlight;
-color:HighlightText;
+.datePicker .labelPopup a.selected {
+	font-weight: 700;
 }
 
-.xdatePicker .labelPopup a.selected {
-font-weight:700;
+.datePicker .headerTable,.datePicker .footerTable,.datePicker .gridTable,.datePicker td.labelContainer,.datePicker td.filler
+	{
+	width: 100%;
 }
 
-.xdatePicker .headerTable,.xdatePicker .footerTable,.xdatePicker .gridTable,.xdatePicker td.labelContainer,.xdatePicker td.filler {
-width:100%;
-margin-top: 0px;
-margin-bottom: 0px;
+.datePicker .footer,.datePicker .grid {
+	padding: 0px;
+	margin: 0px;
 }
 
-.xdatePicker .footer,.xdatePicker .grid {
-padding:3px;
+.datePicker table {
+	margin: 0px;
+	border-spacing: 3px 2px;
+	border-collapse: separate;
+	empty-cells: hide;
+	border-collapse: separate;
+	background: none;
+}
+
+table.headerTable {
+	background: rgb(224, 224, 224); /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(224, 224, 224, 1) 0%,
+		rgba(204, 204, 204, 1) 100% ); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(224,
+		224, 224, 1) ), color-stop(100%, rgba(204, 204, 204, 1) ) );
+	/* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, rgba(224, 224, 224, 1) 0%,
+		rgba(204, 204, 204, 1) 100% ); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, rgba(224, 224, 224, 1) 0%,
+		rgba(204, 204, 204, 1) 100% ); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, rgba(224, 224, 224, 1) 0%,
+		rgba(204, 204, 204, 1) 100% ); /* IE10+ */
+	background: linear-gradient(top, rgba(224, 224, 224, 1) 0%,
+		rgba(204, 204, 204, 1) 100% ); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient(             startColorstr='#e0e0e0',
+		endColorstr='#cccccc', GradientType=0 ); /* IE6-9 */
+	border-radius: 5px;
+}
+
+.datePicker .header,.datePicker .footer,.datePicker .grid {
+	border: 0px;
+	padding: 0px;
+}
+.datePicker .header {
+	border-bottom: 0px;
+}
+
+.datePicker td {
+	padding: 0px;
 }
