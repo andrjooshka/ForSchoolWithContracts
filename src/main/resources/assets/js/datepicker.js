@@ -200,7 +200,7 @@ DatePicker.prototype.create = function (doc)
     this._noneButton = doc.createElement("button");
     this._noneButton.className = "noneButton";
     this._noneButton.setAttribute("type", "button");
-    this._noneButton.appendChild(doc.createTextNode("Без"));
+    this._noneButton.appendChild(doc.createTextNode("Очистить"));
     td.appendChild(this._noneButton);
     tr.appendChild(td);
 

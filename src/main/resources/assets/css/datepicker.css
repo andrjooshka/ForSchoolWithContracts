@@ -17,7 +17,6 @@ div.datePicker {
 	cursor: default;
 	font-weight: 400 !important;
 	-moz-user-select: none;
-	height: 0px; /*��� ������ �� ������ ����� � ������� � ����� ������*/
 	border: 1px solid #CCC;
 	width: 18px;
 	font-size: 11px;
@@ -49,16 +48,21 @@ div.datePicker {
 
 .datePicker .gridTable .daysRow td {
 	font-weight: 700 !important;
-	border: 0px;
-	border-bottom: 1px solid ThreeDDarkShadow;
+	border: none;
 	background: none;
 	padding: 3px 0px;
 	text-align: center;
 }
 
-.datePicker .grid .gridTable .upperLine {
-	width: 100%;
-	height: 2px;
+.daysRow {
+	margin-bottom: -3px;
+	margin-top: -1px;
+}
+
+.datePicker .gridTable .upperLine {
+	height: 0px;
+	padding: 0px;
+	border: none;
 	overflow: hidden;
 	background: transparent;
 }
