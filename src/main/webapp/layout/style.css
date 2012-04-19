@@ -689,6 +689,15 @@ table.t-data-grid td.balance {
 	padding-right: 3px;
 }
 
+logo{
+	background: url("../images/logo.jpg");
+	border-radius: 3px;
+}
+big {
+	height: 100px;
+	width: 200px;
+}
+
 
 /* AutoComplete */
 DIV.t-autocomplete-menu {

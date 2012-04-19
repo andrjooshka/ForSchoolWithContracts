@@ -4,6 +4,9 @@
       xmlns:p="tapestry:parameter">
     <div style="margin-left:35%;">
 	    
+	    <div class="big">
+			<img src="images/logo.jpg" />
+		</div>
 	    <t:pagelink page="schedules" style="margin-top: 0px;" class="homelink">
 		    <div class="buttondiv">
 		    	<h2>Расписания</h2>
