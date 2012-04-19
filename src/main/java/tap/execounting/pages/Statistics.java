@@ -141,7 +141,8 @@ public class Statistics {
 		return total;
 	}
 
-	Object onValueChangedFromFacilityId(int facId) {
+	Object onValueChangedFromFacilityId(Integer facId) {
+		System.out.println("\n\nInside on value changed\nfacId");
 		facilityId = facId;
 		roomSelect = facilityId == null ? new RoomSelectModel(null)
 				: new RoomSelectModel(dao.find(Facility.class, facilityId));

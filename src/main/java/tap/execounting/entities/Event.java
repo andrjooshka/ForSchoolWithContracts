@@ -116,6 +116,11 @@ public class Event implements Comparable<Event> {
 	}
 
 	public Date getDate() {
+		if(date==null){
+			date = new Date();
+			if(getComment()==null) setComment("");
+			setComment(getComment().concat(" !! дату надо проверить"));
+		}
 		return date;
 	}
 
