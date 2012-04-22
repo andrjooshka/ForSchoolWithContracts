@@ -5,7 +5,7 @@
 	
 	<h3>${client.name}</h3>
 
-	<span style="position: absolute; top: 100px; right: 150px;">
+	<span style="position: absolute; top: 60px; right: 60px;">
 		<t:form>
 			<t:checkbox t:id="switchEditor" value="editorActiveAlways" onclick="this.form.submit();"/>
 			<t:label for="switchEditor"/>

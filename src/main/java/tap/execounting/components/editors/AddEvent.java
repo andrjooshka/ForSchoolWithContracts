@@ -41,7 +41,6 @@ public class AddEvent {
 	@Persist
 	private Event event;
 
-	@SuppressWarnings("unused")
 	@Property
 	private SelectModel facilitySelect;
 
@@ -91,7 +90,8 @@ public class AddEvent {
 	public void setup(Event e, boolean update) {
 		setup(e);
 		updateMode = update;
-		if(!updateMode)e.setComment("");
+		if (!updateMode)
+			e.setComment("");
 	}
 
 	public void setup(Teacher t) {
@@ -99,7 +99,7 @@ public class AddEvent {
 		event = new Event();
 		event.setHostId(t.getId());
 		event.setDate(new Date());
-		
+
 	}
 
 	public void setup(Facility f) {
@@ -163,17 +163,19 @@ public class AddEvent {
 					// type_id check;
 					typeMatch = con.getEventType().getTypeTitle()
 							.equals(eventType.getTypeTitle()); // soft check
-					
+
 					if (event.haveContract(con)) {
 						typeMatch = con.getEventType().getTypeTitle()
 								.equals(eventType.getTypeTitle());
 						if (!typeMatch) {
-							throw new IllegalArgumentException(String.format(
-									"Ошибка: сохраняемое занятие для клиента %s, имеет тип (%s), отличный " +
-									"от типа договора (%s) к которому оно прикреплено. Если вы хотите перекинуть это занятие" +
-									"в другой договор - " +
-									"то сначала удалите его из текущего.",
-									name, eventType.getTitle(), con.getEventType().getTitle()));
+							throw new IllegalArgumentException(
+									String.format(
+											"Ошибка: сохраняемое занятие для клиента %s, имеет тип (%s), отличный "
+													+ "от типа договора (%s) к которому оно прикреплено. Если вы хотите перекинуть это занятие"
+													+ "в другой договор - "
+													+ "то сначала удалите его из текущего.",
+											name, eventType.getTitle(), con
+													.getEventType().getTitle()));
 						}
 						candidates.clear();
 						break;
@@ -230,9 +232,20 @@ public class AddEvent {
 
 		teacherSelect = new TeacherSelectModel(dao);
 		facilitySelect = new FacilitySelectModel(dao);
-		roomSelect = event == null ? new RoomSelectModel(null)
-				: new RoomSelectModel(dao.find(Facility.class,
+		// roomSelect
+		if (event == null) {
+			roomSelect = new RoomSelectModel(dao.find(Facility.class,
+					(Integer) facilitySelect.getOptions().get(0).getValue()));
+		} else {
+			if (event.getFacilityId() == 0)
+				roomSelect = new RoomSelectModel(
+						dao.find(Facility.class, (Integer) facilitySelect
+								.getOptions().get(0).getValue()));
+			else
+				roomSelect = new RoomSelectModel(dao.find(Facility.class,
 						event.getFacilityId()));
+		}
+
 		typeSelect = new TypeSelectModel(dao);
 	}
 
