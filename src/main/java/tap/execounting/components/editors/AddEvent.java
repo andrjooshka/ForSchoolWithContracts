@@ -83,7 +83,6 @@ public class AddEvent {
 	}
 
 	public void setup(Event e) {
-		updateMode = true;
 		roomSelect = new RoomSelectModel(dao.find(Facility.class,
 				e.getFacilityId()));
 		event = e;
@@ -92,6 +91,7 @@ public class AddEvent {
 	public void setup(Event e, boolean update) {
 		setup(e);
 		updateMode = update;
+		if(!updateMode)e.setComment("");
 	}
 
 	public void setup(Teacher t) {
@@ -99,6 +99,7 @@ public class AddEvent {
 		event = new Event();
 		event.setHostId(t.getId());
 		event.setDate(new Date());
+		
 	}
 
 	public void setup(Facility f) {

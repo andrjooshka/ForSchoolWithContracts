@@ -1,8 +1,5 @@
 package tap.execounting.pages;
 
-import tap.execounting.annotations.AnonymousAccess;
-import tap.execounting.services.Authenticator;
-
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Log;
 import org.apache.tapestry5.annotations.Property;
@@ -10,7 +7,9 @@ import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import tap.execounting.annotations.AnonymousAccess;
 import tap.execounting.security.AuthenticationException;
+import tap.execounting.services.Authenticator;
 
 
 /**
@@ -38,7 +37,7 @@ public class Signin
 
     @Inject
     private Messages messages;
-
+    
     @Log
     public Object onSubmitFromLoginForm()
     {

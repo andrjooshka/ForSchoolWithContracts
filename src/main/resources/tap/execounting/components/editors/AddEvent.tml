@@ -19,13 +19,13 @@
 		
 		<p:facilityId>
 			<t:label for="facilityid"/>
-			<t:select t:id="facilityid" model="facilitySelect" value="event.facilityid" t:zone="roomZone" blankOption="ALWAYS" blankLabel="message:blank-label"/>
+			<t:select t:id="facilityid" model="facilitySelect" value="event.facilityid" t:zone="roomZone" <!--blankOption="ALWAYS" blankLabel="message:blank-label"--> />
 		</p:facilityId>
 		
 		<p:roomId>
 			<t:zone t:id="roomZone" id="roomZone" style="display:inline;">
 				<t:label for="room"/>
-				<t:select t:id="room" model="roomSelect" value="event.roomid" blankOption="ALWAYS" blankLabel="message:blank-label"/>
+				<t:select t:id="room" model="roomSelect" value="event.roomid" <!--blankOption="ALWAYS" blankLabel="message:blank-label"--> />
 			</t:zone>
 		</p:roomId>
 

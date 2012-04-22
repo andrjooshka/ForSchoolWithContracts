@@ -3,11 +3,9 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-	<div class="big">
-		<img src="../images/logo.jpg" />
-	</div>
+	<img src="images/logo.png" style="margin-left: 40%; margin-top: 5%; width: 150px; padding-left: 48px;" />
 
-	<form t:type="form" class="full-form" t:id="loginForm" style="margin-top: 10%; margin-left: 35%;">
+	<form t:type="form" class="full-form" t:id="loginForm" style="margin-left: 40%;">
 		
 		<t:errors />	
 		<table class="login">

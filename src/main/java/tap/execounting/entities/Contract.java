@@ -38,7 +38,7 @@ public class Contract implements Comparable<Contract> {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name = "client_id")
+	@Column(name = "client_id", unique = false)
 	private int clientId;
 
 	@OneToOne(optional = false)
@@ -53,14 +53,14 @@ public class Contract implements Comparable<Contract> {
 
 	private boolean freeze;
 
-	@Column(name = "contract_type_id")
+	@Column(name = "contract_type_id", unique = false)
 	private int contractTypeId;
 
 	@OneToOne(optional = false)
 	@JoinColumn(name = "contract_type_id", insertable = false, updatable = false)
 	private ContractType contractType;
 
-	@Column(name = "type_id")
+	@Column(name = "type_id", unique = false)
 	private int typeId;
 
 	@OneToOne(optional = false)
@@ -70,7 +70,7 @@ public class Contract implements Comparable<Contract> {
 	@Column(name = "lessons_number")
 	private int lessonsNumber;
 
-	@Column(name = "teacher_id", nullable = true)
+	@Column(name = "teacher_id", nullable = true, unique = false)
 	private int teacherId;
 
 	@OneToOne(optional = false)

@@ -121,9 +121,9 @@ a div.buttondiv { /* Gradient */
 	-webkit-border-radius: 5px;
 	box-shadow: 0 0 3px 0px #000;
 	height: 90px;
-	width: 360px;
+	width: 330px;
 	margin-top: 10px;
-	padding-left: 20px;
+	padding-left: 30px;
 	padding-right: 20px;
 	padding-top: 20px;
 }
@@ -143,9 +143,9 @@ a div.buttondiv:hover { /* Gradient */
 	-webkit-border-radius: 5px;
 	box-shadow: 0 0 3px 0px #000;
 	height: 90px;
-	width: 360px;
+	width: 330px;
 	margin-top: 10px;
-	padding-left: 20px;
+	padding-left: 30px;
 	padding-right: 20px;
 	padding-top: 20px;
 }
@@ -165,11 +165,11 @@ a div.buttondiv:active { /* Gradient */
 	-webkit-border-radius: 5px;
 	box-shadow: 0 0 3px 0px #000;
 	height: 90px;
-	width: 360px;
+	width: 330px;
 	margin-top: 11px;
 	margin-bottom: -1px;
 	margin-left: 1px;
-	padding-left: 20px;
+	padding-left: 30px;
 	padding-right: 20px;
 	padding-top: 20px;
 }
@@ -178,20 +178,16 @@ div.buttondiv h2 {
 	margin-bottom: 15px;
 }
 
-div.buttondiv {
-	padding-top: 0px;
+div.buttondiv div {
+	margin-top: 24px;
+	margin-left: 19px;
+	text-align: justify;
 }
 
 .homelink {
 	text-decoration: none;
 	text-shadow: #CCC 2px 1px 5px;
 	width: 350px;
-}
-
-div.buttondiv div {
-	margin-top: 15px;
-	margin-left: 10px;
-	text-align: justify;
 }
 
 .nav a {
@@ -229,6 +225,7 @@ div.buttondiv div {
 
 .nav a.last {
 	border-right: 0px;
+	display: table-cell;
 }
 
 .nav span {
@@ -585,7 +582,7 @@ th.Action.t-last {
 	text-align: center;
 }
 
-t-zone {
+div.t-zone {
 	background: none;
 }
 

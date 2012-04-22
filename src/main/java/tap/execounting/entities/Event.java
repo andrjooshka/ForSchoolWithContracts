@@ -63,7 +63,7 @@ public class Event implements Comparable<Event> {
 
 	private boolean state;
 
-	@Column(name = "type_id")
+	@Column(name = "type_id", unique = false)
 	private int typeId;
 
 	@OneToOne(optional = false)
@@ -116,9 +116,10 @@ public class Event implements Comparable<Event> {
 	}
 
 	public Date getDate() {
-		if(date==null){
+		if (date == null) {
 			date = new Date();
-			if(getComment()==null) setComment("");
+			if (getComment() == null)
+				setComment("");
 			setComment(getComment().concat(" !! дату надо проверить"));
 		}
 		return date;
@@ -211,8 +212,9 @@ public class Event implements Comparable<Event> {
 	}
 
 	public boolean haveContract(Contract con) {
-		for(Contract c : getContracts())
-			if(c.getId()==con.getId()) return true;
+		for (Contract c : getContracts())
+			if (c.getId() == con.getId())
+				return true;
 		return false;
 	}
 }

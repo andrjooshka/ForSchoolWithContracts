@@ -40,7 +40,7 @@
 		</tr>
 	</table>
 	
-	<t:zone t:id="ezone">
+	<t:zone t:id="ezone" style="background: none;">
 		<t:if test="editorActive">
 			<t:editors.addcontract t:id="editor"/>
 			<p:else>
