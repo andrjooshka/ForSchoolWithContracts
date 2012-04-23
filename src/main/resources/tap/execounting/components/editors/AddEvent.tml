@@ -33,7 +33,7 @@
 
 		<p:date>
 			<t:label for="date"/>
-			<t:datefield t:id="date" value="event.date" />
+			<t:datefield t:id="date" value="event.date" validate="required" />
 		</p:date>
 		
 		<p:typeId>

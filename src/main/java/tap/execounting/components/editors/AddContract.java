@@ -16,11 +16,15 @@ import tap.execounting.entities.Contract;
 import tap.execounting.entities.ContractType;
 import tap.execounting.entities.EventType;
 import tap.execounting.entities.Teacher;
+import tap.execounting.services.SuperCalendar;
 
 public class AddContract {
 
 	@Inject
 	private CrudServiceDAO dao;
+	
+	@Inject
+	private SuperCalendar calendar;
 
 	@Property
 	@Persist
@@ -95,6 +99,10 @@ public class AddContract {
 		if (teachers == null)
 			teachers = dao.findWithNamedQuery(Teacher.ALL);
 		return teachers;
+	}
+	
+	public String getConDate(){
+		return calendar.setTime(con.getDate()).stringByTuple("day", "month", "year");
 	}
 
 	void onSubmit() {

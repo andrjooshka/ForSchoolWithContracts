@@ -75,6 +75,10 @@ public class Event implements Comparable<Event> {
 	@OneToMany
 	@JoinTable(name = "events_contracts", joinColumns = { @JoinColumn(name = "event_id") }, inverseJoinColumns = { @JoinColumn(name = "contract_id") })
 	private List<Contract> contracts;
+	
+	public Event() {
+		date = new Date();
+	}
 
 	public int getId() {
 		return id;

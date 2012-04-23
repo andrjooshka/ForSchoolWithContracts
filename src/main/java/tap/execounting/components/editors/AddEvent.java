@@ -247,6 +247,11 @@ public class AddEvent {
 		}
 
 		typeSelect = new TypeSelectModel(dao);
+		if(!updateMode) event.setComment("");
+	}
+	
+	void setupRender(){
+		if(!updateMode) event.setComment("");
 	}
 
 	List<String> onProvideCompletionsFromEventTypes(String starts) {
