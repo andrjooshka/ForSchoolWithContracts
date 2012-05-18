@@ -84,14 +84,17 @@ public class AddEvent {
 	public void setup(Event e) {
 		roomSelect = new RoomSelectModel(dao.find(Facility.class,
 				e.getFacilityId()));
+		
+		if(!updateMode){
+			e.setFacilityId(event.getFacilityId());
+			e.setRoomId(event.getRoomId());
+		}
 		event = e;
 	}
 
 	public void setup(Event e, boolean update) {
-		setup(e);
 		updateMode = update;
-		if (!updateMode)
-			e.setComment("");
+		setup(e);
 	}
 
 	public void setup(Teacher t) {

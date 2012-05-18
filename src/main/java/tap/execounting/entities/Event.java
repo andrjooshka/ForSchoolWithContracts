@@ -78,6 +78,7 @@ public class Event implements Comparable<Event> {
 	
 	public Event() {
 		date = new Date();
+		state = true;
 	}
 
 	public int getId() {
