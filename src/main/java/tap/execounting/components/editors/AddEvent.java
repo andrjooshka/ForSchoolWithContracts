@@ -85,7 +85,7 @@ public class AddEvent {
 		roomSelect = new RoomSelectModel(dao.find(Facility.class,
 				e.getFacilityId()));
 		
-		if(!updateMode){
+		if(!updateMode && event != null){
 			e.setFacilityId(event.getFacilityId());
 			e.setRoomId(event.getRoomId());
 		}
