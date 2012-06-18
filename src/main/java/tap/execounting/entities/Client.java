@@ -35,7 +35,7 @@ public class Client {
 	public static final String inactive = "нет активных договоров";
 	public static final String frozen = "договор(а) заморожены";
 	public static final String active = "занимается";
-	
+
 	public static final String studStateNew = "новичок";
 	public static final String studStateExp = "продливший";
 
@@ -141,6 +141,23 @@ public class Client {
 		return payments;
 	}
 
+	public Payment getFirstPlannedPayment() {
+		List<Payment> payments = getPlannedPayments();
+		if (payments.size() == 0)
+			return null;
+		Payment p = payments.get(0);
+		for (Payment t : payments)
+			if (t.getDate().before(p.getDate()))
+				p = t;
+		return p;
+	}
+
+	public Date getFirstPlannedPaymentDate() {
+		if (getFirstPlannedPayment() != null)
+			return getFirstPlannedPayment().getDate();
+		return null;
+	}
+
 	public String getState() {
 
 		// Client inactive check
@@ -171,7 +188,8 @@ public class Client {
 			if (!firstRealContract) {
 				if (t.getLessonsNumber() > 2)
 					firstRealContract = true;
-			} else if(t.getLessonsNumber()>2) return Client.studStateExp;
+			} else if (t.getLessonsNumber() > 2)
+				return Client.studStateExp;
 		}
 		return Client.studStateNew;
 	}

@@ -1,20 +1,28 @@
 package tap.execounting.pages;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.PropertyConduit;
+import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.BeanModel;
+import org.apache.tapestry5.corelib.components.Zone;
+import org.apache.tapestry5.internal.services.LiteralPropertyConduit;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
+import org.apache.tapestry5.services.Request;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 
+import tap.execounting.components.editors.AddPayment;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Payment;
@@ -32,13 +40,22 @@ public class Reports {
 	@Inject
 	private ComponentResources componentResources;
 	@Inject
+	private Request request;
+	@Inject
 	private Session session;
 	@Property
 	private Client client;
+	@Property
+	private boolean editingPayment;
 	@Inject
 	private SuperCalendar calendar;
 	@InjectPage
 	private ClientPage clientPage;
+	@Component
+	private Zone paymentZone;
+
+	@Component
+	private AddPayment paymentEditor;
 
 	// TODO check if SQL will work better
 	// Question is: should we remember about freezed contracts?
@@ -79,6 +96,12 @@ public class Reports {
 		return builder.toString();
 	}
 
+	public Block onEditPayment(Client c) {
+		editingPayment = true;
+		paymentEditor.setup(c.getFirstPlannedPayment());
+		return request.isXHR() ? paymentZone.getBody() : null;
+	}
+
 	public List<Client> getSchedPayments() {
 		List<Contract> list = getAllContracts();
 
@@ -104,7 +127,9 @@ public class Reports {
 						"day", "month")
 						+ ": ");
 				builder.append(p.getAmount());
-				builder.append("р. за '" + c.getEventType().getTitle() + "'");
+				builder.append(" р. за '" + c.getEventType().getTitle() + "'.");
+				if (p.getComment() != null && !p.getComment().equals(""))
+					builder.append("Комм.: " + p.getComment());
 			}
 		return builder.toString();
 	}
@@ -117,9 +142,9 @@ public class Reports {
 				list.remove(i);
 		return list;
 	}
-	
-	public String getDebtInfo(){
-		return client.getBalance()*(-1) + "";
+
+	public String getDebtInfo() {
+		return client.getBalance() * (-1) + "";
 	}
 
 	void setupRender() {
@@ -129,7 +154,7 @@ public class Reports {
 					componentResources.getMessages());
 			modelOfEnding.add("endingInfo", null);
 			modelOfEnding.exclude("return", "balance", "studentInfo",
-					"firstContractDate", "state");
+					"firstContractDate", "state", "firstPlannedPaymentDate");
 		}
 
 		// soon payments
@@ -147,11 +172,11 @@ public class Reports {
 					componentResources.getMessages());
 			modelOfDebtors.add("debtInfo", null);
 			modelOfDebtors.exclude("return", "balance", "studentInfo",
-					"firstContractDate", "state");
+					"firstContractDate", "state", "firstPlannedPaymentDate");
 		}
 	}
-	
-	ClientPage onDetails(Client c){
+
+	ClientPage onDetails(Client c) {
 		clientPage.setup(c);
 		return clientPage;
 	}
@@ -162,15 +187,16 @@ public class Reports {
 		List<Contract> list = criteria.list();
 		return list;
 	}
-	
+
 	@Property
 	@Persist
 	private boolean switchPages;
-	
-	public String getPagerPosition(){
+
+	public String getPagerPosition() {
 		return switchPages ? "top" : "none";
 	}
-	public int getRows(){
+
+	public int getRows() {
 		return switchPages ? 20 : 100000;
 	}
 }

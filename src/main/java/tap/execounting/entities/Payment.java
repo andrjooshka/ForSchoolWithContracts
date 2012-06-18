@@ -36,6 +36,8 @@ public class Payment {
 	private int amount;
 
 	private boolean scheduled;
+	
+	private String comment;
 
 	@Validate(value = "required")
 	private Date date;
@@ -81,5 +83,13 @@ public class Payment {
 
 	public void setScheduled(boolean scheduled) {
 		this.scheduled = scheduled;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 }

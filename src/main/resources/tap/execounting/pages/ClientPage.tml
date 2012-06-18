@@ -11,6 +11,12 @@
 			<t:label for="switchEditor"/>
 		</t:form>
 	</span>
+	<span style="position: absolute; top: 90px; right: 85px;">
+		<t:form>
+			<t:checkbox t:id="switchEventEditor" value="constantEventEditor" onclick="this.form.submit();"/>
+			<t:label for="switchEventEditor"/>
+		</t:form>
+	</span>
 	
 	<!--stats-->
 	<table class="stats">

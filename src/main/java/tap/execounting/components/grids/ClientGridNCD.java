@@ -47,7 +47,7 @@ public class ClientGridNCD {
 		if (model == null) {
 			model = beanModelSource.createDisplayModel(Client.class,
 					componentResources.getMessages());
-			model.exclude("return");
+			model.exclude("return", "firstPlannedPaymentDate");
 			// model.add("teachers", null);
 			model.add("contracts", null);
 			model.reorder("id", "name", "contracts");

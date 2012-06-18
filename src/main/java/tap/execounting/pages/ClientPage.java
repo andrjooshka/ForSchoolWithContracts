@@ -32,6 +32,9 @@ public class ClientPage {
 	private boolean editorActiveAlways;
 	@Component
 	private Zone ezone;
+	@Persist
+	@Property
+	private boolean constantEventEditor;
 
 	@InjectComponent
 	private AddContract editor;

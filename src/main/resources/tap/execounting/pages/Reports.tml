@@ -42,6 +42,16 @@
 	  		</p:nameCell>
 	  		<p:paymentsInfoCell>
 	  			${paymentInfo}
+	  			<t:zone t:id="paymentzone" id="${client.id}payment">
+	  				<t:if test="editingPayment">
+	  					<t:editors.addpayment t:id="paymenteditor" />
+	  					<p:else>
+	  						<t:eventlink context="client" event="editPayment" zone="${client.id}payment">
+	  							Редактировать первый платеж.
+	  						</t:eventlink>
+	  					</p:else>
+	  				</t:if>
+	  			</t:zone>
 	  		</p:paymentsInfoCell>
 	  	</t:grid>
 	</div>
