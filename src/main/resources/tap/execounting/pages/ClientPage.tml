@@ -56,6 +56,6 @@
 	</t:zone>
 	
 	<t:loop source="contracts" value="contract">
-		<t:showcontract contract="contract" />
+		<t:show.showcontract contract="contract" />
 	</t:loop>
 </html>

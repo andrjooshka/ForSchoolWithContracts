@@ -41,17 +41,9 @@
 	  			<t:eventlink event="details" context="client">${client.name}</t:eventlink>
 	  		</p:nameCell>
 	  		<p:paymentsInfoCell>
-	  			${paymentInfo}
-	  			<t:zone t:id="paymentzone" id="${client.id}payment">
-	  				<t:if test="editingPayment">
-	  					<t:editors.addpayment t:id="paymenteditor" />
-	  					<p:else>
-	  						<t:eventlink context="client" event="editPayment" zone="${client.id}payment">
-	  							Редактировать первый платеж.
-	  						</t:eventlink>
-	  					</p:else>
-	  				</t:if>
-	  			</t:zone>
+				<t:loop source="client.plannedPayments" value="pPayment">
+					<t:show.showpayment payment="pPayment" id="pPayment.id" />
+				</t:loop>
 	  		</p:paymentsInfoCell>
 	  	</t:grid>
 	</div>

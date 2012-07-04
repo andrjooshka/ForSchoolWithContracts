@@ -22,7 +22,6 @@ public class AddPayment {
 	@Persist
 	private Payment payment;
 
-
 	public void setup(Payment p) {
 		payment = p;
 		updateMode = true;
@@ -33,12 +32,11 @@ public class AddPayment {
 		updateMode = false;
 	}
 
-	void onSubmit() {
-		
-		if (updateMode) {
+	
+	void onSuccess(){
+		if (updateMode) 
 			dao.update(payment);
-		} else {
+		else
 			dao.create(payment);
-		}
 	}
 }

@@ -46,7 +46,7 @@
 		        			<t:loop source="facility.rooms" value="room">
 			        			<td>
 			        			<t:if test="event">
-	        						<t:showevent event="event"/>
+	        						<t:show.showevent event="event"/>
 	        					</t:if>	
 			        			</td>
 			        		</t:loop>

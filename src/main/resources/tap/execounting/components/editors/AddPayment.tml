@@ -7,6 +7,7 @@
 	</t:if> 
 	<div>
 	
-	<t:beaneditform object="payment" submitlabel="message:submit-label" exclude="id,contractId"/>
+	<t:beaneditform object="payment" submitlabel="message:submit-label" 
+	exclude="id,contractId"/>
 	</div>
 </t:container>

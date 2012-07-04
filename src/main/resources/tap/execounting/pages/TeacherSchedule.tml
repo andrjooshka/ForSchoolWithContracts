@@ -63,7 +63,7 @@
 	    			<t:loop source="dates" value="date">
 	    				<td class="rb lb">
 	    					<t:if test="event">
-	    						<t:showevent event="event"/>
+	    						<t:show.showevent event="event"/>
 	    					</t:if>
 	    				</td>
 	    			</t:loop>

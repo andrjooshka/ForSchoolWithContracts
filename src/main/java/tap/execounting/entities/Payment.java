@@ -7,8 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.apache.tapestry5.beaneditor.Validate;
@@ -44,6 +46,14 @@ public class Payment {
 
 	@Column(name = "contract_id")
 	private int contractId;
+	
+	@OneToOne(optional = false)
+	@JoinColumn(name = "contract_id", insertable = false, updatable = false)
+	private Contract contract;
+
+	public Contract getContract() {
+		return contract;
+	}
 
 	public int getId() {
 		return id;

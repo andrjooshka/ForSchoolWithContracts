@@ -1,32 +1,23 @@
 package tap.execounting.pages;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
-import org.apache.tapestry5.PropertyConduit;
-import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.BeanModel;
-import org.apache.tapestry5.corelib.components.Zone;
-import org.apache.tapestry5.internal.services.LiteralPropertyConduit;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
-import org.apache.tapestry5.services.Request;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 
-import tap.execounting.components.editors.AddPayment;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Payment;
-import tap.execounting.services.SuperCalendar;
 
 public class Reports {
 	@Inject
@@ -39,23 +30,16 @@ public class Reports {
 	private BeanModel<Client> modelOfDebtors;
 	@Inject
 	private ComponentResources componentResources;
-	@Inject
-	private Request request;
+	@SuppressWarnings("unused")
+	@Property
+	private Payment pPayment;
 	@Inject
 	private Session session;
 	@Property
 	private Client client;
-	@Property
-	private boolean editingPayment;
-	@Inject
-	private SuperCalendar calendar;
+
 	@InjectPage
 	private ClientPage clientPage;
-	@Component
-	private Zone paymentZone;
-
-	@Component
-	private AddPayment paymentEditor;
 
 	// TODO check if SQL will work better
 	// Question is: should we remember about freezed contracts?
@@ -96,12 +80,6 @@ public class Reports {
 		return builder.toString();
 	}
 
-	public Block onEditPayment(Client c) {
-		editingPayment = true;
-		paymentEditor.setup(c.getFirstPlannedPayment());
-		return request.isXHR() ? paymentZone.getBody() : null;
-	}
-
 	public List<Client> getSchedPayments() {
 		List<Contract> list = getAllContracts();
 
@@ -117,21 +95,6 @@ public class Reports {
 			set.add(c.getClient());
 
 		return new ArrayList<Client>(set);
-	}
-
-	public String getPaymentInfo() {
-		StringBuilder builder = new StringBuilder();
-		for (Contract c : client.getContracts())
-			for (Payment p : c.getPlannedPayments(14)) {
-				builder.append(calendar.setTime(p.getDate()).stringByTuple(
-						"day", "month")
-						+ ": ");
-				builder.append(p.getAmount());
-				builder.append(" р. за '" + c.getEventType().getTitle() + "'.");
-				if (p.getComment() != null && !p.getComment().equals(""))
-					builder.append("Комм.: " + p.getComment());
-			}
-		return builder.toString();
 	}
 
 	public List<Client> getDebtors() {
