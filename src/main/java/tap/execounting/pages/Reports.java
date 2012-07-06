@@ -5,19 +5,27 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.BeanModel;
+import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
+import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.annotations.Index;
 
+import tap.execounting.components.editors.AddPayment;
+import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Payment;
+import tap.execounting.services.SuperCalendar;
 
 public class Reports {
 	@Inject
@@ -32,11 +40,16 @@ public class Reports {
 	private ComponentResources componentResources;
 	@SuppressWarnings("unused")
 	@Property
-	private Payment pPayment;
+	@Persist
+	private Payment loopPayment;
+	@Component
+	private Zone paymentZone;
 	@Inject
 	private Session session;
 	@Property
 	private Client client;
+	@Inject
+	private AjaxResponseRenderer renderer;
 
 	@InjectPage
 	private ClientPage clientPage;
@@ -154,6 +167,43 @@ public class Reports {
 	@Property
 	@Persist
 	private boolean switchPages;
+	
+	@Property
+	private boolean editing;
+	@Inject
+	private SuperCalendar calendar;
+	
+	public String getPaymentInfo() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(calendar.setTime(loopPayment.getDate()).stringByTuple("day",
+				"month")
+				+ ": ");
+		builder.append(loopPayment.getAmount());
+		builder.append(" р. за '"
+				+ loopPayment.getContract().getEventType().getTitle() + "'.");
+		if (loopPayment.getComment() != null && !loopPayment.getComment().equals(""))
+			builder.append("Комм.: " + loopPayment.getComment());
+		return builder.toString();
+	}
+	
+	void onEdit(Payment p){
+		editing = true;
+		loopPayment=p;
+		renderer.addRender("paymentBody"+p.getId(), paymentZone);
+	}
+	void onDelete(Payment payment) {
+		loopPayment= null;
+		dao.delete(Payment.class, payment.getId());
+		renderer.addRender("paymentBody"+payment.getId(), paymentZone);
+	}
+	
+	@Inject
+	private CrudServiceDAO dao;
+	void onSuccess(){
+		dao.update(loopPayment);
+		editing=false;
+		renderer.addRender("paymentBody"+loopPayment.getId(), paymentZone);
+	}
 
 	public String getPagerPosition() {
 		return switchPages ? "top" : "none";

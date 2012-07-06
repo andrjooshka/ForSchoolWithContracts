@@ -2,24 +2,10 @@
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" 
 	xmlns:p="tapestry:parameter">
 
-	<t:zone t:id="bodyZone" id="paymentBody${id}">
-		<t:if test="updateMode">
-			Платеж ${id} : Редактирование
-			<div>
-			<t:beaneditform object="payment" submitlabel="message:submit-label" 
-			exclude="id,contractId" zone="paymentBody${payment.id}" />
-			</div>
-			
-			<p:else>
-				<t:if test="payment">
-				<div class="panel" style="height: 25px; min-width: 100px; margin-top: 5px; ">	
-					${paymentInfo} &#09;
-					(<t:eventlink event="delete" context="payment" t:zone="paymentBody${payment.id}">удалить</t:eventlink> |
-					<t:eventlink event="edit" context="payment"
-					t:zone="paymentBody${payment.id}">редактировать</t:eventlink>)
-				</div>
-				</t:if>
-			</p:else>
-		</t:if>
-	</t:zone>
+	<div class="panel" style="height: 25px; min-width: 100px; margin-top: 5px; ">	
+		${paymentInfo} &#09;
+		(<t:eventlink event="delete" context="payment" t:zone="paymentBody${payment.id}">удалить</t:eventlink> |
+		<t:eventlink event="edit" 
+		t:zone="paymentBody${payment.id}">редактировать</t:eventlink>)
+	</div>
 </t:container>

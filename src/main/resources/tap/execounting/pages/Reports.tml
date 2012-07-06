@@ -41,8 +41,26 @@
 	  			<t:eventlink event="details" context="client">${client.name}</t:eventlink>
 	  		</p:nameCell>
 	  		<p:paymentsInfoCell>
-				<t:loop source="client.plannedPayments" value="pPayment">
-					<t:show.showpayment payment="pPayment" id="pPayment.id" />
+				<t:loop source="client.plannedPayments" value="loopPayment">
+					<t:if test="loopPayment">
+						<t:zone t:id="paymentZone" id="paymentBody${loopPayment.id}" update="show">
+							<t:if test="!editing">
+								<div class="panel" style="height: 25px; min-width: 100px; margin-top: 5px; ">	
+									${paymentInfo} &#09;
+									(<t:eventlink event="delete" context="loopPayment" t:zone="paymentBody${loopPayment.id}">удалить</t:eventlink> |
+									<t:eventlink event="edit" context="loopPayment"
+									t:zone="paymentBody${loopPayment.id}">редактировать</t:eventlink>)
+								</div>
+							</t:if>
+							<t:if test="editing">
+								Платеж ${loopPayment.id} : Редактирование
+								<div>
+									<t:beaneditform object="loopPayment" submitlabel="message:submit-label" 
+									exclude="id,contractId" t:zone="paymentBody${loopPayment.id}"/>
+								</div>
+							</t:if>
+						</t:zone>
+					</t:if>
 				</t:loop>
 	  		</p:paymentsInfoCell>
 	  	</t:grid>
