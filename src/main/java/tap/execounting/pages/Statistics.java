@@ -20,7 +20,7 @@ import tap.execounting.data.BooleanSelectModel;
 import tap.execounting.data.FacilitySelectModel;
 import tap.execounting.data.RoomSelectModel;
 import tap.execounting.data.TeacherSelectModel;
-import tap.execounting.data.TypeSelectModel;
+import tap.execounting.data.TypeTitleSelectModel;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.EventType;
 import tap.execounting.entities.Facility;
@@ -49,7 +49,7 @@ public class Statistics {
 	private RoomSelectModel roomSelect;
 	@SuppressWarnings("unused")
 	@Property
-	private TypeSelectModel typeSelect;
+	private TypeTitleSelectModel typeSelect;
 	@SuppressWarnings("unused")
 	@Property
 	private SelectModel boolSelect;
@@ -69,7 +69,7 @@ public class Statistics {
 	private Integer teacherId;
 	@Property
 	@Persist
-	private Integer typeId;
+	private String typeId;
 	@Property
 	@Persist
 	private Integer roomId;
@@ -98,8 +98,8 @@ public class Statistics {
 		}
 		if (teacherId != null)
 			criteria.add(Restrictions.eq("hostId", teacherId));
-		if (typeId != null)
-			criteria.add(Restrictions.eq("typeId", typeId));
+		// if (typeId != null)
+		// criteria.add(Restrictions.eq("typeId", typeId));
 		if (date1 != null)
 			criteria.add(Restrictions.gt("date", date1));
 		if (date2 != null)
@@ -108,6 +108,13 @@ public class Statistics {
 			criteria.add(Restrictions.eq("state", Boolean.parseBoolean(state)));
 
 		events = criteria.list();
+
+		if (typeId != null) {
+			for (int i = events.size() - 1; i >= 0; i--)
+				if (!events.get(i).getEventType().getTitle().contains(typeId))
+					events.remove(i);
+		}
+
 		return events;
 	}
 
@@ -150,7 +157,8 @@ public class Statistics {
 	}
 
 	void onSubmitFromFilterForm() {
-		if(request.isXHR()) renderer.addRender(resultZone).addRender(statZone);
+		if (request.isXHR())
+			renderer.addRender(resultZone).addRender(statZone);
 	}
 
 	void onPrepareForRender() {
@@ -159,6 +167,6 @@ public class Statistics {
 		boolSelect = new BooleanSelectModel();
 		roomSelect = facilityId == null ? new RoomSelectModel(null)
 				: new RoomSelectModel(dao.find(Facility.class, facilityId));
-		typeSelect = new TypeSelectModel(dao);
+		typeSelect = new TypeTitleSelectModel(dao);
 	}
 }
