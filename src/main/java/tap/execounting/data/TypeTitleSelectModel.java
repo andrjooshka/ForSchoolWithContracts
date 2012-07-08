@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-
 import org.apache.tapestry5.OptionGroupModel;
 import org.apache.tapestry5.OptionModel;
 import org.apache.tapestry5.internal.OptionModelImpl;
@@ -23,16 +22,19 @@ public class TypeTitleSelectModel extends AbstractSelectModel {
 		for (EventType et : types)
 			options.add(new OptionModelImpl(et.getTitle(), et.getTitle()));
 		HashSet<String> set = new HashSet<String>();
-		for(EventType et : types){
-			try{
-			set.add(et.getTitle().split(" ")[0]);
-			}
-			catch (Exception e){
-				System.out.println("Exception occured in data.TypeTitleSelectModel");
+		for (EventType et : types) {
+			try {
+				String ex = et.getTitle().split(" ")[0].trim();
+				if (ex.charAt(ex.length() - 1) == ':')
+					ex = ex.substring(0, ex.length() - 1).trim();
+				set.add(ex);
+			} catch (Exception e) {
+				System.out
+						.println("Exception occured in data.TypeTitleSelectModel");
 				e.printStackTrace();
 			}
 		}
-		for(String s : set)
+		for (String s : set)
 			options.add(new OptionModelImpl(s, s));
 	}
 
