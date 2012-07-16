@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 
 import tap.execounting.dal.DataModule;
 import tap.execounting.dal.HibernateModule;
+import tap.execounting.dal.TeacherMediator;
 import tap.execounting.security.AuthenticationFilter;
 
 /**
@@ -39,6 +40,7 @@ public class AppModule {
 
 		binder.bind(Authenticator.class, BasicAuthenticator.class);
 		binder.bind(SuperCalendar.class, RusCalendar.class);
+		binder.bind(TeacherMediator.class, TeacherMediator.class);
 	}
 
 	public static void contributeFactoryDefaults(

@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
 @NamedQueries({
 		@NamedQuery(name = Client.ALL, query = "select c from Client c"),
 		@NamedQuery(name = Client.ALL_NAMES, query = "select c.name from Client c"),
-		@NamedQuery(name = Client.BY_NAME, query = "select c from Client c where c.name = :name") })
+		@NamedQuery(name = Client.BY_NAME, query = "select c from Client c where c.name = :name")})
 public class Client {
 
 	public static final String ALL = "Client.all";
