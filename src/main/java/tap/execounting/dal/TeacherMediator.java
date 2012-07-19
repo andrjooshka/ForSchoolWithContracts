@@ -1,9 +1,11 @@
 package tap.execounting.dal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Teacher;
 
@@ -27,7 +29,10 @@ public class TeacherMediator {
 				QueryParameters.with("teacherId", unit.getId()).parameters());
 	}
 	
-	public L
+	public List<Client> getActualContracts(){
+		List<Client> list= getContracts();
+		
+	}
 	
 	public void setUnit(Teacher unit){
 		this.unit = unit;

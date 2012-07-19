@@ -29,8 +29,7 @@ public class TypeTitleSelectModel extends AbstractSelectModel {
 					ex = ex.substring(0, ex.length() - 1).trim();
 				set.add(ex);
 			} catch (Exception e) {
-				System.out
-						.println("Exception occured in data.TypeTitleSelectModel");
+				System.out.println("Exception occured in data.TypeTitleSelectModel");
 				e.printStackTrace();
 			}
 		}
