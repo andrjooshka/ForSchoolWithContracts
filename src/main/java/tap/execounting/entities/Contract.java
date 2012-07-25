@@ -54,6 +54,8 @@ public class Contract implements Comparable<Contract> {
 	private int discount;
 
 	private boolean freeze;
+	
+	private boolean canceled;
 
 	@Column(name = "contract_type_id", unique = false)
 	private int contractTypeId;
@@ -167,6 +169,14 @@ public class Contract implements Comparable<Contract> {
 		this.freeze = freeze;
 	}
 
+	public boolean isCanceled() {
+		return canceled;
+	}
+
+	public void setCanceled(boolean canceled) {
+		this.canceled = canceled;
+	}
+
 	public int getContractTypeId() {
 		return contractTypeId;
 	}
@@ -229,7 +239,8 @@ public class Contract implements Comparable<Contract> {
 	}
 
 	public boolean isActive() {
-		boolean active = (!isComplete()) && (!isFreeze());
+		boolean active = !isComplete() && !isFreeze() 
+				&& !isCanceled();
 		return active;
 	}
 
@@ -318,13 +329,16 @@ public class Contract implements Comparable<Contract> {
 	public String getStateString() {
 		String activeString = "активен";
 		String freezedString = "заморожен";
+		String canceledString = "закрыт";
 		String completeString = "завершен";
 
-		if (isActive())
-			return activeString;
+		if (isFreeze())
+			return freezedString;
 		if (isComplete())
 			return completeString;
-		return freezedString;
+		if(isCanceled())
+			return canceledString;
+		return activeString;
 	}
 
 	public boolean isTrialLesson() {

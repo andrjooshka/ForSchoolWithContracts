@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.InjectPage;
@@ -18,9 +17,7 @@ import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.annotations.Index;
 
-import tap.execounting.components.editors.AddPayment;
 import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
@@ -38,7 +35,6 @@ public class Reports {
 	private BeanModel<Client> modelOfDebtors;
 	@Inject
 	private ComponentResources componentResources;
-	@SuppressWarnings("unused")
 	@Property
 	@Persist
 	private Payment loopPayment;
@@ -168,6 +164,7 @@ public class Reports {
 	@Persist
 	private boolean switchPages;
 	
+	@SuppressWarnings("unused")
 	@Property
 	private boolean editing;
 	@Inject
@@ -199,7 +196,7 @@ public class Reports {
 	
 	@Inject
 	private CrudServiceDAO dao;
-	void onSuccess(){
+	void onSuccessFromPaymentEditor(){
 		dao.update(loopPayment);
 		editing=false;
 		renderer.addRender("paymentBody"+loopPayment.getId(), paymentZone);

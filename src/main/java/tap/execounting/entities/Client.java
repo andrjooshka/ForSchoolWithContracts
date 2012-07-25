@@ -20,6 +20,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import tap.execounting.services.DateService;
+
 @Entity
 @Table(name = "clients")
 @NamedQueries({
@@ -136,8 +138,10 @@ public class Client {
 
 	public List<Payment> getPlannedPayments() {
 		List<Payment> payments = new ArrayList<Payment>();
-		for (Contract c : getActiveContracts())
-			payments.addAll(c.getPlannedPayments());
+		for (Contract c : getContracts())
+			for (Payment p : c.getPlannedPayments())
+				if(p.getDate().before(DateService.fromNowPlusDays(15)))
+					payments.add(p);
 		return payments;
 	}
 

@@ -2,6 +2,7 @@ package tap.execounting.services;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -231,5 +232,11 @@ public class DateService {
 		Calendar c = getCalendar();
 		setDayOfYear(c, day);
 		date.setTime(c.getTimeInMillis());
+	}
+
+	public static Date fromNowPlusDays(int days) {
+		GregorianCalendar calendar =  new GregorianCalendar();
+		calendar.add(Calendar.DAY_OF_YEAR, days);
+		return calendar.getTime();
 	}
 }

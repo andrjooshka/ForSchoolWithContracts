@@ -14,7 +14,7 @@
     
       
 	<span style="position: absolute; top: 90px; right: 70px;">
-		<t:form>
+		<t:form t:id="switchPagesForm">
 			<t:checkbox t:id="switchPages" value="switchPages" onclick="this.form.submit();"/>
 			<t:label for="switchPages"/>
 		</t:form>
@@ -42,25 +42,33 @@
 	  		</p:nameCell>
 	  		<p:paymentsInfoCell>
 				<t:loop source="client.plannedPayments" value="loopPayment">
-
-						<t:zone t:id="paymentZone" id="paymentBody${loopPayment.id}" update="show">
-							<t:if test="!editing">
-								<div class="panel" style="height: 25px; min-width: 100px; margin-top: 5px; ">	
-									${paymentInfo} &#09;
-									(<t:eventlink event="delete" context="loopPayment" t:zone="paymentBody${loopPayment.id}">удалить</t:eventlink> |
-									<t:eventlink event="edit" context="loopPayment"
-									t:zone="paymentBody${loopPayment.id}">редактировать</t:eventlink>)
-								</div>
-							</t:if>
-							<t:if test="editing">
-								Платеж ${loopPayment.id} : Редактирование
-								<div>
-									<t:beaneditform object="loopPayment" submitlabel="message:submit-label" 
-									exclude="id,contractId" t:zone="paymentBody${loopPayment.id}"/>
-								</div>
-							</t:if>
-						</t:zone>
-
+					<t:zone t:id="paymentZone" id="paymentBody${loopPayment.id}" update="show">
+						<t:if test="!editing">
+							<div class="panel" style="min-height: 45px; min-width: 100px; 
+							margin-top: 5px; max-width: 300px; padding: 5px; margin: 5px;">	
+								${paymentInfo}
+								<t:if test="loopPayment.contract.freeze">
+									<br/>
+									По замороженному договору.
+								</t:if>
+								<t:if test="loopPayment.contract.canceled">
+									<br/>
+									По расторгнутому договору.
+								</t:if>
+								<br/>
+								(<t:eventlink event="delete" context="loopPayment" t:zone="paymentBody${loopPayment.id}">удалить</t:eventlink> |
+								<t:eventlink event="edit" context="loopPayment"
+								t:zone="paymentBody${loopPayment.id}">изменить</t:eventlink>)
+							</div>
+						</t:if>
+						<t:if test="editing">
+							Платеж ${loopPayment.id} : Редактирование
+							<div>
+								<t:beaneditform object="loopPayment" t:id="paymentEditor" submitlabel="message:submit-label" 
+								exclude="id,contractId" t:zone="paymentBody${loopPayment.id}"/>
+							</div>
+						</t:if>
+					</t:zone>
 				</t:loop>
 	  		</p:paymentsInfoCell>
 	  	</t:grid>

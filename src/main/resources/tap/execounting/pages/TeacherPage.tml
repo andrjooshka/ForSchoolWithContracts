@@ -4,6 +4,44 @@
       xmlns:p="tapestry:parameter">
 
 	<h3>${tMed.unit.name}</h3>
-	
+	<h4>Расписание</h4>
+	<a href="#" t:type="actionlink" t:id="scheduleEditLink" t:zone="zone1">Изменить</a>
+	<div t:type="zone" t:id="scheduleZone" id="zone1">
+			<table id="scheduleTable">
+				<thead>
+					<tr>
+						<th t:type="loop" t:source="days" t:value="day">${day}</th>
+					</tr>
+				</thead>
+				<tbody t:type="if" t:test="scheduleEdit">
+					<form t:type="form">
+						<tr>
+							<td><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.monday"/></td>
+							<td><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.tuesday"/></td>
+							<td><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.wednesday"/></td>
+							<td><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.thursday"/></td>
+							<td><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.friday"/></td>
+							<td><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.saturday"/></td>
+							<td><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.sunday"/></td>
+						</tr>
+						<tr>
+							<td colspan="7" style><input type="submit" value="Сохранить" />	
+					</form>
+				</tbody>
+				<tbody t:type="if" t:test="!scheduleEdit">
+					<tr>
+						<td t:type="loop" t:source="days" t:value="day">${tMed.worksOn(day)}</td>
+					</tr>
+				</tbody>
+			</table>
+	</div>
+	<div style="height: 100px;"/>
+	<h3>${message:clients}</h3>
+	<ul t:type="loop" t:source="tMed.activeClients" t:value="tClient">
+		<li>
+			${tClient.name}
+		</li>
+	</ul>
+	<h3>${message:stats}</h3>
 
 </html>
