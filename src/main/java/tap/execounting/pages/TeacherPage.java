@@ -8,7 +8,7 @@ import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 
 import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.dal.HibernateCrudServiceDAO;
-import tap.execounting.dal.mediators.TeacherMediator;
+import tap.execounting.dal.mediators.TeacherMedImpl;
 import tap.execounting.data.FacilitySelectModel;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Teacher;
@@ -23,7 +23,7 @@ public class TeacherPage {
 	
 	@Inject
 	@Property
-	private TeacherMediator tMed;
+	private TeacherMedImpl tMed;
 	
 	@Property
 	private boolean scheduleEdit;

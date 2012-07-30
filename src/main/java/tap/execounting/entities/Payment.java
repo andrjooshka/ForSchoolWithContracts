@@ -24,7 +24,7 @@ import tap.execounting.entities.interfaces.Dated;
 		@NamedQuery(name = Payment.BY_CONTRACT_ID, query = "Select p from Payment p where p.contractId = :contractId order by p.date desc"),
 		@NamedQuery(name = Payment.BY_DATES, query = "Select p from Payment p where p.date between "
 				+ ":earlierDate and :laterDate") })
-public class Payment implements Dated<Payment>{
+public class Payment implements Dated{
 
 	public static final String ALL = "Payment.all";
 

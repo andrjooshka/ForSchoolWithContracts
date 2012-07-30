@@ -34,7 +34,7 @@ import tap.execounting.entities.interfaces.Dated;
 				+ "and date(e.date) = date(:date)"),
 		@NamedQuery(name = Event.BY_TYPE_ID, query = "Select e from Event e where e.typeId = :typeId") })
 @Table(name = "events")
-public class Event implements Comparable<Event>, Dated<Event> {
+public class Event implements Comparable<Event>, Dated {
 
 	public static final String ALL = "Event.all";
 	public static final String BY_FACILITY_ID = "Event.byFacilityId";

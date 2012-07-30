@@ -1,4 +1,4 @@
-package tap.execounting.dal.mediators.interfaces;
+package tap.execounting.dal.mediators;
 
 import java.util.Date;
 import java.util.List;
@@ -76,7 +76,7 @@ public interface ContractMed {
 ////counters:
 	
 	//actual group size
-	public Integer count();
+	public Integer countGroupSize();
 	
 	//state
 	public Integer count(ContractState state);

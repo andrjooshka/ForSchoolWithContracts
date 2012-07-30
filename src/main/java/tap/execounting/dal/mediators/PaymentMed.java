@@ -1,4 +1,10 @@
-package tap.execounting.dal.mediators.interfaces;
+package tap.execounting.dal.mediators;
+
+import java.util.Date;
+import java.util.List;
+
+import tap.execounting.entities.Contract;
+import tap.execounting.entities.Payment;
 
 public interface PaymentMed {
 //unit methods
@@ -35,10 +41,10 @@ public interface PaymentMed {
 	public PaymentMed filter(Date date);
 
 	//Planned (state)
-	pubilc PaymentMed filter(boolean state);
+	public PaymentMed filter(boolean state);
 
 	//counters
-	public Integer countItems();
+	public Integer countGroupSize();
 	
 	//amount
 	public Integer countAmount();

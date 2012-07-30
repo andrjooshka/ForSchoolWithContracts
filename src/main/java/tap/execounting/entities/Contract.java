@@ -30,7 +30,7 @@ import tap.execounting.services.SuperCalendar;
 		@NamedQuery(name = Contract.BY_DATES, query = "Select c from Contract c where c.date between "
 				+ ":earlierDate and :laterDate"),
 				@NamedQuery(name = Contract.WITH_TEACHER, query ="Select c from Contract c where c.teacherId = :teacherId")})
-public class Contract implements Comparable<Contract>, Dated<Contract> {
+public class Contract implements Comparable<Contract>, Dated {
 
 	public static final String ALL = "Contract.all";
 	public static final String BY_DATES = "Contract.byDates";

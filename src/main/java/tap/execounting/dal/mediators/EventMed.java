@@ -1,4 +1,16 @@
-package tap.execounting.dal.mediators.interfaces;
+package tap.execounting.dal.mediators;
+
+import java.util.Date;
+import java.util.List;
+
+import tap.execounting.data.EventState;
+import tap.execounting.entities.Client;
+import tap.execounting.entities.Contract;
+import tap.execounting.entities.Event;
+import tap.execounting.entities.EventType;
+import tap.execounting.entities.Facility;
+import tap.execounting.entities.Room;
+import tap.execounting.entities.Teacher;
 
 public interface EventMed {
 //unit methods:
@@ -69,7 +81,7 @@ public interface EventMed {
 
 	//counters
 	//group length
-	public Integer countGroupLength();
+	public Integer countGroupSize();
 
 	//state
 	public Integer count(EventState state);

@@ -1,4 +1,6 @@
-package tap.execounting.dal.mediators.interfaces;
+package tap.execounting.dal.mediators;
+
+import java.util.List;
 
 import tap.execounting.entities.Teacher;
 
@@ -22,4 +24,6 @@ public interface TeacherMed {
 //group methods
 	public List<Teacher> getAllTeachers();
 	
+	//count:
+	public Integer countGroupSize();
 }
