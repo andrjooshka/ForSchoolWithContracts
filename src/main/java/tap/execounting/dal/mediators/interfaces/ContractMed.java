@@ -50,7 +50,9 @@ public interface ContractMed {
 	//group
 	public List<Contract> getGroup();
 	public void setGroup(List<Contract> group);
-	
+	public List<Contract> getAllContracts();
+	public void reset();
+	public String getFilterState();	
 ////filters:
 	
 	//client

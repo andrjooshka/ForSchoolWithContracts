@@ -18,4 +18,8 @@ public interface TeacherMed {
 	
 	//state
 	public boolean getState();
+	
+//group methods
+	public List<Teacher> getAllTeachers();
+	
 }
