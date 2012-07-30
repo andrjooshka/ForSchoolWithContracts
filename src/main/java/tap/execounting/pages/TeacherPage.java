@@ -8,7 +8,7 @@ import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 
 import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.dal.HibernateCrudServiceDAO;
-import tap.execounting.dal.TeacherMediator;
+import tap.execounting.dal.mediators.TeacherMediator;
 import tap.execounting.data.FacilitySelectModel;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Teacher;

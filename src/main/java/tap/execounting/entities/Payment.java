@@ -15,6 +15,8 @@ import javax.persistence.Table;
 
 import org.apache.tapestry5.beaneditor.Validate;
 
+import tap.execounting.entities.interfaces.Dated;
+
 @Entity
 @Table(name = "payments")
 @NamedQueries({
@@ -22,7 +24,7 @@ import org.apache.tapestry5.beaneditor.Validate;
 		@NamedQuery(name = Payment.BY_CONTRACT_ID, query = "Select p from Payment p where p.contractId = :contractId order by p.date desc"),
 		@NamedQuery(name = Payment.BY_DATES, query = "Select p from Payment p where p.date between "
 				+ ":earlierDate and :laterDate") })
-public class Payment {
+public class Payment implements Dated<Payment>{
 
 	public static final String ALL = "Payment.all";
 

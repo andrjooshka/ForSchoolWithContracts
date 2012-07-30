@@ -20,6 +20,8 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.tapestry5.beaneditor.Validate;
 
+import tap.execounting.entities.interfaces.Dated;
+
 @Entity
 @NamedQueries({
 		@NamedQuery(name = Event.ALL, query = "Select se from Event se"),
@@ -32,7 +34,7 @@ import org.apache.tapestry5.beaneditor.Validate;
 				+ "and date(e.date) = date(:date)"),
 		@NamedQuery(name = Event.BY_TYPE_ID, query = "Select e from Event e where e.typeId = :typeId") })
 @Table(name = "events")
-public class Event implements Comparable<Event> {
+public class Event implements Comparable<Event>, Dated<Event> {
 
 	public static final String ALL = "Event.all";
 	public static final String BY_FACILITY_ID = "Event.byFacilityId";

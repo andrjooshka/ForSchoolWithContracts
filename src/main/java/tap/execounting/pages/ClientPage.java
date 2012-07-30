@@ -32,6 +32,7 @@ public class ClientPage {
 	private boolean editorActiveAlways;
 	@Component
 	private Zone ezone;
+	@SuppressWarnings("unused")
 	@Persist
 	@Property
 	private boolean constantEventEditor;

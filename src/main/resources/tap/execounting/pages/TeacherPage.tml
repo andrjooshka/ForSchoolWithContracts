@@ -25,7 +25,8 @@
 							<td><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.sunday"/></td>
 						</tr>
 						<tr>
-							<td colspan="7" style><input type="submit" value="Сохранить" />	
+							<td colspan="7" ><input type="submit" value="Сохранить" /></td>
+						</tr>
 					</form>
 				</tbody>
 				<tbody t:type="if" t:test="!scheduleEdit">

@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import tap.execounting.entities.interfaces.Dated;
 import tap.execounting.services.RusCalendar;
 import tap.execounting.services.SuperCalendar;
 
@@ -29,7 +30,7 @@ import tap.execounting.services.SuperCalendar;
 		@NamedQuery(name = Contract.BY_DATES, query = "Select c from Contract c where c.date between "
 				+ ":earlierDate and :laterDate"),
 				@NamedQuery(name = Contract.WITH_TEACHER, query ="Select c from Contract c where c.teacherId = :teacherId")})
-public class Contract implements Comparable<Contract> {
+public class Contract implements Comparable<Contract>, Dated<Contract> {
 
 	public static final String ALL = "Contract.all";
 	public static final String BY_DATES = "Contract.byDates";

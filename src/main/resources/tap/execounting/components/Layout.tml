@@ -25,6 +25,11 @@
 						Расписания
 					</li>
 				</a>
+				<a href="#" t:type="pageLink" t:page="teachers">
+					<li class="${cssForLi('Учителя')}">
+						Учителя
+					</li>
+				</a>
 				<a href="#" t:type="pageLink" t:page="clients">
 					<li class="${cssForLi('Клиенты')}">
 						Клиенты

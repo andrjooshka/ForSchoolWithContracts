@@ -1,4 +1,4 @@
-package tap.execounting.dal;
+package tap.execounting.dal.mediators;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -7,6 +7,8 @@ import java.util.Set;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.QueryParameters;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Facility;
