@@ -1,4 +1,4 @@
-package tap.execounting.dal.mediators;
+package tap.execounting.dal.mediators.interfaces;
 
 import java.util.Date;
 import java.util.List;
@@ -10,7 +10,7 @@ public interface PaymentMed {
 //unit methods
 	//unit
 	public Payment getUnit();
-	public void setUnit();
+	public void setUnit(Payment unit);
 
 	//getters
 	//planned
@@ -28,7 +28,7 @@ public interface PaymentMed {
 //group methods
 	//group
 	public List<Payment> getGroup();
-	public void setGroup();
+	public PaymentMed setGroup(List<Payment> payments);
 	public List<Payment> getAllPayments();
 	public void reset();
 	public String getFilterState();

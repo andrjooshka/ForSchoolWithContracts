@@ -23,14 +23,20 @@ import tap.execounting.entities.interfaces.Dated;
 		@NamedQuery(name = Payment.ALL, query = "Select p from Payment p"),
 		@NamedQuery(name = Payment.BY_CONTRACT_ID, query = "Select p from Payment p where p.contractId = :contractId order by p.date desc"),
 		@NamedQuery(name = Payment.BY_DATES, query = "Select p from Payment p where p.date between "
-				+ ":earlierDate and :laterDate") })
-public class Payment implements Dated{
+				+ ":earlierDate and :laterDate"),
+		@NamedQuery(name = Payment.SCHEDULED, query = "from Payment p where p.scheduled = true"),
+		@NamedQuery(name = Payment.NOT_SCHEDULED, query = "from Payment p where p.scheduled = false") })
+public class Payment implements Dated {
 
 	public static final String ALL = "Payment.all";
 
 	public static final String BY_CONTRACT_ID = "Payment.byContractId";
 
 	public static final String BY_DATES = "Payment.byDates";
+
+	public static final String SCHEDULED = "Payment.scheduled";
+
+	public static final String NOT_SCHEDULED = "Payment.notScheduled";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +46,7 @@ public class Payment implements Dated{
 	private int amount;
 
 	private boolean scheduled;
-	
+
 	private String comment;
 
 	@Validate(value = "required")
@@ -48,7 +54,7 @@ public class Payment implements Dated{
 
 	@Column(name = "contract_id")
 	private int contractId;
-	
+
 	@OneToOne(optional = false)
 	@JoinColumn(name = "contract_id", insertable = false, updatable = false)
 	private Contract contract;

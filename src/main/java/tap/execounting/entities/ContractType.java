@@ -15,6 +15,10 @@ import javax.persistence.Table;
 public class ContractType {
 
 	public static final String ALL = "ContractType.all";
+	public static final int Trial = 3;
+	public static final int Special = 2;
+	public static final int Standard = 1;
+	public static final int Free = 4;
 
 	@Id
 	@Column(name = "contract_type_id")

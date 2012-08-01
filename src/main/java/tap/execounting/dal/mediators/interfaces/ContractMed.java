@@ -1,8 +1,9 @@
-package tap.execounting.dal.mediators;
+package tap.execounting.dal.mediators.interfaces;
 
 import java.util.Date;
 import java.util.List;
 
+import tap.execounting.dal.mediators.ContractMediator;
 import tap.execounting.data.ContractState;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
@@ -55,7 +56,7 @@ public interface ContractMed {
 //group methods
 	//group
 	public List<Contract> getGroup();
-	public void setGroup(List<Contract> group);
+	public ContractMed setGroup(List<Contract> group);
 	public List<Contract> getAllContracts();
 	public void reset();
 	public String getFilterState();	
@@ -77,7 +78,10 @@ public interface ContractMed {
 	public ContractMed filter(Date date1, Date date2);
 	
 	//planned payments date
-	public ContractMed filterByPlannedPaymentsDate(Date date1, Date date2);	
+	public ContractMed filterByPlannedPaymentsDate(Date date1, Date date2);
+	
+	//contract type
+	public ContractMediator filterByContractType(int type);
 	
 ////counters:
 	

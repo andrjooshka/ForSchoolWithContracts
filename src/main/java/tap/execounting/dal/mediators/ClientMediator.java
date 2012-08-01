@@ -1,224 +1,431 @@
 package tap.execounting.dal.mediators;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.QueryParameters;
+import tap.execounting.dal.mediators.interfaces.ClientMed;
+import tap.execounting.dal.mediators.interfaces.ContractMed;
+import tap.execounting.dal.mediators.interfaces.DateFilter;
+import tap.execounting.dal.mediators.interfaces.PaymentMed;
 import tap.execounting.data.ClientState;
+import tap.execounting.data.ContractState;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
+import tap.execounting.entities.ContractType;
+import tap.execounting.entities.Payment;
 import tap.execounting.entities.Teacher;
+import tap.execounting.entities.interfaces.Dated;
 
 public class ClientMediator implements ClientMed {
 
 	@Inject
 	private CrudServiceDAO dao;
-	
+
+	@Inject
+	private ContractMed contractMed;
+
+	@Inject
+	private PaymentMed paymentMed;
+
+	@Inject
+	private DateFilter dateFilter;
+
+	private Client unit;
+
 	public Client getUnit() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return unit;
+		} catch (NullPointerException npe) {
+			return null;
+		}
 	}
 
-	public void setUnit() {
-		// TODO Auto-generated method stub
-		
+	public void setUnit(Client unit) {
+		this.unit = unit;
 	}
+
+	private List<Contract> contractCache;
 
 	public boolean hasContracts() {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			return getContracts().size() > 0;
+		} catch (NullPointerException npe) {
+			npe.printStackTrace();
+			return false;
+		}
 	}
 
-	public List<Contract> getContarcts() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Contract> getContracts() {
+		try {
+			if (contractCache == null)
+				contractCache = unit.getContracts() == null ? new ArrayList<Contract>(
+						0) : unit.getContracts();
+			return contractCache.subList(0, contractCache.size() - 1);
+		} catch (NullPointerException npe) {
+			npe.printStackTrace();
+			return null;
+		}
 	}
 
 	public boolean hasActiveContracts() {
-		// TODO Auto-generated method stub
-		return false;
+		boolean response = contractMed.setGroup(getContracts())
+				.filter(ContractState.active).countGroupSize() > 0;
+		contractMed.reset();
+		return response;
 	}
 
 	public List<Contract> getActiveContracts() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return contractMed.setGroup(getContracts())
+					.filter(ContractState.active).getGroup();
+		} catch (NullPointerException npe) {
+			npe.printStackTrace();
+			return null;
+		}
 	}
 
 	public boolean hasFrozenContracts() {
-		// TODO Auto-generated method stub
-		return false;
+		boolean response = contractMed.setGroup(getContracts())
+				.filter(ContractState.frozen).countGroupSize() > 0;
+		contractMed.reset();
+		return response;
 	}
 
 	public List<Contract> getFrozenContracts() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return contractMed.setGroup(getContracts())
+					.filter(ContractState.frozen).getGroup();
+		} catch (NullPointerException npe) {
+			npe.printStackTrace();
+			return null;
+		}
 	}
 
 	public boolean hasCanceledContracts() {
-		// TODO Auto-generated method stub
-		return false;
+		boolean response = contractMed.setGroup(getContracts())
+				.filter(ContractState.canceled).countGroupSize() > 0;
+		contractMed.reset();
+		return response;
 	}
 
 	public List<Contract> getCanceledContracts() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return contractMed.setGroup(getContracts())
+					.filter(ContractState.canceled).getGroup();
+		} catch (NullPointerException npe) {
+			npe.printStackTrace();
+			return null;
+		}
 	}
 
 	public boolean hasTrialContracts() {
-		// TODO Auto-generated method stub
+		for (Contract c : getContracts())
+			if (c.getContractTypeId() == ContractType.Trial)
+				return true;
 		return false;
 	}
 
 	public List<Contract> getTrialContracts() {
-		// TODO Auto-generated method stub
-		return null;
+		return contractMed.setGroup(getContracts())
+				.filterByContractType(ContractType.Trial).getGroup();
 	}
 
 	public boolean hasFinishedContracts() {
-		// TODO Auto-generated method stub
-		return false;
+		boolean response = contractMed.setGroup(getContracts())
+				.filter(ContractState.complete).countGroupSize() > 0;
+		contractMed.reset();
+		return response;
 	}
 
 	public List<Contract> getFinishedContracts() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return contractMed.setGroup(getContracts())
+					.filter(ContractState.complete).getGroup();
+		} catch (NullPointerException npe) {
+			npe.printStackTrace();
+			return null;
+		}
 	}
 
 	public int getBalance() {
-		// TODO Auto-generated method stub
-		return 0;
+		return unit.getBalance();
 	}
 
 	public ClientState getState() {
-		// TODO Auto-generated method stub
-		return null;
+		// if client is canceled - he have special mark
+		if (unit.isInactive())
+			return ClientState.canceled;
+		// check if client is active
+		if (hasActiveContracts()) {
+			// if he is active, he is one of three:
+			// trial | beginner | continuer
+			boolean notOnlyTrial = false;
+			for (Contract c : getActiveContracts())
+				if (c.getContractTypeId() != ContractType.Trial) {
+					notOnlyTrial = true;
+					break;
+				}
+			if (!notOnlyTrial)
+				return ClientState.trial;
+			if (hasFinishedContracts()) {
+				notOnlyTrial = false;
+				for (Contract c : getFinishedContracts()) {
+					if (c.getContractTypeId() != ContractType.Trial) {
+						notOnlyTrial = true;
+						break;
+					}
+					return notOnlyTrial ? ClientState.continuer
+							: ClientState.beginner;
+				}
+			}
+			return ClientState.beginner;
+		}
+		if (hasFrozenContracts())
+			return ClientState.frozen;
+
+		return ClientState.undefined;
 	}
 
 	public void cancelClient() {
-		// TODO Auto-generated method stub
-		
+		unit.setInactive(true);
 	}
 
 	public Date getDateOfFirstContract() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return unit.getFirstContractDate();
+		} catch (NullPointerException npe) {
+			npe.printStackTrace();
+			return null;
+		}
 	}
 
 	public List<Teacher> getActiveTeachers() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Contract> contracts = getActiveContracts();
+		if (contracts == null || contracts.size() == 0)
+			return null;
+		Set<Teacher> res = new HashSet<Teacher>(5);
+		for (Contract c : contracts)
+			res.add(c.getTeacher());
+		return new ArrayList<Teacher>(res);
 	}
 
-	public List<Teacher> getReturn() {
-		// TODO Auto-generated method stub
-		return null;
+	public int getReturn() {
+		List<Contract> t = getContracts();
+		if (t == null || t.size() == 0)
+			return 0;
+		int summ = 0;
+		for (Contract c : t)
+			for (Payment p : c.getPayments())
+				if (!p.isScheduled())
+					summ += p.getAmount();
+		return summ;
 	}
 
-	public List<Client> getGroup() {
-		// TODO Auto-generated method stub
-		return null;
+	private List<Client> cache;
+	private Map<String, Object> appliedFilters;
+
+	private Map<String, Object> getAppliedFilters() {
+		if (appliedFilters == null)
+			appliedFilters = new HashMap<String, Object>(5);
+		return appliedFilters;
 	}
 
-	public void setGroup(List<Client> group) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public List<Client> getAllClient() {
-		// TODO Auto-generated method stub
-		return null;
+	private void load() {
+		cache = dao.findWithNamedQuery(Client.ALL);
+		appliedFilters = new HashMap<String, Object>();
 	}
 
 	public void reset() {
-		// TODO Auto-generated method stub
-		
+		cache = null;
+		appliedFilters = null;
 	}
 
-	public String getStateFilter() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Client> getGroup() {
+		if (cache == null)
+			load();
+		return cache;
+	}
+
+	public ClientMediator setGroup(List<Client> group) {
+		cache = group;
+		return this;
+	}
+
+	public List<Client> getAllClient() {
+		return dao.findWithNamedQuery(Client.ALL);
+	}
+
+	public String getFilterState() {
+		StringBuilder sb = new StringBuilder();
+		for (Entry<String, Object> entry : getAppliedFilters().entrySet())
+			sb.append(entry.getKey() + ": " + entry.getValue().toString()
+					+ "\n");
+		return sb.toString();
 	}
 
 	public ClientMed filter(ClientState state) {
-		// TODO Auto-generated method stub
-		return null;
+		getAppliedFilters().put("ClientState", state);
+		List<Client> cache = getGroup();
+
+		// save current unit
+		Client unit = getUnit();
+
+		// filter
+		for (int i = cache.size() - 1; i >= 0; i--) {
+			setUnit(cache.get(i));
+			if (getState() == state)
+				continue;
+			cache.remove(i);
+		}
+
+		// restore unit
+		setUnit(unit);
+		return this;
 	}
 
-	public ClientMed filter(Teacher teacher) {
-		// TODO Auto-generated method stub
-		return null;
+	public ClientMed filterByActiveTeacher(Teacher teacher) {
+		getAppliedFilters().put("Active teacher", teacher);
+		List<Client> cache = getGroup();
+
+		// save current unit
+		Client unit = getUnit();
+
+		// filter
+		for (int i = cache.size() - 1; i >= 0; i--)
+			outer: {
+				setUnit(cache.get(i));
+				if (getActiveContracts() != null)
+					for (Contract c : getActiveContracts())
+						if (c.getTeacherId() == teacher.getId())
+							break outer;
+				cache.remove(i);
+			}
+
+		// restore unit
+		setUnit(unit);
+		return this;
 	}
 
 	public ClientMed filterDateOfFirstContract(Date date1, Date date2) {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO we can do this through hsql
+		getAppliedFilters().put("Date of first contract 1", date1);
+		getAppliedFilters().put("Date of first contract 2", date2);
+		List<Client> cache = getGroup();
+		List<Client> cache2 = new ArrayList<Client>();
+		for (Dated item : dateFilter.filterWithReturn(cache, date1, date2))
+			cache2.add((Client) item);
+		setGroup(cache2);
+		return this;
 	}
 
 	public ClientMed filterDateOfPlannedPayments(Date date1, Date date2) {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO we can do this through hsql
+		getAppliedFilters().put("Date of first contract 1", date1);
+		getAppliedFilters().put("Date of first contract 2", date2);
+		List<Payment> payments;
+
+		if (cache != null) {
+			List<Client> cache = getGroup();
+
+			// extract payments of current client group
+			payments = new ArrayList<Payment>();
+			for (Client c : cache)
+				for (Contract con : c.getContracts())
+					payments.addAll(con.getPayments());
+			paymentMed.setGroup(payments);
+		}
+
+		payments = paymentMed.filter(true).filter(date1, date2).getGroup();
+		Set<Client> clients = new HashSet<Client>();
+		for (Payment p : payments)
+			clients.add(p.getContract().getClient());
+		setGroup(new ArrayList<Client>(clients));
+		return this;
 	}
 
 	public ClientMed filterName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		getAppliedFilters().put("Client name", name);
+		if (cache == null) {
+			cache = dao.findWithNamedQuery(Client.BY_NAME, QueryParameters
+					.with("name", name).parameters());
+			return this;
+		}
+		List<Client> cache = getGroup();
+		Client c;
+		for (int i = cache.size() - 1; i >= 0; i--) {
+			c = cache.get(i);
+			if (!c.getName().toLowerCase().contains(name.toLowerCase()))
+				cache.remove(i);
+		}
+		return this;
 	}
 
 	public List<Client> getDebtors() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Client> cache = getAllClient();
+		Client c;
+		for (int i = cache.size() - 1; i >= 0; i--) {
+			c = cache.get(i);
+			if (c.getBalance() >= 0 || c.isInactive())
+				cache.remove(i);
+		}
+		return cache;
 	}
 
 	public List<Client> getClientsWithExpiringContracts() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Contract> contracts = contractMed.filter(2).getGroup();
+		Set<Client> clients = new HashSet<Client>();
+		for (Contract c : contracts)
+			clients.add(c.getClient());
+		return new ArrayList<Client>(clients);
 	}
 
 	public Integer countGroupSize() {
-		// TODO Auto-generated method stub
-		return null;
+		return getGroup().size();
 	}
 
 	public Integer count(ClientState state) {
-		// TODO Auto-generated method stub
-		return null;
+		ClientMediator cm = new ClientMediator();
+		return cm.filter(state).countGroupSize();
 	}
 
 	public Integer count(ClientState state, Date date1, Date date2) {
-		// TODO Auto-generated method stub
-		return null;
+		ClientMediator cm = new ClientMediator();
+		return cm.filter(state).filterDateOfFirstContract(date1, date2)
+				.countGroupSize();
 	}
 
 	public Integer countContinuers(Date date1, Date date2) {
-		// TODO Auto-generated method stub
-		return null;
+		return count(ClientState.continuer, date1, date2);
 	}
 
 	public Integer countNewbies(Date date1, Date date2) {
-		// TODO Auto-generated method stub
-		return null;
+		return count(ClientState.beginner, date1, date2);
 	}
 
 	public Integer countTrial(Date date1, Date date2) {
-		// TODO Auto-generated method stub
-		return null;
+		return count(ClientState.trial, date1, date2);
 	}
 
 	public Integer countCanceled(Date date1, Date date2) {
-		// TODO Auto-generated method stub
-		return null;
+		return count(ClientState.canceled, date1, date2);
 	}
 
 	public Integer countUndefined(Date date1, Date date2) {
-		// TODO Auto-generated method stub
-		return null;
+		return count(ClientState.undefined, date1, date2);
 	}
 
 	public Integer countFrozen(Date date1, Date date2) {
-		// TODO Auto-generated method stub
-		return null;
+		return count(ClientState.frozen, date1, date2);
 	}
-	
+
 }

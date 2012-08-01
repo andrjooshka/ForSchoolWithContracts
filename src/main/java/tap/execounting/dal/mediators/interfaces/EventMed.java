@@ -1,4 +1,4 @@
-package tap.execounting.dal.mediators;
+package tap.execounting.dal.mediators.interfaces;
 
 import java.util.Date;
 import java.util.List;

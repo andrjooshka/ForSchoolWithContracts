@@ -1,8 +1,9 @@
-package tap.execounting.dal.mediators;
+package tap.execounting.dal.mediators.interfaces;
 
 import java.util.Date;
 import java.util.List;
 
+import tap.execounting.dal.mediators.ClientMediator;
 import tap.execounting.data.ClientState;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
@@ -11,13 +12,13 @@ import tap.execounting.entities.Teacher;
 public interface ClientMed {
 //unit
 	public Client getUnit();
-	public void setUnit();
+	public void setUnit(Client c);
 
 	//getters
 
 	//contracts
 	public boolean hasContracts();
-	public List<Contract> getContarcts();
+	public List<Contract> getContracts();
 
 		//active
 	public boolean hasActiveContracts();
@@ -53,14 +54,14 @@ public interface ClientMed {
 	public List<Teacher> getActiveTeachers();
 	
 	//return
-	public List<Teacher> getReturn();
+	public int getReturn();
 
 //group
 	public List<Client> getGroup();
-	public void setGroup(List<Client> group);
+	public ClientMediator setGroup(List<Client> group);
 	public List<Client> getAllClient();
 	public void reset();
-	public String getStateFilter();
+	public String getFilterState();
 	
 	//filters
 	
@@ -68,7 +69,7 @@ public interface ClientMed {
 	public ClientMed filter(ClientState state);
 	
 	//Teacher
-	public ClientMed filter(Teacher teacher);
+	public ClientMed filterByActiveTeacher(Teacher teacher);
 	
 	//Date of first contract (duration of relations)
 	public ClientMed filterDateOfFirstContract(Date date1, Date date2);

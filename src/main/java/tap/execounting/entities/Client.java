@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,26 +19,27 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import tap.execounting.entities.interfaces.Dated;
 import tap.execounting.services.DateService;
 
 @Entity
 @Table(name = "clients")
 @NamedQueries({
-		@NamedQuery(name = Client.ALL, query = "select c from Client c"),
+		@NamedQuery(name = Client.ALL, query = "from Client"),
 		@NamedQuery(name = Client.ALL_NAMES, query = "select c.name from Client c"),
-		@NamedQuery(name = Client.BY_NAME, query = "select c from Client c where c.name = :name")})
-public class Client {
+		@NamedQuery(name = Client.BY_NAME, query = "from Client c where lower(c.name) = lower(:name)")})
+public class Client implements Dated {
 
 	public static final String ALL = "Client.all";
 	public static final String ALL_NAMES = "Client.allNames";
 	public static final String BY_NAME = "Client.byName";
-
-	public static final String inactive = "нет активных договоров";
-	public static final String frozen = "договор(а) заморожены";
-	public static final String active = "занимается";
-
-	public static final String studStateNew = "новичок";
-	public static final String studStateExp = "продливший";
+//
+//	public static final String inactive = "нет активных договоров";
+//	public static final String frozen = "договор(а) заморожены";
+//	public static final String active = "занимается";
+//
+//	public static final String studStateNew = "новичок";
+//	public static final String studStateExp = "продливший";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,9 +49,11 @@ public class Client {
 	@Column(unique = true)
 	private String name;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany
 	@JoinColumn(name = "client_id")
 	private List<Contract> contracts;
+	
+	private boolean inactive;
 
 	public Client() {
 		setContracts(new ArrayList<Contract>());
@@ -162,18 +164,22 @@ public class Client {
 		return null;
 	}
 
-	public String getState() {
-
-		// Client inactive check
-		List<Contract> list = getUnfinishedContracts();
-		if (list.size() == 0)
-			return inactive;
-
-		for (Contract c : list)
-			if (c.isActive())
-				return active;
-
-		return frozen;
+//	public String getState() {
+//
+//		// Client inactive check
+//		List<Contract> list = getUnfinishedContracts();
+//		if (list.size() == 0)
+//			return inactive;
+//
+//		for (Contract c : list)
+//			if (c.isActive())
+//				return active;
+//
+//		return frozen;
+//	}
+	
+	public Date getDate(){
+		return getFirstContractDate();
 	}
 
 	public Date getFirstContractDate() {
@@ -184,17 +190,26 @@ public class Client {
 		return d;
 	}
 
-	public String getStudentInfo() {
-		Contract t;
-		boolean firstRealContract = false;
-		for (int i = 0; i < contracts.size(); i++) {
-			t = contracts.get(i);
-			if (!firstRealContract) {
-				if (t.getLessonsNumber() > 2)
-					firstRealContract = true;
-			} else if (t.getLessonsNumber() > 2)
-				return Client.studStateExp;
-		}
-		return Client.studStateNew;
+	public boolean isInactive() {
+		return inactive;
 	}
+
+	public void setInactive(boolean inactive) {
+		this.inactive = inactive;
+	}
+	
+
+//	public String getStudentInfo() {
+//		Contract t;
+//		boolean firstRealContract = false;
+//		for (int i = 0; i < contracts.size(); i++) {
+//			t = contracts.get(i);
+//			if (!firstRealContract) {
+//				if (t.getLessonsNumber() > 2)
+//					firstRealContract = true;
+//			} else if (t.getLessonsNumber() > 2)
+//				return Client.studStateExp;
+//		}
+//		return Client.studStateNew;
+//	}
 }

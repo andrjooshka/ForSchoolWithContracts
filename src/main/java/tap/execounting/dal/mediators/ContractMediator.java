@@ -10,6 +10,10 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.dal.QueryParameters;
+import tap.execounting.dal.mediators.interfaces.ContractMed;
+import tap.execounting.dal.mediators.interfaces.DateFilter;
+import tap.execounting.dal.mediators.interfaces.EventMed;
+import tap.execounting.dal.mediators.interfaces.PaymentMed;
 import tap.execounting.data.ContractState;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
@@ -145,7 +149,7 @@ public class ContractMediator implements ContractMed {
 
 	private boolean undefinedStateTest() {
 		boolean result = eventMed.filter(unit)
-				.filter(DateService.fromNowPlusDays(-14), null).getGroup()
+				.filter(DateService.fromNowPlusDays(-60), null).getGroup()
 				.size() > 0;
 		eventMed.reset();
 		return result;
@@ -204,8 +208,9 @@ public class ContractMediator implements ContractMed {
 		appliedFilters = new HashMap<String, Object>();
 	}
 
-	public void setGroup(List<Contract> group) {
+	public ContractMed setGroup(List<Contract> group) {
 		cache = group;
+		return this;
 	}
 
 	public List<Contract> getAllContracts() {
@@ -219,7 +224,7 @@ public class ContractMediator implements ContractMed {
 
 	public String getFilterState() {
 		StringBuilder sb = new StringBuilder();
-		for (Entry<String, Object> entry : appliedFilters.entrySet())
+		for (Entry<String, Object> entry : getAppliedFilters().entrySet())
 			sb.append(entry.getKey() + ": " + entry.getValue().toString()
 					+ "\n");
 		return sb.toString();
@@ -287,7 +292,7 @@ public class ContractMediator implements ContractMed {
 
 		for (int i = cache.size() - 1; i >= 0; i--) {
 			con = cache.get(i);
-			if (con.getLessonsRemain() >= remainingLessons)
+			if (con.getLessonsRemain() <= remainingLessons)
 				continue;
 			cache.remove(i);
 		}
@@ -296,7 +301,7 @@ public class ContractMediator implements ContractMed {
 
 	public ContractMed filter(Date date1, Date date2) {
 		List<Contract> cache = getGroup();
-		dateFilter.filter(cache, date1, date2);
+		dateFilter.filterWithReturn(cache, date1, date2);
 		return this;
 	}
 
@@ -319,6 +324,20 @@ public class ContractMediator implements ContractMed {
 				.filter(date1, date2).getGroup().size() > 0;
 		paymentMed.reset();
 		return result;
+	}
+	
+	public ContractMediator filterByContractType(int type) {
+		getAppliedFilters().put("ContractTypeId", type);
+		List<Contract> cache = getGroup();
+		Contract con;
+
+		for (int i = cache.size() - 1; i >= 0; i--) {
+			con = cache.get(i);
+			if (con.getContractTypeId() == type)
+				continue;
+			cache.remove(i);
+		}
+		return this;
 	}
 
 	public Integer countGroupSize() {

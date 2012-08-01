@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.tapestry5.beaneditor.Validate;
 
+import tap.execounting.data.EventState;
 import tap.execounting.entities.interfaces.Dated;
 
 @Entity
@@ -32,7 +33,9 @@ import tap.execounting.entities.interfaces.Dated;
 				+ "and se.date between :earlierDate and :laterDate"),
 		@NamedQuery(name = Event.BY_ROOM_ID_AND_DATE, query = "Select e from Event e where e.roomId = :roomId "
 				+ "and date(e.date) = date(:date)"),
-		@NamedQuery(name = Event.BY_TYPE_ID, query = "Select e from Event e where e.typeId = :typeId") })
+		@NamedQuery(name = Event.BY_TYPE_ID, query = "Select e from Event e where e.typeId = :typeId"),
+		@NamedQuery(name = Event.BY_ROOM_ID, query = "from Event with roomId = :roomId"),
+		@NamedQuery(name = Event.BETWEEN_DATE1_AND_DATE2, query = "from Event as e where e.date <= :date2 and e.date >= :date1")})
 @Table(name = "events")
 public class Event implements Comparable<Event>, Dated {
 
@@ -42,6 +45,9 @@ public class Event implements Comparable<Event>, Dated {
 	public static final String BY_TEACHER_ID = "Event.byTeacherId";
 	public static final String BY_TEACHER_ID_AND_DATE = "Event.byTeacherIdAndDate";
 	public static final String BY_TYPE_ID = "Event.byTypeId";
+	public static final String BY_STATE = "Event.byState";
+	public static final String BY_ROOM_ID = "Event.byRoomId";
+	public static final String BETWEEN_DATE1_AND_DATE2 = "Event.betweenDate1andDate2";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,6 +70,8 @@ public class Event implements Comparable<Event>, Dated {
 	private Date date;
 
 	private boolean state;
+	
+	private EventState newstate;
 
 	@Column(name = "type_id", unique = false)
 	private int typeId;
@@ -136,12 +144,14 @@ public class Event implements Comparable<Event>, Dated {
 		this.date = date;
 	}
 
-	public boolean getState() {
-		return state;
+	public EventState getState() {
+		newstate = state ? EventState.complete : EventState.failed;
+		return newstate;
 	}
 
-	public void setState(boolean state) {
-		this.state = state;
+	public void setState(EventState state) {
+		this.newstate = state;
+		this.state = state == EventState.complete;
 	}
 
 	public String getComment() {
