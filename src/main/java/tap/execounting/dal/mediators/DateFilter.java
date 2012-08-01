@@ -6,5 +6,5 @@ import java.util.List;
 import tap.execounting.entities.interfaces.Dated;
 
 public interface DateFilter {
-	public List<Dated> filter(List<Dated> items, Date date1, Date date2);
+	public List<? extends Dated> filter(List<? extends Dated> items, Date date1, Date date2);
 }

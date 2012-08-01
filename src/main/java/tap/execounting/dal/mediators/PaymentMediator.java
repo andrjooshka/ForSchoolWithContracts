@@ -74,7 +74,7 @@ public class PaymentMediator implements PaymentMed {
 		return null;
 	}
 
-	public PaymentMed filter(Date date) {
+	public PaymentMed filter(Date date1, Date date2) {
 		// TODO Auto-generated method stub
 		return null;
 	}

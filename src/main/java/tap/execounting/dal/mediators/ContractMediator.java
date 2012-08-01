@@ -18,8 +18,18 @@ import tap.execounting.entities.Event;
 import tap.execounting.entities.EventType;
 import tap.execounting.entities.Payment;
 import tap.execounting.entities.Teacher;
+import tap.execounting.services.DateService;
 
 public class ContractMediator implements ContractMed {
+
+	@Inject
+	private DateFilter dateFilter;
+
+	@Inject
+	private EventMed eventMed;
+
+	@Inject
+	private PaymentMed paymentMed;
 
 	@Inject
 	private CrudServiceDAO dao;
@@ -117,6 +127,30 @@ public class ContractMediator implements ContractMed {
 
 	}
 
+	public ContractState getContractState() {
+		ContractState state = null;
+		if (unit.isCanceled())
+			state = ContractState.canceled;
+		else if (unit.isFreeze())
+			state = ContractState.frozen;
+		else if (unit.isComplete())
+			state = ContractState.complete;
+		else if (undefinedStateTest()) {
+			state = ContractState.undefined;
+		} else
+			state = ContractState.active;
+
+		return state;
+	}
+
+	private boolean undefinedStateTest() {
+		boolean result = eventMed.filter(unit)
+				.filter(DateService.fromNowPlusDays(-14), null).getGroup()
+				.size() > 0;
+		eventMed.reset();
+		return result;
+	}
+
 	public int getBalance() {
 		try {
 			return unit.getBalance();
@@ -137,6 +171,10 @@ public class ContractMediator implements ContractMed {
 		}
 	}
 
+	public int getRemainingLessons() {
+		return unit.getLessonsRemain();
+	}
+
 	public List<Payment> getPayments() {
 		try {
 			return unit.getPayments();
@@ -145,23 +183,29 @@ public class ContractMediator implements ContractMed {
 			return null;
 		}
 	}
-	
+
 	private List<Contract> cache;
 	private Map<String, Object> appliedFilters;
 
+	private Map<String, Object> getAppliedFilters() {
+		if (appliedFilters == null)
+			appliedFilters = new HashMap<String, Object>(5);
+		return appliedFilters;
+	}
+
 	public List<Contract> getGroup() {
-		if(cache==null)		
+		if (cache == null)
 			load();
 		return cache;
 	}
-	
-	private void load(){
+
+	private void load() {
 		cache = dao.findWithNamedQuery(Contract.ALL);
 		appliedFilters = new HashMap<String, Object>();
 	}
 
 	public void setGroup(List<Contract> group) {
-cache = group;
+		cache = group;
 	}
 
 	public List<Contract> getAllContracts() {
@@ -169,76 +213,132 @@ cache = group;
 	}
 
 	public void reset() {
-		load();
+		cache = null;
+		appliedFilters = null;
 	}
 
 	public String getFilterState() {
 		StringBuilder sb = new StringBuilder();
-		for(Entry<String, Object> entry : appliedFilters.entrySet())
-			sb.append(entry.getKey() + ": " + entry.getValue().toString() + "\n");
+		for (Entry<String, Object> entry : appliedFilters.entrySet())
+			sb.append(entry.getKey() + ": " + entry.getValue().toString()
+					+ "\n");
 		return sb.toString();
 	}
 
 	public ContractMed filter(Client c) {
-		appliedFilters.put("Client", c);
+		getAppliedFilters().put("Client", c);
+		if (cache == null)
+			cache = dao.findWithNamedQuery(Contract.WITH_CLIENT,
+					QueryParameters.with("clientId", c.getId()).parameters());
+		List<Contract> cache = getGroup();
 		Contract con;
-		for(int i = cache.size()-1;i>=0;i--){
+
+		for (int i = cache.size() - 1; i >= 0; i--) {
 			con = cache.get(i);
-			if(con.getClientId()==c.getId())
+			if (con.getClientId() == c.getId())
 				continue;
 			cache.remove(i);
-			}
+		}
 		return this;
 	}
 
 	public ContractMed filter(Teacher t) {
-		// TODO Auto-generated method stub
-		return null;
+		getAppliedFilters().put("Teacher", t);
+		if (cache == null)
+			cache = dao.findWithNamedQuery(Contract.WITH_TEACHER,
+					QueryParameters.with("teacherId", t.getId()).parameters());
+		List<Contract> cache = getGroup();
+		Contract con;
+		for (int i = cache.size() - 1; i >= 0; i--) {
+			con = cache.get(i);
+			if (con.getTeacherId() == t.getId())
+				continue;
+			cache.remove(i);
+		}
+		return this;
 	}
 
 	public ContractMed filter(ContractState state) {
-		// TODO Auto-generated method stub
-		return null;
+		getAppliedFilters().put("ContractState", state);
+		List<Contract> cache = getGroup();
+		
+		//save current unit;
+		Contract tempUnit = getUnit();
+		
+		Contract con;
+		for (int i = cache.size() - 1; i >= 0; i--) {
+			con = cache.get(i);
+			setUnit(con);
+			if (getContractState() == state)
+				continue;
+			else
+				cache.remove(i);
+		}
+		
+		//restore unit
+		setUnit(tempUnit);
+		return this;
 	}
 
 	public ContractMed filter(int remainingLessons) {
-		// TODO Auto-generated method stub
-		return null;
+		getAppliedFilters().put("RemainingLessons", remainingLessons);
+		List<Contract> cache = getGroup();
+		Contract con;
+
+		for (int i = cache.size() - 1; i >= 0; i--) {
+			con = cache.get(i);
+			if (con.getLessonsRemain() >= remainingLessons)
+				continue;
+			cache.remove(i);
+		}
+		return this;
 	}
 
 	public ContractMed filter(Date date1, Date date2) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Contract> cache = getGroup();
+		dateFilter.filter(cache, date1, date2);
+		return this;
 	}
 
 	public ContractMed filterByPlannedPaymentsDate(Date date1, Date date2) {
-		// TODO Auto-generated method stub
-		return null;
+		getAppliedFilters().put("PlannedPaymentsDate", date1);
+		List<Contract> cache = getGroup();
+		Contract con;
+
+		for (int i = cache.size() - 1; i >= 0; i--) {
+			con = cache.get(i);
+			if (plannedPaymentsTest(con, date1, date2))
+				continue;
+			cache.remove(i);
+		}
+		return this;
+	}
+
+	private boolean plannedPaymentsTest(Contract con, Date date1, Date date2) {
+		boolean result = paymentMed.filter(con).filter(true)
+				.filter(date1, date2).getGroup().size() > 0;
+		paymentMed.reset();
+		return result;
 	}
 
 	public Integer countGroupSize() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return cache.size();
+		} catch (NullPointerException npe) {
+			return null;
+		}
 	}
 
 	public Integer count(ContractState state) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Integer countRemainingLessons() {
-		// TODO Auto-generated method stub
-		return null;
+		return filter(state).countGroupSize();
 	}
 
 	public Integer countCompleteLessonsMoney() {
-		// TODO Auto-generated method stub
-		return null;
+		return unit.getCompleteLessonsCost();
 	}
 
 	public Integer countMoneyPaid() {
-		// TODO Auto-generated method stub
-		return null;
+		return unit.getMoneyPaid();
 	}
 
 }

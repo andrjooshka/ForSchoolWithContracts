@@ -6,7 +6,6 @@ import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.mediators.TeacherMed;
-import tap.execounting.dal.mediators.TeacherMedImpl;
 import tap.execounting.entities.Teacher;
 
 public class Teachers {

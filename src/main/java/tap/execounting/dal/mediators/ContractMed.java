@@ -28,11 +28,17 @@ public interface ContractMed {
 	//contract type
 	public ContractType getContractType();
 	
+	//state
+	public ContractState getContractState();
+	
 	//date
 	public Date getDate();
 	
 	//lessons number
 	public int getLessonsNumber();
+	
+	//remaining events
+	public int getRemainingLessons();
 	
 	//price
 	public int getPrice();
@@ -80,9 +86,6 @@ public interface ContractMed {
 	
 	//state
 	public Integer count(ContractState state);
-	
-	//remaining events
-	public Integer countRemainingLessons();
 	
 	//money for complete events
 	public Integer countCompleteLessonsMoney();

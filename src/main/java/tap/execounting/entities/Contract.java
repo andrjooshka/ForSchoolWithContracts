@@ -29,12 +29,14 @@ import tap.execounting.services.SuperCalendar;
 		@NamedQuery(name = Contract.ALL, query = "Select c from Contract c"),
 		@NamedQuery(name = Contract.BY_DATES, query = "Select c from Contract c where c.date between "
 				+ ":earlierDate and :laterDate"),
-				@NamedQuery(name = Contract.WITH_TEACHER, query ="Select c from Contract c where c.teacherId = :teacherId")})
+		@NamedQuery(name = Contract.WITH_TEACHER, query = "Select c from Contract c where c.teacherId = :teacherId"),
+		@NamedQuery(name= Contract.WITH_CLIENT,query = "Select c from Contract c where c.clientId = :clientId")})
 public class Contract implements Comparable<Contract>, Dated {
 
 	public static final String ALL = "Contract.all";
 	public static final String BY_DATES = "Contract.byDates";
 	public static final String WITH_TEACHER = "Contract.withTeacher";
+	public static final String WITH_CLIENT = "Contract.withClient";
 
 	@Id
 	@Column(name = "contract_id")
@@ -55,7 +57,7 @@ public class Contract implements Comparable<Contract>, Dated {
 	private int discount;
 
 	private boolean freeze;
-	
+
 	private boolean canceled;
 
 	@Column(name = "contract_type_id", unique = false)
@@ -240,8 +242,7 @@ public class Contract implements Comparable<Contract>, Dated {
 	}
 
 	public boolean isActive() {
-		boolean active = !isComplete() && !isFreeze() 
-				&& !isCanceled();
+		boolean active = !isComplete() && !isFreeze() && !isCanceled();
 		return active;
 	}
 
@@ -276,9 +277,7 @@ public class Contract implements Comparable<Contract>, Dated {
 	public int getMoneyPaid() {
 		int total = 0;
 		for (Payment p : getPayments()) {
-			boolean paymentOK = false;
-			paymentOK = !p.isScheduled();
-			if (paymentOK) {
+			if (!p.isScheduled()) {
 				total += p.getAmount();
 			}
 		}
@@ -337,7 +336,7 @@ public class Contract implements Comparable<Contract>, Dated {
 			return freezedString;
 		if (isComplete())
 			return completeString;
-		if(isCanceled())
+		if (isCanceled())
 			return canceledString;
 		return activeString;
 	}
@@ -363,36 +362,13 @@ public class Contract implements Comparable<Contract>, Dated {
 		SuperCalendar calendar = new RusCalendar();
 		calendar.addDays(days);
 		List<Payment> list = getPlannedPayments();
-		
+
 		Payment p;
-		for(int i = list.size()-1;i>=0;i--){
+		for (int i = list.size() - 1; i >= 0; i--) {
 			p = list.get(i);
-			if(p.getDate().after(calendar.getTime())) list.remove(i);
+			if (p.getDate().after(calendar.getTime()))
+				list.remove(i);
 		}
 		return list;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

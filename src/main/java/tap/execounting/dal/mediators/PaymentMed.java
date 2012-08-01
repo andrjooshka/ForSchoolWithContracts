@@ -38,7 +38,7 @@ public interface PaymentMed {
 	public PaymentMed filter(Contract unit);
 	
 	//Date
-	public PaymentMed filter(Date date);
+	public PaymentMed filter(Date date1, Date date2);
 
 	//Planned (state)
 	public PaymentMed filter(boolean state);
@@ -49,4 +49,5 @@ public interface PaymentMed {
 	//amount
 	public Integer countAmount();
 	public Integer countReturn(Date date1, Date date2);
+
 }

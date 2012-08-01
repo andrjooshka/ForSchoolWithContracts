@@ -20,19 +20,7 @@ import org.slf4j.Logger;
 
 import tap.execounting.dal.DataModule;
 import tap.execounting.dal.HibernateModule;
-import tap.execounting.dal.mediators.ClientMed;
-import tap.execounting.dal.mediators.ClientMediator;
-import tap.execounting.dal.mediators.ContractMed;
-import tap.execounting.dal.mediators.ContractMediator;
-import tap.execounting.dal.mediators.DateFilter;
-import tap.execounting.dal.mediators.DateFilterImpl;
-import tap.execounting.dal.mediators.EventMed;
-import tap.execounting.dal.mediators.EventMediator;
 import tap.execounting.dal.mediators.MediatorModule;
-import tap.execounting.dal.mediators.PaymentMed;
-import tap.execounting.dal.mediators.PaymentMediator;
-import tap.execounting.dal.mediators.TeacherMed;
-import tap.execounting.dal.mediators.TeacherMedImpl;
 import tap.execounting.security.AuthenticationFilter;
 
 /**
@@ -51,7 +39,9 @@ public class AppModule {
 		// invoking the constructor.
 
 		binder.bind(Authenticator.class, BasicAuthenticator.class);
-		binder.bind(SuperCalendar.class, RusCalendar.class);	
+		binder.bind(SuperCalendar.class, RusCalendar.class);
+		
+		//binder.bind(TeacherMed.class);
 	}
 
 	public static void contributeFactoryDefaults(
@@ -165,6 +155,6 @@ public class AppModule {
 		// contributed filter
 		// within the pipeline.
 
-		configuration.add("Timing", filter);
+		//configuration.add("Timing", filter);
 	}
 }

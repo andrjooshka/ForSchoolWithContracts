@@ -8,7 +8,7 @@ import tap.execounting.entities.interfaces.Dated;
 
 public class DateFilterImpl implements DateFilter {
 
-	public List<Dated> filter(List<Dated> items, Date date1, Date date2) {
+	public List<? extends Dated> filter(List<? extends Dated> items, Date date1, Date date2) {
 		List<Dated> filtered = new ArrayList<Dated>(500);
 		if (date1 != null && date2 != null) {
 			for(Dated item : items){

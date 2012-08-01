@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 
 import org.junit.Test;
 
+@SuppressWarnings("unused")
 public class DateServiceTest {
 
 	@Test
