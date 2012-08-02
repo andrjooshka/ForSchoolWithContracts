@@ -44,7 +44,6 @@ public class SchoolSchedule {
 	private Zone datelabelZone;
 	@Component
 	private AddEvent eventEditor;
-	@SuppressWarnings("unused")
 	@Property
 	private FacilitySelectModel facilityselect;
 	
@@ -64,7 +63,6 @@ public class SchoolSchedule {
 	private int facilityId;
 	@Property
 	private Room room;
-	@SuppressWarnings("unused")
 	@Property
 	private boolean adding;
 	private Event[][] eventsArray;

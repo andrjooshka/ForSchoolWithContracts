@@ -44,15 +44,12 @@ public class AddEvent {
 	@Property
 	private SelectModel facilitySelect;
 
-	@SuppressWarnings("unused")
 	@Property
 	private SelectModel teacherSelect;
 
-	@SuppressWarnings("unused")
 	@Property
 	private SelectModel roomSelect;
 
-	@SuppressWarnings("unused")
 	@Property
 	private SelectModel typeSelect;
 

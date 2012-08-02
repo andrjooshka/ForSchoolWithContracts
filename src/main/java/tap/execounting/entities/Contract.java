@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import tap.execounting.data.EventState;
 import tap.execounting.entities.interfaces.Dated;
 import tap.execounting.services.RusCalendar;
 import tap.execounting.services.SuperCalendar;
@@ -213,7 +214,7 @@ public class Contract implements Comparable<Contract>, Dated {
 	public List<Event> getFinishedEvents() {
 		List<Event> events = new ArrayList<Event>();
 		for (Event e : getEvents())
-			if (e.getState())
+			if (e.getState()==EventState.complete)
 				events.add(e);
 		return events;
 	}
@@ -268,7 +269,7 @@ public class Contract implements Comparable<Contract>, Dated {
 	public int getCompleteLessonsCost() {
 		int count = 0;
 		for (Event e : getEvents())
-			if (e.getState())
+			if (e.getState()==EventState.complete)
 				count++;
 		int completeLessonsCost = count * getSingleLessonCost();
 		return completeLessonsCost;
@@ -301,10 +302,10 @@ public class Contract implements Comparable<Contract>, Dated {
 	public int getLessonsRemain() {
 		int remaining = 0;
 		try {
-			remaining = getLessonsNumber() - getEvents().size();
+			remaining = getLessonsNumber();
 			for (Event e : getEvents())
-				if (!e.getState())
-					remaining++;
+				if (e.getState()==EventState.complete)
+					remaining--;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -314,31 +315,13 @@ public class Contract implements Comparable<Contract>, Dated {
 	public List<Event> getScheduledLessons() {
 		List<Event> events = new ArrayList<Event>();
 		for (Event e : getEvents())
-			if (!e.getState())
+			if (e.getState()==EventState.planned)
 				events.add(e);
 		return events;
 	}
 
 	public boolean isComplete() {
-		int lessonsAssigned = getLessonsNumber();
-		int lessonsDone = getFinishedEvents().size();
-		boolean complete = lessonsAssigned <= lessonsDone;
-		return complete;
-	}
-
-	public String getStateString() {
-		String activeString = "активен";
-		String freezedString = "заморожен";
-		String canceledString = "закрыт";
-		String completeString = "завершен";
-
-		if (isFreeze())
-			return freezedString;
-		if (isComplete())
-			return completeString;
-		if (isCanceled())
-			return canceledString;
-		return activeString;
+		return getLessonsRemain()<=0;
 	}
 
 	public boolean isTrialLesson() {

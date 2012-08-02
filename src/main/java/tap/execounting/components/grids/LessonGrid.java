@@ -13,6 +13,7 @@ import org.apache.tapestry5.services.BeanModelSource;
 
 import tap.execounting.components.editors.AddEvent;
 import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.data.EventState;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.EventType;
@@ -32,7 +33,6 @@ public class LessonGrid {
 	
 	@InjectComponent
 	private AddEvent editor;
-	@SuppressWarnings("unused")
 	@Property
 	private boolean editorActive;
 	@Property
@@ -84,7 +84,7 @@ public class LessonGrid {
 	}
 	
 	public String getState(){
-		return unit.getState() ? "Проведено" : "Не проведено";
+		return unit.getState() == EventState.complete ? "Проведено" : "Не проведено";
 	}
 	
 	public String getTypeTitle(){

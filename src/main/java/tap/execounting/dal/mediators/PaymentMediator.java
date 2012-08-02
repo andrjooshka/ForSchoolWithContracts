@@ -62,6 +62,13 @@ public class PaymentMediator implements PaymentMed {
 			cache = getAllPayments();
 		return cache;
 	}
+	
+	public List<Payment> getGroup(boolean reset){
+		List<Payment> innerCache = getGroup();
+		if (reset)
+			reset();
+		return innerCache;
+	}
 
 	public PaymentMed setGroup(List<Payment> payments) {
 		cache = payments;

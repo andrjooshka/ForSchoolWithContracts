@@ -19,7 +19,6 @@ import tap.execounting.entities.Contract;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.EventType;
 import tap.execounting.entities.Facility;
-import tap.execounting.entities.Payment;
 import tap.execounting.entities.Room;
 import tap.execounting.entities.Teacher;
 
@@ -138,6 +137,13 @@ public class EventMediator implements EventMed {
 		if (cache == null)
 			cache = dao.findWithNamedQuery(Event.ALL);
 		return cache;
+	}
+	
+	public List<Event> getGroup(boolean reset){
+		List<Event> innerCache = getGroup();
+		if (reset)
+			reset();
+		return innerCache;
 	}
 
 	public void setGroup(List<Event> items) {
@@ -329,7 +335,7 @@ public class EventMediator implements EventMed {
 	}
 
 	public int countDaysInEventsGroup() {
-		
+		//TODO write days counting code
+		return 20;
 	}
-
 }

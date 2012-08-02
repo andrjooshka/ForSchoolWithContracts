@@ -28,12 +28,10 @@ public class TeacherGrid {
 	
 	@InjectComponent
 	private AddTeacher editor;
-	@SuppressWarnings("unused")
 	@Property
 	private boolean editorActive;
 	@Property
 	private BeanModel<Teacher> model;
-	@SuppressWarnings("unused")
 	@Property
 	private Teacher unit;
 

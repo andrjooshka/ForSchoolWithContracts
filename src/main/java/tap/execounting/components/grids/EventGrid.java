@@ -8,6 +8,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.data.EventState;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.EventType;
@@ -17,7 +18,6 @@ import tap.execounting.entities.Teacher;
 
 public class EventGrid {
 
-	@SuppressWarnings("unused")
 	@Parameter
 	@Property
 	private List<Event> source;
@@ -41,7 +41,7 @@ public class EventGrid {
 	}
 
 	public String getState() {
-		return event.getState() ? "Проведено" : "Не проведено";
+		return event.getState()==EventState.complete ? "Проведено" : "Не проведено";
 	}
 
 	public String getTypeTitle() {

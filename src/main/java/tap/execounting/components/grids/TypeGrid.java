@@ -27,12 +27,10 @@ public class TypeGrid {
 	
 	@InjectComponent
 	private AddEventType editor;
-	@SuppressWarnings("unused")
 	@Property
 	private boolean editorActive;
 	@Property
 	private BeanModel<EventType> model;
-	@SuppressWarnings("unused")
 	@Property
 	private EventType unit;
 

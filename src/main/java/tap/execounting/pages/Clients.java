@@ -41,7 +41,6 @@ public class Clients {
 	@Inject
 	private SuperCalendar calendar;
 
-	@SuppressWarnings("unused")
 	@Property
 	private SelectModel contractTypeIdsModel;
 
@@ -149,8 +148,9 @@ public class Clients {
 		// Stud status
 		if (filterOnStudStatus) {
 			for (int i = cs.size() - 1; i >= 0; i--) {
-				if (!cs.get(i).getStudentInfo().equals(studStatus))
-					cs.remove(i);
+				//TODO client status filtration is shout down
+//				if (!cs.get(i).getStudentInfo().equals(studStatus))
+//					cs.remove(i);
 			}
 		}
 		// Contract Type
@@ -202,17 +202,17 @@ public class Clients {
 
 	public int getNewClients() {
 		int sum = 0;
-		for (Client c : getClients())
-			if (c.getStudentInfo().equals(Client.studStateNew))
-				sum++;
+//		for (Client c : getClients())
+//			if (c.getStudentInfo().equals(Client.studStateNew))
+//				sum++;
 		return sum;
 	}
 
 	public int getExpClients() {
 		int sum = 0;
-		for (Client c : getClients())
-			if (c.getStudentInfo().equals(Client.studStateExp))
-				sum++;
+//		for (Client c : getClients())
+//			if (c.getStudentInfo().equals(Client.studStateExp))
+//				sum++;
 		return sum;
 	}
 

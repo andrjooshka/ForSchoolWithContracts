@@ -31,7 +31,6 @@ public class ShowEvent {
 	@InjectComponent
 	private Zone bodyZone;
 
-	@SuppressWarnings("unused")
 	@Property
 	private boolean updateMode;
 

@@ -48,7 +48,6 @@ public class AddContract {
 	@Persist
 	private List<Teacher> teachers;
 
-	@SuppressWarnings("unused")
 	@Property
 	private SelectModel contractTypeIdsModel;
 

@@ -164,7 +164,6 @@ public class Reports {
 	@Persist
 	private boolean switchPages;
 	
-	@SuppressWarnings("unused")
 	@Property
 	private boolean editing;
 	@Inject

@@ -58,6 +58,7 @@ public interface ClientMed {
 
 //group
 	public List<Client> getGroup();
+	public List<Client> getGroup(boolean reset);
 	public ClientMediator setGroup(List<Client> group);
 	public List<Client> getAllClient();
 	public void reset();

@@ -7,8 +7,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 
 import tap.execounting.dal.CrudServiceDAO;
-import tap.execounting.dal.HibernateCrudServiceDAO;
-import tap.execounting.dal.mediators.TeacherMedImpl;
+import tap.execounting.dal.mediators.interfaces.TeacherMed;
 import tap.execounting.data.FacilitySelectModel;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Teacher;
@@ -23,7 +22,7 @@ public class TeacherPage {
 	
 	@Inject
 	@Property
-	private TeacherMedImpl tMed;
+	private TeacherMed tMed;
 	
 	@Property
 	private boolean scheduleEdit;
@@ -56,4 +55,26 @@ public class TeacherPage {
 		if(facilitySelectModel==null)
 			facilitySelectModel = new FacilitySelectModel(dao);
 	}
+	
+	//page properties
+	public String getSchool(){
+		return tMed.getSchoolForDay(day);
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

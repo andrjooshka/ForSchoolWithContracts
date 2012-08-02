@@ -18,7 +18,6 @@ import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.validator.ValidatorMacro;
 import org.slf4j.Logger;
 
-import tap.execounting.dal.DataModule;
 import tap.execounting.dal.HibernateModule;
 import tap.execounting.dal.mediators.MediatorModule;
 import tap.execounting.security.AuthenticationFilter;
@@ -28,7 +27,7 @@ import tap.execounting.security.AuthenticationFilter;
  * it's a good place to configure and extend Tapestry, or to place your own
  * service definitions.
  */
-@SubModule({ HibernateModule.class, DataModule.class, MediatorModule.class })
+@SubModule({ HibernateModule.class, MediatorModule.class })
 public class AppModule {
 	public static void bind(ServiceBinder binder) {
 		// binder.bind(MyServiceInterface.class, MyServiceImpl.class);
@@ -40,8 +39,6 @@ public class AppModule {
 
 		binder.bind(Authenticator.class, BasicAuthenticator.class);
 		binder.bind(SuperCalendar.class, RusCalendar.class);
-		
-		//binder.bind(TeacherMed.class);
 	}
 
 	public static void contributeFactoryDefaults(

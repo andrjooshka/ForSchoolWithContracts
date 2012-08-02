@@ -26,7 +26,7 @@ public interface EventMed {
 	public Teacher getTeacher();
 
 	//Clients
-	public List<Client> getClient();
+	public List<Client> getClients();
 
 	//Discipline (EventType)
 	public EventType getEventType();

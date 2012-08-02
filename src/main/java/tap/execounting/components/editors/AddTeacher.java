@@ -23,7 +23,6 @@ public class AddTeacher {
 	@Property
 	private Teacher teacher;
 	
-	@SuppressWarnings("unused")
 	@Property
 	private SelectModel facilitySelect;
 

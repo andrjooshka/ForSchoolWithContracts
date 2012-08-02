@@ -26,15 +26,12 @@ public class TeacherSchedule {
 	@Persist
 	private int teacherId;
 
-	@SuppressWarnings("unused")
 	@Property
 	private boolean adding;
 
-	@SuppressWarnings("unused")
 	@Property
 	private TeacherSelectModel teacherSelectModel;
 
-	@SuppressWarnings("unused")
 	@Property
 	private String eventTime;
 
@@ -57,7 +54,6 @@ public class TeacherSchedule {
 	@Persist
 	private Event[][] eventsArrayCached;
 
-	@SuppressWarnings("unused")
 	@Property
 	private String singledate;
 

@@ -40,10 +40,8 @@ public class ShowContract {
 	@InjectComponent
 	private Zone bodyZone;
 
-	@SuppressWarnings("unused")
 	@Property
 	private boolean updateMode;
-	@SuppressWarnings("unused")
 	@Property
 	private boolean addingEvent;
 	@Property
@@ -65,7 +63,6 @@ public class ShowContract {
 	@Component
 	private AddContract editor;
 
-	@SuppressWarnings("unused")
 	@Property
 	private boolean addingPayment;
 

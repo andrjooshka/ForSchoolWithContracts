@@ -26,12 +26,10 @@ public class ClientGridNCD {
 	@Inject
 	private SuperCalendar calendar;
 
-	@SuppressWarnings("unused")
 	@Property
 	@Parameter
 	private List<Client> source;
 
-	@SuppressWarnings("unused")
 	@Property
 	private boolean editorActive;
 

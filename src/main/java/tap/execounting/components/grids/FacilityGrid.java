@@ -27,12 +27,10 @@ public class FacilityGrid {
 	
 	@InjectComponent
 	private AddFacility editor;
-	@SuppressWarnings("unused")
 	@Property
 	private boolean editorActive;
 	@Property
 	private BeanModel<Facility> model;
-	@SuppressWarnings("unused")
 	@Property
 	private Facility unit;
 

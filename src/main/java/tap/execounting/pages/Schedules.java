@@ -21,10 +21,8 @@ public class Schedules {
 	@Inject
 	private CrudServiceDAO dao;
 	
-	@SuppressWarnings("unused")
 	@Property
 	private Teacher teacher;
-	@SuppressWarnings("unused")
 	@Property
 	private Facility facility;
 	@Property

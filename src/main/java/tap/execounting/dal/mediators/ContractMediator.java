@@ -202,6 +202,13 @@ public class ContractMediator implements ContractMed {
 			load();
 		return cache;
 	}
+	
+	public List<Contract> getGroup(boolean reset){
+		List<Contract> innerCache = getGroup();
+		if(reset)
+			reset();
+		return innerCache;
+	}
 
 	private void load() {
 		cache = dao.findWithNamedQuery(Contract.ALL);

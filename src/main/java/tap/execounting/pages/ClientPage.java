@@ -32,17 +32,14 @@ public class ClientPage {
 	private boolean editorActiveAlways;
 	@Component
 	private Zone ezone;
-	@SuppressWarnings("unused")
 	@Persist
 	@Property
 	private boolean constantEventEditor;
 
 	@InjectComponent
 	private AddContract editor;
-	@SuppressWarnings("unused")
 	@Property
 	private Contract contract;
-	@SuppressWarnings("unused")
 	@Property
 	private boolean mode;
 	@Inject

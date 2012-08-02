@@ -38,19 +38,14 @@ public class Statistics {
 	private AjaxResponseRenderer renderer;
 
 	// page components
-	@SuppressWarnings("unused")
 	@Property
 	private TeacherSelectModel teacherSelect;
-	@SuppressWarnings("unused")
 	@Property
 	private FacilitySelectModel facilitySelect;
-	@SuppressWarnings("unused")
 	@Property
 	private RoomSelectModel roomSelect;
-	@SuppressWarnings("unused")
 	@Property
 	private TypeTitleSelectModel typeSelect;
-	@SuppressWarnings("unused")
 	@Property
 	private SelectModel boolSelect;
 	@Component

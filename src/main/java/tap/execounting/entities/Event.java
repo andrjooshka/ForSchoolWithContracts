@@ -34,7 +34,7 @@ import tap.execounting.entities.interfaces.Dated;
 		@NamedQuery(name = Event.BY_ROOM_ID_AND_DATE, query = "Select e from Event e where e.roomId = :roomId "
 				+ "and date(e.date) = date(:date)"),
 		@NamedQuery(name = Event.BY_TYPE_ID, query = "Select e from Event e where e.typeId = :typeId"),
-		@NamedQuery(name = Event.BY_ROOM_ID, query = "from Event with roomId = :roomId"),
+		@NamedQuery(name = Event.BY_ROOM_ID, query = "from Event as e where e.roomId = :roomId"),
 		@NamedQuery(name = Event.BETWEEN_DATE1_AND_DATE2, query = "from Event as e where e.date <= :date2 and e.date >= :date1")})
 @Table(name = "events")
 public class Event implements Comparable<Event>, Dated {

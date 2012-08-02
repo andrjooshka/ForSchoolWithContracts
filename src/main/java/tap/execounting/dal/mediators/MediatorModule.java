@@ -7,6 +7,7 @@ import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.dal.mediators.interfaces.DateFilter;
 import tap.execounting.dal.mediators.interfaces.EventMed;
 import tap.execounting.dal.mediators.interfaces.PaymentMed;
+import tap.execounting.dal.mediators.interfaces.TeacherMed;
 
 
 public class MediatorModule {
@@ -16,8 +17,7 @@ public class MediatorModule {
 		binder.bind(ClientMed.class, ClientMediator.class);
 		binder.bind(PaymentMed.class, PaymentMediator.class);
 		binder.bind(EventMed.class, EventMediator.class);
-		//binder.bind(TeacherMed.class, TeacherMedImpl.class);
-		binder.bind(TeacherMed.class);
+		binder.bind(TeacherMed.class, TeacherMediator.class);
 	}
 
 }

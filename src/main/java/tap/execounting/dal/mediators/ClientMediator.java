@@ -255,6 +255,15 @@ public class ClientMediator implements ClientMed {
 			load();
 		return cache;
 	}
+	
+	public List<Client> getGroup(boolean reset){
+		if (cache == null)
+			load();
+		List<Client> innerCache = cache;
+		if (reset)
+			reset();
+		return innerCache;
+	}
 
 	public ClientMediator setGroup(List<Client> group) {
 		cache = group;

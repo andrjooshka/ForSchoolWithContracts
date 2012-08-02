@@ -31,7 +31,7 @@
 				</tbody>
 				<tbody t:type="if" t:test="!scheduleEdit">
 					<tr>
-						<td t:type="loop" t:source="days" t:value="day">${tMed.worksOn(day)}</td>
+						<td t:type="loop" t:source="days" t:value="day">${school}</td>
 					</tr>
 				</tbody>
 			</table>

@@ -30,7 +30,6 @@ public class ClientGrid {
 
 	@InjectComponent
 	private AddClient editor;
-	@SuppressWarnings("unused")
 	@Property
 	private boolean editorActive;
 	@Property
