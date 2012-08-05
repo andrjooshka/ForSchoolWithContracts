@@ -1,9 +1,11 @@
 package tap.execounting.services;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -239,4 +241,52 @@ public class DateService {
 		calendar.add(Calendar.DAY_OF_YEAR, days);
 		return calendar.getTime();
 	}
+
+	public static Date trimToDate(Date date) {
+		Calendar c = new GregorianCalendar();
+		c.setTime(date);
+		Calendar r = new GregorianCalendar();
+		r.set(YEAR, c.get(YEAR));
+		r.set(DAY_OF_YEAR, c.get(DAY_OF_YEAR));
+		//r.set(YEAR, c.get(YEAR));
+		return r.getTime();
+	}
+
+	public static Date fromDatePlusDays(Date date, int days) {
+		GregorianCalendar calendar =  new GregorianCalendar();
+		calendar.setTime(date);
+		calendar.add(Calendar.DAY_OF_YEAR, days);
+		return calendar.getTime();
+	}
+
+	public static List<Date> generateDaySet(Date eventsDate, int days) {
+		List<Date> list = new ArrayList<Date>(days);
+		for(int i =0;i<days;i++)
+			list.add(fromDatePlusDays(eventsDate, i));
+		return list;
+	}
+
+	public static String monthName(Date eventsDate) {
+		RusCalendar rc = new RusCalendar();
+		rc.setTime(eventsDate);
+		return rc.getMonthName();
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,12 +1,13 @@
 <html t:type="layout"
-      t:pageTitle="Вход"
+      t:pageTitle="Учителя : ${tMed.name}"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
 
-	<h3>${tMed.unit.name}</h3>
+	<h3>${tMed.name}</h3>
 	<h4>Расписание</h4>
-	<a href="#" t:type="actionlink" t:id="scheduleEditLink" t:zone="zone1">Изменить</a>
-	<div t:type="zone" t:id="scheduleZone" id="zone1">
+	<a href="#" t:type="actionlink" t:id="scheduleEditLink" t:zone="scheduleZone">Изменить</a>
+	
+	<t:zone t:id="scheduleZone" id="scheduleZone">
 			<table id="scheduleTable">
 				<thead>
 					<tr>
@@ -14,7 +15,7 @@
 					</tr>
 				</thead>
 				<tbody t:type="if" t:test="scheduleEdit">
-					<form t:type="form">
+					<t:form t:id="scheduleForm" zone="scheduleZone">
 						<tr>
 							<td><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.monday"/></td>
 							<td><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.tuesday"/></td>
@@ -25,9 +26,9 @@
 							<td><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.sunday"/></td>
 						</tr>
 						<tr>
-							<td colspan="7" ><input type="submit" value="Сохранить" /></td>
+							<td colspan="7" ><t:submit value="Сохранить" /></td>
 						</tr>
-					</form>
+					</t:form>
 				</tbody>
 				<tbody t:type="if" t:test="!scheduleEdit">
 					<tr>
@@ -35,14 +36,124 @@
 					</tr>
 				</tbody>
 			</table>
-	</div>
-	<div style="height: 100px;"/>
-	<h3>${message:clients}</h3>
-	<ul t:type="loop" t:source="tMed.activeClients" t:value="tClient">
-		<li>
-			${tClient.name}
-		</li>
-	</ul>
-	<h3>${message:stats}</h3>
+	</t:zone>
+	
+	<!--CLIENTS-->
+	
+	<h3 style="margin-top: 70px; margin-bottom: 20px;">${message:clients}</h3>
+	
+	<t:zone t:id="clientsZone" id="clientsZone">
+		<t:if test="calendarCentric">
+			<div style="display: inline-table; width:130px; height: 45px;
+					text-align: right;padding-right: 30px;"><h4 style="font-size: 1.6em">${monthName}</h4></div>
+			<div class="calendar" style="display: inline-table;">
+				<t:show.EventRow displayNull="true" displayDate="true" elements="dates"/></div>	
+		</t:if>
+		
+		<div t:type="loop" t:source="contracts" t:value="contract" class="" style="height: 70px;">
+				<div style="display: inline-table; width:150px; height: 45px;
+				text-align: right;padding-right: 10px;">${clientName}</div>
+				<t:show.EventRow displayNull="true" elements="elements"/>
+		</div>
+	</t:zone>
+	
+	<!--/CLIENTS-->
+		
+	<h3 style="margin-top: 70px; margin-bottom: 20px;">${message:stats}</h3>
+	<t:zone t:id="statsZone" id="statsZone">
+		<t:form t:id="statsDateForm" zone="statsZone">
+			<t:label for="date1" style="margin: 5px;"/>
+			<t:datefield t:id="date1"/>
+			<t:label for="date2" style="margin: 5px; margin-left: 25px;"/>
+			<t:datefield t:id="date2"/>
+			<t:submit style="margin-left: 20px;" />
+		</t:form>
+		<table>
+			<tr>
+				<th>
+					Проведено уроков
+				</th>
+				<td>
+					${lessonsComplete}
+				</td>
+				
+				<th>
+					Отработано дней
+				</th>
+				<td>
+					${daysWorked}
+				</td>
+			</tr>
+			
+			<tr>
+				<th>
+					Отменено занятий
+				</th>
+				<td>
+					${lessonsFailed}
+				</td>
+				
+				<th></th>
+				<td></td>
+			</tr>
+			
+			<tr>
+				<th>
+					Из-за клиента
+				</th>
+				<td>
+					${lessonsFailedByClient}
+				</td>
+				
+				<th>
+					Из-за педагога
+				</th>
+				<td>
+					${lessonsFailedByTeacher}
+				</td>
+			</tr>
+			<tr>
+				<th>
+					Заработал денег
+				</th>
+				<td>
+					${moneyEarned}
+				</td>
+				
+				<th>
+				</th>
+				<td>
+					
+				</td>
+			</tr>
+			
+			<tr>
+				<th>
+					Для школы
+				</th>
+				<td>
+					${moneyEarnedForSchool}
+				</td>
+				
+				<th>
+					Для себя
+				</th>
+				<td>
+					${moneyEarnedForSelf}
+				</td>
+			</tr>
+		</table>
+	</t:zone>
+	
+	<t:zone id="commentsZone">
+		t:loop source="comments" value="comment"
+			t:comment showHidden="showHidden" commentId="comment.id" /
+		/t:loop
+	</t:zone>
+	
+	<h4>Долги по перенесенным занятиям</h4>
+		t:loop source="shiftedLessons" value="lesson"
+			t:wideshowevent lessonId="lesson.id"/
+		/t:loop
 
 </html>

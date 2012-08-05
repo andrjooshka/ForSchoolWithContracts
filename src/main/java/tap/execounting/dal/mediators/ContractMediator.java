@@ -31,14 +31,43 @@ public class ContractMediator implements ContractMed {
 
 	@Inject
 	private EventMed eventMed;
+	private EventMed sureEventMed;
 
 	@Inject
 	private PaymentMed paymentMed;
+	private PaymentMed surePaymentMed;
 
 	@Inject
 	private CrudServiceDAO dao;
+	private CrudServiceDAO sureDao;
 
 	private Contract unit;
+	
+	public void setDao(CrudServiceDAO dao){
+		this.sureDao = dao;
+	}
+	private CrudServiceDAO getDao(){
+		return dao == null ? sureDao : dao;
+	}
+	
+	private PaymentMed getPaymentMed(){
+		if(paymentMed==null){
+			surePaymentMed = new PaymentMediator();
+			surePaymentMed.setDao(getDao());
+			return surePaymentMed;
+		}
+		else return paymentMed;
+	}
+	
+	private EventMed getEventMed(){
+		if(eventMed==null){
+			sureEventMed = new EventMediator();
+			sureEventMed.setDao(getDao());
+			return sureEventMed;
+		}
+		else return eventMed;
+	}
+	
 
 	public Contract getUnit() {
 		try {
@@ -148,6 +177,7 @@ public class ContractMediator implements ContractMed {
 	}
 
 	private boolean undefinedStateTest() {
+		EventMed eventMed = getEventMed();
 		boolean result = eventMed.filter(unit)
 				.filter(DateService.fromNowPlusDays(-60), null).getGroup()
 				.size() > 0;
@@ -211,7 +241,7 @@ public class ContractMediator implements ContractMed {
 	}
 
 	private void load() {
-		cache = dao.findWithNamedQuery(Contract.ALL);
+		cache = getDao().findWithNamedQuery(Contract.ALL);
 		appliedFilters = new HashMap<String, Object>();
 	}
 
@@ -221,7 +251,7 @@ public class ContractMediator implements ContractMed {
 	}
 
 	public List<Contract> getAllContracts() {
-		return dao.findWithNamedQuery(Contract.ALL);
+		return getDao().findWithNamedQuery(Contract.ALL);
 	}
 
 	public void reset() {
@@ -240,7 +270,7 @@ public class ContractMediator implements ContractMed {
 	public ContractMed filter(Client c) {
 		getAppliedFilters().put("Client", c);
 		if (cache == null)
-			cache = dao.findWithNamedQuery(Contract.WITH_CLIENT,
+			cache = getDao().findWithNamedQuery(Contract.WITH_CLIENT,
 					QueryParameters.with("clientId", c.getId()).parameters());
 		List<Contract> cache = getGroup();
 		Contract con;
@@ -257,7 +287,7 @@ public class ContractMediator implements ContractMed {
 	public ContractMed filter(Teacher t) {
 		getAppliedFilters().put("Teacher", t);
 		if (cache == null)
-			cache = dao.findWithNamedQuery(Contract.WITH_TEACHER,
+			cache = getDao().findWithNamedQuery(Contract.WITH_TEACHER,
 					QueryParameters.with("teacherId", t.getId()).parameters());
 		List<Contract> cache = getGroup();
 		Contract con;
@@ -307,13 +337,17 @@ public class ContractMediator implements ContractMed {
 	}
 
 	public ContractMed filter(Date date1, Date date2) {
+		getAppliedFilters().put("Date1", date1);
+		getAppliedFilters().put("Date2", date2);
+		
 		List<Contract> cache = getGroup();
 		dateFilter.filterWithReturn(cache, date1, date2);
 		return this;
 	}
 
 	public ContractMed filterByPlannedPaymentsDate(Date date1, Date date2) {
-		getAppliedFilters().put("PlannedPaymentsDate", date1);
+		getAppliedFilters().put("PlannedPaymentsDate1", date1);
+		getAppliedFilters().put("PlannedPaymentsDate2", date2);
 		List<Contract> cache = getGroup();
 		Contract con;
 
@@ -327,6 +361,7 @@ public class ContractMediator implements ContractMed {
 	}
 
 	private boolean plannedPaymentsTest(Contract con, Date date1, Date date2) {
+		PaymentMed paymentMed = getPaymentMed();
 		boolean result = paymentMed.filter(con).filter(true)
 				.filter(date1, date2).getGroup().size() > 0;
 		paymentMed.reset();

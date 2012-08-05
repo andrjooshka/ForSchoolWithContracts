@@ -35,7 +35,8 @@ import tap.execounting.entities.interfaces.Dated;
 				+ "and date(e.date) = date(:date)"),
 		@NamedQuery(name = Event.BY_TYPE_ID, query = "Select e from Event e where e.typeId = :typeId"),
 		@NamedQuery(name = Event.BY_ROOM_ID, query = "from Event as e where e.roomId = :roomId"),
-		@NamedQuery(name = Event.BETWEEN_DATE1_AND_DATE2, query = "from Event as e where e.date <= :date2 and e.date >= :date1")})
+		@NamedQuery(name = Event.BETWEEN_DATE1_AND_DATE2, query = "from Event as e where e.date <= :date2 and e.date >= :date1"),
+		@NamedQuery(name = Event.BY_STATE, query = "from Event as e where e.newstate=:stateCode") })
 @Table(name = "events")
 public class Event implements Comparable<Event>, Dated {
 
@@ -45,7 +46,7 @@ public class Event implements Comparable<Event>, Dated {
 	public static final String BY_TEACHER_ID = "Event.byTeacherId";
 	public static final String BY_TEACHER_ID_AND_DATE = "Event.byTeacherIdAndDate";
 	public static final String BY_TYPE_ID = "Event.byTypeId";
-	public static final String BY_STATE = "Event.byState";
+	public static final String BY_STATE = "Event.byStateCode";
 	public static final String BY_ROOM_ID = "Event.byRoomId";
 	public static final String BETWEEN_DATE1_AND_DATE2 = "Event.betweenDate1andDate2";
 
@@ -69,9 +70,10 @@ public class Event implements Comparable<Event>, Dated {
 	@Column(name = "date")
 	private Date date;
 
+	@SuppressWarnings("unused")
 	private boolean state;
-	
-	private EventState newstate;
+
+	private int newstate;
 
 	@Column(name = "type_id", unique = false)
 	private int typeId;
@@ -85,7 +87,7 @@ public class Event implements Comparable<Event>, Dated {
 	@OneToMany
 	@JoinTable(name = "events_contracts", joinColumns = { @JoinColumn(name = "event_id") }, inverseJoinColumns = { @JoinColumn(name = "contract_id") })
 	private List<Contract> contracts;
-	
+
 	public Event() {
 		date = new Date();
 		state = true;
@@ -145,12 +147,11 @@ public class Event implements Comparable<Event>, Dated {
 	}
 
 	public EventState getState() {
-		newstate = state ? EventState.complete : EventState.failed;
-		return newstate;
+		return EventState.fromCode(newstate);
 	}
 
 	public void setState(EventState state) {
-		this.newstate = state;
+		this.newstate = state.getCode();
 		this.state = state == EventState.complete;
 	}
 

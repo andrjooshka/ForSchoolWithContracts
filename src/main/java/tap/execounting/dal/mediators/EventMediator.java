@@ -3,6 +3,7 @@ package tap.execounting.dal.mediators;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,16 +22,26 @@ import tap.execounting.entities.EventType;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Room;
 import tap.execounting.entities.Teacher;
+import tap.execounting.services.DateService;
 
 public class EventMediator implements EventMed {
 
 	@Inject
 	private CrudServiceDAO dao;
+	private CrudServiceDAO sureDao;
 
 	@Inject
 	private DateFilter dateFilter;
 
 	private Event unit;
+
+	public void setDao(CrudServiceDAO dao) {
+		this.sureDao = dao;
+	}
+
+	private CrudServiceDAO getDao() {
+		return dao == null ? sureDao : dao;
+	}
 
 	public Event getUnit() {
 		return unit;
@@ -51,7 +62,7 @@ public class EventMediator implements EventMed {
 
 	public Teacher getTeacher() {
 		try {
-			return dao.find(Teacher.class, unit.getHostId());
+			return getDao().find(Teacher.class, unit.getHostId());
 		} catch (NullPointerException npe) {
 			npe.printStackTrace();
 			return null;
@@ -108,7 +119,7 @@ public class EventMediator implements EventMed {
 
 	public Facility getFacility() {
 		try {
-			return dao.find(Facility.class, unit.getFacilityId());
+			return getDao().find(Facility.class, unit.getFacilityId());
 		} catch (NullPointerException npe) {
 			npe.printStackTrace();
 			return null;
@@ -117,7 +128,7 @@ public class EventMediator implements EventMed {
 
 	public Room getRoom() {
 		try {
-			return dao.find(Room.class, unit.getRoomId());
+			return getDao().find(Room.class, unit.getRoomId());
 		} catch (NullPointerException npe) {
 			npe.printStackTrace();
 			return null;
@@ -135,11 +146,11 @@ public class EventMediator implements EventMed {
 
 	public List<Event> getGroup() {
 		if (cache == null)
-			cache = dao.findWithNamedQuery(Event.ALL);
+			cache = getDao().findWithNamedQuery(Event.ALL);
 		return cache;
 	}
-	
-	public List<Event> getGroup(boolean reset){
+
+	public List<Event> getGroup(boolean reset) {
 		List<Event> innerCache = getGroup();
 		if (reset)
 			reset();
@@ -151,7 +162,7 @@ public class EventMediator implements EventMed {
 	}
 
 	public List<Event> getAllEvents() {
-		return dao.findWithNamedQuery(Event.ALL);
+		return getDao().findWithNamedQuery(Event.ALL);
 	}
 
 	public void reset() {
@@ -170,15 +181,18 @@ public class EventMediator implements EventMed {
 	public EventMed filter(Teacher unit) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
-			cache = dao.findWithNamedQuery(Event.BY_TEACHER_ID, QueryParameters
-					.with("teacherId", unit.getId()).parameters());
-			return this;
-		}
+			cache = getDao().findWithNamedQuery(
+					Event.BY_TEACHER_ID,
+					QueryParameters.with("teacherId", unit.getId())
+							.parameters());
 
-		List<Event> cache = getGroup();
-		for (int i = countGroupSize() - 1; i >= 0; i--)
-			if (cache.get(i).getHostId() != unit.getId())
-				cache.remove(i);
+		} else {
+			List<Event> cache = getGroup();
+			for (int i = countGroupSize() - 1; i >= 0; i--)
+				if (cache.get(i).getHostId() != unit.getId())
+					cache.remove(i);
+		}
+		getAppliedFilters().put("Teacher", unit);
 		return this;
 	}
 
@@ -187,91 +201,104 @@ public class EventMediator implements EventMed {
 				|| appliedFilters.size() == 0) {
 			setGroup(unit.getEvents());
 			return this;
-		}
-
-		List<Event> cache = getGroup();
-		for (int i = countGroupSize() - 1; i >= 0; i--)
-			evnt: {
-				for (Contract c : cache.get(i).getContracts()) {
-					if (c.getId() == unit.getId())
-						break evnt;
-					cache.remove(i);
+		} else {
+			List<Event> cache = getGroup();
+			for (int i = countGroupSize() - 1; i >= 0; i--)
+				evnt: {
+					for (Contract c : cache.get(i).getContracts()) {
+						if (c.getId() == unit.getId())
+							break evnt;
+						cache.remove(i);
+					}
 				}
-			}
+		}
+		getAppliedFilters().put("Contract", unit);
 		return this;
 	}
 
 	public EventMed filter(EventState state) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
-			cache = dao.findWithNamedQuery(Event.BY_STATE, QueryParameters
-					.with("state", state).parameters());
-			return this;
-		}
+			cache = getDao().findWithNamedQuery(
+					Event.BY_STATE,
+					QueryParameters.with("stateCode", state.getCode())
+							.parameters());
+		} else {
 
-		List<Event> cache = getGroup();
-		for (int i = countGroupSize() - 1; i >= 0; i--)
-			if (cache.get(i).getState() != state)
-				cache.remove(i);
+			List<Event> cache = getGroup();
+			for (int i = countGroupSize() - 1; i >= 0; i--)
+				if (cache.get(i).getState() != state)
+					cache.remove(i);
+		}
+		getAppliedFilters().put("EventState", state);
 		return this;
 	}
 
 	public EventMed filter(Facility unit) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
-			cache = dao.findWithNamedQuery(Event.BY_FACILITY_ID,
+			cache = getDao().findWithNamedQuery(
+					Event.BY_FACILITY_ID,
 					QueryParameters.with("facilityId", unit.getFacilityId())
 							.parameters());
-			return this;
-		}
+		} else {
 
-		List<Event> cache = getGroup();
-		for (int i = countGroupSize() - 1; i >= 0; i--)
-			if (cache.get(i).getFacilityId() != unit.getFacilityId())
-				cache.remove(i);
+			List<Event> cache = getGroup();
+			for (int i = countGroupSize() - 1; i >= 0; i--)
+				if (cache.get(i).getFacilityId() != unit.getFacilityId())
+					cache.remove(i);
+		}
+		getAppliedFilters().put("Facility", unit);
 		return this;
 	}
 
 	public EventMed filter(Room unit) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
-			cache = dao.findWithNamedQuery(Event.BY_ROOM_ID, QueryParameters
-					.with("roomId", unit.getRoomId()).parameters());
-			return this;
-		}
+			cache = getDao().findWithNamedQuery(
+					Event.BY_ROOM_ID,
+					QueryParameters.with("roomId", unit.getRoomId())
+							.parameters());
+		} else {
 
-		List<Event> cache = getGroup();
-		for (int i = countGroupSize() - 1; i >= 0; i--)
-			if (cache.get(i).getRoomId() != unit.getRoomId())
-				cache.remove(i);
+			List<Event> cache = getGroup();
+			for (int i = countGroupSize() - 1; i >= 0; i--)
+				if (cache.get(i).getRoomId() != unit.getRoomId())
+					cache.remove(i);
+		}
+		getAppliedFilters().put("Room", unit);
 		return this;
 	}
 
 	public EventMed filter(EventType type) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
-			cache = dao.findWithNamedQuery(Event.BY_TYPE_ID, QueryParameters
-					.with("typeId", type.getId()).parameters());
-			return this;
-		}
+			cache = getDao().findWithNamedQuery(Event.BY_TYPE_ID,
+					QueryParameters.with("typeId", type.getId()).parameters());
+		} else {
 
-		List<Event> cache = getGroup();
-		for (int i = countGroupSize() - 1; i >= 0; i--)
-			if (cache.get(i).getTypeId() != type.getId())
-				cache.remove(i);
+			List<Event> cache = getGroup();
+			for (int i = countGroupSize() - 1; i >= 0; i--)
+				if (cache.get(i).getTypeId() != type.getId())
+					cache.remove(i);
+		}
+		getAppliedFilters().put("EventType", type);
 		return this;
 	}
 
 	public EventMed filter(Date date1, Date date2) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
-			cache = dao.findWithNamedQuery(Event.BETWEEN_DATE1_AND_DATE2,
+			cache = getDao().findWithNamedQuery(
+					Event.BETWEEN_DATE1_AND_DATE2,
 					QueryParameters.with("date1", date1).and("date2", date2)
 							.parameters());
-			return this;
+		} else {
+			dateFilter.filter(getGroup(), date1, date2);
 		}
 
-		dateFilter.filter(getGroup(), date1, date2);
+		getAppliedFilters().put("Date1", date1);
+		getAppliedFilters().put("Date2", date2);
 
 		return this;
 	}
@@ -307,10 +334,11 @@ public class EventMediator implements EventMed {
 	}
 
 	public Integer countMoney() {
-		if(cache==null) return null;
+		if (cache == null)
+			return null;
 		int summ = 0;
-		for(Event e : getGroup())
-			summ+=e.getMoney();
+		for (Event e : getGroup())
+			summ += e.getMoney();
 		return summ;
 	}
 
@@ -318,8 +346,28 @@ public class EventMediator implements EventMed {
 		return filter(EventState.complete).countMoney();
 	}
 
+	public Integer countTeacherMoney() {
+		if (cache == null)
+			return null;
+		int summ = 0;
+		for (Event e : getGroup())
+			summ += e.getMoney() * (100 - e.getEventType().getShare()) / 100;
+		return summ;
+	}
+
+	public Integer countSchoolMoney() {
+		if (cache == null)
+			return null;
+		int summ = 0;
+		for (Event e : getGroup())
+			summ += e.getMoney() * e.getEventType().getShare() / 100;
+		return summ;
+	}
+
 	public Integer countMoneyOfFailedEvents() {
-		return filter(EventState.complete).countMoney() + countMoneyOfEventsFailedByClient() + countMoneyOfEventsFailedByTeacher();
+		return filter(EventState.complete).countMoney()
+				+ countMoneyOfEventsFailedByClient()
+				+ countMoneyOfEventsFailedByTeacher();
 	}
 
 	public Integer countMoneyOfEventsFailedByClient() {
@@ -331,11 +379,13 @@ public class EventMediator implements EventMed {
 	}
 
 	public Integer countGivenPercentOfMoney(int percent) {
-		return countMoney()*100/percent;
+		return countMoney() * 100 / percent;
 	}
 
 	public int countDaysInEventsGroup() {
-		//TODO write days counting code
-		return 20;
+		HashSet<Date> days = new HashSet<Date>();
+		for (Event e : getGroup())
+			days.add(DateService.trimToDate(e.getDate()));
+		return days.size();
 	}
 }

@@ -1,6 +1,5 @@
 package tap.execounting.services;
 
-import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 
@@ -23,12 +22,12 @@ public class QaModule
         // The factory default is true but during the early stages of an application
         // overriding to false is a good idea. In addition, this is often overridden
         // on the command line as -Dtapestry.production-mode=false
-        configuration.add(SymbolConstants.PRODUCTION_MODE, false);
+        //configuration.add(SymbolConstants.PRODUCTION_MODE, "false");
 
         // The application version number is incorprated into URLs for some
         // assets. Web browsers will cache assets because of the far future expires
         // header. If existing assets are changed, the version number should also
         // change, to force the browser to download new versions.
-        configuration.add(SymbolConstants.APPLICATION_VERSION, "2.0-QA");
+        //configuration.add(SymbolConstants.APPLICATION_VERSION, "2.0-QA");
     }
 }

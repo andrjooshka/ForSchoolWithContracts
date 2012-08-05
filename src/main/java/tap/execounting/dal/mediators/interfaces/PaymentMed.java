@@ -3,6 +3,7 @@ package tap.execounting.dal.mediators.interfaces;
 import java.util.Date;
 import java.util.List;
 
+import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Payment;
 
@@ -49,5 +50,7 @@ public interface PaymentMed {
 	//amount
 	public Integer countAmount();
 	public Integer countReturn(Date date1, Date date2);
-
+	
+	//service methods which we should avoid to use
+	public void setDao(CrudServiceDAO dao);
 }

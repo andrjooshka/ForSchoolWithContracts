@@ -54,7 +54,7 @@ public class AppModule {
 		// DevelopmentModule or
 		// QaModule.
 
-		configuration.override(SymbolConstants.APPLICATION_VERSION, "2.0");
+		configuration.override(SymbolConstants.APPLICATION_VERSION, "2.2");
 		configuration.override(SymbolConstants.DATEPICKER, "assets/");
 	}
 
@@ -71,6 +71,7 @@ public class AppModule {
 		// the first locale name is the default when there's no reasonable
 		// match).
 		configuration.add(SymbolConstants.SUPPORTED_LOCALES, "ru");
+		configuration.add(SymbolConstants.PRODUCTION_MODE, "false");
 		// configuration.add(JQuerySymbolConstants.SUPPRESS_PROTOTYPE, "false");
 	}
 
@@ -152,6 +153,6 @@ public class AppModule {
 		// contributed filter
 		// within the pipeline.
 
-		//configuration.add("Timing", filter);
+		configuration.add("Timing", filter);
 	}
 }

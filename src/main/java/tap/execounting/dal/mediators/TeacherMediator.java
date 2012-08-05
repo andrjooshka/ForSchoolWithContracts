@@ -1,13 +1,18 @@
 package tap.execounting.dal.mediators;
 
+import java.util.Date;
 import java.util.List;
 
+import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.dal.QueryParameters;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
+import tap.execounting.dal.mediators.interfaces.EventMed;
 import tap.execounting.dal.mediators.interfaces.TeacherMed;
+import tap.execounting.data.ClientState;
+import tap.execounting.data.EventState;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Facility;
@@ -17,13 +22,57 @@ public class TeacherMediator implements TeacherMed {
 
 	@Inject
 	private CrudServiceDAO dao;
+	private CrudServiceDAO sureDao;
+
+	@Inject
+	private EventMed eventMed;
+	private EventMed sureEventMed;
+
 	@Inject
 	private ClientMed clientMed;
+	@Persist
+	private ClientMed sureClientMed;
+
+	public void setDao(CrudServiceDAO dao) {
+		this.sureDao = dao;
+	}
+
+	private CrudServiceDAO getDao() {
+		CrudServiceDAO dao= this.dao == null ? sureDao : this.dao;
+		return dao;
+	}
+
+	private ClientMed getClientMed() {
+		if (clientMed == null) {
+			sureClientMed = new ClientMediator();
+			sureClientMed.setDao(getDao());
+			return sureClientMed;
+		} else {
+			try {
+				clientMed.count(ClientState.beginner);
+				return clientMed;
+			} catch (LinkageError le) {
+				le.printStackTrace();
+				sureClientMed = new ClientMediator();
+				sureClientMed.setDao(getDao());
+				return sureClientMed;
+			}
+		}
+	}
+
+	private EventMed getEventMed() {
+		if (eventMed == null) {
+			sureEventMed = new EventMediator();
+			sureEventMed.setDao(getDao());
+			return sureEventMed;
+		}
+		return eventMed;
+	}
 
 	public Teacher unit;
 
 	public List<Teacher> getAllTeachers() {
-		return dao.findWithNamedQuery(Teacher.ALL);
+		return getDao().findWithNamedQuery(Teacher.ALL);
 	}
 
 	public Teacher getUnit() {
@@ -35,8 +84,8 @@ public class TeacherMediator implements TeacherMed {
 	}
 
 	public List<Contract> getAllContracts() {
-		return dao.findWithNamedQuery(Contract.WITH_TEACHER, QueryParameters
-				.with("teacherId", unit.getId()).parameters());
+		return getDao().findWithNamedQuery(Contract.WITH_TEACHER,
+				QueryParameters.with("teacherId", unit.getId()).parameters());
 	}
 
 	public List<Contract> getActualContracts() {
@@ -53,13 +102,15 @@ public class TeacherMediator implements TeacherMed {
 	}
 
 	public List<Client> getActiveClients() {
-		// //own
+		// own
 		// Set<Client> clients = new HashSet<Client>(10);
 		// for (Contract c : getActualContracts())
 		// clients.add(c.getClient());
 		// return new ArrayList<Client>(clients);
-		clientMed.filterByActiveTeacher(unit);
-		return clientMed.getGroup();
+		List<Client> res = getClientMed().filterByActiveTeacher(unit)
+				.getGroup();
+		getClientMed().reset();
+		return res;
 	}
 
 	public List<Client> getFrozenClients() {
@@ -120,28 +171,28 @@ public class TeacherMediator implements TeacherMed {
 		try {
 			Integer[] sched = getSchedule();
 			day = day.toLowerCase();
-			if(day.equals("пн"))
-				return sched[0] == null ? null : dao.find(Facility.class,
+			if (day.equals("пн"))
+				return sched[0] == null ? null : getDao().find(Facility.class,
 						sched[0]).getName();
-			if(day.equals("вт")) 
-				return sched[1] == null ? null : dao.find(Facility.class,
+			if (day.equals("вт"))
+				return sched[1] == null ? null : getDao().find(Facility.class,
 						sched[1]).getName();
-			if(day.equals("ср"))
-				return sched[2] == null ? null : dao.find(Facility.class,
+			if (day.equals("ср"))
+				return sched[2] == null ? null : getDao().find(Facility.class,
 						sched[2]).getName();
-			if(day.equals("чт"))
-				return sched[3] == null ? null : dao.find(Facility.class,
+			if (day.equals("чт"))
+				return sched[3] == null ? null : getDao().find(Facility.class,
 						sched[3]).getName();
-			if(day.equals("пт"))
-				return sched[4] == null ? null : dao.find(Facility.class,
+			if (day.equals("пт"))
+				return sched[4] == null ? null : getDao().find(Facility.class,
 						sched[4]).getName();
-			if(day.equals("сб"))
-				return sched[5] == null ? null : dao.find(Facility.class,
+			if (day.equals("сб"))
+				return sched[5] == null ? null : getDao().find(Facility.class,
 						sched[5]).getName();
-			if(day.equals("вс"))
-				return sched[6] == null ? null : dao.find(Facility.class,
+			if (day.equals("вс"))
+				return sched[6] == null ? null : getDao().find(Facility.class,
 						sched[6]).getName();
-				return null;
+			return null;
 		} catch (NullPointerException npe) {
 			npe.printStackTrace();
 			return null;
@@ -156,6 +207,62 @@ public class TeacherMediator implements TeacherMed {
 		}
 	}
 
+	public int getLessonsComplete(Date date1, Date date2) {
+		int res = getEventMed().filter(unit).filter(date1, date2)
+				.countEventsComplete();
+		getEventMed().reset();
+		return res;
+	}
+
+	public int getLessonsFailed(Date date1, Date date2) {
+		int res = getEventMed().filter(unit).filter(date1, date2)
+				.countEventsFailed();
+		getEventMed().reset();
+		return res;
+	}
+
+	public int getLessonsFailedByTeacher(Date date1, Date date2) {
+		int res = getEventMed().filter(unit).filter(date1, date2)
+				.countEventsFailedByTeacher();
+		getEventMed().reset();
+		return res;
+	}
+
+	public int getLessonsFailedByClient(Date date1, Date date2) {
+		int res = getEventMed().filter(unit).filter(date1, date2)
+				.countEventsFailedByClient();
+		getEventMed().reset();
+		return res;
+	}
+
+	public int getDaysWorked(Date date1, Date date2) {
+		int res = getEventMed().filter(unit).filter(date1, date2)
+				.countDaysInEventsGroup();
+		getEventMed().reset();
+		return res;
+	}
+
+	public int getMoneyEarned(Date date1, Date date2) {
+		int res = getEventMed().filter(unit).filter(date1, date2)
+				.countMoneyOfCompleteEvents();
+		getEventMed().reset();
+		return res;
+	}
+
+	public int getMoneyEarnedForSchool(Date date1, Date date2) {
+		int res = getEventMed().filter(unit).filter(date1, date2)
+				.filter(EventState.complete).countSchoolMoney();
+		getEventMed().reset();
+		return res;
+	}
+
+	public int getMoneyEarnedForSelf(Date date1, Date date2) {
+		int res = getEventMed().filter(unit).filter(date1, date2)
+				.filter(EventState.complete).countTeacherMoney();
+		getEventMed().reset();
+		return res;
+	}
+
 	private List<Teacher> teachersCache;
 
 	public Integer countGroupSize() {
@@ -165,4 +272,5 @@ public class TeacherMediator implements TeacherMed {
 			return null;
 		}
 	}
+
 }

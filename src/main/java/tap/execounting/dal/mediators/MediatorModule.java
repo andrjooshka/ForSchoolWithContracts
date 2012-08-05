@@ -10,6 +10,8 @@ import tap.execounting.dal.mediators.interfaces.PaymentMed;
 import tap.execounting.dal.mediators.interfaces.TeacherMed;
 
 
+
+
 public class MediatorModule {
 	public static void bind(ServiceBinder binder) {
 		binder.bind(DateFilter.class, DateFilterImpl.class);

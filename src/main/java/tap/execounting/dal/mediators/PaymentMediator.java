@@ -19,11 +19,20 @@ public class PaymentMediator implements PaymentMed {
 
 	@Inject
 	private CrudServiceDAO dao;
+	private CrudServiceDAO sureDao;
 
 	@Inject
 	private DateFilter dateFilter;
 
 	private Payment unit;
+	
+	public void setDao(CrudServiceDAO dao){
+		this.sureDao = dao;
+	}
+	private CrudServiceDAO getDao(){
+		return dao == null ? sureDao : dao;
+	}
+	
 
 	public Payment getUnit() {
 		return this.unit;
@@ -76,7 +85,7 @@ public class PaymentMediator implements PaymentMed {
 	}
 
 	public List<Payment> getAllPayments() {
-		return dao.findWithNamedQuery(Payment.ALL);
+		return getDao().findWithNamedQuery(Payment.ALL);
 	}
 
 	public void reset() {
@@ -101,7 +110,7 @@ public class PaymentMediator implements PaymentMed {
 	public PaymentMed filter(Contract unit) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
-			cache = dao.findWithNamedQuery(Payment.BY_CONTRACT_ID,
+			cache = getDao().findWithNamedQuery(Payment.BY_CONTRACT_ID,
 					QueryParameters.with("contractId", unit.getId())
 							.parameters());
 		} else {
@@ -109,18 +118,21 @@ public class PaymentMediator implements PaymentMed {
 				if (cache.get(i).getContractId() != unit.getId())
 					cache.remove(i);
 		}
+		getAppliedFilters().put("Contract", unit);
 		return this;
 	}
 
 	public PaymentMed filter(Date date1, Date date2) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0)
-			cache = dao.findWithNamedQuery(Payment.BY_DATES, QueryParameters
+			cache = getDao().findWithNamedQuery(Payment.BY_DATES, QueryParameters
 					.with("earlierDate", date1).and("laterDate", date2)
 					.parameters());
 		else
 			dateFilter.filter(cache, date1, date2);
-
+		getAppliedFilters().put("Date1", date1);
+		getAppliedFilters().put("Date2", date2);
+		
 		return this;
 	}
 
@@ -128,14 +140,15 @@ public class PaymentMediator implements PaymentMed {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0)
 			if (state)
-				cache = dao.findWithNamedQuery(Payment.SCHEDULED);
+				cache = getDao().findWithNamedQuery(Payment.SCHEDULED);
 			else
-				cache = dao.findWithNamedQuery(Payment.NOT_SCHEDULED);
+				cache = getDao().findWithNamedQuery(Payment.NOT_SCHEDULED);
 		else {
 			for (int i = cache.size() - 1; i >= 0; i--)
 				if (cache.get(i).isScheduled() != state)
 					cache.remove(i);
 		}
+		getAppliedFilters().put("StatePlanned", state);
 		return this;
 	}
 

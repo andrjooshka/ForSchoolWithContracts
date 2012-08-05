@@ -3,6 +3,7 @@ package tap.execounting.dal.mediators.interfaces;
 import java.util.Date;
 import java.util.List;
 
+import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.dal.mediators.ClientMediator;
 import tap.execounting.data.ClientState;
 import tap.execounting.entities.Client;
@@ -111,6 +112,10 @@ public interface ClientMed {
 	
 		//frozen
 	public Integer countFrozen(Date date1, Date date2);
+	
+	
+	//service methods which we should avoid to use
+	public void setDao(CrudServiceDAO dao);
 }
 
 

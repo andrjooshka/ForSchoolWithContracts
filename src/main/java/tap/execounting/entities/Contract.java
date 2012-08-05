@@ -21,6 +21,7 @@ import javax.persistence.Table;
 
 import tap.execounting.data.EventState;
 import tap.execounting.entities.interfaces.Dated;
+import tap.execounting.services.DateService;
 import tap.execounting.services.RusCalendar;
 import tap.execounting.services.SuperCalendar;
 
@@ -353,5 +354,13 @@ public class Contract implements Comparable<Contract>, Dated {
 				list.remove(i);
 		}
 		return list;
+	}
+
+	public List<Event> getEvents(Date d) {
+		List<Event> res = new ArrayList<Event>();
+		for(Event e : getEvents())
+			if(DateService.trimToDate(e.getDate()).equals(d))
+				res.add(e);
+		return res;
 	}
 }

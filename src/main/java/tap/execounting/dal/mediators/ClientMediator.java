@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CrudServiceDAO;
@@ -30,17 +31,46 @@ public class ClientMediator implements ClientMed {
 
 	@Inject
 	private CrudServiceDAO dao;
+	@Persist
+	private CrudServiceDAO sureDao;
 
 	@Inject
 	private ContractMed contractMed;
+	private ContractMed sureContractMed;
 
 	@Inject
 	private PaymentMed paymentMed;
+	private PaymentMed surePaymentMed;
 
 	@Inject
 	private DateFilter dateFilter;
 
 	private Client unit;
+
+	public void setDao(CrudServiceDAO dao){
+		this.sureDao = dao;
+	}
+	private CrudServiceDAO getDao(){
+		return sureDao == null ? dao : sureDao;
+	}
+	
+	private ContractMed getContractMed(){
+		if(sureContractMed!=null) return sureContractMed;
+		if(contractMed==null){
+			sureContractMed = new ContractMediator();
+			sureContractMed.setDao(getDao());
+			return sureContractMed;
+		}
+		else return contractMed;
+	}
+	private PaymentMed getPaymentMed(){
+		if(paymentMed==null){
+			surePaymentMed = new PaymentMediator();
+			surePaymentMed.setDao(getDao());
+			return surePaymentMed;
+		}
+		else return paymentMed;
+	}
 
 	public Client getUnit() {
 		try {
@@ -78,6 +108,7 @@ public class ClientMediator implements ClientMed {
 	}
 
 	public boolean hasActiveContracts() {
+		ContractMed contractMed = getContractMed();
 		boolean response = contractMed.setGroup(getContracts())
 				.filter(ContractState.active).countGroupSize() > 0;
 		contractMed.reset();
@@ -86,6 +117,7 @@ public class ClientMediator implements ClientMed {
 
 	public List<Contract> getActiveContracts() {
 		try {
+			ContractMed contractMed = getContractMed();
 			return contractMed.setGroup(getContracts())
 					.filter(ContractState.active).getGroup();
 		} catch (NullPointerException npe) {
@@ -95,6 +127,7 @@ public class ClientMediator implements ClientMed {
 	}
 
 	public boolean hasFrozenContracts() {
+		ContractMed contractMed = getContractMed();
 		boolean response = contractMed.setGroup(getContracts())
 				.filter(ContractState.frozen).countGroupSize() > 0;
 		contractMed.reset();
@@ -103,6 +136,7 @@ public class ClientMediator implements ClientMed {
 
 	public List<Contract> getFrozenContracts() {
 		try {
+			ContractMed contractMed = getContractMed();
 			return contractMed.setGroup(getContracts())
 					.filter(ContractState.frozen).getGroup();
 		} catch (NullPointerException npe) {
@@ -112,6 +146,7 @@ public class ClientMediator implements ClientMed {
 	}
 
 	public boolean hasCanceledContracts() {
+		ContractMed contractMed = getContractMed();
 		boolean response = contractMed.setGroup(getContracts())
 				.filter(ContractState.canceled).countGroupSize() > 0;
 		contractMed.reset();
@@ -120,6 +155,7 @@ public class ClientMediator implements ClientMed {
 
 	public List<Contract> getCanceledContracts() {
 		try {
+			ContractMed contractMed = getContractMed();
 			return contractMed.setGroup(getContracts())
 					.filter(ContractState.canceled).getGroup();
 		} catch (NullPointerException npe) {
@@ -136,11 +172,13 @@ public class ClientMediator implements ClientMed {
 	}
 
 	public List<Contract> getTrialContracts() {
+		ContractMed contractMed = getContractMed();
 		return contractMed.setGroup(getContracts())
 				.filterByContractType(ContractType.Trial).getGroup();
 	}
 
 	public boolean hasFinishedContracts() {
+		ContractMed contractMed = getContractMed();
 		boolean response = contractMed.setGroup(getContracts())
 				.filter(ContractState.complete).countGroupSize() > 0;
 		contractMed.reset();
@@ -149,6 +187,7 @@ public class ClientMediator implements ClientMed {
 
 	public List<Contract> getFinishedContracts() {
 		try {
+			ContractMed contractMed = getContractMed();
 			return contractMed.setGroup(getContracts())
 					.filter(ContractState.complete).getGroup();
 		} catch (NullPointerException npe) {
@@ -241,7 +280,7 @@ public class ClientMediator implements ClientMed {
 	}
 
 	private void load() {
-		cache = dao.findWithNamedQuery(Client.ALL);
+		cache = getDao().findWithNamedQuery(Client.ALL);
 		appliedFilters = new HashMap<String, Object>();
 	}
 
@@ -271,7 +310,7 @@ public class ClientMediator implements ClientMed {
 	}
 
 	public List<Client> getAllClient() {
-		return dao.findWithNamedQuery(Client.ALL);
+		return getDao().findWithNamedQuery(Client.ALL);
 	}
 
 	public String getFilterState() {
@@ -304,25 +343,18 @@ public class ClientMediator implements ClientMed {
 
 	public ClientMed filterByActiveTeacher(Teacher teacher) {
 		getAppliedFilters().put("Active teacher", teacher);
-		List<Client> cache = getGroup();
 
-		// save current unit
-		Client unit = getUnit();
-
-		// filter
-		for (int i = cache.size() - 1; i >= 0; i--)
-			outer: {
-				setUnit(cache.get(i));
-				if (getActiveContracts() != null)
-					for (Contract c : getActiveContracts())
-						if (c.getTeacherId() == teacher.getId())
-							break outer;
-				cache.remove(i);
-			}
-
-		// restore unit
-		setUnit(unit);
+		List<Contract> contractsCache = getContractMed().filter(teacher).filter(ContractState.active).getGroup();
+		getContractMed().reset();
+		cache = toClients(contractsCache);
 		return this;
+	}
+	
+	private List<Client> toClients(List<Contract> contracts){
+		Set<Client> list = new HashSet<Client>();
+		for(Contract c : contracts)
+			list.add(c.getClient());
+		return new ArrayList<Client>(list);
 	}
 
 	public ClientMed filterDateOfFirstContract(Date date1, Date date2) {
@@ -339,9 +371,10 @@ public class ClientMediator implements ClientMed {
 
 	public ClientMed filterDateOfPlannedPayments(Date date1, Date date2) {
 		// TODO we can do this through hsql
-		getAppliedFilters().put("Date of first contract 1", date1);
-		getAppliedFilters().put("Date of first contract 2", date2);
+		getAppliedFilters().put("Date of planned payments 1", date1);
+		getAppliedFilters().put("Date of planned payments 2", date2);
 		List<Payment> payments;
+		PaymentMed paymentMed = getPaymentMed();
 
 		if (cache != null) {
 			List<Client> cache = getGroup();
@@ -365,7 +398,7 @@ public class ClientMediator implements ClientMed {
 	public ClientMed filterName(String name) {
 		getAppliedFilters().put("Client name", name);
 		if (cache == null) {
-			cache = dao.findWithNamedQuery(Client.BY_NAME, QueryParameters
+			cache = getDao().findWithNamedQuery(Client.BY_NAME, QueryParameters
 					.with("name", name).parameters());
 			return this;
 		}
@@ -391,6 +424,7 @@ public class ClientMediator implements ClientMed {
 	}
 
 	public List<Client> getClientsWithExpiringContracts() {
+		ContractMed contractMed = getContractMed();
 		List<Contract> contracts = contractMed.filter(2).getGroup();
 		Set<Client> clients = new HashSet<Client>();
 		for (Contract c : contracts)

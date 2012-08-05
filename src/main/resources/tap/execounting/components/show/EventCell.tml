@@ -1,0 +1,13 @@
+<t:container 
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" 
+	xmlns:p="tapestry:parameter">
+			
+			<div class="mini ${addition}">
+				
+					<t:if test="displayDate">
+						<h3 class="date">${date}</h3>
+					</t:if>
+				<div class="glass"/>
+			</div>
+	
+</t:container>
