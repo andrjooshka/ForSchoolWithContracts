@@ -91,6 +91,7 @@ public class Event implements Comparable<Event>, Dated {
 	public Event() {
 		date = new Date();
 		state = true;
+		newstate = EventState.complete.getCode();
 	}
 
 	public int getId() {

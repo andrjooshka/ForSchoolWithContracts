@@ -15,7 +15,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.components.editors.AddEvent;
 import tap.execounting.dal.CrudServiceDAO;
-import tap.execounting.data.TeacherSelectModel;
+import tap.execounting.data.selectmodels.TeacherSelectModel;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;

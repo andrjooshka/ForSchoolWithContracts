@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
@@ -18,12 +19,12 @@ import tap.execounting.dal.mediators.interfaces.EventMed;
 import tap.execounting.dal.mediators.interfaces.TeacherMed;
 import tap.execounting.data.ContractState;
 import tap.execounting.data.EventRowElement;
-import tap.execounting.data.FacilitySelectModel;
+import tap.execounting.data.selectmodels.FacilitySelectModel;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.Teacher;
 import tap.execounting.services.DateService;
-
+@Import(stylesheet="context:/layout/weekschedule.css")
 public class TeacherPage {
 
 	@Inject
@@ -90,8 +91,9 @@ public class TeacherPage {
 	void onPrepareForRender() {
 		if (facilitySelectModel == null)
 			facilitySelectModel = new FacilitySelectModel(dao);
-		if (eventsDate == null)
-			eventsDate = new Date();
+	}
+	void onActivate(){
+		eventsDate = new Date();
 	}
 
 	Object onSuccessFromStatsDateForm() {

@@ -22,7 +22,6 @@ import tap.execounting.entities.Event;
 import tap.execounting.entities.EventType;
 import tap.execounting.entities.Payment;
 import tap.execounting.entities.Teacher;
-import tap.execounting.services.DateService;
 
 public class ContractMediator implements ContractMed {
 
@@ -31,7 +30,6 @@ public class ContractMediator implements ContractMed {
 
 	@Inject
 	private EventMed eventMed;
-	private EventMed sureEventMed;
 
 	@Inject
 	private PaymentMed paymentMed;
@@ -42,32 +40,23 @@ public class ContractMediator implements ContractMed {
 	private CrudServiceDAO sureDao;
 
 	private Contract unit;
-	
-	public void setDao(CrudServiceDAO dao){
+
+	public void setDao(CrudServiceDAO dao) {
 		this.sureDao = dao;
 	}
-	private CrudServiceDAO getDao(){
+
+	private CrudServiceDAO getDao() {
 		return dao == null ? sureDao : dao;
 	}
-	
-	private PaymentMed getPaymentMed(){
-		if(paymentMed==null){
+
+	private PaymentMed getPaymentMed() {
+		if (paymentMed == null) {
 			surePaymentMed = new PaymentMediator();
 			surePaymentMed.setDao(getDao());
 			return surePaymentMed;
-		}
-		else return paymentMed;
+		} else
+			return paymentMed;
 	}
-	
-	private EventMed getEventMed(){
-		if(eventMed==null){
-			sureEventMed = new EventMediator();
-			sureEventMed.setDao(getDao());
-			return sureEventMed;
-		}
-		else return eventMed;
-	}
-	
 
 	public Contract getUnit() {
 		try {
@@ -161,28 +150,7 @@ public class ContractMediator implements ContractMed {
 	}
 
 	public ContractState getContractState() {
-		ContractState state = null;
-		if (unit.isCanceled())
-			state = ContractState.canceled;
-		else if (unit.isFreeze())
-			state = ContractState.frozen;
-		else if (unit.isComplete())
-			state = ContractState.complete;
-		else if (undefinedStateTest()) {
-			state = ContractState.undefined;
-		} else
-			state = ContractState.active;
-
-		return state;
-	}
-
-	private boolean undefinedStateTest() {
-		EventMed eventMed = getEventMed();
-		boolean result = eventMed.filter(unit)
-				.filter(DateService.fromNowPlusDays(-60), null).getGroup()
-				.size() > 0;
-		eventMed.reset();
-		return result;
+		return unit.getState();
 	}
 
 	public int getBalance() {
@@ -232,10 +200,10 @@ public class ContractMediator implements ContractMed {
 			load();
 		return cache;
 	}
-	
-	public List<Contract> getGroup(boolean reset){
+
+	public List<Contract> getGroup(boolean reset) {
 		List<Contract> innerCache = getGroup();
-		if(reset)
+		if (reset)
 			reset();
 		return innerCache;
 	}
@@ -272,14 +240,16 @@ public class ContractMediator implements ContractMed {
 		if (cache == null)
 			cache = getDao().findWithNamedQuery(Contract.WITH_CLIENT,
 					QueryParameters.with("clientId", c.getId()).parameters());
-		List<Contract> cache = getGroup();
-		Contract con;
+		else {
+			List<Contract> cache = getGroup();
+			Contract con;
 
-		for (int i = cache.size() - 1; i >= 0; i--) {
-			con = cache.get(i);
-			if (con.getClientId() == c.getId())
-				continue;
-			cache.remove(i);
+			for (int i = cache.size() - 1; i >= 0; i--) {
+				con = cache.get(i);
+				if (con.getClientId() == c.getId())
+					continue;
+				cache.remove(i);
+			}
 		}
 		return this;
 	}
@@ -289,13 +259,15 @@ public class ContractMediator implements ContractMed {
 		if (cache == null)
 			cache = getDao().findWithNamedQuery(Contract.WITH_TEACHER,
 					QueryParameters.with("teacherId", t.getId()).parameters());
-		List<Contract> cache = getGroup();
-		Contract con;
-		for (int i = cache.size() - 1; i >= 0; i--) {
-			con = cache.get(i);
-			if (con.getTeacherId() == t.getId())
-				continue;
-			cache.remove(i);
+		else {
+			List<Contract> cache = getGroup();
+			Contract con;
+			for (int i = cache.size() - 1; i >= 0; i--) {
+				con = cache.get(i);
+				if (con.getTeacherId() == t.getId())
+					continue;
+				cache.remove(i);
+			}
 		}
 		return this;
 	}
@@ -303,10 +275,10 @@ public class ContractMediator implements ContractMed {
 	public ContractMed filter(ContractState state) {
 		getAppliedFilters().put("ContractState", state);
 		List<Contract> cache = getGroup();
-		
-		//save current unit;
+
+		// save current unit;
 		Contract tempUnit = getUnit();
-		
+
 		Contract con;
 		for (int i = cache.size() - 1; i >= 0; i--) {
 			con = cache.get(i);
@@ -316,8 +288,8 @@ public class ContractMediator implements ContractMed {
 			else
 				cache.remove(i);
 		}
-		
-		//restore unit
+
+		// restore unit
 		setUnit(tempUnit);
 		return this;
 	}
@@ -339,7 +311,7 @@ public class ContractMediator implements ContractMed {
 	public ContractMed filter(Date date1, Date date2) {
 		getAppliedFilters().put("Date1", date1);
 		getAppliedFilters().put("Date2", date2);
-		
+
 		List<Contract> cache = getGroup();
 		dateFilter.filterWithReturn(cache, date1, date2);
 		return this;
@@ -367,7 +339,7 @@ public class ContractMediator implements ContractMed {
 		paymentMed.reset();
 		return result;
 	}
-	
+
 	public ContractMediator filterByContractType(int type) {
 		getAppliedFilters().put("ContractTypeId", type);
 		List<Contract> cache = getGroup();

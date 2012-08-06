@@ -59,7 +59,7 @@
 					</tr>
 					<tr>
 						<th>${message:status-label}</th>
-						<td colspan="2">${contract.stateString}</td>
+						<td colspan="2">${contract.state}</td>
 					</tr>
 					<tr>
 						<th>${message:date-label}</th>

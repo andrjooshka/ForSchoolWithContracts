@@ -1,11 +1,16 @@
 package tap.execounting.data;
 
 public enum EventState {
-	planned(0), complete(1), failed(2), failedByClient(3), failedByTeacher(4);
+	planned(0, "Запланировано"), 
+	complete(1, "Состоялось"), 
+	failed(2,"Не состоялось"), 
+	failedByClient(3,"НС - Клиент"), 
+	failedByTeacher(4,"НС - Учитель");
 
 	private int code;
+	private String translation;
 
-	private EventState(int code) {
+	private EventState(int code, String translation) {
 		this.code = code;
 	}
 
@@ -28,5 +33,10 @@ public enum EventState {
 		default:
 			return planned;
 		}
+	}
+	
+	@Override
+	public String toString(){
+		return this.translation;
 	}
 }

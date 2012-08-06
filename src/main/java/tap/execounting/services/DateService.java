@@ -246,6 +246,7 @@ public class DateService {
 		Calendar c = new GregorianCalendar();
 		c.setTime(date);
 		Calendar r = new GregorianCalendar();
+		r.setTime(new Date(100));
 		r.set(YEAR, c.get(YEAR));
 		r.set(DAY_OF_YEAR, c.get(DAY_OF_YEAR));
 		//r.set(YEAR, c.get(YEAR));

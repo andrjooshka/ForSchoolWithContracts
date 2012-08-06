@@ -1,7 +1,8 @@
-package tap.execounting.data;
+package tap.execounting.data.selectmodels;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 import org.apache.tapestry5.OptionGroupModel;
 import org.apache.tapestry5.OptionModel;
@@ -9,16 +10,17 @@ import org.apache.tapestry5.internal.OptionModelImpl;
 import org.apache.tapestry5.util.AbstractSelectModel;
 
 import tap.execounting.dal.CrudServiceDAO;
-import tap.execounting.entities.Facility;
+import tap.execounting.entities.EventType;
 
-public class FacilitySelectModel extends AbstractSelectModel {
-	
-	private List<OptionModel> options = new ArrayList<OptionModel>(3);
+public class TypeSelectModel extends AbstractSelectModel {
 
-	public FacilitySelectModel(CrudServiceDAO dao) {
-		List<Facility> facilities = dao.findWithNamedQuery(Facility.ALL);
-		for (Facility f : facilities)
-			options.add(new OptionModelImpl(f.getName(), f.getFacilityId()));
+	List<OptionModel> options;
+
+	public TypeSelectModel(CrudServiceDAO dao) {
+		options = new ArrayList<OptionModel>();
+		List<EventType> types = dao.findWithNamedQuery(EventType.ALL);
+		for (EventType et : types)
+			options.add(new OptionModelImpl(et.getTitle(), et.getId()));
 	}
 
 	public List<OptionGroupModel> getOptionGroups() {

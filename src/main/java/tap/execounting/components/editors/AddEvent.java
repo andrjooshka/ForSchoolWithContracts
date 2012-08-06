@@ -17,10 +17,10 @@ import org.apache.tapestry5.internal.OptionModelImpl;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CrudServiceDAO;
-import tap.execounting.data.FacilitySelectModel;
-import tap.execounting.data.RoomSelectModel;
-import tap.execounting.data.TeacherSelectModel;
-import tap.execounting.data.TypeSelectModel;
+import tap.execounting.data.selectmodels.FacilitySelectModel;
+import tap.execounting.data.selectmodels.RoomSelectModel;
+import tap.execounting.data.selectmodels.TeacherSelectModel;
+import tap.execounting.data.selectmodels.TypeSelectModel;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Event;

@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import tap.execounting.data.ContractState;
 import tap.execounting.data.EventState;
 import tap.execounting.entities.interfaces.Dated;
 import tap.execounting.services.DateService;
@@ -32,7 +33,7 @@ import tap.execounting.services.SuperCalendar;
 		@NamedQuery(name = Contract.BY_DATES, query = "Select c from Contract c where c.date between "
 				+ ":earlierDate and :laterDate"),
 		@NamedQuery(name = Contract.WITH_TEACHER, query = "Select c from Contract c where c.teacherId = :teacherId"),
-		@NamedQuery(name= Contract.WITH_CLIENT,query = "Select c from Contract c where c.clientId = :clientId")})
+		@NamedQuery(name = Contract.WITH_CLIENT, query = "Select c from Contract c where c.clientId = :clientId") })
 public class Contract implements Comparable<Contract>, Dated {
 
 	public static final String ALL = "Contract.all";
@@ -215,7 +216,7 @@ public class Contract implements Comparable<Contract>, Dated {
 	public List<Event> getFinishedEvents() {
 		List<Event> events = new ArrayList<Event>();
 		for (Event e : getEvents())
-			if (e.getState()==EventState.complete)
+			if (e.getState() == EventState.complete)
 				events.add(e);
 		return events;
 	}
@@ -270,7 +271,7 @@ public class Contract implements Comparable<Contract>, Dated {
 	public int getCompleteLessonsCost() {
 		int count = 0;
 		for (Event e : getEvents())
-			if (e.getState()==EventState.complete)
+			if (e.getState() == EventState.complete)
 				count++;
 		int completeLessonsCost = count * getSingleLessonCost();
 		return completeLessonsCost;
@@ -305,7 +306,7 @@ public class Contract implements Comparable<Contract>, Dated {
 		try {
 			remaining = getLessonsNumber();
 			for (Event e : getEvents())
-				if (e.getState()==EventState.complete)
+				if (e.getState() == EventState.complete)
 					remaining--;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -316,13 +317,13 @@ public class Contract implements Comparable<Contract>, Dated {
 	public List<Event> getScheduledLessons() {
 		List<Event> events = new ArrayList<Event>();
 		for (Event e : getEvents())
-			if (e.getState()==EventState.planned)
+			if (e.getState() == EventState.planned)
 				events.add(e);
 		return events;
 	}
 
 	public boolean isComplete() {
-		return getLessonsRemain()<=0;
+		return getLessonsRemain() <= 0;
 	}
 
 	public boolean isTrialLesson() {
@@ -358,9 +359,37 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	public List<Event> getEvents(Date d) {
 		List<Event> res = new ArrayList<Event>();
-		for(Event e : getEvents())
-			if(DateService.trimToDate(e.getDate()).equals(d))
+		d=DateService.trimToDate(d);
+		for (Event e : getEvents())
+			if (DateService.trimToDate(e.getDate()).equals(d))
 				res.add(e);
 		return res;
+	}
+
+	public ContractState getState() {
+		ContractState state = null;
+		if (isCanceled())
+			state = ContractState.canceled;
+		else if (isFreeze())
+			state = ContractState.frozen;
+		else if (isComplete())
+			state = ContractState.complete;
+		else if (undefinedStateTest()) {
+			state = ContractState.undefined;
+		} else
+			state = ContractState.active;
+
+		return state;
+	}
+
+	private boolean undefinedStateTest() {
+		boolean result = true;
+		Date former = DateService.fromNowPlusDays(-60);
+		for (Event e : getEvents())
+			if (e.getDate().after(former)) {
+				result = false;
+				break;
+			}
+		return result;
 	}
 }

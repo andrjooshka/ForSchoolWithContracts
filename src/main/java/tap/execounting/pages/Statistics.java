@@ -16,11 +16,11 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 import tap.execounting.dal.CrudServiceDAO;
-import tap.execounting.data.BooleanSelectModel;
-import tap.execounting.data.FacilitySelectModel;
-import tap.execounting.data.RoomSelectModel;
-import tap.execounting.data.TeacherSelectModel;
-import tap.execounting.data.TypeTitleSelectModel;
+import tap.execounting.data.selectmodels.BooleanSelectModel;
+import tap.execounting.data.selectmodels.FacilitySelectModel;
+import tap.execounting.data.selectmodels.RoomSelectModel;
+import tap.execounting.data.selectmodels.TeacherSelectModel;
+import tap.execounting.data.selectmodels.TypeTitleSelectModel;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.EventType;
 import tap.execounting.entities.Facility;

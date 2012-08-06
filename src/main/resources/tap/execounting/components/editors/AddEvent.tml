@@ -31,6 +31,12 @@
 			</t:zone>
 		</p:roomId>
 
+		<p:state>
+				<t:label for="state"/>
+				<t:select t:id="state" value="event.state" blankOption="NEVER" />
+		</p:state>
+		
+
 		<p:date>
 			<t:label for="date"/>
 			<t:datefield t:id="date" value="event.date" validate="required" />

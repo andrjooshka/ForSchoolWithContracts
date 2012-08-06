@@ -17,7 +17,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 
 import tap.execounting.dal.CrudServiceDAO;
-import tap.execounting.data.ContractTypeIdSelectModel;
+import tap.execounting.data.selectmodels.ContractTypeIdSelectModel;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.ContractType;
