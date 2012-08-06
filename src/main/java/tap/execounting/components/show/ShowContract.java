@@ -74,16 +74,17 @@ public class ShowContract {
 
 	void onDelete(Contract con) {
 		if (con.getEvents().size() > 0 || con.getPayments().size() > 0)
-			throw new IllegalArgumentException("Перед удалением договора - удалите все платежи по нему и все его события");
+			throw new IllegalArgumentException(
+					"Перед удалением договора - удалите все платежи по нему и все его события");
 		dao.delete(Contract.class, con.getId());
 	}
 
-	void onFreeze(Contract con){
+	void onFreeze(Contract con) {
 		System.out.print("\n\n onFreeze\n");
 		con.setFreeze(!con.isFreeze());
 		dao.update(con);
 	}
-	
+
 	Object onAddEvent(Contract con) {
 		addingEvent = true;
 		newEvent = new Event();
@@ -105,14 +106,14 @@ public class ShowContract {
 
 		return paymentZone.getBody();
 	}
-	
+
 	Object onEditPayment(Payment p) {
 		addingPayment = true;
 		paymentEditor.setup(p);
 
 		return request.isXHR() ? paymentZone.getBody() : null;
 	}
-	
+
 	void onDeletePayment(Payment p) {
 		dao.delete(Payment.class, p.getId());
 	}
@@ -120,15 +121,13 @@ public class ShowContract {
 	void onDeleteEvent(Event e) {
 		dao.delete(Event.class, e.getId());
 	}
-	
+
 	Object onEditEvent(Event e) {
 		addingEvent = true;
-		eventEditor.setup(e,true);
+		eventEditor.setup(e, true);
 
 		return request.isXHR() ? eventZone.getBody() : null;
 	}
-
-	
 
 	public String getEtype() {
 		return dao.find(EventType.class, contract.getTypeId()).getTitle();
@@ -161,7 +160,7 @@ public class ShowContract {
 		sb.append(calendar.stringByTuple("day", "month", "year"));
 		sb.append(", Сумма: ");
 		sb.append(loopPayment.getAmount());
-		if(loopPayment.isScheduled())
+		if (loopPayment.isScheduled())
 			sb.append(" (план.)");
 
 		return sb.toString();
@@ -169,11 +168,14 @@ public class ShowContract {
 
 	public String getEventInfo() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("#" + loopEvent.getId() + " от: ");
-		if(loopEvent.getDate()!=null)
-			sb.append(calendar.setTime(loopEvent.getDate()).stringByTuple("day", "month", "year"));
-		else sb.append("нет информации о дате");
-
+		//sb.append("#" + loopEvent.getId() + " от: ");
+		try {
+			sb.append(calendar.setTime(loopEvent.getDate()).stringByTuple(
+					"day", "month", "year"));
+		} catch (NullPointerException npe) {
+			sb.append("нет информации о дате");
+		}
+		sb.append(". " +loopEvent.getState().toString());
 		return sb.toString();
 	}
 
@@ -181,13 +183,13 @@ public class ShowContract {
 		calendar.setTime(contract.getDate());
 		return calendar.stringByTuple("day", "month", "year");
 	}
-	
-	public String getFreezeLabel(){
+
+	public String getFreezeLabel() {
 		String response = contract.isFreeze() ? "разморозить" : "заморозить";
 		return response;
 	}
-	
-	public String getLockImg(){
-		return contract.isFreeze()? "icons/lock.png" : "icons/ulock.png";
+
+	public String getLockImg() {
+		return contract.isFreeze() ? "icons/lock.png" : "icons/ulock.png";
 	}
 }

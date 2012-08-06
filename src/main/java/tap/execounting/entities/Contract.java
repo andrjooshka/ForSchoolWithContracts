@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -29,11 +30,11 @@ import tap.execounting.services.SuperCalendar;
 @Entity
 @Table(name = "contracts")
 @NamedQueries({
-		@NamedQuery(name = Contract.ALL, query = "Select c from Contract c"),
-		@NamedQuery(name = Contract.BY_DATES, query = "Select c from Contract c where c.date between "
+		@NamedQuery(name = Contract.ALL, query = "from Contract"),
+		@NamedQuery(name = Contract.BY_DATES, query = "from Contract where date between "
 				+ ":earlierDate and :laterDate"),
-		@NamedQuery(name = Contract.WITH_TEACHER, query = "Select c from Contract c where c.teacherId = :teacherId"),
-		@NamedQuery(name = Contract.WITH_CLIENT, query = "Select c from Contract c where c.clientId = :clientId") })
+		@NamedQuery(name = Contract.WITH_TEACHER, query = "from Contract where teacherId = :teacherId"),
+		@NamedQuery(name = Contract.WITH_CLIENT, query = "from Contract where clientId = :clientId") })
 public class Contract implements Comparable<Contract>, Dated {
 
 	public static final String ALL = "Contract.all";
@@ -49,7 +50,7 @@ public class Contract implements Comparable<Contract>, Dated {
 	@Column(name = "client_id", unique = false)
 	private int clientId;
 
-	@OneToOne(optional = false)
+	@ManyToOne
 	@JoinColumn(name = "client_id", insertable = false, updatable = false)
 	private Client client;
 

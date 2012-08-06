@@ -47,8 +47,9 @@ public class EventMediator implements EventMed {
 		return unit;
 	}
 
-	public void setUnit(Event unit) {
+	public EventMed setUnit(Event unit) {
 		this.unit = unit;
+		return this;
 	}
 
 	public Date getDate() {
@@ -157,8 +158,9 @@ public class EventMediator implements EventMed {
 		return innerCache;
 	}
 
-	public void setGroup(List<Event> items) {
+	public EventMed setGroup(List<Event> items) {
 		cache = items;
+		return this;
 	}
 
 	public List<Event> getAllEvents() {

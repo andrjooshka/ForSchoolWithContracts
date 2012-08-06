@@ -66,8 +66,9 @@ public class ContractMediator implements ContractMed {
 		}
 	}
 
-	public void setUnit(Contract unit) {
+	public ContractMed setUnit(Contract unit) {
 		this.unit = unit;
+		return this;
 	}
 
 	public String getTeacherName() {

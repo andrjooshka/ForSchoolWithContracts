@@ -17,7 +17,7 @@ public interface EventMed {
 //unit methods:
 	//unit
 	public Event getUnit();
-	public void setUnit(Event unit);
+	public EventMed setUnit(Event unit);
 
 	//getters:
 	//Date
@@ -54,7 +54,7 @@ public interface EventMed {
 	//group
 	public List<Event> getGroup();
 	public List<Event> getGroup(boolean resetAfter);
-	public void setGroup(List<Event> items);
+	public EventMed setGroup(List<Event> items);
 	public List<Event> getAllEvents();
 	public void reset();
 	public String getFilterState();

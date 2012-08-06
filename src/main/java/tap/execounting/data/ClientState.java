@@ -1,7 +1,22 @@
 package tap.execounting.data;
 
 public enum ClientState {
-	trial, beginner, continuer, canceled, frozen, undefined,
-	//aggregation for trial, beginner, continuer
-	//active
+	trial("Пробует"),
+	beginner("Новичок"),
+	continuer("Продливший"),
+	canceled("Ушел"),
+	frozen("Заморожен"),
+	undefined("Не активен"),
+	active("Активен"); 	//aggregation for trial, beginner, continuer
+
+	private String translation;
+	
+	private ClientState(String translation){
+		this.translation = translation;
+	}
+	
+	@Override
+	public String toString(){
+		return translation;
+	}
 }

@@ -13,7 +13,7 @@ import tap.execounting.entities.Teacher;
 public interface ClientMed {
 //unit
 	public Client getUnit();
-	public void setUnit(Client c);
+	public ClientMed setUnit(Client c);
 
 	//getters
 

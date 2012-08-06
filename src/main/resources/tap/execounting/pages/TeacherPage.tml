@@ -4,38 +4,51 @@
       xmlns:p="tapestry:parameter">
 
 	<h3>${tMed.name}</h3>
-	<h4>Расписание</h4>
+	<h4 style="margin-top: 38px; margin-bottom:8px;">Расписание</h4>
 	<a href="#" t:type="actionlink" t:id="scheduleEditLink" t:zone="scheduleZone">Изменить</a>
 	
-	<t:zone t:id="scheduleZone" id="scheduleZone">
+	<t:zone t:id="scheduleZone" id="scheduleZone" update="show">
+		<t:if test="scheduleEdit">
+			<t:form t:id="scheduleForm" zone="scheduleZone">
+				<t:errors/>
+				<table id="scheduleTable">
+					<thead>
+						<tr>
+							<th t:type="loop" t:source="days" t:value="day">${day}</th>
+						</tr>
+					</thead>
+					<tbody>		
+						<tr>
+							<td class="withselect"><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.monday"/></td>
+							<td class="withselect"><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.tuesday"/></td>
+							<td class="withselect"><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.wednesday"/></td>
+							<td class="withselect"><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.thursday"/></td>
+							<td class="withselect"><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.friday"/></td>
+							<td class="withselect"><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.saturday"/></td>
+							<td class="withselect"><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.sunday"/></td>
+						</tr>
+						<tr>
+							<td colspan="7" ><t:submit value="Сохранить" /></td>
+						</tr>
+					</tbody>
+				</table>
+			</t:form>
+		</t:if>	
+		
+		<t:if test="!scheduleEdit">	
 			<table id="scheduleTable">
 				<thead>
 					<tr>
 						<th t:type="loop" t:source="days" t:value="day">${day}</th>
 					</tr>
 				</thead>
-				<tbody t:type="if" t:test="scheduleEdit">
-					<t:form t:id="scheduleForm" zone="scheduleZone">
-						<tr>
-							<td><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.monday"/></td>
-							<td><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.tuesday"/></td>
-							<td><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.wednesday"/></td>
-							<td><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.thursday"/></td>
-							<td><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.friday"/></td>
-							<td><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.saturday"/></td>
-							<td><input t:type="select" t:model="facilitySelectModel" t:value="tMed.unit.sunday"/></td>
-						</tr>
-						<tr>
-							<td colspan="7" ><t:submit value="Сохранить" /></td>
-						</tr>
-					</t:form>
-				</tbody>
-				<tbody t:type="if" t:test="!scheduleEdit">
+				<tbody>
 					<tr>
 						<td t:type="loop" t:source="days" t:value="day">${school}</td>
 					</tr>
 				</tbody>
 			</table>
+		</t:if>
 	</t:zone>
 	
 	<!--CLIENTS-->

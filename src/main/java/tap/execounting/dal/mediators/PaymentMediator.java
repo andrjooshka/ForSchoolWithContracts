@@ -38,8 +38,9 @@ public class PaymentMediator implements PaymentMed {
 		return this.unit;
 	}
 
-	public void setUnit(Payment unit) {
+	public PaymentMed setUnit(Payment unit) {
 		this.unit = unit;
+		return this;
 	}
 
 	public boolean getPlanned() {

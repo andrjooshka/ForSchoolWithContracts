@@ -13,7 +13,7 @@ public interface TeacherMed {
 	
 	//unit
 	public Teacher getUnit();
-	public void setUnit(Teacher unit);
+	public TeacherMed setUnit(Teacher unit);
 	
 	//name
 	public String getName();

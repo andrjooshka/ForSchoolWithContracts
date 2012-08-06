@@ -18,7 +18,7 @@ public interface ContractMed {
 //unit methods
 	//unit
 	public Contract getUnit();
-	public void setUnit(Contract unit);
+	public ContractMed setUnit(Contract unit);
 	
 	//getters:
 	//Teacher name

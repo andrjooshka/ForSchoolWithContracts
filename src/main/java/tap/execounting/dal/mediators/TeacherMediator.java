@@ -79,8 +79,9 @@ public class TeacherMediator implements TeacherMed {
 		return unit;
 	}
 
-	public void setUnit(Teacher unit) {
+	public TeacherMed setUnit(Teacher unit) {
 		this.unit = unit;
+		return this;
 	}
 
 	public List<Contract> getAllContracts() {

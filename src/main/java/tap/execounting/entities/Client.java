@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -27,19 +26,19 @@ import tap.execounting.services.DateService;
 @NamedQueries({
 		@NamedQuery(name = Client.ALL, query = "from Client"),
 		@NamedQuery(name = Client.ALL_NAMES, query = "select c.name from Client c"),
-		@NamedQuery(name = Client.BY_NAME, query = "from Client c where lower(c.name) = lower(:name)")})
+		@NamedQuery(name = Client.BY_NAME, query = "from Client c where lower(c.name) = lower(:name)") })
 public class Client implements Dated {
 
 	public static final String ALL = "Client.all";
 	public static final String ALL_NAMES = "Client.allNames";
 	public static final String BY_NAME = "Client.byName";
-//
-//	public static final String inactive = "нет активных договоров";
-//	public static final String frozen = "договор(а) заморожены";
-//	public static final String active = "занимается";
-//
-//	public static final String studStateNew = "новичок";
-//	public static final String studStateExp = "продливший";
+	//
+	// public static final String inactive = "нет активных договоров";
+	// public static final String frozen = "договор(а) заморожены";
+	// public static final String active = "занимается";
+	//
+	// public static final String studStateNew = "новичок";
+	// public static final String studStateExp = "продливший";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,15 +48,11 @@ public class Client implements Dated {
 	@Column(unique = true)
 	private String name;
 
-	@OneToMany
-	@JoinColumn(name = "client_id")
+	@OneToMany(mappedBy = "client")
 	private List<Contract> contracts;
-	
-	private boolean inactive;
 
-	public Client() {
-		setContracts(new ArrayList<Contract>());
-	}
+	private boolean canceled;
+
 
 	public int getId() {
 		return id;
@@ -76,9 +71,12 @@ public class Client implements Dated {
 	}
 
 	public List<Contract> getContracts() {
-		if (contracts == null)
-			contracts = new ArrayList<Contract>();
-		return contracts;
+		try {
+			return contracts;
+		} catch (NullPointerException npe) {
+			npe.printStackTrace();
+			return new ArrayList<Contract>();
+		}
 	}
 
 	public List<Contract> getContracts(boolean sortAsc) {
@@ -87,10 +85,6 @@ public class Client implements Dated {
 		if (!sortAsc)
 			Collections.reverse(list);
 		return list;
-	}
-
-	public void setContracts(List<Contract> contracts) {
-		this.contracts = contracts;
 	}
 
 	public List<Contract> getActiveContracts() {
@@ -142,7 +136,7 @@ public class Client implements Dated {
 		List<Payment> payments = new ArrayList<Payment>();
 		for (Contract c : getContracts())
 			for (Payment p : c.getPlannedPayments())
-				if(p.getDate().before(DateService.fromNowPlusDays(15)))
+				if (p.getDate().before(DateService.fromNowPlusDays(15)))
 					payments.add(p);
 		return payments;
 	}
@@ -164,21 +158,21 @@ public class Client implements Dated {
 		return null;
 	}
 
-//	public String getState() {
-//
-//		// Client inactive check
-//		List<Contract> list = getUnfinishedContracts();
-//		if (list.size() == 0)
-//			return inactive;
-//
-//		for (Contract c : list)
-//			if (c.isActive())
-//				return active;
-//
-//		return frozen;
-//	}
-	
-	public Date getDate(){
+	// public String getState() {
+	//
+	// // Client inactive check
+	// List<Contract> list = getUnfinishedContracts();
+	// if (list.size() == 0)
+	// return inactive;
+	//
+	// for (Contract c : list)
+	// if (c.isActive())
+	// return active;
+	//
+	// return frozen;
+	// }
+
+	public Date getDate() {
 		return getFirstContractDate();
 	}
 
@@ -190,26 +184,25 @@ public class Client implements Dated {
 		return d;
 	}
 
-	public boolean isInactive() {
-		return inactive;
+	public boolean isCanceled() {
+		return canceled;
 	}
 
-	public void setInactive(boolean inactive) {
-		this.inactive = inactive;
+	public void setCanceled(boolean inactive) {
+		this.canceled = inactive;
 	}
-	
 
-//	public String getStudentInfo() {
-//		Contract t;
-//		boolean firstRealContract = false;
-//		for (int i = 0; i < contracts.size(); i++) {
-//			t = contracts.get(i);
-//			if (!firstRealContract) {
-//				if (t.getLessonsNumber() > 2)
-//					firstRealContract = true;
-//			} else if (t.getLessonsNumber() > 2)
-//				return Client.studStateExp;
-//		}
-//		return Client.studStateNew;
-//	}
+	// public String getStudentInfo() {
+	// Contract t;
+	// boolean firstRealContract = false;
+	// for (int i = 0; i < contracts.size(); i++) {
+	// t = contracts.get(i);
+	// if (!firstRealContract) {
+	// if (t.getLessonsNumber() > 2)
+	// firstRealContract = true;
+	// } else if (t.getLessonsNumber() > 2)
+	// return Client.studStateExp;
+	// }
+	// return Client.studStateNew;
+	// }
 }

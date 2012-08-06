@@ -12,6 +12,7 @@ public enum EventState {
 
 	private EventState(int code, String translation) {
 		this.code = code;
+		this.translation = translation;
 	}
 
 	public int getCode() {

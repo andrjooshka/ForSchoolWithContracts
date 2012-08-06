@@ -14,6 +14,9 @@ import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
 
+import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.mediators.ClientMediator;
+import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Teacher;
@@ -25,7 +28,11 @@ public class ClientGridNCD {
 	private ComponentResources componentResources;
 	@Inject
 	private SuperCalendar calendar;
-
+	@Inject
+	private ClientMed clientMed;
+	@Inject
+	private CrudServiceDAO dao;
+	
 	@Property
 	@Parameter
 	private List<Client> source;
@@ -40,13 +47,21 @@ public class ClientGridNCD {
 	private Contract loopContract;
 	@InjectPage
 	private ClientPage clientPage;
+	
+	private ClientMed getClientMed(){
+		ClientMed c = new ClientMediator();
+		c.setDao(dao);
+		return c;
+	}
 
 	void setupRender() {
 		if (model == null) {
 			model = beanModelSource.createDisplayModel(Client.class,
 					componentResources.getMessages());
-			model.exclude("return", "firstPlannedPaymentDate");
+			model.exclude("return", "firstPlannedPaymentDate", "date",
+					"canceled");
 			// model.add("teachers", null);
+			model.add("state", null);
 			model.add("contracts", null);
 			model.reorder("id", "name", "contracts");
 		}
@@ -104,10 +119,18 @@ public class ClientGridNCD {
 
 		return sb.toString();
 	}
-	
-	public String getCssForBalance(){
-		if(unit.getBalance()<0) return "debtor";
-		if(unit.getBalance()>0) return "creditor";
+
+	public String getCssForBalance() {
+		if (unit.getBalance() < 0)
+			return "debtor";
+		if (unit.getBalance() > 0)
+			return "creditor";
 		return "neutral";
+	}
+	
+	public String getState(){
+		ClientMed clientMed = getClientMed();
+		clientMed.setUnit(unit);
+		return clientMed.getState().toString();
 	}
 }

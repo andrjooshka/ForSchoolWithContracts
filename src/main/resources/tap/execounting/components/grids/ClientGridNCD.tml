@@ -13,6 +13,9 @@
 				<br/>
 			</t:loop>
 		</p:contractsCell>
+		<p:stateCell>
+			${state}
+		</p:stateCell>
 		<p:teachersCell>
 			${teachers}
 		</p:teachersCell>

@@ -99,6 +99,12 @@ public class TeacherPage {
 	Object onSuccessFromStatsDateForm() {
 		return statsZone;
 	}
+	
+	Object onSuccessFromScheduleForm(){
+		scheduleEdit= false;
+		dao.update(tMed.getUnit());
+		return scheduleZone;
+	}
 
 	// requests from page
 	public String getSchool() {
