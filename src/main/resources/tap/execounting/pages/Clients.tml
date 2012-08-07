@@ -62,7 +62,7 @@
 					Имя
 				</th>
 				<th>
-					Новичок/Продливший
+					Статус клиента
 				</th>
 				<th>
 					Тип договора
@@ -79,7 +79,7 @@
 					<t:textfield value="name"/>
 				</td>
 				<td>
-					<t:select t:id="studStatus" model="literal:новичок,продливший"/>
+					<t:select t:id="studStatus" value="state"/>
 				</td>
 				<td>
 					<t:select t:id="contractType" model="contractTypeIdsModel" value="contractTypeId"/>

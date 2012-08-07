@@ -17,6 +17,9 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 
 import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.mediators.ClientMediator;
+import tap.execounting.dal.mediators.interfaces.ClientMed;
+import tap.execounting.data.ClientState;
 import tap.execounting.data.selectmodels.ContractTypeIdSelectModel;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
@@ -69,7 +72,7 @@ public class Clients {
 	private String name;
 	@Property
 	@Persist
-	private String studStatus;
+	private ClientState state;
 	@Property
 	@Persist
 	private Integer contractTypeId;
@@ -82,6 +85,10 @@ public class Clients {
 	@Persist
 	private Date pfLaterDate;
 
+	private ClientMed getClientMed() {
+		return new ClientMediator().setDao(dao);
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<Client> getClients() {
 		List<Client> cs;
@@ -92,7 +99,7 @@ public class Clients {
 				|| laterDate != null;
 		boolean filterOnFCDate = fcEarlyDate != null || fcLaterDate != null;
 		boolean filterOnNames = name != null && name.length() > 1;
-		boolean filterOnStudStatus = studStatus != null;
+		boolean filterOnState = state != null;
 		boolean filterOnContractType = contractTypeId != null;
 
 		cs = criteria.list();
@@ -146,12 +153,13 @@ public class Clients {
 			}
 		}
 		// Stud status
-		if (filterOnStudStatus) {
-			for (int i = cs.size() - 1; i >= 0; i--) {
-				//TODO client status filtration is shout down
-//				if (!cs.get(i).getStudentInfo().equals(studStatus))
-//					cs.remove(i);
-			}
+		if (filterOnState) {
+			getClientMed().setGroup(cs).filter(state);
+			// for (int i = cs.size() - 1; i >= 0; i--) {
+			// //TODO client status filtration is shout down
+			// // if (!cs.get(i).getStudentInfo().equals(studStatus))
+			// // cs.remove(i);
+			// }
 		}
 		// Contract Type
 		if (filterOnContractType) {
@@ -201,19 +209,13 @@ public class Clients {
 	}
 
 	public int getNewClients() {
-		int sum = 0;
-//		for (Client c : getClients())
-//			if (c.getStudentInfo().equals(Client.studStateNew))
-//				sum++;
-		return sum;
+		return getClientMed().setGroup(getClients()).countNewbies(null, null)
+				+ getClientMed().setGroup(getClients()).countTrial(null, null);
 	}
 
 	public int getExpClients() {
-		int sum = 0;
-//		for (Client c : getClients())
-//			if (c.getStudentInfo().equals(Client.studStateExp))
-//				sum++;
-		return sum;
+		return getClientMed().setGroup(getClients())
+				.countContinuers(null, null);
 	}
 
 	public int getTotalClients() {
@@ -228,12 +230,14 @@ public class Clients {
 			calendar.setTime(new Date());
 			calendar.addDays(-5000);
 			paramEarlier = calendar.getTime();
-		} else paramEarlier = pfEarlierDate;
+		} else
+			paramEarlier = pfEarlierDate;
 		if (pfLaterDate == null) {
 			calendar.setTime(new Date());
 			calendar.addDays(5000);
 			paramLater = calendar.getTime();
-		} else paramLater = pfLaterDate;
+		} else
+			paramLater = pfLaterDate;
 
 		params.put("earlierDate", paramEarlier);
 		params.put("laterDate", paramLater);
@@ -253,9 +257,9 @@ public class Clients {
 	}
 
 	// events
-	Object onSubmit() {
-		return request.isXHR() ? ajaxResponseRenderer.addRender(gridZone).addRender(statZone)
-				: null;
+	void onSubmit() {
+		if (request.isXHR())
+			ajaxResponseRenderer.addRender(gridZone).addRender(statZone);
 	}
 
 	void setupRender() {

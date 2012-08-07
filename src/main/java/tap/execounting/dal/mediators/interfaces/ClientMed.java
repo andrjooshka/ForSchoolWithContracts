@@ -115,7 +115,7 @@ public interface ClientMed {
 	
 	
 	//service methods which we should avoid to use
-	public void setDao(CrudServiceDAO dao);
+	public ClientMed setDao(CrudServiceDAO dao);
 }
 
 

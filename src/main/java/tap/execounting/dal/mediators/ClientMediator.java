@@ -47,8 +47,9 @@ public class ClientMediator implements ClientMed {
 
 	private Client unit;
 
-	public void setDao(CrudServiceDAO dao) {
+	public ClientMed setDao(CrudServiceDAO dao) {
 		this.sureDao = dao;
+		return this;
 	}
 
 	private CrudServiceDAO getDao() {
@@ -100,9 +101,11 @@ public class ClientMediator implements ClientMed {
 	public List<Contract> getContracts() {
 		try {
 			// MAP IT!!!
-			List<Contract> res = getDao().findWithNamedQuery(Contract.WITH_CLIENT,
-					QueryParameters.with("clientId", unit.getId())
-							.parameters());
+			List<Contract> res = getDao()
+					.findWithNamedQuery(
+							Contract.WITH_CLIENT,
+							QueryParameters.with("clientId", unit.getId())
+									.parameters());
 			return res;
 			// return unit.getContracts();
 		} catch (NullPointerException npe) {
@@ -332,12 +335,22 @@ public class ClientMediator implements ClientMed {
 		Client unit = getUnit();
 
 		// filter
-		for (int i = cache.size() - 1; i >= 0; i--) {
-			setUnit(cache.get(i));
-			if (getState() == state)
-				continue;
-			cache.remove(i);
-		}
+		if (state != ClientState.active)
+			for (int i = cache.size() - 1; i >= 0; i--) {
+				setUnit(cache.get(i));
+				if (getState() == state)
+					continue;
+				cache.remove(i);
+			}
+		else
+			for (int i = cache.size() - 1; i >= 0; i--) {
+				setUnit(cache.get(i));
+				ClientState cs = getState();
+				if (cs == ClientState.beginner || cs == ClientState.continuer
+						|| cs == ClientState.trial)
+					continue;
+				cache.remove(i);
+			}
 
 		// restore unit
 		setUnit(unit);
