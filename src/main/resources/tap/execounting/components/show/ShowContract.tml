@@ -29,7 +29,7 @@
 						</t:eventlink>
 					</li>
 				</ul>
-				<table class="entity contract panel">
+				<table class="showcontract">
 					<!--controls>
 					<tr>
 						<td>
@@ -79,7 +79,7 @@
 					</tr>
 					<tr>
 						<th>${message:events-label}</th>
-						<td colspan="2">
+						<td>
 							<strong>Занятий осталось:</strong> ${contract.lessonsRemain}<br/><br/>
 							Проведенные занятия:
 							<t:zone t:id="eventZone" id="contractNewEventZone${contract.id}">
@@ -92,25 +92,28 @@
 								</t:if>
 							</t:zone>
 							
-							<ul>
+							
 								<t:loop source="events" value="loopEvent">
-									<li>${eventInfo} &#09;
+									<div style="-moz-box-shadow: 0px 0px 2px #999;
+									box-shadow: 0px 0px 2px #999; margin: 4px;
+									width:400px;padding:2px;padding-left:5px;margin-left:10px">
+									${eventInfo} &#09;
 									(<t:eventlink context="loopEvent" event="deleteEvent">удалить</t:eventlink> |
 									<t:eventlink context="loopEvent" event="editEvent" 
 									t:zone="contractNewEventZone${contract.id}">редактировать</t:eventlink>)
 										<t:if test="loopEvent.comment">
 											<br/>&#09;${loopEvent.comment}
 										</t:if>
-									</li>
+									</div>
 										
 								</t:loop>
-							</ul>
+							
 							На сумму: ${contract.completeLessonsCost}
 						</td>
 					</tr>
 					<tr>
 						<th>${message:payments-label}</th>
-						<td colspan="2">
+						<td>
 							<t:zone t:id="paymentZone" id="paymentZone${contract.id}">
 								<t:if test="addingPayment">
 									<t:editors.addPayment t:id="paymentEditor" />
@@ -122,16 +125,18 @@
 								</t:if>
 							</t:zone>
 							
-							<ul>
+							
 								<t:loop source="payments" value="loopPayment">
-									<li>
+									<div style="-moz-box-shadow: 0px 0px 2px #999;
+									box-shadow: 0px 0px 2px #999; margin: 4px;
+									width:400px;padding:2px;padding-left:5px;margin-left:10px">
 										${paymentInfo} &#09;
 										(<t:eventlink context="loopPayment" event="deletePayment">удалить</t:eventlink> |
 										<t:eventlink context="loopPayment" event="editPayment" 
 										t:zone="paymentZone${contract.id}">редактировать</t:eventlink>)
-									</li>
+									</div>
 								</t:loop>
-							</ul>
+							
 							Итого: ${contract.moneyPaid}
 						</td>
 					</tr>

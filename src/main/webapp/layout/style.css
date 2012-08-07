@@ -526,15 +526,6 @@ table.entity td {
 	background: #ffffff;
 }
 
-table.contract {
-	width: 1000px;
-	margin-bottom: 50px;
-}
-
-table.contract th {
-	width: 200px;
-}
-
 .datepicker {
 	z-index: 100;
 }
@@ -671,21 +662,6 @@ div.t-zone {
 	border-radius: 5px;
 	box-shadow: 0 0 3px 0px #000,
 	inset 0px 0px 9px 2px #eeeeff;
-}
-
-.sider {
-	margin-top: 2px;
-	width: 160px;
-	list-style: none;
-	padding: 5px;
-	position: relative;
-	left: 830px;
-	top: 13px;
-}
-
-.sider li {
-	display: table-cell;
-	padding-top: 6px;
 }
 
 /* Pager */

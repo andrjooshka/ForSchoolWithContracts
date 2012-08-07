@@ -6,6 +6,7 @@ import java.util.List;
 import tap.execounting.services.SuperCalendar;
 
 import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
@@ -24,6 +25,7 @@ import tap.execounting.entities.EventType;
 import tap.execounting.entities.Payment;
 import tap.execounting.entities.Teacher;
 
+@Import(stylesheet="context:/layout/contract.css")
 public class ShowContract {
 
 	@Parameter

@@ -380,6 +380,7 @@ public class ClientMediator implements ClientMed {
 		getAppliedFilters().put("Date of first contract 2", date2);
 		List<Client> cache = getGroup();
 		List<Client> cache2 = new ArrayList<Client>();
+		DateFilter dateFilter = new DateFilterImpl();
 		for (Dated item : dateFilter.filterWithReturn(cache, date1, date2))
 			cache2.add((Client) item);
 		setGroup(cache2);
@@ -454,12 +455,12 @@ public class ClientMediator implements ClientMed {
 	}
 
 	public Integer count(ClientState state) {
-		ClientMediator cm = new ClientMediator();
+		ClientMed cm = new ClientMediator().setDao(getDao());
 		return cm.filter(state).countGroupSize();
 	}
 
 	public Integer count(ClientState state, Date date1, Date date2) {
-		ClientMediator cm = new ClientMediator();
+		ClientMed cm = new ClientMediator().setDao(getDao());
 		return cm.filter(state).filterDateOfFirstContract(date1, date2)
 				.countGroupSize();
 	}
