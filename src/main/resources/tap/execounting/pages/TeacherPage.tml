@@ -1,7 +1,8 @@
 <html t:type="layout"
       t:pageTitle="Учителя : ${tMed.name}"
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
-      xmlns:p="tapestry:parameter">
+      xmlns:p="tapestry:parameter"
+      xmlns:ex="tapestry-library:exanpe">
 
 	<h3>${tMed.name}</h3>
 	<h4 style="margin-top: 38px; margin-bottom:8px;">Расписание</h4>
@@ -55,19 +56,49 @@
 	
 	<h3 style="margin-top: 70px; margin-bottom: 20px;">${message:clients}</h3>
 	
-	<t:zone t:id="clientsZone" id="clientsZone">
+
+	
+	
+	<t:zone t:id="clientsZone" id="clientsZone" update="show">
 		<t:if test="calendarCentric">
+			<t:actionlink t:id="eventsDateBackwardLink" zone="clientsZone">На месяц назад</t:actionlink>&nbsp;&nbsp;&nbsp;
+			<t:actionlink t:id="eventsDateForwardLink" zone="clientsZone">На месяц вперед</t:actionlink>
+			<t:form zone="clientsZone" t:id="clientsDateForm">
+				<t:errors/>
+				<t:datefield value="eventsDate"/>
+				<t:submit style="margin-left:15px;"/>
+			</t:form>
+			
 			<div style="display: inline-table; width:130px; height: 45px;
 					text-align: right;padding-right: 30px;"><h4 style="font-size: 1.6em">${monthName}</h4></div>
 			<div class="calendar" style="display: inline-table;">
 				<t:show.EventRow displayNull="true" displayDate="true" elements="dates"/></div>	
 		</t:if>
 		
-		<div t:type="loop" t:source="contracts" t:value="contract" class="" style="height: 70px;">
-				<div style="display: inline-table; width:150px; height: 45px;
-				text-align: right;padding-right: 10px;">${clientName}</div>
-				<t:show.EventRow displayNull="true" elements="elements"/>
-		</div>
+		
+		<t:loop t:source="contracts" t:value="contract" class="" style="height: 110px;">
+			<div style="margin-top:20px;">
+				<t:zone t:id="contractZone" id="contractZone${contract.id}" update="show">
+					<div style="display: inline-table; width:150px; height: 45px;
+					text-align: right;padding-right: 10px;">${clientName}
+					<br/>
+					${discipline}
+					</div>
+					<t:show.EventRow displayNull="true" displayDate="true" elements="elements"/>
+					
+				</t:zone>
+			</div>
+			<div>
+					<ex:accordion style="width:800px;">
+						<ex:accordionItem title="literal:Детали">
+							<t:actionlink context="contract.client" t:id="clientpagelink">
+								Перейти на страницу клиента
+							</t:actionlink>
+							<t:show.showcontract contract="contract"/>
+						</ex:accordionItem>
+					</ex:accordion>
+			</div>
+		</t:loop>
 	</t:zone>
 	
 	<!--/CLIENTS-->
@@ -158,15 +189,34 @@
 		</table>
 	</t:zone>
 	
+	<h4>Комментарии:</h4>
+	<t:editors.addcomment t:id="addComment" code="0" entityid="tMed.unit.id" />
 	<t:zone id="commentsZone">
-		t:loop source="comments" value="comment"
-			t:comment showHidden="showHidden" commentId="comment.id" /
-		/t:loop
+		<t:loop source="comments" value="comment">
+			<t:show.showcomment showDeleted="showDeleted" comment="comment" />
+		</t:loop>
 	</t:zone>
 	
-	<h4>Долги по перенесенным занятиям</h4>
-		t:loop source="shiftedLessons" value="lesson"
-			t:wideshowevent lessonId="lesson.id"/
-		/t:loop
+	<h4>Долги по перенесенным занятиям:</h4>
+	<t:loop source="shiftedLessons" value="lesson">
+		<t:show.wideshowevent lesson="lesson"/>
+	</t:loop>
 
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

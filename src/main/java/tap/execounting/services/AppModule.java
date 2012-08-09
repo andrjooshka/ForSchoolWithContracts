@@ -21,13 +21,14 @@ import org.slf4j.Logger;
 import tap.execounting.dal.HibernateModule;
 import tap.execounting.dal.mediators.MediatorModule;
 import tap.execounting.security.AuthenticationFilter;
+import fr.exanpe.t5.lib.services.ExanpeLibraryModule;
 
 /**
  * This module is automatically included as part of the Tapestry IoC Registry,
  * it's a good place to configure and extend Tapestry, or to place your own
  * service definitions.
  */
-@SubModule({ HibernateModule.class, MediatorModule.class })
+@SubModule({ HibernateModule.class, MediatorModule.class, ExanpeLibraryModule.class })
 public class AppModule {
 	public static void bind(ServiceBinder binder) {
 		// binder.bind(MyServiceInterface.class, MyServiceImpl.class);

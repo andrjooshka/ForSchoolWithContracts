@@ -14,6 +14,7 @@ import tap.execounting.dal.mediators.interfaces.TeacherMed;
 import tap.execounting.data.ClientState;
 import tap.execounting.data.EventState;
 import tap.execounting.entities.Client;
+import tap.execounting.entities.Comment;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;
@@ -38,7 +39,7 @@ public class TeacherMediator implements TeacherMed {
 	}
 
 	private CrudServiceDAO getDao() {
-		CrudServiceDAO dao= this.dao == null ? sureDao : this.dao;
+		CrudServiceDAO dao = this.dao == null ? sureDao : this.dao;
 		return dao;
 	}
 
@@ -82,6 +83,11 @@ public class TeacherMediator implements TeacherMed {
 	public TeacherMed setUnit(Teacher unit) {
 		this.unit = unit;
 		return this;
+	}
+
+	public List<Comment> getComments() {
+		return getDao().findWithNamedQuery(Comment.BY_TEACHER_ID,
+				QueryParameters.with("teacherId", unit.getId()).parameters());
 	}
 
 	public List<Contract> getAllContracts() {

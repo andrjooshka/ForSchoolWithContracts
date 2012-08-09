@@ -20,136 +20,123 @@ import org.hibernate.validator.constraints.Email;
  * @author karesti
  */
 @Entity
-@NamedQueries(
-{
-        @NamedQuery(name = User.ALL, query = "Select u from User u"),
-        @NamedQuery(name = User.BY_USERNAME_OR_EMAIL, query = "Select u from User u where u.username = :username or u.email = :email"),
-        @NamedQuery(name = User.BY_CREDENTIALS, query = "Select u from User u where u.username = :username and u.password = :password") })
+@NamedQueries({
+		@NamedQuery(name = User.ALL, query = "from User"),
+		@NamedQuery(name = User.BY_USERNAME_OR_EMAIL, query = "Select u from User u where u.username = :username or u.email = :email"),
+		@NamedQuery(name = User.BY_CREDENTIALS, query = "Select u from User u where u.username = :username and u.password = :password"),
+		@NamedQuery(name = User.BY_ID, query = "from User where id=:userId") })
 @Table(name = "users")
-public class User
-{
+public class User {
 
-    public static final String ALL = "User.all";
+	public static final String ALL = "User.all";
 
-    public static final String BY_USERNAME_OR_EMAIL = "User.byUserNameOrEmail";
+	public static final String BY_USERNAME_OR_EMAIL = "User.byUserNameOrEmail";
 
-    public static final String BY_CREDENTIALS = "User.byCredentials";
+	public static final String BY_CREDENTIALS = "User.byCredentials";
 
-//    @SuppressWarnings("unused")
-//	private static final long serialVersionUID = 4060967693790504175L;
+	public static final String BY_ID = "User.byId";
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+	// @SuppressWarnings("unused")
+	// private static final long serialVersionUID = 4060967693790504175L;
 
-    @NaturalId
-    @Column(nullable = false, unique = true)
-    @NotNull
-    @Size(min = 3, max = 15)
-    private String username;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 
-    @Column(nullable = false)
-    @NotNull
-    @Size(min = 3, max = 50)
-    private String fullname;
+	@NaturalId
+	@Column(nullable = false, unique = true)
+	@NotNull
+	@Size(min = 3, max = 15)
+	private String username;
 
-    @Column(nullable = false)
-    @NotNull
-    @Email
-    private String email;
+	@Column(nullable = false)
+	@NotNull
+	@Size(min = 3, max = 50)
+	private String fullname;
 
-    @Column(nullable = false)
-    @Size(min = 3, max = 12)
-    @NotNull
-    private String password;
+	@Column(nullable = false)
+	@NotNull
+	@Email
+	private String email;
 
-    public User()
-    {
-    }
+	@Column(nullable = false)
+	@Size(min = 3, max = 12)
+	@NotNull
+	private String password;
 
-    public User(final String fullname, final String username, final String email)
-    {
-        this.fullname = fullname;
-        this.username = username;
-        this.email = email;
-    }
+	public User() {
+	}
 
-    public User(final String fullname, final String username, final String email,
-            final String password)
-    {
-        this(fullname, username, email);
-        this.password = password;
-    }
+	public User(final String fullname, final String username, final String email) {
+		this.fullname = fullname;
+		this.username = username;
+		this.email = email;
+	}
 
-    public User(int id, String username, String fullname, String email, String password)
-    {
-        super();
-        this.id = id;
-        this.username = username;
-        this.fullname = fullname;
-        this.email = email;
-        this.password = password;
-    }
+	public User(final String fullname, final String username,
+			final String email, final String password) {
+		this(fullname, username, email);
+		this.password = password;
+	}
 
-    @Override
-    public String toString()
-    {
-        StringBuilder builder = new StringBuilder();
-        builder.append("id ");
-        builder.append(id);
-        builder.append(",");
-        builder.append("username ");
-        builder.append(username);
-        return builder.toString();
-    }
+	public User(int id, String username, String fullname, String email,
+			String password) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.fullname = fullname;
+		this.email = email;
+		this.password = password;
+	}
 
-    public int getId()
-    {
-        return id;
-    }
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("id ");
+		builder.append(id);
+		builder.append(",");
+		builder.append("username ");
+		builder.append(username);
+		return builder.toString();
+	}
 
-    public void setId(int id)
-    {
-        this.id = id;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public String getEmail()
-    {
-        return email;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setEmail(String email)
-    {
-        this.email = email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public String getUsername()
-    {
-        return username;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public void setUsername(String username)
-    {
-        this.username = username;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public void setFullname(String fullname)
-    {
-        this.fullname = fullname;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public String getFullname()
-    {
-        return fullname;
-    }
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
+	}
 
-    public String getPassword()
-    {
-        return password;
-    }
+	public String getFullname() {
+		return fullname;
+	}
 
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 }

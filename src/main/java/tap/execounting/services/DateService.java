@@ -100,19 +100,19 @@ public class DateService {
 	public Calendar maxHoursAndMinutes(Calendar c) {
 		Calendar res = getCalendar(c.getTime());
 		assert (res.getTimeInMillis() == c.getTimeInMillis());
-		
+
 		setHour(res, 23);
 		setMinute(res, 59);
 		return res;
 	}
-	
-	public Date maxHourAndMinutes(Date d){
+
+	public Date maxHourAndMinutes(Date d) {
 		Calendar c = getCalendar(d);
 		c = maxHoursAndMinutes(c);
 		return c.getTime();
 	}
-	
-	public int getMinute(Calendar c){
+
+	public int getMinute(Calendar c) {
 		return c.get(MINUTE);
 	}
 
@@ -237,7 +237,7 @@ public class DateService {
 	}
 
 	public static Date fromNowPlusDays(int days) {
-		GregorianCalendar calendar =  new GregorianCalendar();
+		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.add(Calendar.DAY_OF_YEAR, days);
 		return calendar.getTime();
 	}
@@ -249,12 +249,12 @@ public class DateService {
 		r.setTime(new Date(100));
 		r.set(YEAR, c.get(YEAR));
 		r.set(DAY_OF_YEAR, c.get(DAY_OF_YEAR));
-		//r.set(YEAR, c.get(YEAR));
+		// r.set(YEAR, c.get(YEAR));
 		return r.getTime();
 	}
 
-	public static Date fromDatePlusDays(Date date, int days) {
-		GregorianCalendar calendar =  new GregorianCalendar();
+	public static Date datePlusDays(Date date, int days) {
+		GregorianCalendar calendar = new GregorianCalendar();
 		calendar.setTime(date);
 		calendar.add(Calendar.DAY_OF_YEAR, days);
 		return calendar.getTime();
@@ -262,32 +262,32 @@ public class DateService {
 
 	public static List<Date> generateDaySet(Date eventsDate, int days) {
 		List<Date> list = new ArrayList<Date>(days);
-		for(int i =0;i<days;i++)
-			list.add(fromDatePlusDays(eventsDate, i));
+		for (int i = 0; i < days; i++)
+			list.add(datePlusDays(eventsDate, i));
 		return list;
 	}
 
 	public static String monthName(Date eventsDate) {
-		RusCalendar rc = new RusCalendar();
-		rc.setTime(eventsDate);
-		return rc.getMonthName();
+		return  new RusCalendar().setTime(eventsDate).getMonthName();
+	}
+
+	public static Date datePlusMonths(Date d, int months) {
+		Calendar c = new GregorianCalendar();
+		c.setTime(d);
+		c.add(MONTH, months);
+		return c.getTime();
+	}
+
+	public static Date trimToMonth(Date date) {
+		Calendar c = new GregorianCalendar();
+		c.setTime(date);
+		Calendar r = new GregorianCalendar();
+		r.setTimeInMillis(100);
+		r.set(YEAR, c.get(YEAR));
+		r.set(MONTH, c.get(MONTH));
+		return r.getTime();
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

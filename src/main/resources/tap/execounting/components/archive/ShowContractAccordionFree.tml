@@ -92,6 +92,7 @@
 								</t:if>
 							</t:zone>
 							
+							
 								<t:loop source="events" value="loopEvent">
 									<div style="-moz-box-shadow: 0px 0px 2px #999;
 									box-shadow: 0px 0px 2px #999; margin: 4px;
@@ -103,7 +104,8 @@
 										<t:if test="loopEvent.comment">
 											<br/>&#09;${loopEvent.comment}
 										</t:if>
-									</div>										
+									</div>
+										
 								</t:loop>
 							
 							На сумму: ${contract.completeLessonsCost}

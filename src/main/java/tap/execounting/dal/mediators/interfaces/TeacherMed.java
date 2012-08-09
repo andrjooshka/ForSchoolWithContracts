@@ -5,6 +5,7 @@ import java.util.List;
 
 import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.entities.Client;
+import tap.execounting.entities.Comment;
 import tap.execounting.entities.Teacher;
 
 public interface TeacherMed {
@@ -24,6 +25,9 @@ public interface TeacherMed {
 	
 	//state
 	public boolean getState();
+	
+	//comments
+	public List<Comment> getComments();
 	
 	//clients
 		//all
@@ -61,5 +65,4 @@ public interface TeacherMed {
 	
 	//service methods which we should avoid to use
 	public void setDao(CrudServiceDAO dao);
-	
 }
