@@ -58,6 +58,10 @@ public class Payment implements Dated {
 	@OneToOne(optional = false)
 	@JoinColumn(name = "contract_id", insertable = false, updatable = false)
 	private Contract contract;
+	
+	public Payment(){
+		date = new Date();
+	}
 
 	public Contract getContract() {
 		return contract;

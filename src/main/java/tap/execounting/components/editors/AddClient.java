@@ -35,7 +35,7 @@ public class AddClient {
 		updateMode = false;
 	}
 
-	void onSubmit() {
+	void onSuccess() {
 		if (updateMode) {
 			dao.update(client);
 		} else {

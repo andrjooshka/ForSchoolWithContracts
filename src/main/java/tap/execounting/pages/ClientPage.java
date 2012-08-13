@@ -5,8 +5,6 @@ import static java.lang.System.out;
 import java.util.Date;
 import java.util.List;
 
-import tap.execounting.services.SuperCalendar;
-
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
@@ -18,6 +16,7 @@ import tap.execounting.components.editors.AddContract;
 import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
+import tap.execounting.services.SuperCalendar;
 
 public class ClientPage {
 
@@ -44,24 +43,38 @@ public class ClientPage {
 	private boolean mode;
 	@Inject
 	private SuperCalendar calendar;
+	
 
+	// page events	
+	void onActiate(int clientId){
+		this.client = dao.find(Client.class, clientId);
+	}
+	
+	int onPassivate(){
+		return client.getId();
+	}
+	
+	void onPrepare() {
+		out.println("\n\nOnPrepare");
+		out.println("Number of contracts: " + client.getContracts().size());
+		client = dao.find(Client.class, client.getId());
+		setup(client);
+	}
+
+	Object onAddContract() {
+		editorActive = true;
+		return ezone.getBody();
+	}
+	// setup
 	public void setup(Client c) {
 		client = c;
 		c.getContracts().size();
 		editor.setup(c);
 	}
 
+	// page properties
 	public List<Contract> getContracts() {
-		List<Contract> cl = client.getContracts();
-		for (int i = 0; i < cl.size(); i++)
-			for (int j = cl.size() - 1; j > i; j--) {
-				if (cl.get(i).getDate().before(cl.get(j).getDate())) {
-					Contract c = cl.get(i);
-					cl.set(i, cl.get(j));
-					cl.set(j, c);
-				}
-			}
-		return cl;
+		return client.getContracts(false);
 	}
 
 	public String getFirstContractDate() {
@@ -90,16 +103,6 @@ public class ClientPage {
 		return editorActive || editorActiveAlways;
 	}
 
-	// event handling
-	void onPrepare() {
-		out.println("\n\nOnPrepare");
-		out.println("Number of contracts: " + client.getContracts().size());
-		client = dao.find(Client.class, client.getId());
-		setup(client);
-	}
+	
 
-	Object onAddContract() {
-		editorActive = true;
-		return ezone.getBody();
-	}
 }

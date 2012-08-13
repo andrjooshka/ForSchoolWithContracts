@@ -140,7 +140,7 @@ public class AddEvent {
 		return c;
 	}
 
-	void onSubmit() {
+	void onSuccess() {
 		EventType eventType = checkType();
 
 		event.setTypeId(eventType.getId());
@@ -152,21 +152,19 @@ public class AddEvent {
 
 				// source dependent from updatemode
 				List<Contract> source = updateMode ? c.getContracts() : c
-						.getActiveContracts();
+						.getOpenContracts();
 
 				// event type check for compatibility with existing contracts of
 				// the client
 				boolean typeMatch = false;
 				List<Contract> candidates = new ArrayList<Contract>();
 				for (Contract con : source) {
-					// typeMatch = con.getTypeId() == evet.getId(); //strict
+					// typeMatch = con.getTypeId() == evet.getId(); // strict
 					// type_id check;
 					typeMatch = con.getEventType().getTypeTitle()
-							.equals(eventType.getTypeTitle()); // soft check
+							.equals(eventType.getTypeTitle());	// soft check
 
 					if (event.haveContract(con)) {
-						typeMatch = con.getEventType().getTypeTitle()
-								.equals(eventType.getTypeTitle());
 						if (!typeMatch) {
 							throw new IllegalArgumentException(
 									String.format(

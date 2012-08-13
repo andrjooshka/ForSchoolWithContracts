@@ -32,7 +32,7 @@ public class AddEventType {
 		updateMode = false;
 	}
 
-	void onSubmit() {
+	void onSuccess() {
 		if (updateMode) {
 			dao.update(etype);
 		} else {

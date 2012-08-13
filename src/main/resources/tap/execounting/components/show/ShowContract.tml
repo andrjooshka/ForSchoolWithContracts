@@ -19,13 +19,13 @@
 											
 					<li>
 						<t:eventlink event="edit" zone="contractBody${contract.id}" context="contract">
-							<img src="icons/edit.png" title="редактировать" alt="редактировать" class="icons" />
+							<img src="${context:/icons/edit.png}" title="редактировать" alt="редактировать" class="icons" />
 						</t:eventlink>
 					</li>
 						
 					<li>
 						<t:eventlink event="delete" context="contract">
-							<img src="icons/trash.png" title="удалить" alt="удалить" class="icons" />
+							<img src="${context:/icons/trash.png}" title="удалить" alt="удалить" class="icons" />
 						</t:eventlink>
 					</li>
 				</ul>

@@ -100,14 +100,11 @@ public class ClientMediator implements ClientMed {
 
 	public List<Contract> getContracts() {
 		try {
-			// MAP IT!!!
-			List<Contract> res = getDao()
-					.findWithNamedQuery(
-							Contract.WITH_CLIENT,
-							QueryParameters.with("clientId", unit.getId())
-									.parameters());
-			return res;
-			// return unit.getContracts();
+			int l = unit.getContracts().size();
+			List<Contract> contracts = new ArrayList<Contract>();
+			for (int i = 0; i < l; i++)
+				contracts.add(unit.getContracts().get(i));
+			return contracts;
 		} catch (NullPointerException npe) {
 			npe.printStackTrace();
 			return null;

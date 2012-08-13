@@ -25,7 +25,7 @@ import tap.execounting.entities.EventType;
 import tap.execounting.entities.Payment;
 import tap.execounting.entities.Teacher;
 
-@Import(stylesheet="context:/layout/contract.css")
+@Import(stylesheet = "context:/layout/contract.css")
 public class ShowContract {
 
 	@Parameter
@@ -170,14 +170,14 @@ public class ShowContract {
 
 	public String getEventInfo() {
 		StringBuilder sb = new StringBuilder();
-		//sb.append("#" + loopEvent.getId() + " от: ");
+		// sb.append("#" + loopEvent.getId() + " от: ");
 		try {
 			sb.append(calendar.setTime(loopEvent.getDate()).stringByTuple(
 					"day", "month", "year"));
 		} catch (NullPointerException npe) {
 			sb.append("нет информации о дате");
 		}
-		sb.append(". " +loopEvent.getState().toString());
+		sb.append(". " + loopEvent.getState().toString());
 		return sb.toString();
 	}
 
@@ -192,6 +192,9 @@ public class ShowContract {
 	}
 
 	public String getLockImg() {
-		return contract.isFreeze() ? "icons/lock.png" : "icons/ulock.png";
+
+		return contract.isFreeze() ? request.getContextPath()
+				+ "/icons/lock.png" : request.getContextPath()
+				+ "/icons/ulock.png";
 	}
 }

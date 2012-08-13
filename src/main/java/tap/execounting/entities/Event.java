@@ -11,9 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -84,9 +84,9 @@ public class Event implements Comparable<Event>, Dated {
 
 	private String comment;
 
-	@OneToMany
-	@JoinTable(name = "events_contracts", joinColumns = { @JoinColumn(name = "event_id") }, inverseJoinColumns = { @JoinColumn(name = "contract_id") })
-	private List<Contract> contracts;
+	@ManyToMany//(cascade={CascadeType.ALL})
+	@JoinTable(name = "events_contracts", joinColumns = { @JoinColumn(name = "event_id") }, inverseJoinColumns = { @JoinColumn(name = "contract_id")})
+	private List<Contract> contracts = new ArrayList<Contract>();
 
 	public Event() {
 		date = new Date();
@@ -173,8 +173,6 @@ public class Event implements Comparable<Event>, Dated {
 	}
 
 	public List<Contract> getContracts() {
-		if (contracts == null)
-			contracts = new ArrayList<Contract>();
 		return contracts;
 	}
 

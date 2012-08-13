@@ -104,7 +104,7 @@ public class ClientGridNCD {
 	}
 
 	public List<Contract> getContracts() {
-		return unit.getContracts();
+		return getClientMed().setUnit(unit).getActiveContracts();
 	}
 
 	public String getContractInfo() {
@@ -129,8 +129,6 @@ public class ClientGridNCD {
 	}
 	
 	public String getState(){
-		ClientMed clientMed = getClientMed();
-		clientMed.setUnit(unit);
-		return clientMed.getState().toString();
+		return getClientMed().setUnit(unit).getState().toString();
 	}
 }

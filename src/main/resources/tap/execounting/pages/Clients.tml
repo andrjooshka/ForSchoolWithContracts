@@ -11,7 +11,7 @@
 		</t:pagelink>
 	</ul>
 	
-	<t:form>
+	<t:form t:id="filterform">
 		<h4>Фильтры</h4>
 		<table class="filters panel">
 			<tr>

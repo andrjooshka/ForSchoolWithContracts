@@ -89,8 +89,12 @@ public class Clients {
 		return new ClientMediator().setDao(dao);
 	}
 
+	@Persist
+	private List<Client> clients;
 	@SuppressWarnings("unchecked")
 	public List<Client> getClients() {
+		if(clients!=null)
+			return clients.subList(0, clients.size());
 		List<Client> cs;
 		Criteria criteria = session.createCriteria(Client.class);
 
@@ -153,14 +157,8 @@ public class Clients {
 			}
 		}
 		// Stud status
-		if (filterOnState) {
+		if (filterOnState)
 			getClientMed().setGroup(cs).filter(state);
-			// for (int i = cs.size() - 1; i >= 0; i--) {
-			// //TODO client status filtration is shout down
-			// // if (!cs.get(i).getStudentInfo().equals(studStatus))
-			// // cs.remove(i);
-			// }
-		}
 		// Contract Type
 		if (filterOnContractType) {
 			for (int i = cs.size() - 1; i >= 0; i--) {
@@ -174,8 +172,8 @@ public class Clients {
 					cs.remove(i);
 			}
 		}
-
-		return cs;
+		clients = cs;
+		return getClients();
 	}
 
 	public Block getFilter() {
@@ -257,7 +255,8 @@ public class Clients {
 	}
 
 	// events
-	void onSubmit() {
+	void onSubmitFromFilterForm() {
+		clients = null;
 		if (request.isXHR())
 			ajaxResponseRenderer.addRender(gridZone).addRender(statZone);
 	}

@@ -12,7 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -51,7 +51,7 @@ public class Contract implements Comparable<Contract>, Dated {
 	private int clientId;
 
 	@ManyToOne
-	@JoinColumn(name = "client_id", insertable = false, updatable = false)
+	@JoinColumn(name = "client_id", updatable = false, insertable = false)
 	private Client client;
 
 	private Date date;
@@ -90,11 +90,11 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "contract_id")
-	private List<Payment> payments;
+	private List<Payment> payments = new ArrayList<Payment>();
 
-	@OneToMany
-	@JoinTable(name = "events_contracts", joinColumns = { @JoinColumn(name = "contract_id") }, inverseJoinColumns = { @JoinColumn(name = "event_id") })
-	private List<Event> events;
+	@ManyToMany(mappedBy="contracts")
+	//@JoinTable(name = "events_contracts", joinColumns = { @JoinColumn(name = "contract_id") }, inverseJoinColumns = { @JoinColumn(name = "event_id") })
+	private List<Event> events = new ArrayList<Event>();
 
 	public Contract() {
 		setContractTypeId(1);
@@ -193,8 +193,6 @@ public class Contract implements Comparable<Contract>, Dated {
 	}
 
 	public List<Payment> getPayments() {
-		if (payments == null)
-			payments = new ArrayList<Payment>();
 		return payments;
 	}
 
@@ -360,7 +358,7 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	public List<Event> getEvents(Date d) {
 		List<Event> res = new ArrayList<Event>();
-		d=DateService.trimToDate(d);
+		d = DateService.trimToDate(d);
 		for (Event e : getEvents())
 			if (DateService.trimToDate(e.getDate()).equals(d))
 				res.add(e);
@@ -384,13 +382,19 @@ public class Contract implements Comparable<Contract>, Dated {
 	}
 
 	private boolean undefinedStateTest() {
-		boolean result = true;
-		Date former = DateService.fromNowPlusDays(-60);
-		for (Event e : getEvents())
-			if (e.getDate().after(former)) {
-				result = false;
-				break;
-			}
-		return result;
+		try {
+			boolean result = true;
+			Date former = DateService.fromNowPlusDays(-360);
+			for (Event e : getEvents())
+				if (e.getDate().after(former)) {
+					result = false;
+					break;
+				}
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("\n\nContract:" + id + "\n\n");
+			return false;
+		}
 	}
 }

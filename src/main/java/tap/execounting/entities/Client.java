@@ -12,12 +12,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import tap.execounting.data.ContractState;
 import tap.execounting.entities.interfaces.Dated;
 import tap.execounting.services.DateService;
 
@@ -32,13 +34,6 @@ public class Client implements Dated {
 	public static final String ALL = "Client.all";
 	public static final String ALL_NAMES = "Client.allNames";
 	public static final String BY_NAME = "Client.byName";
-	//
-	// public static final String inactive = "нет активных договоров";
-	// public static final String frozen = "договор(а) заморожены";
-	// public static final String active = "занимается";
-	//
-	// public static final String studStateNew = "новичок";
-	// public static final String studStateExp = "продливший";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,11 +43,12 @@ public class Client implements Dated {
 	@Column(unique = true)
 	private String name;
 
-	@OneToMany(mappedBy = "client")
-	private List<Contract> contracts;
+	@OneToMany
+	// (mappedBy="client")
+	@JoinColumn(name = "client_id")
+	private List<Contract> contracts = new ArrayList<Contract>();
 
 	private boolean canceled;
-
 
 	public int getId() {
 		return id;
@@ -71,12 +67,7 @@ public class Client implements Dated {
 	}
 
 	public List<Contract> getContracts() {
-		try {
 			return contracts;
-		} catch (NullPointerException npe) {
-			npe.printStackTrace();
-			return new ArrayList<Contract>();
-		}
 	}
 
 	public List<Contract> getContracts(boolean sortAsc) {
@@ -89,30 +80,49 @@ public class Client implements Dated {
 
 	public List<Contract> getActiveContracts() {
 		List<Contract> contracts = new ArrayList<Contract>();
-		for (Contract c : getContracts())
-			if (c.isActive())
+		for (Contract c : getContracts()) {
+			ContractState state = c.getState();
+			if (state == ContractState.active)
 				contracts.add(c);
+		}
+		return contracts;
+	}
+
+	public List<Contract> getOpenContracts() {
+		List<Contract> contracts = new ArrayList<Contract>();
+		for (Contract c : getContracts()) {
+			ContractState state = c.getState();
+			if (state == ContractState.undefined
+					|| state == ContractState.active)
+				contracts.add(c);
+		}
 		return contracts;
 	}
 
 	public List<Contract> getUnfinishedContracts() {
 		List<Contract> contracts = new ArrayList<Contract>();
-		for (Contract c : getContracts())
-			if (c.isActive() || c.isFreeze())
+		for (Contract c : getContracts()) {
+			ContractState state = c.getState();
+			if (state == ContractState.undefined
+					|| state == ContractState.active
+					|| state == ContractState.frozen)
 				contracts.add(c);
+		}
 		return contracts;
 	}
 
 	public List<Teacher> getCurrentTeachers() {
+		// current teachers - those who defined in existing, unfinished,
+		// noncanceled contracts which we get from getUnfinishedContracts
 		Set<Teacher> res = new HashSet<Teacher>();
-		for (Contract c : getActiveContracts())
+		for (Contract c : getUnfinishedContracts())
 			res.add(c.getTeacher());
 		return new ArrayList<Teacher>(res);
 	}
 
 	public int getReturn() {
 		int total = 0;
-
+		// TODO check
 		for (Contract c : getContracts()) {
 			total += c.getMoney();
 		}
@@ -122,17 +132,14 @@ public class Client implements Dated {
 
 	public int getBalance() {
 		int total = 0;
-		Contract contract;
-		for (int i = 0; i < getContracts().size(); i++) {
-			contract = getContracts().get(i);
-
-			total += contract.getBalance();
-		}
+		for (int i = 0; i < getContracts().size(); i++)
+			total += getContracts().get(i).getBalance();
 
 		return total;
 	}
 
 	public List<Payment> getPlannedPayments() {
+		// TODO review planned payments getter (hidden constant)
 		List<Payment> payments = new ArrayList<Payment>();
 		for (Contract c : getContracts())
 			for (Payment p : c.getPlannedPayments())
@@ -158,30 +165,16 @@ public class Client implements Dated {
 		return null;
 	}
 
-	// public String getState() {
-	//
-	// // Client inactive check
-	// List<Contract> list = getUnfinishedContracts();
-	// if (list.size() == 0)
-	// return inactive;
-	//
-	// for (Contract c : list)
-	// if (c.isActive())
-	// return active;
-	//
-	// return frozen;
-	// }
-
 	public Date getDate() {
 		return getFirstContractDate();
 	}
 
 	public Date getFirstContractDate() {
-		List<Contract> contracts = getContracts(true);
-		if (contracts.size() == 0)
+		try {
+			return getContracts(true).get(0).getDate();
+		} catch (NullPointerException npe) {
 			return null;
-		Date d = contracts.get(0).getDate();
-		return d;
+		}
 	}
 
 	public boolean isCanceled() {
@@ -191,18 +184,4 @@ public class Client implements Dated {
 	public void setCanceled(boolean inactive) {
 		this.canceled = inactive;
 	}
-
-	// public String getStudentInfo() {
-	// Contract t;
-	// boolean firstRealContract = false;
-	// for (int i = 0; i < contracts.size(); i++) {
-	// t = contracts.get(i);
-	// if (!firstRealContract) {
-	// if (t.getLessonsNumber() > 2)
-	// firstRealContract = true;
-	// } else if (t.getLessonsNumber() > 2)
-	// return Client.studStateExp;
-	// }
-	// return Client.studStateNew;
-	// }
 }

@@ -30,7 +30,7 @@ public class AddFacility {
 		facility = new Facility();
 	}
 
-	void onSubmit() throws Exception {
+	void onSuccess() {
 		if (updateMode) {
 			dao.update(facility);
 		} else {

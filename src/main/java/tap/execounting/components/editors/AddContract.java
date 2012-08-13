@@ -104,7 +104,7 @@ public class AddContract {
 		return calendar.setTime(con.getDate()).stringByTuple("day", "month", "year");
 	}
 
-	void onSubmit() {
+	void onSuccess() {
 		for (EventType et : types())
 			if (et.getTitle().equals(etype)) {
 				con.setTypeId(et.getId());
