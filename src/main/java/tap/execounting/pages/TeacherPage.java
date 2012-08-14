@@ -85,7 +85,7 @@ public class TeacherPage {
 	@Property
 	private String day;
 
-	private int renderDays = 13;
+	private int renderDays = 20;
 
 	@Property
 	@Persist
@@ -95,6 +95,7 @@ public class TeacherPage {
 	@Persist
 	private Date date2;
 
+	@Persist
 	private Date eventsDate;
 
 	@Property
@@ -187,7 +188,7 @@ public class TeacherPage {
 
 	public List<EventRowElement> getElements() {
 		List<EventRowElement> list = new ArrayList<EventRowElement>();
-		eventsDate = new Date();
+		
 		for (Date d : DateService.generateDaySet(getEventsDate(), renderDays)) {
 			List<Event> events = contract.getEvents(d);
 			if (events.size() == 0)
@@ -201,7 +202,7 @@ public class TeacherPage {
 
 	public List<EventRowElement> getDates() {
 		List<EventRowElement> list = new ArrayList<EventRowElement>();
-		eventsDate = new Date();
+
 		for (Date d : DateService.generateDaySet(getEventsDate(), renderDays))
 			list.add(new EventRowElement(d, null));
 		return list;

@@ -29,5 +29,14 @@
 				<img src="icons/trash.png" class="icons" />
 			</t:eventlink>
 		</p:actionCell>
+		
+		<p:canceledCell>
+			<t:if test="unit.canceled">
+				Ушел
+			</t:if>
+			<t:if test="!unit.canceled">
+				Не ушел
+			</t:if>
+		</p:canceledCell>
 	</t:grid>
 </t:container>

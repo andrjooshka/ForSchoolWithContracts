@@ -16,6 +16,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.mediators.interfaces.EventMed;
 import tap.execounting.data.selectmodels.BooleanSelectModel;
 import tap.execounting.data.selectmodels.FacilitySelectModel;
 import tap.execounting.data.selectmodels.RoomSelectModel;
@@ -36,6 +37,8 @@ public class Statistics {
 	private Request request;
 	@Inject
 	private AjaxResponseRenderer renderer;
+	@Inject
+	private EventMed eventMed;
 
 	// page components
 	@Property
@@ -80,9 +83,15 @@ public class Statistics {
 	@Property
 	@Persist
 	private Integer percent;
+	
+	private EventMed getEventMed(){
+		return eventMed;
+	}
 
+	private List<Event> eventsCache;
 	@SuppressWarnings("unchecked")
 	public List<Event> getEvents() {
+		if(eventsCache!=null) return eventsCache.subList(0, eventsCache.size());
 		List<Event> events;
 		Criteria criteria = session.createCriteria(Event.class);
 
@@ -109,7 +118,9 @@ public class Statistics {
 				if (!events.get(i).getEventType().getTitle().contains(typeId))
 					events.remove(i);
 		}
-
+		
+		eventsCache =  events;
+		
 		return events;
 	}
 
@@ -137,10 +148,10 @@ public class Statistics {
 
 	// school share
 	public int getShare() {
-		int total = 0;
-		for (Event e : getEvents())
-			total += e.getSchoolShare();
-		return total;
+		// int total = 0;
+		// for (Event e : getEvents())
+		// total += e.getSchoolShare();
+		return getEventMed().setGroup(getEvents()).countSchoolMoney();
 	}
 
 	Object onValueChangedFromFacilityId(Integer facId) {

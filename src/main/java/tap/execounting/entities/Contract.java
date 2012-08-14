@@ -95,6 +95,9 @@ public class Contract implements Comparable<Contract>, Dated {
 	@ManyToMany(mappedBy="contracts")
 	//@JoinTable(name = "events_contracts", joinColumns = { @JoinColumn(name = "contract_id") }, inverseJoinColumns = { @JoinColumn(name = "event_id") })
 	private List<Event> events = new ArrayList<Event>();
+	
+	@OneToOne (cascade = CascadeType.ALL)
+	private WeekSchedule schedule;
 
 	public Contract() {
 		setContractTypeId(1);
@@ -106,6 +109,20 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public WeekSchedule getSchedule() {
+		try{
+			return schedule;
+		}
+		catch(NullPointerException npe){
+			this.schedule = new WeekSchedule();
+			return schedule;
+		}
+	}
+	
+	public void setSchedule(WeekSchedule schedule) {
+		this.schedule = schedule;
 	}
 
 	public int getClientId() {

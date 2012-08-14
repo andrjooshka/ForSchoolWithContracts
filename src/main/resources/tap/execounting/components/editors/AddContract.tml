@@ -1,4 +1,6 @@
-<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+<t:container
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+	xmlns:p="tapestry:parameter">
 	<t:if test="updatemode">
 		Договор от ${conDate} : Редактирование
 		<p:else>
@@ -7,7 +9,9 @@
 	</t:if> 
 	<div>
 		<t:beaneditform object="con" submitlabel="message:submit-label" 
-		exclude="id,clientId,freeze" reorder="teacherId,typeId,contractTypeId">
+			exclude="id,clientId,freeze" reorder="teacherId,typeId,contractTypeId"
+			add="schedule">
+			
 			<p:contractTypeId>
 				<t:label for="contractTypeSelect"/>
 				<t:select t:id="contractTypeSelect" value="con.contractTypeId" 
@@ -25,6 +29,12 @@
 				<t:label for="teachers" />
 				<t:textfield t:id="teachers" value="teacher" t:mixins="AutoComplete"/> 
 			</p:teacherId>
+			
+			<p:schedule>
+				${message:schedule-label}
+				<t:checkbox t:id="monday" value="con.schedule.monday"/>
+			</p:schedule>
+			
 		</t:beaneditform>
 	</div>
 </t:container>

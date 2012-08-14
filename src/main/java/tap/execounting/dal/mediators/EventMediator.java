@@ -352,8 +352,9 @@ public class EventMediator implements EventMed {
 		if (cache == null)
 			return null;
 		int summ = 0;
+		// TODO Tuleneva
 		for (Event e : getGroup())
-			summ += e.getMoney() * (100 - e.getEventType().getShare()) / 100;
+			summ += e.getMoney() - e.getEventType().getShare();
 		return summ;
 	}
 
@@ -362,7 +363,7 @@ public class EventMediator implements EventMed {
 			return null;
 		int summ = 0;
 		for (Event e : getGroup())
-			summ += e.getMoney() * e.getEventType().getShare() / 100;
+			summ += e.getEventType().getShare();
 		return summ;
 	}
 

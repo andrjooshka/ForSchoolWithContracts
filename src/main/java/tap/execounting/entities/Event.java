@@ -84,7 +84,7 @@ public class Event implements Comparable<Event>, Dated {
 
 	private String comment;
 
-	@ManyToMany//(cascade={CascadeType.ALL})
+	@ManyToMany		//(cascade={CascadeType.ALL})
 	@JoinTable(name = "events_contracts", joinColumns = { @JoinColumn(name = "event_id") }, inverseJoinColumns = { @JoinColumn(name = "contract_id")})
 	private List<Contract> contracts = new ArrayList<Contract>();
 
@@ -205,20 +205,21 @@ public class Event implements Comparable<Event>, Dated {
 	}
 
 	// returns school share from that event
-	public int getSchoolShare() {
-		int total = 0;
-		for (Contract c : getContracts()) {
-			if (c.getContractTypeId() == 2) {
-				total += 300;
-				continue;
-			}
-			int basicCost = c.getSingleLessonCost();
-			int percent = c.getEventType().getShare();
-			total += basicCost * percent;
-		}
-
-		return total;
-	}
+//	public int getSchoolShare() {
+//		int total = 0;
+//		for (Contract c : getContracts()) {
+//			// TODO: Подарочный сертификат?
+//			if (c.getContractTypeId() == 2) {
+//				total += 300;
+//				continue;
+//			}
+//			int basicCost = c.getSingleLessonCost();
+//			int percent = c.getEventType().getShare();
+//			total += basicCost * percent;
+//		}
+//
+//		return total;
+//	}
 
 	public int getMoney() {
 		int total = 0;

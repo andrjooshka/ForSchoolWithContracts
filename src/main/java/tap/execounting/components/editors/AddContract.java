@@ -3,8 +3,8 @@ package tap.execounting.components.editors;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.apache.tapestry5.SelectModel;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -18,11 +18,12 @@ import tap.execounting.entities.EventType;
 import tap.execounting.entities.Teacher;
 import tap.execounting.services.SuperCalendar;
 
+@Import(stylesheet = "context:/layout/addContract.css")
 public class AddContract {
 
 	@Inject
 	private CrudServiceDAO dao;
-	
+
 	@Inject
 	private SuperCalendar calendar;
 
@@ -69,7 +70,7 @@ public class AddContract {
 
 	public void reset() {
 		con = new Contract();
-		updateMode = false;		
+		updateMode = false;
 	}
 
 	List<String> onProvideCompletionsFromEtypes(String input) {
@@ -99,9 +100,10 @@ public class AddContract {
 			teachers = dao.findWithNamedQuery(Teacher.ALL);
 		return teachers;
 	}
-	
-	public String getConDate(){
-		return calendar.setTime(con.getDate()).stringByTuple("day", "month", "year");
+
+	public String getConDate() {
+		return calendar.setTime(con.getDate()).stringByTuple("day", "month",
+				"year");
 	}
 
 	void onSuccess() {
@@ -129,8 +131,8 @@ public class AddContract {
 			dao.create(con);
 		}
 	}
-	
-	void setupRender(){
+
+	void setupRender() {
 		List<ContractType> allTypes = dao.findWithNamedQuery(ContractType.ALL);
 		contractTypeIdsModel = new ContractTypeIdSelectModel(allTypes);
 	}

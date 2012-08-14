@@ -46,7 +46,7 @@ public class ClientPage {
 	
 
 	// page events	
-	void onActiate(int clientId){
+	void onActivate(int clientId){
 		this.client = dao.find(Client.class, clientId);
 	}
 	

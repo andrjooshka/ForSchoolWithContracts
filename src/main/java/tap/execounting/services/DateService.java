@@ -20,6 +20,7 @@ public class DateService {
 	private static int YEAR = Calendar.YEAR;
 	private static int MONTH = Calendar.MONTH;
 	private static int DAY_OF_YEAR = Calendar.DAY_OF_YEAR;
+	//private static int DAY_OF_MONTH = Calendar.DAY_OF_MONTH;
 
 	public DateService() {
 		timeZone = TimeZone.getTimeZone("Europe/Moscow");
@@ -283,6 +284,7 @@ public class DateService {
 		c.setTime(date);
 		Calendar r = new GregorianCalendar();
 		r.setTimeInMillis(100);
+		
 		r.set(YEAR, c.get(YEAR));
 		r.set(MONTH, c.get(MONTH));
 		return r.getTime();
