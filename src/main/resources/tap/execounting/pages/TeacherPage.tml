@@ -58,7 +58,7 @@
 	
 
 	
-	
+	<div style="width:${width}px;">
 	<t:zone t:id="clientsZone" id="clientsZone" update="show">
 		<t:if test="calendarCentric">
 			<t:actionlink t:id="eventsDateBackwardLink" zone="clientsZone">На месяц назад</t:actionlink>&nbsp;&nbsp;&nbsp;
@@ -95,11 +95,26 @@
 								Перейти на страницу клиента
 							</t:actionlink>
 							<t:show.showcontract contract="contract"/>
+							
+							<t:show.minicontract contract="contract"/>
 						</ex:accordionItem>
 					</ex:accordion>
 			</div>
 		</t:loop>
+		<!--FROZEN AND INACTIVE CONTRACTS-->
+		<ex:accordion style="width:800px;">
+			<ex:accordionItem title="literal:Замороженные">
+				
+				
+			</ex:accordionItem>
+			<ex:accordionItem title="literal:Остальные">
+				
+				
+			</ex:accordionItem>
+		</ex:accordion>
+		
 	</t:zone>
+	</div>
 	
 	<!--/CLIENTS-->
 		

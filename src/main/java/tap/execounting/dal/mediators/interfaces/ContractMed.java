@@ -54,6 +54,9 @@ public interface ContractMed {
 	//payments
 	public List<Payment> getPayments();
 	
+	//event planner method
+	public void planEvents();
+	
 //group methods
 	//group
 	public List<Contract> getGroup();
@@ -99,7 +102,7 @@ public interface ContractMed {
 	public Integer countMoneyPaid();
 	
 	//service methods which we should avoid to use
-	public void setDao(CrudServiceDAO dao);
+	public ContractMed setDao(CrudServiceDAO dao);	
 }
 
 

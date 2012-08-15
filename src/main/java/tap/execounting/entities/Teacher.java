@@ -13,10 +13,10 @@ import javax.validation.constraints.Size;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = Teacher.ALL, query = "Select t from Teacher t order by t.name"),
+	@NamedQuery(name = Teacher.ALL, query = "from Teacher order by name"),
 	@NamedQuery(name = Teacher.ALL_NAMES, query = "Select t.name from Teacher t order by t.name"),
 	@NamedQuery(name = Teacher.BY_ACTIVE_STATUS, query = "Select t from Teacher t where t.active = :status"),
-	@NamedQuery(name = Teacher.BY_NAME, query = "Select t from Teacher t where t.name = :name")
+	@NamedQuery(name = Teacher.BY_NAME, query = "from Teacher where name like :name")
 })
 @Table(name = "teachers")
 public class Teacher {
@@ -104,6 +104,26 @@ public class Teacher {
 	}
 	public void setSunday(Integer sunday) {
 		this.sunday = sunday;
+	}
+	public Integer getScheduleDay(int dayOfWeek) {
+		switch (dayOfWeek) {
+		case 1:
+			return monday;
+		case 2:
+			return tuesday;
+		case 3:
+			return wednesday;
+		case 4:
+			return thursday;
+		case 5:
+			return friday;
+		case 6:
+			return saturday;
+		case 7:
+			return sunday;
+		default:
+			return null;
+		}
 	}
 	
 }

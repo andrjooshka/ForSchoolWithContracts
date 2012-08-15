@@ -1,5 +1,6 @@
 package tap.execounting.dal.mediators;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -15,13 +16,16 @@ import tap.execounting.dal.mediators.interfaces.DateFilter;
 import tap.execounting.dal.mediators.interfaces.EventMed;
 import tap.execounting.dal.mediators.interfaces.PaymentMed;
 import tap.execounting.data.ContractState;
+import tap.execounting.data.EventState;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.ContractType;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.EventType;
+import tap.execounting.entities.Facility;
 import tap.execounting.entities.Payment;
 import tap.execounting.entities.Teacher;
+import tap.execounting.services.DateService;
 
 public class ContractMediator implements ContractMed {
 
@@ -41,8 +45,9 @@ public class ContractMediator implements ContractMed {
 
 	private Contract unit;
 
-	public void setDao(CrudServiceDAO dao) {
+	public ContractMed setDao(CrudServiceDAO dao) {
 		this.sureDao = dao;
+		return this;
 	}
 
 	private CrudServiceDAO getDao() {
@@ -186,6 +191,38 @@ public class ContractMediator implements ContractMed {
 			return null;
 		}
 	}
+
+	public void planEvents() {
+		CrudServiceDAO dao = getDao();
+		unit = dao.find(Contract.class, unit.getId());
+		for (Event e : unit.getEvents())
+			if (e.getState() == EventState.planned)
+				dao.delete(Event.class, e.getId());
+
+		int remain = getRemainingLessons();
+		Calendar date = DateService.getMoscowCalendar();
+		date.setTime(DateService.trimToDate(new Date()));
+
+		while (remain > 0) {
+			int dow = date.get(Calendar.DAY_OF_WEEK);
+			if (unit.getSchedule().get(dow)) {
+				Event e = new Event();
+				e.getContracts().add(unit);
+				e.setHostId(unit.getTeacherId());
+				e.setFacilityId(unit.getTeacher().getScheduleDay(dow));
+				e.setRoomId(dao.find(Facility.class, e.getFacilityId())
+						.getRooms().get(0).getRoomId());
+				e.setState(EventState.planned);
+				e.setTypeId(unit.getEventType().getId());
+				e.setDate(date.getTime());
+				dao.create(e);
+				remain--;
+			}
+			date.add(Calendar.DAY_OF_WEEK, 1);
+		}
+	}
+
+	// group methods
 
 	private List<Contract> cache;
 	private Map<String, Object> appliedFilters;

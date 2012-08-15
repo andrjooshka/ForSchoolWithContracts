@@ -235,4 +235,16 @@ public class Event implements Comparable<Event>, Dated {
 				return true;
 		return false;
 	}
+	
+	
+	/* Not full clone
+	 * only ID and eventstate are copied.
+	 * only for delete.
+	 */
+	public Event clone(){
+		Event e = new Event();
+		e.setId(this.id);
+		e.setState(EventState.fromCode(this.newstate));
+		return e;
+	}
 }

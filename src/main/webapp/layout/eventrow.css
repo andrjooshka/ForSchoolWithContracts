@@ -1,8 +1,8 @@
 .mini {
 	margin: 5px;
-	width: 40px;
-	height: 40px;
-	display: inline-table;
+	width: 50px;
+	height: 50px;
+	display: inline-block;
 	background: #f0f9ff; /* Old browsers */
 	background: -moz-radial-gradient(center, ellipse cover, #f0f9ff 0%, #cbebff 76%);
 	/* FF3.6+ */
@@ -40,7 +40,7 @@ div.calendar .mini {
 		100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff',
 		endColorstr='#ffffff', GradientType=0 ); /* IE6-9 */
-	width: 44px;
+	width: 54px;
 	margin: 3px;
 	border-radius: 2px;
 	margin-bottom: 0px;

@@ -92,11 +92,13 @@ public class Contract implements Comparable<Contract>, Dated {
 	@JoinColumn(name = "contract_id")
 	private List<Payment> payments = new ArrayList<Payment>();
 
-	@ManyToMany(mappedBy="contracts")
-	//@JoinTable(name = "events_contracts", joinColumns = { @JoinColumn(name = "contract_id") }, inverseJoinColumns = { @JoinColumn(name = "event_id") })
+	@ManyToMany(mappedBy = "contracts")
+	// @JoinTable(name = "events_contracts", joinColumns = { @JoinColumn(name =
+	// "contract_id") }, inverseJoinColumns = { @JoinColumn(name = "event_id")
+	// })
 	private List<Event> events = new ArrayList<Event>();
-	
-	@OneToOne (cascade = CascadeType.ALL)
+
+	@OneToOne(cascade = CascadeType.ALL)
 	private WeekSchedule schedule;
 
 	public Contract() {
@@ -110,17 +112,13 @@ public class Contract implements Comparable<Contract>, Dated {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public WeekSchedule getSchedule() {
-		try{
-			return schedule;
-		}
-		catch(NullPointerException npe){
-			this.schedule = new WeekSchedule();
-			return schedule;
-		}
+		if (schedule == null)
+			schedule = new WeekSchedule();
+		return schedule;
 	}
-	
+
 	public void setSchedule(WeekSchedule schedule) {
 		this.schedule = schedule;
 	}
@@ -219,6 +217,13 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	public List<Event> getEvents() {
 		return events;
+	}
+	
+	public List<Event> getEventsPersistent() {
+		List<Event> list = new ArrayList<Event>();
+		for(Event e : events)
+			list.add(e.clone());
+		return list;
 	}
 
 	public List<Event> getEvents(boolean asc) {

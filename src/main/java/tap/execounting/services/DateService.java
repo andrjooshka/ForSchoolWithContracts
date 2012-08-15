@@ -20,7 +20,8 @@ public class DateService {
 	private static int YEAR = Calendar.YEAR;
 	private static int MONTH = Calendar.MONTH;
 	private static int DAY_OF_YEAR = Calendar.DAY_OF_YEAR;
-	//private static int DAY_OF_MONTH = Calendar.DAY_OF_MONTH;
+
+	// private static int DAY_OF_MONTH = Calendar.DAY_OF_MONTH;
 
 	public DateService() {
 		timeZone = TimeZone.getTimeZone("Europe/Moscow");
@@ -238,16 +239,16 @@ public class DateService {
 	}
 
 	public static Date fromNowPlusDays(int days) {
-		GregorianCalendar calendar = new GregorianCalendar();
+		Calendar calendar = getMoscowCalendar();
 		calendar.add(Calendar.DAY_OF_YEAR, days);
 		return calendar.getTime();
 	}
 
 	public static Date trimToDate(Date date) {
-		Calendar c = new GregorianCalendar();
+		Calendar c = getMoscowCalendar();
 		c.setTime(date);
-		Calendar r = new GregorianCalendar();
-		r.setTime(new Date(100));
+		Calendar r = getMoscowCalendar();
+		r.setTimeInMillis(-10800000);
 		r.set(YEAR, c.get(YEAR));
 		r.set(DAY_OF_YEAR, c.get(DAY_OF_YEAR));
 		// r.set(YEAR, c.get(YEAR));
@@ -255,7 +256,7 @@ public class DateService {
 	}
 
 	public static Date datePlusDays(Date date, int days) {
-		GregorianCalendar calendar = new GregorianCalendar();
+		Calendar calendar = getMoscowCalendar();
 		calendar.setTime(date);
 		calendar.add(Calendar.DAY_OF_YEAR, days);
 		return calendar.getTime();
@@ -269,27 +270,33 @@ public class DateService {
 	}
 
 	public static String monthName(Date eventsDate) {
-		return  new RusCalendar().setTime(eventsDate).getMonthName();
+		return new RusCalendar().setTime(eventsDate).getMonthName();
 	}
 
 	public static Date datePlusMonths(Date d, int months) {
-		Calendar c = new GregorianCalendar();
+		Calendar c = getMoscowCalendar();
 		c.setTime(d);
 		c.add(MONTH, months);
 		return c.getTime();
 	}
 
 	public static Date trimToMonth(Date date) {
-		Calendar c = new GregorianCalendar();
+		Calendar c = getMoscowCalendar();
 		c.setTime(date);
-		Calendar r = new GregorianCalendar();
-		r.setTimeInMillis(100);
-		
+		Calendar r = getMoscowCalendar();
+		r.setTimeInMillis(-10800000);
+
 		r.set(YEAR, c.get(YEAR));
 		r.set(MONTH, c.get(MONTH));
 		return r.getTime();
 	}
+
+	public static TimeZone getMoscowTimeZone() {
+		return java.util.TimeZone.getTimeZone("Europe/Moscow");
+	}
+
+	public static Calendar getMoscowCalendar() {
+		Calendar c = new GregorianCalendar(getMoscowTimeZone());
+		return c;
+	}
 }
-
-
-

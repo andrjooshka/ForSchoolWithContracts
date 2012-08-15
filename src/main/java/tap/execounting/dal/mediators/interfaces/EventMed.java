@@ -108,5 +108,5 @@ public interface EventMed {
 	public int countDaysInEventsGroup();
 	
 	//service methods which we should avoid to use
-	public void setDao(CrudServiceDAO dao);
+	public EventMed setDao(CrudServiceDAO dao);
 }

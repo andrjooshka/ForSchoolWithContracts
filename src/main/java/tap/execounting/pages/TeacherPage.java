@@ -1,6 +1,7 @@
 package tap.execounting.pages;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -85,8 +86,6 @@ public class TeacherPage {
 	@Property
 	private String day;
 
-	private int renderDays = 20;
-
 	@Property
 	@Persist
 	private Date date1;
@@ -101,6 +100,14 @@ public class TeacherPage {
 	@Property
 	private FacilitySelectModel facilitySelectModel;
 
+	void onActivate(int teacherId){
+		tMed.setUnit(dao.find(Teacher.class, teacherId));
+	}
+	
+	int onPassivate(){
+		return tMed.getUnit().getId();
+	}
+	
 	void setup(Teacher context) {
 		tMed.setUnit(context);
 	}
@@ -189,7 +196,7 @@ public class TeacherPage {
 	public List<EventRowElement> getElements() {
 		List<EventRowElement> list = new ArrayList<EventRowElement>();
 		
-		for (Date d : DateService.generateDaySet(getEventsDate(), renderDays)) {
+		for (Date d : DateService.generateDaySet(getEventsDate(), getRenderDays())) {
 			List<Event> events = contract.getEvents(d);
 			if (events.size() == 0)
 				list.add(new EventRowElement(d, null));
@@ -199,11 +206,22 @@ public class TeacherPage {
 		}
 		return list;
 	}
+	
+	public int getWidth(){
+		return getRenderDays() * 60 + 300;
+	}
+
+	
+	private int getRenderDays(){
+		Calendar c = DateService.getMoscowCalendar();
+		c.setTime(getEventsDate());
+		return c.getActualMaximum(Calendar.DAY_OF_MONTH);
+	}
 
 	public List<EventRowElement> getDates() {
 		List<EventRowElement> list = new ArrayList<EventRowElement>();
-
-		for (Date d : DateService.generateDaySet(getEventsDate(), renderDays))
+		
+		for (Date d : DateService.generateDaySet(getEventsDate(), getRenderDays()))
 			list.add(new EventRowElement(d, null));
 		return list;
 	}

@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tapestry5.SelectModel;
+import org.apache.tapestry5.ValidationException;
+import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.corelib.components.BeanEditForm;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.mediators.ContractMediator;
+import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.data.selectmodels.ContractTypeIdSelectModel;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
@@ -23,9 +28,13 @@ public class AddContract {
 
 	@Inject
 	private CrudServiceDAO dao;
-
 	@Inject
 	private SuperCalendar calendar;
+	@Inject
+	private ContractMed contractMed;
+
+	@Component
+	private BeanEditForm editor;
 
 	@Property
 	@Persist
@@ -51,6 +60,17 @@ public class AddContract {
 
 	@Property
 	private SelectModel contractTypeIdsModel;
+
+	private ContractMed getContractMed() {
+		return new ContractMediator().setDao(dao);
+		// try {
+		// contractMed.setUnit(con);
+		// return contractMed;
+		// } catch (LinkageError e) {
+		// e.printStackTrace();
+		// return new ContractMediator().setDao(dao);
+		// }
+	}
 
 	public void setup(Contract con) {
 		if (con.getTeacherId() == 0)
@@ -101,35 +121,73 @@ public class AddContract {
 		return teachers;
 	}
 
+	private Teacher teacher() {
+		for (Teacher t : teachers())
+			if (t.getName().equals(teacher))
+				return t;
+		return null;
+	}
+
+	private int teacherId() {
+		return teacher().getId();
+	}
+
+	private EventType type() {
+		for (EventType et : types())
+			if (et.getTitle().equals(etype))
+				return et;
+		return null;
+	}
+
+	private int typeId() {
+		return type().getId();
+	}
+
 	public String getConDate() {
 		return calendar.setTime(con.getDate()).stringByTuple("day", "month",
 				"year");
 	}
 
-	void onSuccess() {
-		for (EventType et : types())
-			if (et.getTitle().equals(etype)) {
-				con.setTypeId(et.getId());
-				break;
-			}
-		if (con.getTypeId() == 0)
-			throw new IllegalArgumentException("Тип события " + etype
-					+ " не найден");
+	void onValidateFromEditor() throws ValidationException {
+		// Teacher check
+		try {
+			teacherId();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException("Учителя c именем: " + teacher + ", не найдено.");
+		}
 
-		for (Teacher t : teachers())
-			if (t.getName().equals(teacher)) {
-				con.setTeacherId(t.getId());
-				break;
-			}
-		if (con.getTeacherId() == 0)
-			throw new IllegalArgumentException("Педагог " + teacher
-					+ " не найден");
+		// Contract/Teacher Schedule compatibility check
+		for (int i = 1; i < 8; i++)
+			if (con.getSchedule().get(i))
+				if (teacher().getScheduleDay(i) == null)
+					throw new IllegalArgumentException(
+							String.format(
+									"%s не ведет занятий в %s день недели.",
+									teacher, i));
+
+		// Type check
+		try {
+			typeId();
+		} catch (Exception e) {
+			e.printStackTrace();
+			String errorString = "Типа занятий: " + etype + ", не найдено.";
+			throw new IllegalArgumentException(errorString);
+			//editor.recordError(errorString);
+		}
+	}
+
+	void onSuccess() {
+		con.setTypeId(typeId());
+		con.setTeacherId(teacherId());
 
 		if (updateMode) {
 			dao.update(con);
 		} else {
 			dao.create(con);
 		}
+
+		getContractMed().setUnit(con).planEvents();
 	}
 
 	void setupRender() {

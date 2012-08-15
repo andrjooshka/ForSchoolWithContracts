@@ -35,8 +35,9 @@ public class EventMediator implements EventMed {
 
 	private Event unit;
 
-	public void setDao(CrudServiceDAO dao) {
+	public EventMed setDao(CrudServiceDAO dao) {
 		this.sureDao = dao;
+		return this;
 	}
 
 	private CrudServiceDAO getDao() {
@@ -201,9 +202,11 @@ public class EventMediator implements EventMed {
 	public EventMed filter(Contract unit) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
-			setGroup(unit.getEvents());
+			getAppliedFilters().put("Contract", unit);
+			setGroup(unit.getEventsPersistent());
 			return this;
 		} else {
+			getAppliedFilters().put("Contract", unit);
 			List<Event> cache = getGroup();
 			for (int i = countGroupSize() - 1; i >= 0; i--)
 				evnt: {
@@ -214,7 +217,6 @@ public class EventMediator implements EventMed {
 					}
 				}
 		}
-		getAppliedFilters().put("Contract", unit);
 		return this;
 	}
 

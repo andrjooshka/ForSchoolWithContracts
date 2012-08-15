@@ -8,7 +8,7 @@
 		</p:else>
 	</t:if> 
 	<div>
-		<t:beaneditform object="con" submitlabel="message:submit-label" 
+		<t:beaneditform t:id="editor" object="con" submitlabel="message:submit-label" 
 			exclude="id,clientId,freeze" reorder="teacherId,typeId,contractTypeId"
 			add="schedule">
 			
@@ -31,8 +31,44 @@
 			</p:teacherId>
 			
 			<p:schedule>
-				${message:schedule-label}
-				<t:checkbox t:id="monday" value="con.schedule.monday"/>
+				<div class="t-beaneditor-row">
+					<h4 style="padding-left: 15%;">${message:schedule-label}</h4>
+				</div>
+				
+				<div class="t-beaneditor-row">
+					<t:label for="monday" />
+					<t:checkbox t:id="monday" value="con.schedule.monday"/>
+				</div>
+				
+				<div class="t-beaneditor-row">					
+					<t:label for="tuesday" />
+					<t:checkbox t:id="tuesday" value="con.schedule.tuesday"/>
+				</div>
+				
+				<div class="t-beaneditor-row">
+					<t:label for="wednesday" />
+					<t:checkbox t:id="wednesday" value="con.schedule.wednesday"/>
+				</div>
+				
+				<div class="t-beaneditor-row">
+					<t:label for="thursday" />
+					<t:checkbox t:id="thursday" value="con.schedule.thursday"/>
+				</div>
+				
+				<div class="t-beaneditor-row">
+					<t:label for="friday" />
+					<t:checkbox t:id="friday" value="con.schedule.friday"/>
+				</div>
+				
+				<div class="t-beaneditor-row">
+					<t:label for="saturday" />
+					<t:checkbox t:id="saturday" value="con.schedule.saturday"/>
+				</div>
+				
+				<div class="t-beaneditor-row">
+					<t:label for="sunday" />
+					<t:checkbox t:id="sunday" value="con.schedule.sunday"/>
+				</div>
 			</p:schedule>
 			
 		</t:beaneditform>
