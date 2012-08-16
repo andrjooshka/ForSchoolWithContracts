@@ -11,6 +11,10 @@
 			<p:else>
 				<table class="entity">
 					<tr>
+						<th>${message:names-label}</th>
+						<td>${names}</td>
+					</tr>
+					<tr>
 						<th>${message:facilityId-label}</th>
 						<td>${facilityName}</td>
 					</tr>
@@ -29,12 +33,7 @@
 					<tr>
 						<th>${message:state-label}</th>
 						<td>
-							<t:if test="event.state">
-								Проведено
-								<p:else>
-									Не проведено
-								</p:else>
-							</t:if>
+							${event.state}
 						</td>
 					</tr>
 					<tr>

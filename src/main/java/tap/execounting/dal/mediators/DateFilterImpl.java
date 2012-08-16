@@ -44,13 +44,13 @@ public class DateFilterImpl implements DateFilter {
 		} else if (date1 != null) {
 			for(int i=items.size()-1;i>=0;i--){
 				item = items.get(i);
-				if(item.getDate().after(date2))
+				if(item.getDate().before(date1))
 					items.remove(i);
 			}
 		} else if (date2 != null) {
 			for(int i=items.size()-1;i>=0;i--){
 				item = items.get(i);
-				if(item.getDate().before(date1))
+				if(item.getDate().after(date2))
 					items.remove(i);
 			}
 		}

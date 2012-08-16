@@ -5,9 +5,7 @@ import java.text.SimpleDateFormat;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.ioc.annotations.Inject;
 
-import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.entities.Contract;
 
 @Import(stylesheet = "context:/layout/minicontract.css")
@@ -17,8 +15,9 @@ public class MiniContract {
 	@Property
 	private Contract contract;
 
-	@Inject
-	private CrudServiceDAO dao;
+	@Parameter
+	@Property
+	private boolean displayName;
 
 	public String getContractDate() {
 		return "От: "

@@ -1,5 +1,6 @@
 package tap.execounting.dal.mediators;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,9 +10,11 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.dal.QueryParameters;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
+import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.dal.mediators.interfaces.EventMed;
 import tap.execounting.dal.mediators.interfaces.TeacherMed;
 import tap.execounting.data.ClientState;
+import tap.execounting.data.ContractState;
 import tap.execounting.data.EventState;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Comment;
@@ -27,7 +30,6 @@ public class TeacherMediator implements TeacherMed {
 
 	@Inject
 	private EventMed eventMed;
-	private EventMed sureEventMed;
 
 	@Inject
 	private ClientMed clientMed;
@@ -63,11 +65,13 @@ public class TeacherMediator implements TeacherMed {
 
 	private EventMed getEventMed() {
 		if (eventMed == null) {
-			sureEventMed = new EventMediator();
-			sureEventMed.setDao(getDao());
-			return sureEventMed;
+			return new EventMediator().setDao(getDao());
 		}
 		return eventMed;
+	}
+
+	private ContractMed getContractMed() {
+		return new ContractMediator().setDao(getDao());
 	}
 
 	public Teacher unit;
@@ -82,7 +86,12 @@ public class TeacherMediator implements TeacherMed {
 
 	public TeacherMed setUnit(Teacher unit) {
 		this.unit = unit;
+		clearCaches();
 		return this;
+	}
+
+	private void clearCaches() {
+		allContractsCache = null;
 	}
 
 	public List<Comment> getComments() {
@@ -90,9 +99,18 @@ public class TeacherMediator implements TeacherMed {
 				QueryParameters.with("teacherId", unit.getId()).parameters());
 	}
 
+	private List<Contract> allContractsCache;
+
 	public List<Contract> getAllContracts() {
-		return getDao().findWithNamedQuery(Contract.WITH_TEACHER,
-				QueryParameters.with("teacherId", unit.getId()).parameters());
+		if (allContractsCache == null)
+			allContractsCache = getDao().findWithNamedQuery(
+					Contract.WITH_TEACHER,
+					QueryParameters.with("teacherId", unit.getId())
+							.parameters());
+		List<Contract> lst = new ArrayList<Contract>(allContractsCache.size());
+		for (Contract c : allContractsCache)
+			lst.add(c);
+		return lst;
 	}
 
 	public List<Contract> getActualContracts() {
@@ -128,6 +146,31 @@ public class TeacherMediator implements TeacherMed {
 	public List<Client> getUndefinedClients() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	// contracts
+	// frozen
+	public List<Contract> getFrozenContracts() {
+		return getContractMed().setGroup(getAllContracts())
+				.filter(ContractState.frozen).getGroup();
+	}
+
+	// inactive
+	public List<Contract> getInactiveContracts() {
+		return getContractMed().setGroup(getAllContracts())
+				.filter(ContractState.undefined).getGroup();
+	}
+
+	// canceled
+	public List<Contract> getCanceledContracts() {
+		return getContractMed().setGroup(getAllContracts())
+				.filter(ContractState.canceled).getGroup();
+	}
+
+	// complete
+	public List<Contract> getCompleteContracts() {
+		return getContractMed().setGroup(getAllContracts())
+				.filter(ContractState.complete).getGroup();
 	}
 
 	public String worksOn(String day) {

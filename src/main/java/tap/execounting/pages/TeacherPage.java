@@ -2,6 +2,7 @@ package tap.execounting.pages;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 
 import tap.execounting.components.editors.AddComment;
 import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.QueryParameters;
 import tap.execounting.dal.mediators.ContractMediator;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.dal.mediators.interfaces.EventMed;
@@ -76,7 +78,7 @@ public class TeacherPage {
 
 	@Property
 	private Contract contract;
-	
+
 	@Property
 	private Event lesson;
 
@@ -100,16 +102,19 @@ public class TeacherPage {
 	@Property
 	private FacilitySelectModel facilitySelectModel;
 
-	void onActivate(int teacherId){
+	void onActivate(int teacherId) {
 		tMed.setUnit(dao.find(Teacher.class, teacherId));
+		if (date1 == null)
+			date1 = DateService.trimToMonth(new Date());
 	}
-	
-	int onPassivate(){
+
+	int onPassivate() {
 		return tMed.getUnit().getId();
 	}
-	
+
 	void setup(Teacher context) {
 		tMed.setUnit(context);
+		date1 = DateService.trimToMonth(new Date());
 	}
 
 	void onActionFromScheduleEditLink() {
@@ -185,6 +190,31 @@ public class TeacherPage {
 				.getGroup();
 	}
 
+	public List<Contract> getOtherContracts() {
+		List<Contract> other = dao.findWithNamedQuery(Contract.WITH_CLIENT,
+				QueryParameters.with("clientId", contract.getClientId())
+						.parameters());
+		for (int i = other.size() - 1; i >= 0; i--)
+			if (other.get(i).getId() == contract.getId())
+				other.remove(i);
+		Collections.sort(other);
+		Collections.reverse(other);
+		if (other.size() > 15)
+			other = other.subList(0, 15);
+		return other;
+	}
+
+	public List<Contract> getFrozenContracts() {
+		return tMed.getFrozenContracts();
+	}
+
+	public List<Contract> getOtherTeacherContracts() {
+		List<Contract> list = tMed.getInactiveContracts();
+		list.addAll(tMed.getCanceledContracts());
+		list.addAll(tMed.getCompleteContracts());
+		return list;
+	}
+
 	public String getClientName() {
 		return contract.getClient().getName();
 	}
@@ -195,8 +225,9 @@ public class TeacherPage {
 
 	public List<EventRowElement> getElements() {
 		List<EventRowElement> list = new ArrayList<EventRowElement>();
-		
-		for (Date d : DateService.generateDaySet(getEventsDate(), getRenderDays())) {
+
+		for (Date d : DateService.generateDaySet(getEventsDate(),
+				getRenderDays())) {
 			List<Event> events = contract.getEvents(d);
 			if (events.size() == 0)
 				list.add(new EventRowElement(d, null));
@@ -206,13 +237,12 @@ public class TeacherPage {
 		}
 		return list;
 	}
-	
-	public int getWidth(){
+
+	public int getWidth() {
 		return getRenderDays() * 60 + 300;
 	}
 
-	
-	private int getRenderDays(){
+	private int getRenderDays() {
 		Calendar c = DateService.getMoscowCalendar();
 		c.setTime(getEventsDate());
 		return c.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -220,8 +250,9 @@ public class TeacherPage {
 
 	public List<EventRowElement> getDates() {
 		List<EventRowElement> list = new ArrayList<EventRowElement>();
-		
-		for (Date d : DateService.generateDaySet(getEventsDate(), getRenderDays()))
+
+		for (Date d : DateService.generateDaySet(getEventsDate(),
+				getRenderDays()))
 			list.add(new EventRowElement(d, null));
 		return list;
 	}

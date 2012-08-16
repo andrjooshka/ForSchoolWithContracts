@@ -98,34 +98,26 @@
 							
 							<div style="display:block;"><t:show.showcontract contract="contract"/></div>
 							
-							<t:show.minicontract contract="contract"/>
-							<t:show.minicontract contract="contract"/>
-							<t:show.minicontract contract="contract"/>
-							<t:show.minicontract contract="contract"/>
-							<t:show.minicontract contract="contract"/>
-							<t:show.minicontract contract="contract"/>
-							<t:show.minicontract contract="contract"/>
-							<t:show.minicontract contract="contract"/>
-							<t:show.minicontract contract="contract"/>
-							<t:show.minicontract contract="contract"/>
-							<t:show.minicontract contract="contract"/>
-							<t:show.minicontract contract="contract"/>
-							<t:show.minicontract contract="contract"/>
-							<t:show.minicontract contract="contract"/>
-							<t:show.minicontract contract="contract"/>
+							<t:loop source="othercontracts" value="contract">
+								<t:show.minicontract contract="contract"/>
+							</t:loop>
+							
 						</ex:accordionItem>
 					</ex:accordion>
 			</div>
 		</t:loop>
+		
 		<!--FROZEN AND INACTIVE CONTRACTS-->
-		<ex:accordion style="width:800px;">
+		<ex:accordion style="width:1100px;margin-top:40px;">
 			<ex:accordionItem title="literal:Замороженные">
-				
-				
+				<t:loop source="frozenContracts" value="contract">
+					<t:show.minicontract contract="contract" displayName="true"/>
+				</t:loop>
 			</ex:accordionItem>
-			<ex:accordionItem title="literal:Остальные">
-				
-				
+			<ex:accordionItem title="literal:Остальные (если клиент не ходит больше полугода, или договор закрыт, или завершен)">
+				<t:loop source="otherTeacherContracts" value="contract">
+					<t:show.minicontract contract="contract" displayName="true"/>
+				</t:loop>
 			</ex:accordionItem>
 		</ex:accordion>
 		
@@ -143,7 +135,7 @@
 			<t:datefield t:id="date2"/>
 			<t:submit style="margin-left: 20px;" />
 		</t:form>
-		<table>
+		<table class="panel contract">
 			<tr>
 				<th>
 					Проведено уроков
@@ -230,7 +222,7 @@
 	
 	<h4>Долги по перенесенным занятиям:</h4>
 	<t:loop source="shiftedLessons" value="lesson">
-		<t:show.wideshowevent lesson="lesson"/>
+		<div style="display:inline-block;"><t:show.showevent event="lesson"/></div>
 	</t:loop>
 
 </html>

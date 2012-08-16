@@ -6,6 +6,7 @@ import java.util.List;
 import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Comment;
+import tap.execounting.entities.Contract;
 import tap.execounting.entities.Teacher;
 
 public interface TeacherMed {
@@ -38,6 +39,16 @@ public interface TeacherMed {
 	public List<Client> getFrozenClients();
 		//undefined
 	public List<Client> getUndefinedClients();
+	//contracts
+		//frozen
+	public List<Contract> getFrozenContracts();
+		//Inactive
+	public List<Contract> getInactiveContracts();
+		//Canceled
+	public List<Contract> getCanceledContracts();
+		//Complete
+	public List<Contract> getCompleteContracts();
+	
 	//lessons
 		//complete
 	public int getLessonsComplete(Date date1, Date date2);

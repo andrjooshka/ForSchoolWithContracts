@@ -14,6 +14,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import tap.execounting.components.editors.AddEvent;
 import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.entities.Client;
+import tap.execounting.entities.Contract;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.EventType;
 import tap.execounting.entities.Facility;
@@ -59,6 +60,14 @@ public class ShowEvent {
 
 	public String getRoomName() {
 		return dao.find(Room.class, event.getRoomId()).getName();
+	}
+	
+	public String getNames(){
+		StringBuilder sb = new StringBuilder();
+		for(Contract c : event.getContracts())
+			sb.append(c.getClient().getName()+", ");
+		sb.delete(sb.length()-2, sb.length());
+		return sb.toString();
 	}
 
 	public String getDate() {

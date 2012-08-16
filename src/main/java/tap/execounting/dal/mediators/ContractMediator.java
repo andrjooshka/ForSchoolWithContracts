@@ -203,8 +203,13 @@ public class ContractMediator implements ContractMed {
 		Calendar date = DateService.getMoscowCalendar();
 		date.setTime(DateService.trimToDate(new Date()));
 
+		int remain1 = remain;
+		int count = 0;
 		while (remain > 0) {
+			if (count == 9 && remain1 == remain)
+				break;
 			int dow = date.get(Calendar.DAY_OF_WEEK);
+			dow = dow == 1 ? 7 : dow - 1;
 			if (unit.getSchedule().get(dow)) {
 				Event e = new Event();
 				e.getContracts().add(unit);
@@ -218,6 +223,7 @@ public class ContractMediator implements ContractMed {
 				dao.create(e);
 				remain--;
 			}
+			count++;
 			date.add(Calendar.DAY_OF_WEEK, 1);
 		}
 	}
