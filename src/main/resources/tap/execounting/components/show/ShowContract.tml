@@ -30,20 +30,6 @@
 					</li>
 				</ul>
 				<table class="showcontract">
-					<!--controls>
-					<tr>
-						<td>
-							<t:eventlink event="edit" zone="contractBody${contract.id}" context="contract">редактировать</t:eventlink>
-						</td>
-						<td>
-							<t:eventlink event="delete" context="contract">удалить</t:eventlink>
-						</td>
-						<td>
-							<t:eventlink t:id="freeze" context="contract">${freezeLabel}</t:eventlink>
-						</td>
-					</tr>
-					</controls-->
-					
 					<tr>
 						<th>${message:teacher-label}</th>
 						<td colspan="2">${teacher}</td>

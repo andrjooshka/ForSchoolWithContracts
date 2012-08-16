@@ -1,126 +1,25 @@
 <t:container 
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" 
 	xmlns:p="tapestry:parameter">
-				<table class="showcontract">
-					<!--controls>
-					<tr>
-						<td>
-							<t:eventlink event="edit" zone="contractBody${contract.id}" context="contract">редактировать</t:eventlink>
-						</td>
-						<td>
-							<t:eventlink event="delete" context="contract">удалить</t:eventlink>
-						</td>
-						<td>
-							<t:eventlink t:id="freeze" context="contract">${freezeLabel}</t:eventlink>
-						</td>
-					</tr>
-					</controls-->
-					
-					<tr>
-						<th>${message:teacher-label}</th>
-						<td colspan="2">${teacher}</td>
-					</tr>
-					<tr>
-						<th>${message:etype-label}</th>
-						<td colspan="2">${etype}</td>
-					</tr>
-
-					<tr>
-						<th>${message:contractType-label}</th>
-						<td colspan="2">${contract.contractType.title}</td>
-					</tr>
-					<tr>
-						<th>${message:status-label}</th>
-						<td colspan="2">${contract.state}</td>
-					</tr>
-					<tr>
-						<th>${message:date-label}</th>
-						<td colspan="2">${contractDate}</td>
-					</tr>
-					<tr>
-						<th>${message:lessonsNumber-label}</th>
-						<td colspan="2">${contract.lessonsNumber}</td>
-					</tr>
-					<tr>
-						<th>${message:completeCost-label}</th>
-						<td colspan="2">${contract.money}</td>
-					</tr>
-					<tr>
-						<th>${message:balance-label}</th>
-						<td colspan="2">${contract.balance}</td>
-					</tr>
-					<tr>
-						<th>${message:events-label}</th>
-						<td>
-							<strong>Занятий осталось:</strong> ${contract.lessonsRemain}<br/><br/>
-							Проведенные занятия:
-							<t:zone t:id="eventZone" id="contractNewEventZone${contract.id}">
-								<t:if test="addingEvent">
-									<t:editors.addEvent t:id="eventEditor" event="newEvent" />
-									<p:else>
-										<t:eventlink t:zone="contractNewEventZone${contract.id}"
-										 event="addEvent" context="contract">${message:addEventToContract}</t:eventlink>
-									</p:else>
-								</t:if>
-							</t:zone>
-							
-								<t:loop source="events" value="loopEvent">
-									<div style="-moz-box-shadow: 0px 0px 2px #999;
-									box-shadow: 0px 0px 2px #999; margin: 4px;
-									width:400px;padding:2px;padding-left:5px;margin-left:10px">
-									${eventInfo} &#09;
-									(<t:eventlink context="loopEvent" event="deleteEvent">удалить</t:eventlink> |
-									<t:eventlink context="loopEvent" event="editEvent" 
-									t:zone="contractNewEventZone${contract.id}">редактировать</t:eventlink>)
-										<t:if test="loopEvent.comment">
-											<br/>&#09;${loopEvent.comment}
-										</t:if>
-									</div>										
-								</t:loop>
-							
-							На сумму: ${contract.completeLessonsCost}
-						</td>
-					</tr>
-					<tr>
-						<th>${message:payments-label}</th>
-						<td>
-							<t:zone t:id="paymentZone" id="paymentZone${contract.id}">
-								<t:if test="addingPayment">
-									<t:editors.addPayment t:id="paymentEditor" />
-									<p:else>
-										<t:eventlink t:zone="paymentZone${contract.id}" 
-											event="addPayment" context="contract">${message:addPaymenttoContract}
-										</t:eventlink>
-									</p:else>
-								</t:if>
-							</t:zone>
-							
-							
-								<t:loop source="payments" value="loopPayment">
-									<div style="-moz-box-shadow: 0px 0px 2px #999;
-									box-shadow: 0px 0px 2px #999; margin: 4px;
-									width:400px;padding:2px;padding-left:5px;margin-left:10px">
-										${paymentInfo} &#09;
-										(<t:eventlink context="loopPayment" event="deletePayment">удалить</t:eventlink> |
-										<t:eventlink context="loopPayment" event="editPayment" 
-										t:zone="paymentZone${contract.id}">редактировать</t:eventlink>)
-									</div>
-								</t:loop>
-							
-							Итого: ${contract.moneyPaid}
-						</td>
-					</tr>
-					<t:if test="contract.discount">
-						<tr>
-							<th>${message:discount-label}</th>
-							<td colspan="2">${contract.discount}</td>
-						</tr>
-					</t:if>
-					<t:if test="contract.gift">
-						<tr><td colspan="3">Подарок</td></tr>
-					</t:if>
-				</table>
-			</p:else>
-		</t:if>
-	</t:zone>
+		<div class="minicontract">
+			<div id="daterow" class="row">
+				${contractDate}
+			</div>
+			<div id="typerow" class="row">
+				${type}
+			</div>
+			<div id="eventsrow" class="row">
+				${eventsinfo}
+			</div>
+			<div id="paymentsrow" class="row">
+				${paymentsinfo}
+			</div>
+			<div id="state" class="row">
+				${state}
+			</div>
+			<div id="url" class="row">
+				<a t:type="pagelink" t:page="ClientPage" t:context="${contract.client.id}"
+				anchor="contractBody${contract.id}" href="#">Смотреть</a>
+			</div>
+		</div>
 </t:container>

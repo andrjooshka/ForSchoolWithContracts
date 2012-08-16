@@ -1,0 +1,9 @@
+.minicontract {
+	display: inline-block;
+	box-shadow: 0px 0px 1px #444;
+	-moz-box-shadow: 0px 0px 1px #444;
+	height: 200px;
+	width: 200px;
+	padding: 5px;
+	margin: 5px;
+}

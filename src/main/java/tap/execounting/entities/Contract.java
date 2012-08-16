@@ -270,7 +270,9 @@ public class Contract implements Comparable<Contract>, Dated {
 		return active;
 	}
 
-	// complete contract cost
+	/**
+	 * @return full contract price
+	 */
 	public int getMoney() {
 		int lessonCost = getEventType().getMoney();
 		int lessons = getLessonsNumber();
@@ -298,6 +300,10 @@ public class Contract implements Comparable<Contract>, Dated {
 		return completeLessonsCost;
 	}
 
+	/**
+	 * 
+	 * @return сумма денег уплаченная клиентом по этому договору.
+	 */
 	public int getMoneyPaid() {
 		int total = 0;
 		for (Payment p : getPayments()) {
