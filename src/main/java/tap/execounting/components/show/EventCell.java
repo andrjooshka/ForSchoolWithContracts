@@ -1,8 +1,10 @@
 package tap.execounting.components.show;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Parameter;
@@ -56,6 +58,10 @@ public class EventCell {
 		Calendar c = new GregorianCalendar();
 		c.setTime(element.getDate());
 		return c.get(Calendar.DAY_OF_MONTH);
+	}
+	
+	public String getDow(){
+		return new SimpleDateFormat("E", new Locale("ru")).format(element.getDate());
 	}
 
 	Object onActionFromEdit(int id) {

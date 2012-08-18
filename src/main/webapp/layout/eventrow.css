@@ -24,22 +24,15 @@
 }
 
 div.calendar .mini {
-	background: #ffffff; /* Old browsers */
-	background: -moz-linear-gradient(top, #ffffff 0%, #f3f3f3 50%, #ededed 51%, #ffffff
-		100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff),
-		color-stop(50%, #f3f3f3), color-stop(51%, #ededed),
-		color-stop(100%, #ffffff) ); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #ffffff 0%, #f3f3f3 50%, #ededed 51%,
-		#ffffff 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #ffffff 0%, #f3f3f3 50%, #ededed 51%, #ffffff
-		100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #ffffff 0%, #f3f3f3 50%, #ededed 51%, #ffffff
-		100%); /* IE10+ */
-	background: linear-gradient(to bottom, #ffffff 0%, #f3f3f3 50%, #ededed 51%, #ffffff
-		100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff',
-		endColorstr='#ffffff', GradientType=0 ); /* IE6-9 */
+	background: #e4f5fc; /* Old browsers */
+background: -moz-linear-gradient(top,  #e4f5fc 0%, #bfe8f9 50%, #9fd8ef 51%, #2ab0ed 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e4f5fc), color-stop(50%,#bfe8f9), color-stop(51%,#9fd8ef), color-stop(100%,#2ab0ed)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #e4f5fc 0%,#bfe8f9 50%,#9fd8ef 51%,#2ab0ed 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #e4f5fc 0%,#bfe8f9 50%,#9fd8ef 51%,#2ab0ed 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #e4f5fc 0%,#bfe8f9 50%,#9fd8ef 51%,#2ab0ed 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #e4f5fc 0%,#bfe8f9 50%,#9fd8ef 51%,#2ab0ed 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e4f5fc', endColorstr='#2ab0ed',GradientType=0 ); /* IE6-9 */
+
 	width: 54px;
 	margin: 3px;
 	border-radius: 2px;
@@ -49,11 +42,21 @@ div.calendar .mini {
 
 div.mini h3.date {
 	margin-top: 30%;
-	text-align: right;
-	margin-right: 12px;
-	font-size: 1.8em;
+	text-align: center;
+	font-size: 1.6em;
 	color: #001;
 	font-family: serif;
+	display: block;
+	margin-bottom: -2px;
+}
+
+h4.dow {
+	display: inline;
+	margin-left: 63%;
+	font-size: 0.97em;
+	margin-bottom: px;
+	color: #444;
+	margin-top: -2px;
 }
 
 div.calendar div.glass {
@@ -82,7 +85,7 @@ div.calendar div.glass {
 	z-index: 10;
 	height: 100%;
 	opacity: 0.31;
-	margin-top: -34px;
+	margin-top: -93%;
 }
 
 .failed {
@@ -120,7 +123,7 @@ div.calendar div.glass {
 		0%, hsla(107, 73%, 45%, 1) 100% ); /* IE10+ */
 	background: radial-gradient(ellipse at center, hsla(106, 100%, 76%, 1)
 		0%, hsla(107, 73%, 45%, 1) 100% ); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient(  startColorstr='#9fff82',
+	filter: progid:DXImageTransform.Microsoft.gradient(    startColorstr='#9fff82',
 		endColorstr='#43c41f', GradientType=1 );
 	/* IE6-9 fallback on horizontal gradient */
 }
@@ -140,7 +143,7 @@ div.calendar div.glass {
 		0%, hsla(53, 87%, 58%, 1) 100% ); /* IE10+ */
 	background: radial-gradient(ellipse at center, hsla(54, 91%, 96%, 1) 0%,
 		hsla(53, 87%, 58%, 1) 100% ); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient(    startColorstr='#fefcea',
+	filter: progid:DXImageTransform.Microsoft.gradient(      startColorstr='#fefcea',
 		endColorstr='#f1da36', GradientType=1 );
 	/* IE6-9 fallback on horizontal gradient */
 }

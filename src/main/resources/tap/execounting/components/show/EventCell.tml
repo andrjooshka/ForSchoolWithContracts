@@ -10,6 +10,7 @@
 					
 						<t:if test="displayDate">
 							<h3 class="date">${date}</h3>
+							<h4 class="dow">${dow}</h4>
 						</t:if>
 					<div class="glass"/>
 				</div>
@@ -28,6 +29,7 @@
 		<div class="mini ${addition}">
 				<t:if test="displayDate">
 					<h3 class="date">${date}</h3>
+					<h4 class="dow">${dow}</h4>
 				</t:if>
 			<div class="glass"/>
 		</div>

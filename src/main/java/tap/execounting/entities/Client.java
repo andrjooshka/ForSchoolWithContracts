@@ -175,6 +175,9 @@ public class Client implements Dated {
 		} catch (NullPointerException npe) {
 			return null;
 		}
+		catch (IndexOutOfBoundsException iob){
+			return null;
+		}
 	}
 
 	public boolean isCanceled() {
