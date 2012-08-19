@@ -32,7 +32,7 @@ public class ClientGridNCD {
 	private ClientMed clientMed;
 	@Inject
 	private CrudServiceDAO dao;
-	
+
 	@Property
 	@Parameter
 	private List<Client> source;
@@ -47,8 +47,8 @@ public class ClientGridNCD {
 	private Contract loopContract;
 	@InjectPage
 	private ClientPage clientPage;
-	
-	private ClientMed getClientMed(){
+
+	private ClientMed getClientMed() {
 		ClientMed c = new ClientMediator();
 		c.setDao(dao);
 		return c;
@@ -121,14 +121,19 @@ public class ClientGridNCD {
 	}
 
 	public String getCssForBalance() {
-		if (unit.getBalance() < 0)
+		int balance = 0;
+		Client c = dao.find(Client.class, unit.getId());
+		balance = c.getBalance();
+
+		// balance = unit.getBalance(); // good old
+		if (balance < 0)
 			return "debtor";
-		if (unit.getBalance() > 0)
+		if (balance > 0)
 			return "creditor";
 		return "neutral";
 	}
-	
-	public String getState(){
+
+	public String getState() {
 		return getClientMed().setUnit(unit).getState().toString();
 	}
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -88,7 +89,7 @@ public class Contract implements Comparable<Contract>, Dated {
 	@JoinColumn(name = "teacher_id", nullable = false, updatable = false, insertable = false)
 	private Teacher teacher;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "contract_id")
 	private List<Payment> payments = new ArrayList<Payment>();
 
@@ -218,10 +219,10 @@ public class Contract implements Comparable<Contract>, Dated {
 	public List<Event> getEvents() {
 		return events;
 	}
-	
+
 	public List<Event> getEventsPersistent() {
 		List<Event> list = new ArrayList<Event>();
-		for(Event e : events)
+		for (Event e : events)
 			list.add(e.clone());
 		return list;
 	}
