@@ -208,8 +208,7 @@ public class ContractMediator implements ContractMed {
 		while (remain > 0) {
 			if (count == 9 && remain1 == remain)
 				break;
-			int dow = date.get(Calendar.DAY_OF_WEEK);
-			dow = dow == 1 ? 7 : dow - 1;
+			int dow = DateService.dayOfWeekRus(date.getTime());
 			if (unit.getSchedule().get(dow)) {
 				Event e = new Event();
 				e.getContracts().add(unit);

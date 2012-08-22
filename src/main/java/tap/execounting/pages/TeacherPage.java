@@ -250,10 +250,47 @@ public class TeacherPage {
 
 	public List<EventRowElement> getDates() {
 		List<EventRowElement> list = new ArrayList<EventRowElement>();
-
+		Date now = DateService.trimToDate(new Date());
 		for (Date d : DateService.generateDaySet(getEventsDate(),
-				getRenderDays()))
-			list.add(new EventRowElement(d, null));
+				getRenderDays())) {
+			Event e = new Event();
+			e.setDate(d);
+
+			if (d.after(now)) {
+				if (tMed.getUnit()
+						.getScheduleDay(DateService.dayOfWeekRus(now)) != null)
+					e.setState(EventState.planned);
+				else
+					e = null;
+			} else {
+				List<Event> evs = dao.findWithNamedQuery(
+						Event.BY_TEACHER_ID_AND_DATE,
+						QueryParameters
+								.with("teacherId", tMed.getUnit().getId())
+								.and("earlierDate", d).and("laterDate", d)
+								.parameters());
+				if (evs.size() > 0) {
+					e.setState(EventState.complete);
+					for (Event ev : evs) {
+						EventState es = ev.getState();
+						if (es == EventState.planned
+								|| es == EventState.failedByTeacher
+								|| es == EventState.failed) {
+							e.setState(EventState.planned);
+							break;
+						}
+					}
+
+				} else if (tMed.getUnit().getScheduleDay(
+						DateService.dayOfWeekRus(now)) != null)
+					e.setState(EventState.failed);
+				else
+					e = null;
+			}
+
+			list.add(new EventRowElement(d, e));
+		}
+
 		return list;
 	}
 

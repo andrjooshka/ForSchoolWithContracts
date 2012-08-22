@@ -262,6 +262,8 @@ public class DateService {
 		return calendar.getTime();
 	}
 
+	
+	
 	public static List<Date> generateDaySet(Date eventsDate, int days) {
 		List<Date> list = new ArrayList<Date>(days);
 		for (int i = 0; i < days; i++)
@@ -298,5 +300,14 @@ public class DateService {
 	public static Calendar getMoscowCalendar() {
 		Calendar c = new GregorianCalendar(getMoscowTimeZone());
 		return c;
+	}
+
+	public static int dayOfWeekRus(Date d) {
+		//TODO check
+		Calendar date = new GregorianCalendar();
+		date.setTime(d);
+		int dow = date.get(Calendar.DAY_OF_WEEK);
+		dow = dow == 1 ? 7 : dow - 1;
+		return dow;
 	}
 }
