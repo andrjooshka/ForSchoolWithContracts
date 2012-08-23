@@ -256,9 +256,10 @@ public class TeacherPage {
 			Event e = new Event();
 			e.setDate(d);
 
-			if (d.after(now)) {
-				if (tMed.getUnit()
-						.getScheduleDay(DateService.dayOfWeekRus(now)) != null)
+			if (!d.before(now)) {
+				int dow = DateService.dayOfWeekRus(d);
+				Integer sched = tMed.getUnit().getScheduleDay(dow);
+				if (sched != null && sched > 0)
 					e.setState(EventState.planned);
 				else
 					e = null;
