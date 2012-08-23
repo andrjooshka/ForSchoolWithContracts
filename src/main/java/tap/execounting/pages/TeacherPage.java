@@ -255,6 +255,9 @@ public class TeacherPage {
 				getRenderDays())) {
 			Event e = new Event();
 			e.setDate(d);
+			System.out.println("\n\n d and now");
+			System.out.println(d);
+			System.out.println(now);
 
 			if (!d.before(now)) {
 				int dow = DateService.dayOfWeekRus(d);
