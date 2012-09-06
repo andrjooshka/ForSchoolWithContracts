@@ -36,7 +36,7 @@ import tap.execounting.entities.interfaces.Dated;
 		@NamedQuery(name = Event.BY_TYPE_ID, query = "Select e from Event e where e.typeId = :typeId"),
 		@NamedQuery(name = Event.BY_ROOM_ID, query = "from Event as e where e.roomId = :roomId"),
 		@NamedQuery(name = Event.BETWEEN_DATE1_AND_DATE2, query = "from Event as e where e.date <= :date2 and e.date >= :date1"),
-		@NamedQuery(name = Event.BY_STATE, query = "from Event as e where e.newstate=:stateCode") })
+		@NamedQuery(name = Event.BY_STATE, query = "from Event as e where e.state=:stateCode") })
 @Table(name = "events")
 public class Event implements Comparable<Event>, Dated {
 
@@ -70,10 +70,7 @@ public class Event implements Comparable<Event>, Dated {
 	@Column(name = "date")
 	private Date date;
 
-	@SuppressWarnings("unused")
-	private boolean state;
-
-	private int newstate;
+	private int state;
 
 	@Column(name = "type_id", unique = false)
 	private int typeId;
@@ -84,14 +81,14 @@ public class Event implements Comparable<Event>, Dated {
 
 	private String comment;
 
-	@ManyToMany		//(cascade={CascadeType.ALL})
-	@JoinTable(name = "events_contracts", joinColumns = { @JoinColumn(name = "event_id") }, inverseJoinColumns = { @JoinColumn(name = "contract_id")})
+	@ManyToMany
+	// (cascade={CascadeType.ALL})
+	@JoinTable(name = "events_contracts", joinColumns = { @JoinColumn(name = "event_id") }, inverseJoinColumns = { @JoinColumn(name = "contract_id") })
 	private List<Contract> contracts = new ArrayList<Contract>();
 
 	public Event() {
 		date = new Date();
-		state = true;
-		newstate = EventState.complete.getCode();
+		state = EventState.complete.getCode();
 	}
 
 	public int getId() {
@@ -148,12 +145,11 @@ public class Event implements Comparable<Event>, Dated {
 	}
 
 	public EventState getState() {
-		return EventState.fromCode(newstate);
+		return EventState.fromCode(state);
 	}
 
 	public void setState(EventState state) {
-		this.newstate = state.getCode();
-		this.state = state == EventState.complete;
+		this.state = state.getCode();
 	}
 
 	public String getComment() {
@@ -205,21 +201,21 @@ public class Event implements Comparable<Event>, Dated {
 	}
 
 	// returns school share from that event
-//	public int getSchoolShare() {
-//		int total = 0;
-//		for (Contract c : getContracts()) {
-//			// TODO: Подарочный сертификат?
-//			if (c.getContractTypeId() == 2) {
-//				total += 300;
-//				continue;
-//			}
-//			int basicCost = c.getSingleLessonCost();
-//			int percent = c.getEventType().getShare();
-//			total += basicCost * percent;
-//		}
-//
-//		return total;
-//	}
+	// public int getSchoolShare() {
+	// int total = 0;
+	// for (Contract c : getContracts()) {
+	// // TODO: Подарочный сертификат?
+	// if (c.getContractTypeId() == 2) {
+	// total += 300;
+	// continue;
+	// }
+	// int basicCost = c.getSingleLessonCost();
+	// int percent = c.getEventType().getShare();
+	// total += basicCost * percent;
+	// }
+	//
+	// return total;
+	// }
 
 	public int getMoney() {
 		int total = 0;
@@ -235,16 +231,14 @@ public class Event implements Comparable<Event>, Dated {
 				return true;
 		return false;
 	}
-	
-	
-	/* Not full clone
-	 * only ID and eventstate are copied.
-	 * only for delete.
+
+	/*
+	 * Not full clone only ID and eventstate are copied. only for delete.
 	 */
-	public Event clone(){
+	public Event clone() {
 		Event e = new Event();
 		e.setId(this.id);
-		e.setState(EventState.fromCode(this.newstate));
+		e.setState(EventState.fromCode(this.state));
 		return e;
 	}
 }

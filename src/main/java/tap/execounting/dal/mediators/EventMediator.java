@@ -106,8 +106,7 @@ public class EventMediator implements EventMed {
 	}
 
 	public EventState getState() {
-		// TODO activate event state
-		return null;
+		return unit.getState();
 	}
 
 	public String getComment() {
@@ -203,7 +202,7 @@ public class EventMediator implements EventMed {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
 			getAppliedFilters().put("Contract", unit);
-			setGroup(unit.getEventsPersistent());
+			setGroup(unit.getEventsCopied());
 			return this;
 		} else {
 			getAppliedFilters().put("Contract", unit);

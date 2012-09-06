@@ -131,10 +131,14 @@ public class ShowContract {
 		return request.isXHR() ? eventZone.getBody() : null;
 	}
 
+	public boolean isCompleteNotPaid() {
+		return contract.isComplete() && !contract.isPaid();
+	}
+
 	public String getEtype() {
 		return dao.find(EventType.class, contract.getTypeId()).getTitle();
 	}
-
+	
 	public String getTeacher() {
 		String s;
 		if (contract.getTeacherId() == 0)

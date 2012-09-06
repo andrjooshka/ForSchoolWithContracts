@@ -30,6 +30,9 @@
 					</li>
 				</ul>
 				<table class="showcontract">
+					<t:if test="completeNotPaid">
+						<tr style="background: #F43; color: black;"><td colspan="2"><strong>Завершен и не оплачен</strong></td></tr>
+					</t:if>
 					<tr>
 						<th>${message:teacher-label}</th>
 						<td colspan="2">${teacher}</td>
@@ -131,7 +134,7 @@
 						</tr>
 					</t:if>
 					<t:if test="contract.gift">
-						<tr><td colspan="3">Подарок</td></tr>
+						<tr><td colspan="2">Подарок</td></tr>
 					</t:if>
 				</table>
 			</p:else>

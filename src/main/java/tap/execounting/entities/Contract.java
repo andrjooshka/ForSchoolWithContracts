@@ -106,6 +106,8 @@ public class Contract implements Comparable<Contract>, Dated {
 		setContractTypeId(1);
 	}
 
+	// Unit properties and methods
+
 	public int getId() {
 		return id;
 	}
@@ -220,29 +222,6 @@ public class Contract implements Comparable<Contract>, Dated {
 		return events;
 	}
 
-	public List<Event> getEventsPersistent() {
-		List<Event> list = new ArrayList<Event>();
-		for (Event e : events)
-			list.add(e.clone());
-		return list;
-	}
-
-	public List<Event> getEvents(boolean asc) {
-		List<Event> list = getEvents();
-		Collections.sort(list);
-		if (!asc)
-			Collections.reverse(list);
-		return list;
-	}
-
-	public List<Event> getFinishedEvents() {
-		List<Event> events = new ArrayList<Event>();
-		for (Event e : getEvents())
-			if (e.getState() == EventState.complete)
-				events.add(e);
-		return events;
-	}
-
 	public void setEvents(List<Event> events) {
 		this.events = events;
 	}
@@ -269,129 +248,6 @@ public class Contract implements Comparable<Contract>, Dated {
 	public boolean isActive() {
 		boolean active = !isComplete() && !isFreeze() && !isCanceled();
 		return active;
-	}
-
-	/**
-	 * @return full contract price
-	 */
-	public int getMoney() {
-		int lessonCost = getEventType().getMoney();
-		int lessons = getLessonsNumber();
-		int total = lessonCost * lessons;
-		total -= discount;
-		if (isGift())
-			total += getGiftPrice();
-		return total;
-	}
-
-	public int getSingleLessonCost() {
-		if (lessonsNumber == 0)
-			return 0;
-		int totalLessonsCost = lessonsNumber * eventType.getMoney() - discount;
-		int singleLessonCost = totalLessonsCost / lessonsNumber;
-		return singleLessonCost;
-	}
-
-	public int getCompleteLessonsCost() {
-		int count = 0;
-		for (Event e : getEvents())
-			if (e.getState() == EventState.complete)
-				count++;
-		int completeLessonsCost = count * getSingleLessonCost();
-		return completeLessonsCost;
-	}
-
-	/**
-	 * 
-	 * @return сумма денег уплаченная клиентом по этому договору.
-	 */
-	public int getMoneyPaid() {
-		int total = 0;
-		for (Payment p : getPayments()) {
-			if (!p.isScheduled()) {
-				total += p.getAmount();
-			}
-		}
-		if (isGift())
-			total += getGiftPrice();
-		return total;
-	}
-
-	public Client getClient() {
-		return client;
-	}
-
-	public List<Payment> getPlannedPayments() {
-		List<Payment> payments = new ArrayList<Payment>();
-		for (Payment p : getPayments())
-			if (p.isScheduled())
-				payments.add(p);
-		return payments;
-	}
-
-	public int getLessonsRemain() {
-		int remaining = 0;
-		try {
-			remaining = getLessonsNumber();
-			for (Event e : getEvents())
-				if (e.getState() == EventState.complete)
-					remaining--;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return remaining;
-	}
-
-	public List<Event> getScheduledLessons() {
-		List<Event> events = new ArrayList<Event>();
-		for (Event e : getEvents())
-			if (e.getState() == EventState.planned)
-				events.add(e);
-		return events;
-	}
-
-	public boolean isComplete() {
-		return getLessonsRemain() <= 0;
-	}
-
-	public boolean isTrialLesson() {
-		return lessonsNumber < 3;
-	}
-
-	public int compareTo(Contract contract) {
-		return getDate().compareTo(contract.getDate());
-	}
-
-	public int getBalance() {
-		return getMoneyPaid() - getCompleteLessonsCost()
-				- (isGift() ? getGiftPrice() : 0);
-	}
-
-	public ContractType getContractType() {
-		return contractType;
-	}
-
-	public List<Payment> getPlannedPayments(int days) {
-		SuperCalendar calendar = new RusCalendar();
-		calendar.addDays(days);
-		List<Payment> list = getPlannedPayments();
-
-		Payment p;
-		for (int i = list.size() - 1; i >= 0; i--) {
-			p = list.get(i);
-			if (p.getDate().after(calendar.getTime()))
-				list.remove(i);
-		}
-		return list;
-	}
-
-	public List<Event> getEvents(Date d) {
-		List<Event> res = new ArrayList<Event>();
-		d = DateService.trimToDate(d);
-		for (Event e : getEvents())
-			if (DateService.trimToDate(e.getDate()).equals(d))
-				res.add(e);
-		return res;
 	}
 
 	public ContractState getState() {
@@ -425,5 +281,165 @@ public class Contract implements Comparable<Contract>, Dated {
 			System.out.println("\n\nContract:" + id + "\n\n");
 			return false;
 		}
+	}
+
+	/**
+	 * @return full contract price
+	 */
+	public int getMoney() {
+		int lessonCost = getEventType().getMoney();
+		int lessons = getLessonsNumber();
+		int total = lessonCost * lessons;
+		total -= discount;
+		if (isGift())
+			total += getGiftPrice();
+		return total;
+	}
+
+	// Lessons Event etc. methods
+	public List<Event> getEventsCopied() {
+		List<Event> list = new ArrayList<Event>();
+		for (Event e : events)
+			list.add(e.clone());
+		return list;
+	}
+
+	public List<Event> getEvents(boolean asc) {
+		List<Event> list = getEvents();
+		Collections.sort(list);
+		if (!asc)
+			Collections.reverse(list);
+		return list;
+	}
+
+	public List<Event> getFinishedEvents() {
+		List<Event> events = new ArrayList<Event>();
+		for (Event e : getEvents())
+			if (e.getState() == EventState.complete)
+				events.add(e);
+		return events;
+	}
+
+	public int getSingleLessonCost() {
+		if (lessonsNumber == 0)
+			return 0;
+		int totalLessonsCost = lessonsNumber * eventType.getMoney() - discount;
+		int singleLessonCost = totalLessonsCost / lessonsNumber;
+		return singleLessonCost;
+	}
+
+	public int getCompleteLessonsCost() {
+		int completeLessons = getCompleteLessonsNumber(true);
+		int completeLessonsCost = completeLessons * getSingleLessonCost();
+		return completeLessonsCost;
+	}
+
+	public int getCompleteLessonsNumber(boolean countFailedByClientAsComplete) {
+		int count = 0;
+
+		if (countFailedByClientAsComplete) {
+			for (Event e : getEvents())
+				if (e.getState() == EventState.complete
+						|| e.getState() == EventState.failedByClient)
+					count++;
+		} else
+			for (Event e : getEvents())
+				if (e.getState() == EventState.complete)
+					count++;
+
+		return count;
+	}
+
+	public int getLessonsRemain() {
+		int lessonsNumber = getLessonsNumber();
+		int lessonsComplete = getCompleteLessonsNumber(true);
+		int remaining = lessonsNumber - lessonsComplete;
+		return remaining;
+	}
+
+	public List<Event> getScheduledLessons() {
+		List<Event> events = new ArrayList<Event>();
+		for (Event e : getEvents())
+			if (e.getState() == EventState.planned)
+				events.add(e);
+		return events;
+	}
+
+	public List<Event> getEvents(Date d) {
+		List<Event> res = new ArrayList<Event>();
+		d = DateService.trimToDate(d);
+		for (Event e : getEvents())
+			if (DateService.trimToDate(e.getDate()).equals(d))
+				res.add(e);
+		return res;
+	}
+
+	// Money and Payments
+	/**
+	 * 
+	 * @return сумма денег уплаченная клиентом по этому договору.
+	 */
+	public int getMoneyPaid() {
+		int total = 0;
+		for (Payment p : getPayments()) {
+			if (!p.isScheduled()) {
+				total += p.getAmount();
+			}
+		}
+		if (isGift())
+			total += getGiftPrice();
+		return total;
+	}
+
+	public Client getClient() {
+		return client;
+	}
+
+	public List<Payment> getPlannedPayments() {
+		List<Payment> payments = new ArrayList<Payment>();
+		for (Payment p : getPayments())
+			if (p.isScheduled())
+				payments.add(p);
+		return payments;
+	}
+
+	public boolean isComplete() {
+		return getLessonsRemain() <= 0;
+	}
+
+	public boolean isPaid() {
+		return getMoneyPaid() >= getMoney();
+	}
+
+	public boolean isTrialLesson() {
+		return lessonsNumber < 3;
+	}
+
+	public int getBalance() {
+		return getMoneyPaid() - getCompleteLessonsCost()
+				- (isGift() ? getGiftPrice() : 0);
+	}
+
+	public ContractType getContractType() {
+		return contractType;
+	}
+
+	public List<Payment> getPlannedPayments(int days) {
+		SuperCalendar calendar = new RusCalendar();
+		calendar.addDays(days);
+		List<Payment> list = getPlannedPayments();
+
+		Payment p;
+		for (int i = list.size() - 1; i >= 0; i--) {
+			p = list.get(i);
+			if (p.getDate().after(calendar.getTime()))
+				list.remove(i);
+		}
+		return list;
+	}
+
+	// Util
+	public int compareTo(Contract contract) {
+		return getDate().compareTo(contract.getDate());
 	}
 }

@@ -3,7 +3,6 @@ package tap.execounting.pages;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
@@ -17,7 +16,7 @@ import org.hibernate.criterion.Restrictions;
 
 import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.dal.mediators.interfaces.EventMed;
-import tap.execounting.data.selectmodels.BooleanSelectModel;
+import tap.execounting.data.EventState;
 import tap.execounting.data.selectmodels.FacilitySelectModel;
 import tap.execounting.data.selectmodels.RoomSelectModel;
 import tap.execounting.data.selectmodels.TeacherSelectModel;
@@ -28,7 +27,7 @@ import tap.execounting.entities.Facility;
 
 public class Statistics {
 
-	// code helpers
+	// Code Helpers
 	@Inject
 	private CrudServiceDAO dao;
 	@Inject
@@ -40,7 +39,7 @@ public class Statistics {
 	@Inject
 	private EventMed eventMed;
 
-	// page components
+	// Page Components
 	@Property
 	private TeacherSelectModel teacherSelect;
 	@Property
@@ -49,8 +48,6 @@ public class Statistics {
 	private RoomSelectModel roomSelect;
 	@Property
 	private TypeTitleSelectModel typeSelect;
-	@Property
-	private SelectModel boolSelect;
 	@Component
 	private Zone roomZone;
 	@Component
@@ -58,7 +55,7 @@ public class Statistics {
 	@Component
 	private Zone statZone;
 
-	// page properties
+	// Page Properties
 	@Property
 	@Persist
 	private Integer facilityId;
@@ -73,7 +70,7 @@ public class Statistics {
 	private Integer roomId;
 	@Property
 	@Persist
-	private String state;
+	private EventState state;
 	@Property
 	@Persist
 	private Date date1;
@@ -109,7 +106,7 @@ public class Statistics {
 		if (date2 != null)
 			criteria.add(Restrictions.lt("date", date2));
 		if (state != null)
-			criteria.add(Restrictions.eq("state", Boolean.parseBoolean(state)));
+			criteria.add(Restrictions.eq("state", state.getCode()));
 
 		events = criteria.list();
 
@@ -170,7 +167,6 @@ public class Statistics {
 	void onPrepareForRender() {
 		teacherSelect = new TeacherSelectModel(dao);
 		facilitySelect = new FacilitySelectModel(dao);
-		boolSelect = new BooleanSelectModel();
 		roomSelect = facilityId == null ? new RoomSelectModel(null)
 				: new RoomSelectModel(dao.find(Facility.class, facilityId));
 		typeSelect = new TypeTitleSelectModel(dao);

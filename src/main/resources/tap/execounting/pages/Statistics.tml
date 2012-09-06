@@ -95,11 +95,11 @@
 					</th>					
 					
 					<th>
-						Дата 1 (не раньше)
+						Не раньше
 					</th>
 					
 					<th>
-						Дата 2 (не позже)
+						Не позже
 					</th>
 					<th>
 						Раcсчитываемый процент
@@ -107,7 +107,7 @@
 			    </tr>
 			    <tr>
 			    	<td>
-				    	<t:select model="boolSelect" value="state" 
+				    	<t:select value="state" 
 				    	blankLabel="message:blank-label" t:validate="none"/>
 			    	</td>
 			    	
