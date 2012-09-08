@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import tap.execounting.dal.CrudServiceDAO;
-import tap.execounting.dal.mediators.ContractMediator;
 import tap.execounting.data.ContractState;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
@@ -85,7 +84,7 @@ public interface ContractMed {
 	public ContractMed filterByPlannedPaymentsDate(Date date1, Date date2);
 	
 	//contract type
-	public ContractMediator filterByContractType(int type);
+	public ContractMed filterByContractType(int type);
 	
 ////counters:
 	

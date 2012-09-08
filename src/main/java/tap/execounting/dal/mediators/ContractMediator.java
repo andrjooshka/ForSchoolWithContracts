@@ -383,7 +383,7 @@ public class ContractMediator implements ContractMed {
 		return result;
 	}
 
-	public ContractMediator filterByContractType(int type) {
+	public ContractMed filterByContractType(int type) {
 		getAppliedFilters().put("ContractTypeId", type);
 		List<Contract> cache = getGroup();
 		Contract con;
