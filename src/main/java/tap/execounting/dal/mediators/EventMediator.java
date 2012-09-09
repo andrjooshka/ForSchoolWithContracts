@@ -28,20 +28,14 @@ public class EventMediator implements EventMed {
 
 	@Inject
 	private CrudServiceDAO dao;
-	private CrudServiceDAO sureDao;
 
 	@Inject
 	private DateFilter dateFilter;
 
 	private Event unit;
 
-	public EventMed setDao(CrudServiceDAO dao) {
-		this.sureDao = dao;
-		return this;
-	}
-
 	private CrudServiceDAO getDao() {
-		return dao == null ? sureDao : dao;
+		return dao;
 	}
 
 	public Event getUnit() {

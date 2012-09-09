@@ -3,7 +3,6 @@ package tap.execounting.dal.mediators.interfaces;
 import java.util.Date;
 import java.util.List;
 
-import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Comment;
 import tap.execounting.entities.Contract;
@@ -72,8 +71,4 @@ public interface TeacherMed {
 	
 	//count:
 	public Integer countGroupSize();
-	
-	
-	//service methods which we should avoid to use
-	public void setDao(CrudServiceDAO dao);
 }

@@ -19,7 +19,6 @@ import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import tap.execounting.components.editors.AddComment;
 import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.dal.QueryParameters;
-import tap.execounting.dal.mediators.ContractMediator;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.dal.mediators.interfaces.EventMed;
 import tap.execounting.dal.mediators.interfaces.TeacherMed;
@@ -183,9 +182,8 @@ public class TeacherPage {
 				.getGroup(true);
 	}
 
-	public List<Contract> getContracts() {
-		ContractMed cMed = new ContractMediator();
-		cMed.setDao(dao);
+	public List<Contract> getActiveContracts() {
+		cMed.reset();
 		return cMed.filter(tMed.getUnit()).filter(ContractState.active)
 				.getGroup();
 	}

@@ -37,29 +37,17 @@ public class ContractMediator implements ContractMed {
 
 	@Inject
 	private PaymentMed paymentMed;
-	private PaymentMed surePaymentMed;
 
 	@Inject
 	private CrudServiceDAO dao;
-	private CrudServiceDAO sureDao;
 
 	private Contract unit;
 
-	public ContractMed setDao(CrudServiceDAO dao) {
-		this.sureDao = dao;
-		return this;
-	}
-
 	private CrudServiceDAO getDao() {
-		return dao == null ? sureDao : dao;
+		return dao;
 	}
 
 	private PaymentMed getPaymentMed() {
-		if (paymentMed == null) {
-			surePaymentMed = new PaymentMediator();
-			surePaymentMed.setDao(getDao());
-			return surePaymentMed;
-		} else
 			return paymentMed;
 	}
 

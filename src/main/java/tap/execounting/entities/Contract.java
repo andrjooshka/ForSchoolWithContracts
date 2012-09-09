@@ -103,6 +103,7 @@ public class Contract implements Comparable<Contract>, Dated {
 	private WeekSchedule schedule;
 
 	public Contract() {
+		setDate(DateService.trimToDate(new Date()));
 		setContractTypeId(1);
 	}
 

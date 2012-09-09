@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CrudServiceDAO;
@@ -31,49 +30,25 @@ public class ClientMediator implements ClientMed {
 
 	@Inject
 	private CrudServiceDAO dao;
-	@Persist
-	private CrudServiceDAO sureDao;
-
 	@Inject
 	private ContractMed contractMed;
-	private ContractMed sureContractMed;
-
 	@Inject
 	private PaymentMed paymentMed;
-	private PaymentMed surePaymentMed;
-
 	@Inject
 	private DateFilter dateFilter;
 
 	private Client unit;
 
-	public ClientMed setDao(CrudServiceDAO dao) {
-		this.sureDao = dao;
-		return this;
-	}
-
 	private CrudServiceDAO getDao() {
-		return sureDao == null ? dao : sureDao;
+		return dao;
 	}
 
 	private ContractMed getContractMed() {
-		if (sureContractMed != null)
-			return sureContractMed;
-		if (contractMed == null) {
-			sureContractMed = new ContractMediator();
-			sureContractMed.setDao(getDao());
-			return sureContractMed;
-		} else
-			return contractMed;
+		return contractMed;
 	}
 
 	private PaymentMed getPaymentMed() {
-		if (paymentMed == null) {
-			surePaymentMed = new PaymentMediator();
-			surePaymentMed.setDao(getDao());
-			return surePaymentMed;
-		} else
-			return paymentMed;
+		return paymentMed;
 	}
 
 	public Client getUnit() {
@@ -307,7 +282,7 @@ public class ClientMediator implements ClientMed {
 		return innerCache;
 	}
 
-	public ClientMediator setGroup(List<Client> group) {
+	public ClientMed setGroup(List<Client> group) {
 		cache = group;
 		return this;
 	}
@@ -452,13 +427,11 @@ public class ClientMediator implements ClientMed {
 	}
 
 	public Integer count(ClientState state) {
-		ClientMed cm = new ClientMediator().setDao(getDao());
-		return cm.filter(state).countGroupSize();
+		return filter(state).countGroupSize();
 	}
 
 	public Integer count(ClientState state, Date date1, Date date2) {
-		ClientMed cm = new ClientMediator().setDao(getDao());
-		return cm.filter(state).filterDateOfFirstContract(date1, date2)
+		return filter(state).filterDateOfFirstContract(date1, date2)
 				.countGroupSize();
 	}
 

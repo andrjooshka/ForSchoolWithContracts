@@ -13,7 +13,6 @@ import org.apache.tapestry5.corelib.components.BeanEditForm;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CrudServiceDAO;
-import tap.execounting.dal.mediators.ContractMediator;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.data.selectmodels.ContractTypeIdSelectModel;
 import tap.execounting.entities.Client;
@@ -62,14 +61,7 @@ public class AddContract {
 	private SelectModel contractTypeIdsModel;
 
 	private ContractMed getContractMed() {
-		return new ContractMediator().setDao(dao);
-		// try {
-		// contractMed.setUnit(con);
-		// return contractMed;
-		// } catch (LinkageError e) {
-		// e.printStackTrace();
-		// return new ContractMediator().setDao(dao);
-		// }
+		return contractMed;
 	}
 
 	public void setup(Contract con) {

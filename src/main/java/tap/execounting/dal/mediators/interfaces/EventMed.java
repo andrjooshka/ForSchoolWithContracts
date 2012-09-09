@@ -3,7 +3,6 @@ package tap.execounting.dal.mediators.interfaces;
 import java.util.Date;
 import java.util.List;
 
-import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.data.EventState;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
@@ -106,7 +105,4 @@ public interface EventMed {
 
 	//days
 	public int countDaysInEventsGroup();
-	
-	//service methods which we should avoid to use
-	public EventMed setDao(CrudServiceDAO dao);
 }

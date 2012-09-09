@@ -3,7 +3,6 @@ package tap.execounting.dal.mediators.interfaces;
 import java.util.Date;
 import java.util.List;
 
-import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.data.ContractState;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
@@ -99,9 +98,6 @@ public interface ContractMed {
 	
 	//money paid on contract
 	public Integer countMoneyPaid();
-	
-	//service methods which we should avoid to use
-	public ContractMed setDao(CrudServiceDAO dao);	
 }
 
 

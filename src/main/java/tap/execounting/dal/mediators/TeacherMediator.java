@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CrudServiceDAO;
@@ -13,7 +12,6 @@ import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.dal.mediators.interfaces.EventMed;
 import tap.execounting.dal.mediators.interfaces.TeacherMed;
-import tap.execounting.data.ClientState;
 import tap.execounting.data.ContractState;
 import tap.execounting.data.EventState;
 import tap.execounting.entities.Client;
@@ -26,52 +24,25 @@ public class TeacherMediator implements TeacherMed {
 
 	@Inject
 	private CrudServiceDAO dao;
-	private CrudServiceDAO sureDao;
-
 	@Inject
 	private EventMed eventMed;
-
 	@Inject
 	private ClientMed clientMed;
-	@Persist
-	private ClientMed sureClientMed;
-
-	public void setDao(CrudServiceDAO dao) {
-		this.sureDao = dao;
-	}
+	@Inject
+	private ContractMed contractMed;
 
 	private CrudServiceDAO getDao() {
-		CrudServiceDAO dao = this.dao == null ? sureDao : this.dao;
 		return dao;
 	}
 
 	private ClientMed getClientMed() {
-		if (clientMed == null) {
-			sureClientMed = new ClientMediator();
-			sureClientMed.setDao(getDao());
-			return sureClientMed;
-		} else {
-			try {
-				clientMed.count(ClientState.beginner);
-				return clientMed;
-			} catch (LinkageError le) {
-				le.printStackTrace();
-				sureClientMed = new ClientMediator();
-				sureClientMed.setDao(getDao());
-				return sureClientMed;
-			}
-		}
+		return clientMed;
 	}
-
+	private ContractMed getContractMed(){
+		return contractMed;
+	}
 	private EventMed getEventMed() {
-		if (eventMed == null) {
-			return new EventMediator().setDao(getDao());
-		}
 		return eventMed;
-	}
-
-	private ContractMed getContractMed() {
-		return new ContractMediator().setDao(getDao());
 	}
 
 	public Teacher unit;

@@ -19,18 +19,13 @@ public class PaymentMediator implements PaymentMed {
 
 	@Inject
 	private CrudServiceDAO dao;
-	private CrudServiceDAO sureDao;
 
 	@Inject
 	private DateFilter dateFilter;
 
 	private Payment unit;
-	
-	public void setDao(CrudServiceDAO dao){
-		this.sureDao = dao;
-	}
 	private CrudServiceDAO getDao(){
-		return dao == null ? sureDao : dao;
+		return dao;
 	}
 	
 

@@ -3,9 +3,6 @@ package tap.execounting.components.grids;
 import java.util.Date;
 import java.util.List;
 
-import tap.execounting.pages.ClientPage;
-import tap.execounting.services.SuperCalendar;
-
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Parameter;
@@ -15,11 +12,12 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
 
 import tap.execounting.dal.CrudServiceDAO;
-import tap.execounting.dal.mediators.ClientMediator;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Teacher;
+import tap.execounting.pages.ClientPage;
+import tap.execounting.services.SuperCalendar;
 
 public class ClientGridNCD {
 	@Inject
@@ -49,9 +47,7 @@ public class ClientGridNCD {
 	private ClientPage clientPage;
 
 	private ClientMed getClientMed() {
-		ClientMed c = new ClientMediator();
-		c.setDao(dao);
-		return c;
+		return clientMed;
 	}
 
 	void setupRender() {

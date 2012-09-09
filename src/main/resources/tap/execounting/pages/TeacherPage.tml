@@ -58,7 +58,7 @@
 	
 
 	
-	<div style="width:${width}px;">
+	<div style="width:${width}px;" id="clients block">
 	<t:zone t:id="clientsZone" id="clientsZone" update="show">
 		<t:if test="calendarCentric">
 			<t:actionlink t:id="eventsDateBackwardLink" zone="clientsZone">На месяц назад</t:actionlink>&nbsp;&nbsp;&nbsp;
@@ -76,7 +76,7 @@
 		</t:if>
 		
 		
-		<t:loop t:source="contracts" t:value="contract" class="" style="height: 110px;">
+		<t:loop t:source="activeContracts" t:value="contract" class="" style="height: 110px;">
 			<div style="margin-top:20px;">
 				<t:zone t:id="contractZone" id="contractZone${contract.id}" update="show">
 					<div style="display: inline-table; width:150px; height: 45px;

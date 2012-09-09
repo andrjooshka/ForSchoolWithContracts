@@ -1,5 +1,6 @@
 package tap.execounting.pages;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +18,6 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 
 import tap.execounting.dal.CrudServiceDAO;
-import tap.execounting.dal.mediators.ClientMediator;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.data.ClientState;
 import tap.execounting.data.selectmodels.ContractTypeIdSelectModel;
@@ -50,6 +50,10 @@ public class Clients {
 	@Inject
 	private Block plannedPayments;
 
+	// Mediators
+	@Inject
+	private ClientMed clientMed;
+	
 	// filtering fields
 
 	// planned payments
@@ -86,7 +90,7 @@ public class Clients {
 	private Date pfLaterDate;
 
 	private ClientMed getClientMed() {
-		return new ClientMediator().setDao(dao);
+		return clientMed;
 	}
 
 	@Persist
@@ -94,7 +98,7 @@ public class Clients {
 	@SuppressWarnings("unchecked")
 	public List<Client> getClients() {
 		if(clients!=null)
-			return clients.subList(0, clients.size());
+			return new ArrayList<Client>(clients);
 		List<Client> cs;
 		Criteria criteria = session.createCriteria(Client.class);
 
@@ -207,8 +211,13 @@ public class Clients {
 	}
 
 	public int getNewClients() {
-		return getClientMed().setGroup(getClients()).countNewbies(null, null)
-				+ getClientMed().setGroup(getClients()).countTrial(null, null);
+		List<Client> clients = getClients(); 
+		clientMed.setGroup(clients);
+		int newbies = clientMed.countNewbies(null, null);
+		clientMed.setGroup(getClients());
+		int trial = clientMed.countTrial(null, null);
+		
+		return trial + newbies;
 	}
 
 	public int getExpClients() {
