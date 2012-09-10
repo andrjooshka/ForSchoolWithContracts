@@ -7,6 +7,7 @@ import tap.execounting.entities.Client;
 import tap.execounting.entities.Comment;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Teacher;
+import tap.execounting.entities.TeacherAddition;
 
 public interface TeacherMed {
 //unit methods
@@ -15,6 +16,11 @@ public interface TeacherMed {
 	//unit
 	public Teacher getUnit();
 	public TeacherMed setUnit(Teacher unit);
+	
+	//id
+	public int getId();
+	//this method sets the unit itself
+	public void setId(int id);
 	
 	//name
 	public String getName();
@@ -65,6 +71,9 @@ public interface TeacherMed {
 	public int getMoneyEarnedForSchool(Date date1, Date date2);
 		//for self
 	public int getMoneyEarnedForSelf(Date date1, Date date2);
+	
+	//addition
+	public TeacherAddition getAddition();
 	
 //group methods
 	public List<Teacher> getAllTeachers();

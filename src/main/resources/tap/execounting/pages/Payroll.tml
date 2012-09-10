@@ -1,0 +1,121 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd">
+	<body>
+		<div id="margin">
+			<div id="header">
+				<div id="toptext">
+					АКТ ОКАЗАННЫХ УСЛУГ ЗА
+					<t:output value="dateOne" format="literal: MMMM yyyy" />
+					года
+					<br />
+					к договору № ${field1}
+				</div>
+				<div id="lefttext">г. Москва</div>
+				<div id="righttext">
+					<t:output value="today" format="literal: d MMM YYYY года" />
+				</div>
+			</div>
+			<div id="bodytextone">
+				Общество с ограниченной ответственностью «Формюзик», именуемое в
+				дальнейшем
+				«Заказчик», в лице генерального директора Маланова Петра
+				Николаевича,
+				действующего на основании Устава с одной стороны и
+				${field2}
+				в дальнейшем «Исполнитель»,
+				действующая от своего имени, с
+				другой
+				стороны, именуемые вместе
+				«Стороны»,
+				а по отдельности «Сторона»,
+				составили настоящий акт о нижеследующем.
+				<div class="li">
+					1. На основании заключенного между Заказчиком и
+					Исполнителем
+					договора
+					${field3}
+					возмездного оказания услуг «11» января
+					2011 года Исполнитель
+					выполнил
+					следующие услуги:
+					(Период выполнения
+					услуг с 05.08.2012 по 31.08.2012 )
+				</div>
+			</div>
+			<div id="tablecontainer">
+				<table>
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Ученик</th>
+							<th>Предмет</th>
+							<th>Кол-во занятий</th>
+							<th>стоимость</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>1</td>
+							<td>Student1</td>
+							<td>EventType1</td>
+							<td>EventsNumber1</td>
+							<td>EventPrice1</td>
+						</tr>
+						<tr>
+							<td>2</td>
+							<td>Student2</td>
+							<td>EventType2</td>
+							<td>EventsNumber2</td>
+							<td>EventPrice2</td>
+						</tr>
+						<tr t:type="loop" source="contracts" value="contract">
+							<td>${iteration}</td>
+							<td>Student</td>
+							<td>EventType3</td>
+							<td>EventsNumber3</td>
+							<td>EventPrice3</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div id="bodytexttwo">
+				<div class="li">
+					2. Общая стоимость оказанных услуг за период с
+					05.08.2012 по
+					31.08.2012 12600 руб
+				</div>
+				<div class="li">
+					3. Сумма НДФЛ составляет 1638 руб
+				</div>
+				<div class="li">
+					4. Итого наруки исполнителю 10962 руб
+				</div>
+				<div class="li">
+					5. В соответствии с пунктом 4.2 договора ${field4}
+					года Заказчик обязуется оплатить услуги в течении 5 (пяти) дней с
+					даты подписания настоящего акта.
+				</div>
+				<div class="li">
+					6. Настоящий акт составлен в двух экземплярах, по
+					одному для каждой из сторон.
+				</div>
+			</div>
+			<div id="footer">
+				<div id="footertop">
+					ПОДПИСИ СТОРОН:
+				</div>
+				<div id="princesig">
+					Заказчик:
+					<br />
+					_____Маланов П.Н.
+					<br />
+					М.П.
+				</div>
+				<div id="agentsig">
+					Исполнитель:
+					<br />
+					_____${field5}
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,69 @@
+body {
+	width: 210mm;
+	border: 1px solid #999;
+}
+
+#margin {
+	margin-left: 5mm;
+}
+
+#header {
+	margin-top: 5mm;
+	text-align: center;
+}
+
+#lefttext {
+	display: inline-block;
+	position: relative;
+	right: 30mm
+}
+
+#righttext {
+	display: inline-block;
+	position: relative;
+	right: -30mm;
+}
+
+#bodytextone {
+	margin-top: 3mm;
+	width:180mm;
+}
+
+#bodytextone :first-child {
+	margin-top: 2mm;
+}
+
+.li{
+	font-size: 11pt;
+	margin-left: 1mm;
+}
+
+table {
+	border-collapse: collapse;
+	margin-left: 1mm;
+}
+
+th,td {
+	border: 1px solid #333;
+}
+
+#bodytexttwo {
+	width: 180mm;
+}
+
+#footer {
+	margin-top: 5mm;
+	text-align: center;
+}
+
+#princesig {
+	display: inline-table;
+	position: relative;
+	right: 30mm
+}
+
+#agentsig {
+	display: inline-table;
+	position: relative;
+	right: -30mm
+}

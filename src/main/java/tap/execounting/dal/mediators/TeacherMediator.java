@@ -19,6 +19,7 @@ import tap.execounting.entities.Comment;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;
+import tap.execounting.entities.TeacherAddition;
 
 public class TeacherMediator implements TeacherMed {
 
@@ -38,9 +39,11 @@ public class TeacherMediator implements TeacherMed {
 	private ClientMed getClientMed() {
 		return clientMed;
 	}
-	private ContractMed getContractMed(){
+
+	private ContractMed getContractMed() {
 		return contractMed;
 	}
+
 	private EventMed getEventMed() {
 		return eventMed;
 	}
@@ -51,6 +54,7 @@ public class TeacherMediator implements TeacherMed {
 		return getDao().findWithNamedQuery(Teacher.ALL);
 	}
 
+	// Unit methods:
 	public Teacher getUnit() {
 		return unit;
 	}
@@ -59,6 +63,14 @@ public class TeacherMediator implements TeacherMed {
 		this.unit = unit;
 		clearCaches();
 		return this;
+	}
+
+	public int getId() {
+		return unit.getId();
+	}
+
+	public void setId(int id) {
+		setUnit(dao.find(Teacher.class, id));
 	}
 
 	private void clearCaches() {
@@ -282,6 +294,11 @@ public class TeacherMediator implements TeacherMed {
 				.filter(EventState.complete).countTeacherMoney();
 		getEventMed().reset();
 		return res;
+	}
+
+	public TeacherAddition getAddition() {
+		return dao.findUniqueWithNamedQuery(TeacherAddition.BY_TEACHER_ID,
+				QueryParameters.with("id", getId()).parameters());
 	}
 
 	private List<Teacher> teachersCache;
