@@ -19,7 +19,7 @@
 				дальнейшем
 				«Заказчик», в лице генерального директора Маланова Петра
 				Николаевича,
-				действующего на основании Устава с одной стороны и
+				действующего на основании Устава, с одной стороны и
 				${field2}
 				в дальнейшем «Исполнитель»,
 				действующая от своего имени, с
@@ -37,7 +37,7 @@
 					2011 года
 					Исполнитель
 					выполнил
-					следующие услуги:
+					следующие услуги: <br/>
 					(Период выполнения
 					услуг с
 					<t:output value="dateOne" format="literal: dd.MM.YYYY" />
@@ -53,17 +53,17 @@
 							<th>#</th>
 							<th>Ученик</th>
 							<th>Предмет</th>
-							<th>Кол-во занятий</th>
-							<th>стоимость</th>
+							<th>Число занятий</th>
+							<th>Стоимость</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr t:type="loop" source="contracts" value="contract">
-							<td>${iteration}</td>
+							<td class="num">${iteration}</td>
 							<td>${name}</td>
 							<td>${type}</td>
-							<td>${lessonsNumber}</td>
-							<td>${lessonPrice}</td>
+							<td class="num">${lessonsNumber}</td>
+							<td class="num">${lessonPrice}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -74,13 +74,13 @@
 					<t:output value="dateOne" format="literal: dd.MM.YYYY" />
 					по
 					<t:output value="dateTwo" format="literal: dd.MM.YYYY" />
-					${totalMoney} руб
+					составляет: ${totalMoney} руб.
 				</div>
 				<div class="li">
-					3. Сумма НДФЛ составляет ${tax} руб
+					3. Сумма НДФЛ составляет: ${tax} руб.
 				</div>
 				<div class="li">
-					4. Итого наруки исполнителю ${taxed} руб
+					4. Итого на руки исполнителю: ${taxed} руб.
 				</div>
 				<div class="li">
 					5. В соответствии с пунктом 4.2 договора ${field4}
@@ -99,14 +99,14 @@
 				<div id="princesig">
 					Заказчик:
 					<br />
-					_____Маланов П.Н.
+					________ Маланов П.Н.
 					<br />
 					М.П.
 				</div>
 				<div id="agentsig">
 					Исполнитель:
 					<br />
-					_____${field5}
+					________ ${field5}
 				</div>
 			</div>
 		</div>

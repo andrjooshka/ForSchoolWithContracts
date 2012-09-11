@@ -1,5 +1,6 @@
 body {
 	width: 210mm;
+	min-height: 297mm;
 	border: 1px solid #999;
 }
 
@@ -40,11 +41,18 @@ body {
 
 table {
 	border-collapse: collapse;
-	margin-left: 1mm;
+	margin: 1mm 0mm 1mm 3mm;
 }
 
 th,td {
 	border: 1px solid #333;
+	font-size: 10pt;
+	padding-right: 1mm;
+	padding-left: 1mm;
+}
+
+td.num {
+	text-align: right;
 }
 
 #bodytexttwo {
@@ -59,11 +67,14 @@ th,td {
 #princesig {
 	display: inline-table;
 	position: relative;
-	right: 30mm
+	right: 30mm;
+	line-height: 6.5mm;
 }
 
 #agentsig {
 	display: inline-table;
 	position: relative;
-	right: -30mm
+	right: -30mm;
+	top: -6.8mm;
+	line-height: 6.5mm;
 }
