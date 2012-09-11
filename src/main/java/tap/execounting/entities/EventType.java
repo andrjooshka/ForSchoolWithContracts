@@ -23,8 +23,10 @@ public class EventType {
 	
 	private String title;
 	
+	//Event price
 	private int money;
 	
+	//Money which school gets
 	private int share;
 	
 	public int getId() {
@@ -43,6 +45,9 @@ public class EventType {
 		this.title = title;
 	}
 
+	/**
+	 * @return Event price
+	 */
 	public int getMoney() {
 		return money;
 	}
@@ -51,12 +56,19 @@ public class EventType {
 		this.money = money;
 	}
 
+	/**
+	 * @return School money
+	 */
 	public int getShare() {
 		return share;
 	}
 
 	public void setShare(int share) {
 		this.share = share;
+	}
+	
+	public int getShareTeacher(){
+		return money - share;
 	}
 	
 	//Difference between typeTitle and title - that typeTitle returns 

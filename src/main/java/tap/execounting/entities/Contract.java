@@ -151,6 +151,9 @@ public class Contract implements Comparable<Contract>, Dated {
 		this.typeId = typeId;
 	}
 
+	/**
+	 * @return returns written number of events in contract 
+	 */
 	public int getLessonsNumber() {
 		return lessonsNumber;
 	}
@@ -322,8 +325,6 @@ public class Contract implements Comparable<Contract>, Dated {
 	}
 
 	public int getSingleLessonCost() {
-		if (lessonsNumber == 0)
-			return 0;
 		int totalLessonsCost = lessonsNumber * eventType.getMoney() - discount;
 		int singleLessonCost = totalLessonsCost / lessonsNumber;
 		return singleLessonCost;

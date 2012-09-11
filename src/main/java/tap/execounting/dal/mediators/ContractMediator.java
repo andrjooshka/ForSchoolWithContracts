@@ -48,7 +48,7 @@ public class ContractMediator implements ContractMed {
 	}
 
 	private PaymentMed getPaymentMed() {
-			return paymentMed;
+		return paymentMed;
 	}
 
 	public Contract getUnit() {
@@ -61,6 +61,11 @@ public class ContractMediator implements ContractMed {
 
 	public ContractMed setUnit(Contract unit) {
 		this.unit = unit;
+		return this;
+	}
+
+	public ContractMed setUnitId(int id) {
+		unit = dao.find(Contract.class, id);
 		return this;
 	}
 
@@ -79,6 +84,10 @@ public class ContractMediator implements ContractMed {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public String getClientName() {
+		return unit.getClient().getName();
 	}
 
 	public EventType getEventType() {
@@ -213,6 +222,10 @@ public class ContractMediator implements ContractMed {
 			count++;
 			date.add(Calendar.DAY_OF_WEEK, 1);
 		}
+	}
+
+	public EventType loadEventType(int id) {
+		return dao.find(EventType.class, id);
 	}
 
 	// group methods

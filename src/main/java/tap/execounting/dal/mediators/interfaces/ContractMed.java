@@ -17,10 +17,14 @@ public interface ContractMed {
 	//unit
 	public Contract getUnit();
 	public ContractMed setUnit(Contract unit);
+	public ContractMed setUnitId(int id);
 	
 	//getters:
 	//Teacher name
 	public String getTeacherName();
+	
+	//Client name
+	public String getClientName();
 	
 	//discipline
 	public EventType getEventType();
@@ -54,6 +58,8 @@ public interface ContractMed {
 	
 	//event planner method
 	public void planEvents();
+	
+	public EventType loadEventType(int id);
 	
 //group methods
 	//group

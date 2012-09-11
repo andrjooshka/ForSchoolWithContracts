@@ -34,11 +34,16 @@
 					договора
 					${field3}
 					возмездного оказания услуг «11» января
-					2011 года Исполнитель
+					2011 года
+					Исполнитель
 					выполнил
 					следующие услуги:
 					(Период выполнения
-					услуг с 05.08.2012 по 31.08.2012 )
+					услуг с
+					<t:output value="dateOne" format="literal: dd.MM.YYYY" />
+					по
+					<t:output value="dateTwo" format="literal: dd.MM.YYYY" />
+					)
 				</div>
 			</div>
 			<div id="tablecontainer">
@@ -53,26 +58,12 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>1</td>
-							<td>Student1</td>
-							<td>EventType1</td>
-							<td>EventsNumber1</td>
-							<td>EventPrice1</td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>Student2</td>
-							<td>EventType2</td>
-							<td>EventsNumber2</td>
-							<td>EventPrice2</td>
-						</tr>
 						<tr t:type="loop" source="contracts" value="contract">
 							<td>${iteration}</td>
-							<td>Student</td>
-							<td>EventType3</td>
-							<td>EventsNumber3</td>
-							<td>EventPrice3</td>
+							<td>${name}</td>
+							<td>${type}</td>
+							<td>${lessonsNumber}</td>
+							<td>${lessonPrice}</td>
 						</tr>
 					</tbody>
 				</table>
@@ -80,14 +71,16 @@
 			<div id="bodytexttwo">
 				<div class="li">
 					2. Общая стоимость оказанных услуг за период с
-					05.08.2012 по
-					31.08.2012 12600 руб
+					<t:output value="dateOne" format="literal: dd.MM.YYYY" />
+					по
+					<t:output value="dateTwo" format="literal: dd.MM.YYYY" />
+					${totalMoney} руб
 				</div>
 				<div class="li">
-					3. Сумма НДФЛ составляет 1638 руб
+					3. Сумма НДФЛ составляет ${tax} руб
 				</div>
 				<div class="li">
-					4. Итого наруки исполнителю 10962 руб
+					4. Итого наруки исполнителю ${taxed} руб
 				</div>
 				<div class="li">
 					5. В соответствии с пунктом 4.2 договора ${field4}

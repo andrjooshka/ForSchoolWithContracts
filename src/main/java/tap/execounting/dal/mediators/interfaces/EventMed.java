@@ -48,6 +48,9 @@ public interface EventMed {
 
 	//Room
 	public Room getRoom();
+	
+	//EventTypeLoader
+	public EventType loadEventType(int id);
 
 //group methods:
 	//group

@@ -129,6 +129,10 @@ public class EventMediator implements EventMed {
 			return null;
 		}
 	}
+	
+	public EventType loadEventType(int id) {
+		return dao.find(EventType.class, id);
+	}
 
 	private Map<String, Object> appliedFilters;
 	private List<Event> cache;
