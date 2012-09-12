@@ -1,5 +1,6 @@
 package tap.execounting.pages;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -14,6 +15,7 @@ import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 
 import tap.execounting.components.editors.AddComment;
@@ -38,6 +40,8 @@ public class TeacherPage {
 
 	@Inject
 	private AjaxResponseRenderer renderer;
+	@Inject
+	private PageRenderLinkSource linkSource;
 
 	@InjectComponent
 	private Zone scheduleZone;
@@ -86,6 +90,13 @@ public class TeacherPage {
 
 	@Property
 	private String day;
+
+	@Property
+	@Persist
+	private Date payrollDateOne;
+	@Property
+	@Persist
+	private Date payrollDateTwo;
 
 	@Property
 	@Persist
@@ -156,6 +167,11 @@ public class TeacherPage {
 	Object onActionFromClientPageLink(Client c) {
 		clientPage.setup(c);
 		return clientPage;
+	}
+
+	Object onSuccessFromPayrollForm() {
+		return linkSource.createPageRenderLinkWithContext(Payroll.class, tMed
+				.getUnit().getId(), getPayrollDateOneS(), getPayrollDateTwoS());
 	}
 
 	// requests from page
@@ -330,5 +346,15 @@ public class TeacherPage {
 
 	public List<Comment> getComments() {
 		return tMed.getComments();
+	}
+
+	public String getPayrollDateOneS() {		
+		SimpleDateFormat t = new SimpleDateFormat("dd.MM.YYYY");
+		return t.format(payrollDateOne);
+	}
+
+	public String getPayrollDateTwoS() {
+		SimpleDateFormat t = new SimpleDateFormat("dd.MM.YYYY");
+		return t.format(payrollDateTwo);
 	}
 }

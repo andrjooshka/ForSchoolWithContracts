@@ -325,6 +325,8 @@ public class Contract implements Comparable<Contract>, Dated {
 	}
 
 	public int getSingleLessonCost() {
+		if(lessonsNumber==0)
+			throw new IllegalArgumentException("Contract id: " + id);
 		int totalLessonsCost = lessonsNumber * eventType.getMoney() - discount;
 		int singleLessonCost = totalLessonsCost / lessonsNumber;
 		return singleLessonCost;

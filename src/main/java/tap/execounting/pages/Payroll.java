@@ -1,7 +1,6 @@
 package tap.execounting.pages;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -17,6 +16,7 @@ import tap.execounting.dal.mediators.interfaces.TeacherMed;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.TeacherAddition;
+import tap.execounting.services.DateService;
 
 @Import(stylesheet = "context:/layout/payroll.css")
 public class Payroll {
@@ -42,7 +42,13 @@ public class Payroll {
 	private int totalMoney = 0;
 
 	void onActivate(int teacherId) {
+		onActivate(teacherId, null, null);
+	}
+
+	boolean onActivate(int teacherId, String one, String two) {
 		tM.setId(teacherId);
+		setDates(one, two);
+		return true;
 	}
 
 	int onPassivate() {
@@ -52,15 +58,22 @@ public class Payroll {
 	void setupRender() {
 		iteration = 0;
 		addition = tM.getAddition();
-		setDates();
 	}
 
-	private void setDates() {
-		Calendar c = new GregorianCalendar();
-		c.set(2012, 1, 1);
-		dateOne = new Date(c.getTimeInMillis());
-		c.set(2012, 9, 1);
-		dateTwo = new Date(c.getTimeInMillis());
+	private Date toDate(String s) {
+		int day = Integer.valueOf(s.substring(0, 2));
+		int month = Integer.valueOf(s.substring(3, 5));
+		int year = Integer.valueOf(s.substring(6, 10));
+		GregorianCalendar c = new GregorianCalendar();
+		c.set(year, month-1, day);
+		return DateService.trimToDate(c.getTime());
+	}
+
+	private void setDates(String oneS, String twoS) {
+		Date one = toDate(oneS);
+		Date two = toDate(twoS);
+		dateOne = one == null ? new Date() : one;
+		dateTwo = two == null ? new Date() : two;
 	}
 
 	public int getIteration() {
@@ -156,39 +169,16 @@ public class Payroll {
 	public int getLessonsNumber() {
 		return contract.getEvents().size();
 	}
-	
-	public int getTotalMoney(){
+
+	public int getTotalMoney() {
 		return totalMoney;
 	}
-	public int getTax(){
-		return totalMoney*13/100;
+
+	public int getTax() {
+		return totalMoney * 13 / 100;
 	}
-	public int getTaxed(){
-		return getTotalMoney()-getTax();
+
+	public int getTaxed() {
+		return getTotalMoney() - getTax();
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
