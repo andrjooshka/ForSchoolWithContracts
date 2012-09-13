@@ -35,7 +35,7 @@ import tap.execounting.entities.Event;
 import tap.execounting.entities.Teacher;
 import tap.execounting.services.DateService;
 
-@Import(stylesheet = "context:/layout/weekschedule.css")
+@Import(stylesheet = {"context:/layout/weekschedule.css", "context:/layout/teacherpage.css"})
 public class TeacherPage {
 
 	@Inject

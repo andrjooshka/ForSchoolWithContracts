@@ -1,5 +1,6 @@
 package tap.execounting.services;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -20,6 +21,8 @@ public class DateService {
 	private static int YEAR = Calendar.YEAR;
 	private static int MONTH = Calendar.MONTH;
 	private static int DAY_OF_YEAR = Calendar.DAY_OF_YEAR;
+	private static int DAY_OF_MONTH = Calendar.DAY_OF_MONTH;
+	private static int MILLISECOND = Calendar.MILLISECOND;
 
 	// private static int DAY_OF_MONTH = Calendar.DAY_OF_MONTH;
 
@@ -37,27 +40,6 @@ public class DateService {
 
 	public DateService(TimeZone timeZone) {
 		this.setTimeZone(timeZone);
-	}
-
-	public Calendar IncrementDay(Calendar c) {
-		int day = getDayOfYear(c);
-		if (day != 365 && day != 366)
-			setDayOfYear(c, day + 1);
-		else if (day == 366) {
-			setYear(c, getYear(c) + 1);
-			setDayOfYear(c, 1);
-		} else if (getYear(c) % 4 == 0)
-			setDayOfYear(c, 366);
-		else {
-			setYear(c, getYear(c) + 1);
-			setDayOfYear(c, 1);
-		}
-
-		return c;
-	}
-
-	public Date IncrementDay(Date d) {
-		return IncrementDay(getCalendar(d)).getTime();
 	}
 
 	public void setYear(Calendar c, int year) {
@@ -83,40 +65,6 @@ public class DateService {
 		return c;
 	}
 
-	public Calendar nullHoursAndMinutes(Calendar c) {
-		Calendar copy = getCalendar(new Date(c.getTimeInMillis()));
-		assert copy.getTimeInMillis() == c.getTimeInMillis();
-		setHour(copy, 0);
-		setMinute(copy, 0);
-		copy.set(Calendar.MILLISECOND, 0);
-		copy.set(Calendar.SECOND, 0);
-		return copy;
-	}
-
-	public Date nullHoursAndMinutes(Date time) {
-		Calendar c = getCalendar(time);
-		c = nullHoursAndMinutes(c);
-		return new Date(c.getTimeInMillis());
-	}
-
-	public Calendar maxHoursAndMinutes(Calendar c) {
-		Calendar res = getCalendar(c.getTime());
-		assert (res.getTimeInMillis() == c.getTimeInMillis());
-
-		setHour(res, 23);
-		setMinute(res, 59);
-		return res;
-	}
-
-	public Date maxHourAndMinutes(Date d) {
-		Calendar c = getCalendar(d);
-		c = maxHoursAndMinutes(c);
-		return c.getTime();
-	}
-
-	public int getMinute(Calendar c) {
-		return c.get(MINUTE);
-	}
 
 	public void setMinute(Calendar c, int value) {
 		c.set(MINUTE, value);
@@ -135,14 +83,6 @@ public class DateService {
 		return year1 == year2 && day1 == day2;
 	}
 
-	public boolean compareDays(Date d1, Date d2) {
-		Calendar c1 = getCalendar(d1), c2 = getCalendar(d2);
-		return compareDays(c1, c2);
-	}
-
-	public boolean compareDays(Calendar c, Date d) {
-		return compareDays(c, getCalendar(d));
-	}
 
 	public TimeZone getTimeZone() {
 		return timeZone;
@@ -205,23 +145,6 @@ public class DateService {
 		dayOfWeekNames.put("Friday", names[4]);
 		dayOfWeekNames.put("Saturday", names[5]);
 		dayOfWeekNames.put("Sunday", names[6]);
-	}
-
-	public int dayRange(Date d1, Date d2) {
-		return dayRange(getCalendar(d1), getCalendar(d2));
-	}
-
-	public int dayRange(Calendar c1, Calendar c2) {
-		if (c2.before(c1))
-			throw new IllegalArgumentException(
-					"Date 1 must be before than date 2");
-		if (getYear(c1) == getYear(c2)) {
-			return getDayOfYear(c2) - getDayOfYear(c1);
-		}
-		if (getYear(c1) % 4 == 0) {
-			return 366 - getDayOfYear(c1) + getDayOfYear(c2);
-		}
-		return 365 - getDayOfYear(c1) + getDayOfYear(c2);
 	}
 
 	public int getDayOfMonth(Calendar c) {
@@ -292,6 +215,14 @@ public class DateService {
 		r.set(MONTH, c.get(MONTH));
 		return r.getTime();
 	}
+	
+	public static Date maxOutDayTime(Date date){
+		Calendar c = getMoscowCalendar();
+		c.setTime(trimToDate(c.getTime()));
+		c.add(DAY_OF_YEAR, 1);
+		c.add(MILLISECOND, -1);
+		return c.getTime();
+	}
 
 	public static TimeZone getMoscowTimeZone() {
 		return java.util.TimeZone.getTimeZone("Europe/Moscow");
@@ -309,5 +240,27 @@ public class DateService {
 		int dow = date.get(Calendar.DAY_OF_WEEK);
 		dow = dow == 1 ? 7 : dow - 1;
 		return dow;
+	}
+	public static String toString(String format, Date date){
+		SimpleDateFormat f = new SimpleDateFormat(format);
+		//f.setTimeZone(TimeZone.getTimeZone("Europe/London"));
+		return f.format(date);
+	}
+	public static String fullRepresentation(Date date){
+		return toString("H:m dd MM yyyy", date);
+	}
+	public static String fullRepresentation(Calendar cal){
+		StringBuilder sb = new StringBuilder();
+		sb.append(cal.get(HOUR));
+		sb.append(':');
+		sb.append(cal.get(MINUTE));
+		sb.append(' ');
+		sb.append(cal.get(DAY_OF_MONTH));
+		sb.append(' ');
+		sb.append(cal.get(MONTH));
+		sb.append(' ');
+		sb.append(cal.get(YEAR));
+		
+		return sb.toString();
 	}
 }

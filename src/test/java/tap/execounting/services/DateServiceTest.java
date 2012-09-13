@@ -1,8 +1,13 @@
 //package tap.execounting.services;
 //
 //import static org.junit.Assert.*;
+//import static tap.execounting.services.DateService.*;
+//import static java.lang.System.out;
 //
+//import java.util.Calendar;
+//import java.util.Date;
 //import java.util.GregorianCalendar;
+//import java.util.TimeZone;
 //
 //import org.junit.Test;
 //
@@ -16,5 +21,37 @@
 //		c1.add(GregorianCalendar.DAY_OF_WEEK, 1);
 //		assert c1.equals(c2);
 //	}
+//	
+//	@Test
+//	public void testDateTrimming(){
+//		Calendar cal = DateService.getMoscowCalendar();
+//		Date d = trimToDate(new Date());
+//		cal.setTime(d);
+//		out.println("Moscow");
+//		out.println(cal);
+//		out.println(fullRepresentation(cal));
+//		out.println(fullRepresentation(cal.getTime()));
+//		
+//		out.println("\nLondon");
+//		cal.setTimeZone(TimeZone.getTimeZone("Europe/London"));
+//		out.println(cal);
+//		out.println(fullRepresentation(cal));
+//		out.println(fullRepresentation(cal.getTime()));
+//		
+//		out.println("\n\nMaxTime");
+//		d = maxOutDayTime(d);
+//		cal.setTime(d);
+//		cal.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+//		out.println("Moscow");
+//		out.println(cal);
+//		out.println(fullRepresentation(cal));
+//		out.println(fullRepresentation(cal.getTime()));
+//		
+//		out.println("\nLondon");
+//		cal.setTimeZone(TimeZone.getTimeZone("Europe/London"));
+//		out.println(cal);
+//		out.println(fullRepresentation(cal));
+//		out.println(fullRepresentation(cal.getTime()));
+//	}
 //
-//}
+//}	

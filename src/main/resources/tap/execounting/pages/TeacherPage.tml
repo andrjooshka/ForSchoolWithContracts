@@ -4,10 +4,14 @@
 
 	<h3>${tMed.name}</h3>
 	<div id="payrollController">
-			<h4 style="margin-top: 20px; margin-bottom:30px;">Ведомость</h4>
+		<h4>Ведомость</h4>
 		<t:form t:id="payrollForm">
-			<t:datefield value="payrollDateOne" />
-			<t:datefield value="payrollDateTwo" />
+			<div>
+				 <t:datefield value="payrollDateOne" />
+			</div>
+			<div>
+				<t:datefield value="payrollDateTwo" />
+			</div>
 			<t:submit />
 		</t:form>
 	</div>
@@ -131,25 +135,24 @@
 
 					</t:zone>
 				</div>
-				<div>
-					<ex:accordion style="width:1100px;">
-						<ex:accordionItem title="literal:Детали">
-							<t:actionlink context="contract.client" t:id="clientpagelink">
-								Перейти на страницу клиента
-							</t:actionlink>
-							<br />
+				<ex:accordion>
+					<ex:accordionItem title="literal:Детали">
+						<t:actionlink context="contract.client" t:id="clientpagelink">
+							Перейти
+							на страницу клиента
+						</t:actionlink>
+						<br />
 
-							<div style="display:block;">
-								<t:show.showcontract contract="contract" />
-							</div>
+						<div style="display:block;">
+							<t:show.showcontract contract="contract" />
+						</div>
 
-							<t:loop source="othercontracts" value="contract">
-								<t:show.minicontract contract="contract" />
-							</t:loop>
+						<t:loop source="othercontracts" value="contract">
+							<t:show.minicontract contract="contract" />
+						</t:loop>
 
-						</ex:accordionItem>
-					</ex:accordion>
-				</div>
+					</ex:accordionItem>
+				</ex:accordion>
 			</t:loop>
 
 			<!--FROZEN AND INACTIVE CONTRACTS -->
