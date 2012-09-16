@@ -79,10 +79,6 @@ public class Event implements Comparable<Event>, Dated {
 	@JoinColumn(name = "type_id", nullable = false, updatable = false, insertable = false)
 	private EventType eventType;
 
-	@OneToOne(optional = false)
-	@JoinColumn(name = "type_id", nullable = false, updatable = false, insertable = false)
-	private Teacher host;
-
 	private String comment;
 
 	@ManyToMany
@@ -108,10 +104,6 @@ public class Event implements Comparable<Event>, Dated {
 
 	public void setHostId(int hostId) {
 		this.hostId = hostId;
-	}
-	
-	public Teacher getHost(){
-		return host;
 	}
 
 	public int getFacilityId() {

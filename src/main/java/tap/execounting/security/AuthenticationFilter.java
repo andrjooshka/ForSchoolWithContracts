@@ -2,11 +2,6 @@ package tap.execounting.security;
 
 import java.io.IOException;
 
-import tap.execounting.annotations.AnonymousAccess;
-import tap.execounting.pages.Schedules;
-import tap.execounting.pages.Signin;
-import tap.execounting.services.Authenticator;
-
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.runtime.Component;
 import org.apache.tapestry5.services.ComponentEventRequestParameters;
@@ -16,6 +11,11 @@ import org.apache.tapestry5.services.ComponentSource;
 import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.apache.tapestry5.services.PageRenderRequestParameters;
 import org.apache.tapestry5.services.Response;
+
+import tap.execounting.annotations.AnonymousAccess;
+import tap.execounting.pages.Home;
+import tap.execounting.pages.Signin;
+import tap.execounting.services.Authenticator;
 
 
 /**
@@ -38,7 +38,7 @@ public class AuthenticationFilter implements ComponentRequestFilter
 
     private final Authenticator authenticator;
 
-    private String defaultPage = Schedules.class.getSimpleName();
+    private String defaultPage = Home.class.getSimpleName();
 
     private String signinPage = Signin.class.getSimpleName();
 

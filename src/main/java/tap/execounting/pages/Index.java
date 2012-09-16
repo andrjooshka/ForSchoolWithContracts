@@ -14,6 +14,6 @@ public class Index
 
     public Object onActivate()
     {
-        return authenticator.isLoggedIn() ? Teachers.class : Signin.class;
+        return authenticator.isLoggedIn() ? Home.class : Signin.class;
     }
 }

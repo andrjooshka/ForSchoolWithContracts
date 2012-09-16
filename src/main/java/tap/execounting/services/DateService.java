@@ -199,15 +199,13 @@ public class DateService {
 	}
 
 	public static Date datePlusMonths(Date d, int months) {
-		Calendar c = getMoscowCalendar();
-		c.setTime(d);
+		Calendar c = getMoscowCalendar(d);
 		c.add(MONTH, months);
 		return c.getTime();
 	}
 
 	public static Date trimToMonth(Date date) {
-		Calendar c = getMoscowCalendar();
-		c.setTime(date);
+		Calendar c = getMoscowCalendar(date);
 		Calendar r = getMoscowCalendar();
 		r.setTimeInMillis(-10800000);
 
@@ -217,8 +215,7 @@ public class DateService {
 	}
 	
 	public static Date maxOutDayTime(Date date){
-		Calendar c = getMoscowCalendar();
-		c.setTime(trimToDate(c.getTime()));
+		Calendar c = getMoscowCalendar(trimToDate(date));
 		c.add(DAY_OF_YEAR, 1);
 		c.add(MILLISECOND, -1);
 		return c.getTime();
@@ -230,6 +227,12 @@ public class DateService {
 
 	public static Calendar getMoscowCalendar() {
 		Calendar c = new GregorianCalendar(getMoscowTimeZone());
+		return c;
+	}
+	
+	public static Calendar getMoscowCalendar(Date time) {
+		Calendar c = new GregorianCalendar(getMoscowTimeZone());
+		c.setTime(time);
 		return c;
 	}
 

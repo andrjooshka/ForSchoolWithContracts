@@ -24,7 +24,7 @@ import tap.execounting.data.selectmodels.TypeTitleSelectModel;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.EventType;
 import tap.execounting.entities.Facility;
-import tap.execounting.services.BroadcastingService;
+import tap.execounting.services.DateService;
 
 public class Statistics {
 
@@ -39,8 +39,6 @@ public class Statistics {
 	private AjaxResponseRenderer renderer;
 	@Inject
 	private EventMed eventMed;
-	@Inject
-	private BroadcastingService broadcaster;
 
 	// Page Components
 	@Property
@@ -104,15 +102,12 @@ public class Statistics {
 		}
 		if (teacherId != null)
 			criteria.add(Restrictions.eq("hostId", teacherId));
-		// if (typeId != null)
-		// criteria.add(Restrictions.eq("typeId", typeId));
-		if (date1 != null) {
-			criteria.add(Restrictions.gt("date", date1));
-			broadcaster.cast(date1.toString());
-		}
+		if (date1 != null)
+			criteria.add(Restrictions.ge("date", date1));
+
 		if (date2 != null) {
-			criteria.add(Restrictions.lt("date", date2));
-			broadcaster.cast(date2.toString());
+			date2 = DateService.maxOutDayTime(date2);
+			criteria.add(Restrictions.le("date", date2));
 		}
 		if (state != null)
 			criteria.add(Restrictions.eq("state", state.getCode()));
