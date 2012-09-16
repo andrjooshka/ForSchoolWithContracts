@@ -40,6 +40,7 @@ public class AppModule {
 
 		binder.bind(Authenticator.class, BasicAuthenticator.class);
 		binder.bind(SuperCalendar.class, RusCalendar.class);
+		binder.bind(BroadcastingService.class);
 	}
 
 	public static void contributeFactoryDefaults(

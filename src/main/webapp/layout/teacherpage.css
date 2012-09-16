@@ -29,3 +29,6 @@
 	border-radius: 5px;
 	box-shadow: 2px 4px 5px black, inset 0 0 5px silver;
 }
+#payrollController {
+	margin: 8px 0px 8px 0px;
+}

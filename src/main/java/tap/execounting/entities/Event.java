@@ -79,10 +79,13 @@ public class Event implements Comparable<Event>, Dated {
 	@JoinColumn(name = "type_id", nullable = false, updatable = false, insertable = false)
 	private EventType eventType;
 
+	@OneToOne(optional = false)
+	@JoinColumn(name = "type_id", nullable = false, updatable = false, insertable = false)
+	private Teacher host;
+
 	private String comment;
 
 	@ManyToMany
-	// (cascade={CascadeType.ALL})
 	@JoinTable(name = "events_contracts", joinColumns = { @JoinColumn(name = "event_id") }, inverseJoinColumns = { @JoinColumn(name = "contract_id") })
 	private List<Contract> contracts = new ArrayList<Contract>();
 
@@ -105,6 +108,10 @@ public class Event implements Comparable<Event>, Dated {
 
 	public void setHostId(int hostId) {
 		this.hostId = hostId;
+	}
+	
+	public Teacher getHost(){
+		return host;
 	}
 
 	public int getFacilityId() {

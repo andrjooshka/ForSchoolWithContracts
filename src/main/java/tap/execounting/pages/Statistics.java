@@ -24,6 +24,7 @@ import tap.execounting.data.selectmodels.TypeTitleSelectModel;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.EventType;
 import tap.execounting.entities.Facility;
+import tap.execounting.services.BroadcastingService;
 
 public class Statistics {
 
@@ -38,6 +39,8 @@ public class Statistics {
 	private AjaxResponseRenderer renderer;
 	@Inject
 	private EventMed eventMed;
+	@Inject
+	private BroadcastingService broadcaster;
 
 	// Page Components
 	@Property
@@ -80,15 +83,17 @@ public class Statistics {
 	@Property
 	@Persist
 	private Integer percent;
-	
-	private EventMed getEventMed(){
+
+	private EventMed getEventMed() {
 		return eventMed;
 	}
 
 	private List<Event> eventsCache;
+
 	@SuppressWarnings("unchecked")
 	public List<Event> getEvents() {
-		if(eventsCache!=null) return eventsCache.subList(0, eventsCache.size());
+		if (eventsCache != null)
+			return eventsCache.subList(0, eventsCache.size());
 		List<Event> events;
 		Criteria criteria = session.createCriteria(Event.class);
 
@@ -101,10 +106,14 @@ public class Statistics {
 			criteria.add(Restrictions.eq("hostId", teacherId));
 		// if (typeId != null)
 		// criteria.add(Restrictions.eq("typeId", typeId));
-		if (date1 != null)
+		if (date1 != null) {
 			criteria.add(Restrictions.gt("date", date1));
-		if (date2 != null)
+			broadcaster.cast(date1.toString());
+		}
+		if (date2 != null) {
 			criteria.add(Restrictions.lt("date", date2));
+			broadcaster.cast(date2.toString());
+		}
 		if (state != null)
 			criteria.add(Restrictions.eq("state", state.getCode()));
 
@@ -115,9 +124,9 @@ public class Statistics {
 				if (!events.get(i).getEventType().getTitle().contains(typeId))
 					events.remove(i);
 		}
-		
-		eventsCache =  events;
-		
+
+		eventsCache = events;
+
 		return events;
 	}
 

@@ -3,7 +3,10 @@ package tap.execounting.pages;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Persist;
@@ -65,7 +68,7 @@ public class Payroll {
 		int month = Integer.valueOf(s.substring(3, 5));
 		int year = Integer.valueOf(s.substring(6, 10));
 		GregorianCalendar c = new GregorianCalendar();
-		c.set(year, month-1, day);
+		c.set(year, month - 1, day);
 		return DateService.trimToDate(c.getTime());
 	}
 
@@ -121,7 +124,44 @@ public class Payroll {
 	}
 
 	private void filter(List<Event> events) {
+		/*
+		 * Logic of this algorithm is simple. For some teachers exist students
+		 * that study with them for free. Such students are stored in the
+		 * Map<Teacher,Student[]>. If in the contracts of the event one of those
+		 * students exist, he will be automatically removed
+		 */
+		int hostid = tM.getUnit().getId();
 
+		Set<Integer> tofilter = filterMap().keySet();
+
+		for (Integer j : tofilter)
+			if (hostid == j) {
+				
+				Integer[] clientsToFilter = filterMap().get(j);
+				List<Contract> contracts;
+				for (int i = events.size() - 1; i >= 0; i--) {
+					contracts = events.get(i).getContracts();
+					for (int k = contracts.size() - 1; k >= 0; k--) {
+						for(Integer x : clientsToFilter)
+							if(x==contracts.get(k).getClientId())
+								contracts.remove(k);
+					}
+					if(contracts.size()==0) events.remove(i);
+						
+				}
+				break;
+			}
+	}
+
+	private Map<Integer, Integer[]> filterMap() {
+		Map<Integer, Integer[]> fm = new HashMap<Integer, Integer[]>();
+		fm.put(6, new Integer[] { 21, 22, 23, 475 });
+		fm.put(9, new Integer[] { 38 });
+		fm.put(14, new Integer[] { 9, 14, 37, 39, 40, 112, 113, 116, 117, 404 });
+		fm.put(17, new Integer[] { 133, 136, 141, 142, 143, 343, 344, 407 });
+		fm.put(50, new Integer[] { 462 });
+
+		return fm;
 	}
 
 	List<Contract> toContracts(List<Event> source) {
