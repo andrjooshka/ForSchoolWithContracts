@@ -13,6 +13,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.tapestry5.beaneditor.NonVisual;
 import org.apache.tapestry5.beaneditor.Validate;
 
 import tap.execounting.entities.interfaces.Dated;
@@ -44,6 +45,9 @@ public class Payment implements Dated {
 	private int id;
 
 	private int amount;
+	
+	@NonVisual
+	private boolean deleted;
 
 	private boolean scheduled;
 
@@ -81,6 +85,14 @@ public class Payment implements Dated {
 
 	public void setAmount(int amount) {
 		this.amount = amount;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	public Date getDate() {

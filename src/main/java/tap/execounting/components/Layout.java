@@ -15,7 +15,7 @@ import tap.execounting.services.Authenticator;
 /**
  * Layout component for pages of application.
  */
-@Import(stylesheet = { "context:/layout/style.css" })
+@Import(stylesheet = { "context:/layout/style.css", "context:/layout/home.css" })
 public class Layout {
 	@Property
 	private String pageName;

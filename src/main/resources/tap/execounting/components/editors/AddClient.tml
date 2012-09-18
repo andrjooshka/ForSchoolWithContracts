@@ -6,6 +6,6 @@
 		</p:else>
 	</t:if> 
 	<div>
-		<t:beaneditform object="client" submitlabel="message:submit-label" exclude="id"/>
+		<t:beaneditform object="client" submitlabel="message:submit-label" exclude="id" include="canceled"/>
 	</div>
 </t:container>

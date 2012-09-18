@@ -19,6 +19,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.apache.tapestry5.beaneditor.NonVisual;
+
 import tap.execounting.data.ContractState;
 import tap.execounting.entities.interfaces.Dated;
 import tap.execounting.services.DateService;
@@ -48,7 +50,19 @@ public class Client implements Dated {
 	@JoinColumn(name = "client_id")
 	private List<Contract> contracts = new ArrayList<Contract>();
 
+	@NonVisual
 	private boolean canceled;
+	
+	@NonVisual
+	private boolean deleted;
+	
+	public boolean getDeleted(){
+		return deleted;
+	}
+	
+	public void setDeleted(){
+		deleted=true;
+	}
 
 	public int getId() {
 		return id;

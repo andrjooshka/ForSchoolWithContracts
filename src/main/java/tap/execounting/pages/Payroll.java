@@ -136,18 +136,23 @@ public class Payroll {
 
 		for (Integer j : tofilter)
 			if (hostid == j) {
-				
+
 				Integer[] clientsToFilter = filterMap().get(j);
 				List<Contract> contracts;
 				for (int i = events.size() - 1; i >= 0; i--) {
 					contracts = events.get(i).getContracts();
 					for (int k = contracts.size() - 1; k >= 0; k--) {
-						for(Integer x : clientsToFilter)
-							if(x==contracts.get(k).getClientId())
-								contracts.remove(k);
+						for (Integer x : clientsToFilter) {
+							if (contracts.size() > 0) {
+								if (x == contracts.get(k).getClientId())
+									contracts.remove(k);
+							} else
+								break;
+						}
 					}
-					if(contracts.size()==0) events.remove(i);
-						
+					if (contracts.size() == 0)
+						events.remove(i);
+
 				}
 				break;
 			}

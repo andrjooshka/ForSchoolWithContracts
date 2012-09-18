@@ -17,6 +17,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.apache.tapestry5.beaneditor.NonVisual;
+
 @Entity
 @NamedQueries(
 {
@@ -36,6 +38,9 @@ public class Facility {
 	
 	@Column(nullable = false, unique = true)
 	private String name;
+	
+	@NonVisual
+	private boolean deleted;
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "facilities_rooms", joinColumns = {@JoinColumn(name = "facility_id")},
@@ -84,5 +89,13 @@ public class Facility {
 	public void setRoomsNumber(int number){
 		while(getRoomsNumber() < number) rooms.add(new Room(getName() + " #" + getRoomsNumber()+1));
 		while(getRoomsNumber() > number) rooms.remove(rooms.size()-1);
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 }

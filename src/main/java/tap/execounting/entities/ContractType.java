@@ -9,6 +9,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.tapestry5.beaneditor.NonVisual;
+
 @Entity
 @Table(name = "contract_types")
 @NamedQueries({ @NamedQuery(name = ContractType.ALL, query = "Select ct from ContractType ct") })
@@ -26,6 +28,9 @@ public class ContractType {
 	private int id;
 
 	private String title;
+	
+	@NonVisual
+	private boolean deleted;
 
 	public int getId() {
 		return id;
@@ -41,5 +46,13 @@ public class ContractType {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 }

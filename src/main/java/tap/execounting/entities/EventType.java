@@ -8,6 +8,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import org.apache.tapestry5.beaneditor.NonVisual;
+
 @Entity
 @NamedQueries({ @NamedQuery(name = EventType.ALL, query = "Select et from EventType et" +
 		" order by et.title")
@@ -28,6 +30,9 @@ public class EventType {
 	
 	//Money which school gets
 	private int share;
+	
+	@NonVisual
+	private boolean deleted;
 	
 	public int getId() {
 		return id;
@@ -54,6 +59,14 @@ public class EventType {
 
 	public void setMoney(int money) {
 		this.money = money;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	/**

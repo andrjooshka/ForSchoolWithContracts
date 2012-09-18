@@ -18,6 +18,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.apache.tapestry5.beaneditor.NonVisual;
 import org.apache.tapestry5.beaneditor.Validate;
 
 import tap.execounting.data.EventState;
@@ -71,6 +72,9 @@ public class Event implements Comparable<Event>, Dated {
 	private Date date;
 
 	private int state;
+	
+	@NonVisual
+	private boolean deleted;
 
 	@Column(name = "type_id", unique = false)
 	private int typeId;
@@ -157,6 +161,14 @@ public class Event implements Comparable<Event>, Dated {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	public int getTypeId() {

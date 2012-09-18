@@ -14,11 +14,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Email;
 
-/**
- * Hotel Booking User
- * 
- * @author karesti
- */
+
 @Entity
 @NamedQueries({
 		@NamedQuery(name = User.ALL, query = "from User"),
@@ -36,8 +32,8 @@ public class User {
 
 	public static final String BY_ID = "User.byId";
 
-	// @SuppressWarnings("unused")
-	// private static final long serialVersionUID = 4060967693790504175L;
+	public static final String ADMIN = "admin";
+	public static final String MANAGER = "manager";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,6 +44,9 @@ public class User {
 	@NotNull
 	@Size(min = 3, max = 15)
 	private String username;
+	
+	@Size(min=3,max=15)
+	private String group;
 
 	@Column(nullable = false)
 	@NotNull
@@ -79,13 +78,14 @@ public class User {
 		this.password = password;
 	}
 
-	public User(int id, String username, String fullname, String email,
+	public User(int id, String username, String group, String fullname, String email,
 			String password) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.fullname = fullname;
 		this.email = email;
+		this.group=group;
 		this.password = password;
 	}
 
@@ -138,5 +138,13 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getGroup() {
+		return group;
+	}
+
+	public void setGroup(String group) {
+		this.group = group;
 	}
 }

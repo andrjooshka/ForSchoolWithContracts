@@ -11,6 +11,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.tapestry5.beaneditor.NonVisual;
+
 @Entity
 @NamedQueries({
 	@NamedQuery(name = Teacher.ALL, query = "from Teacher order by name"),
@@ -36,6 +38,8 @@ public class Teacher {
 	private String name;
 	@NotNull
 	private boolean active;
+	@NonVisual
+	private boolean deleted;
 	private Integer monday;
 	private Integer tuesday;
 	private Integer wednesday;
@@ -62,6 +66,12 @@ public class Teacher {
 	}
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+	public boolean isDeleted() {
+		return deleted;
+	}
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 	public Integer getMonday() {
 		return monday;

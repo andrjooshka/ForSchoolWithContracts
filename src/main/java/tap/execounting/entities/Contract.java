@@ -21,6 +21,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.tapestry5.beaneditor.NonVisual;
+
 import tap.execounting.data.ContractState;
 import tap.execounting.data.EventState;
 import tap.execounting.entities.interfaces.Dated;
@@ -64,6 +66,9 @@ public class Contract implements Comparable<Contract>, Dated {
 	private boolean freeze;
 
 	private boolean canceled;
+	
+	@NonVisual
+	private boolean deleted;
 
 	@Column(name = "contract_type_id", unique = false)
 	private int contractTypeId;
@@ -204,6 +209,14 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	public void setCanceled(boolean canceled) {
 		this.canceled = canceled;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	public int getContractTypeId() {

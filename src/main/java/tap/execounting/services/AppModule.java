@@ -21,6 +21,8 @@ import org.slf4j.Logger;
 import tap.execounting.dal.HibernateModule;
 import tap.execounting.dal.mediators.MediatorModule;
 import tap.execounting.security.AuthenticationFilter;
+import tap.execounting.security.AuthorizationDispatcher;
+import tap.execounting.security.DispatcherOne;
 import fr.exanpe.t5.lib.services.ExanpeLibraryModule;
 
 /**
@@ -41,6 +43,7 @@ public class AppModule {
 		binder.bind(Authenticator.class, BasicAuthenticator.class);
 		binder.bind(SuperCalendar.class, RusCalendar.class);
 		binder.bind(BroadcastingService.class);
+		binder.bind(AuthorizationDispatcher.class, DispatcherOne.class);
 	}
 
 	public static void contributeFactoryDefaults(
