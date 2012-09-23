@@ -17,6 +17,7 @@ import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.data.EventRowElement;
 import tap.execounting.data.EventState;
 import tap.execounting.entities.Event;
+import tap.execounting.security.AuthorizationDispatcher;
 
 public class EventCell {
 	@Property
@@ -27,6 +28,8 @@ public class EventCell {
 	private EventRowElement element;
 	@InjectComponent
 	private Zone cellZone;
+	@Inject
+	private AuthorizationDispatcher dispatcher;
 	@Inject
 	private CrudServiceDAO dao;
 	@Persist
@@ -59,17 +62,22 @@ public class EventCell {
 		c.setTime(element.getDate());
 		return c.get(Calendar.DAY_OF_MONTH);
 	}
-	
-	public String getDow(){
-		return new SimpleDateFormat("E", new Locale("ru")).format(element.getDate());
+
+	public String getDow() {
+		return new SimpleDateFormat("E", new Locale("ru")).format(element
+				.getDate());
 	}
 
 	Object onActionFromEdit(int id) {
-		Event e = dao.find(Event.class, id);
-		element = new EventRowElement(e.getDate(), e);
-		back = new EventRowElement(element.getDate(), element.getEvent());
-		if(e.getDate().after(new Date())) return cellZone;
-		editing = true;
+		// AUTHORIZATION MOUNT POINT EVENT.STATE EDIT
+		if (dispatcher.canEditEvents()) {
+			Event e = dao.find(Event.class, id);
+			element = new EventRowElement(e.getDate(), e);
+			back = new EventRowElement(element.getDate(), element.getEvent());
+			if (e.getDate().after(new Date()))
+				return cellZone;
+			editing = true;
+		}
 		return cellZone;
 	}
 
@@ -77,7 +85,7 @@ public class EventCell {
 		back.getEvent().setState(state);
 		dao.update(back.getEvent());
 		element = back;
-		
+
 		editing = false;
 		return cellZone;
 	}

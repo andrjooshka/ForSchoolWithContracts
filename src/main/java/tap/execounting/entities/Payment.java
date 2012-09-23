@@ -8,9 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.apache.tapestry5.beaneditor.NonVisual;
@@ -45,7 +45,7 @@ public class Payment implements Dated {
 	private int id;
 
 	private int amount;
-	
+
 	@NonVisual
 	private boolean deleted;
 
@@ -59,11 +59,11 @@ public class Payment implements Dated {
 	@Column(name = "contract_id")
 	private int contractId;
 
-	@OneToOne(optional = false)
-	@JoinColumn(name = "contract_id", insertable = false, updatable = false)
+	@ManyToOne
+	@JoinColumn(name = "contract_id", updatable = false, insertable = false)
 	private Contract contract;
-	
-	public Payment(){
+
+	public Payment() {
 		date = new Date();
 	}
 

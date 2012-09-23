@@ -7,20 +7,23 @@ public class Entities {
 	public static final byte CLIENT = 3;
 	public static final byte PAYMENT = 4;
 	public static final byte EVENT_TYPE = 5;
+	public static final byte FACILITY = 6;
 
 	public static byte getCode(String name) {
-		if (name == "Event")
+		if (name.equals("Event"))
 			return EVENT;
-		if (name == "Contract")
+		if (name.equals("Contract"))
 			return CONTRACT;
-		if (name == "Teacher")
+		if (name.equals("Teacher"))
 			return TEACHER;
-		if (name == "Payment")
+		if (name.equals("Payment"))
 			return PAYMENT;
-		if (name == "Client")
+		if (name.equals("Client"))
 			return CLIENT;
-		if (name == "EventType")
+		if (name.equals("EventType"))
 			return EVENT_TYPE;
+		if (name.equals("Facility"))
+			return FACILITY;
 		throw new IllegalArgumentException("Class " + name + " not supported");
 	}
 }

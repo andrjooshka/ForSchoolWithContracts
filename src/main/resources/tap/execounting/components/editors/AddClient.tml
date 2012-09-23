@@ -6,6 +6,11 @@
 		</p:else>
 	</t:if> 
 	<div>
-		<t:beaneditform object="client" submitlabel="message:submit-label" exclude="id" include="canceled"/>
+		<t:beaneditform object="client" submitlabel="message:submit-label" exclude="id" add="canceled">
+			<p:canceled>
+				<t:label for="canceledbox" />
+				<t:checkbox t:id="canceledbox" value="client.canceled"/>
+			</p:canceled>
+		</t:beaneditform>
 	</div>
 </t:container>

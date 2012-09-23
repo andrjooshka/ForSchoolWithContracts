@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.InjectPage;
@@ -12,6 +13,7 @@ import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.corelib.components.Zone;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
@@ -22,9 +24,23 @@ import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Payment;
+import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.SuperCalendar;
 
 public class Reports {
+	// Injected
+	@Inject
+	private Session session;
+	@Inject
+	private Messages messages;
+	@Inject
+	private AjaxResponseRenderer renderer;
+	@Inject
+	private AuthorizationDispatcher dispatcher;
+	
+	// Page components
+	@Component
+	private Zone paymentZone;
 	@Inject
 	private BeanModelSource beanModelSource;
 	@Property
@@ -36,17 +52,16 @@ public class Reports {
 	@Inject
 	private ComponentResources componentResources;
 	@Property
-	@Persist
 	private Payment loopPayment;
-	@Component
-	private Zone paymentZone;
+	@Persist
+	private int loopPaymentId;
 	@Inject
-	private Session session;
+	private Block authBlock;
+	@Inject
+	private Block confirmBlock;
+	// Page stuff
 	@Property
 	private Client client;
-	@Inject
-	private AjaxResponseRenderer renderer;
-
 	@InjectPage
 	private ClientPage clientPage;
 
@@ -163,42 +178,66 @@ public class Reports {
 	@Property
 	@Persist
 	private boolean switchPages;
-	
+
 	@Property
 	private boolean editing;
 	@Inject
 	private SuperCalendar calendar;
-	
+
+	public int getLoopPaymentId() {
+		int lpi;
+		try {
+			lpi = loopPayment.getId();
+		} catch (NullPointerException e) {
+			lpi = loopPaymentId;
+		}
+		return lpi;
+	}
+
 	public String getPaymentInfo() {
 		StringBuilder builder = new StringBuilder();
-		builder.append(calendar.setTime(loopPayment.getDate()).stringByTuple("day",
-				"month")
+		builder.append(calendar.setTime(loopPayment.getDate()).stringByTuple(
+				"day", "month")
 				+ ": ");
 		builder.append(loopPayment.getAmount());
 		builder.append(" р. за '"
 				+ loopPayment.getContract().getEventType().getTitle() + "'.");
-		if (loopPayment.getComment() != null && !loopPayment.getComment().equals(""))
+		if (loopPayment.getComment() != null
+				&& !loopPayment.getComment().equals(""))
 			builder.append("Комм.: " + loopPayment.getComment());
 		return builder.toString();
 	}
-	
-	void onEdit(Payment p){
-		editing = true;
-		loopPayment=p;
-		renderer.addRender("paymentBody"+p.getId(), paymentZone);
+
+	public Block getDeleteBlock(){
+		if(dispatcher.canDeletePayments())
+			return confirmBlock;
+		return authBlock;
 	}
-	void onDelete(Payment payment) {
-		loopPayment= null;
-		dao.delete(Payment.class, payment.getId());
-		renderer.addRender("paymentBody"+payment.getId(), paymentZone);
+
+	void onEdit(Payment p) {
+		if (dispatcher.canEditPayments())
+			editing = true;
+		loopPayment = p;
+		renderer.addRender("paymentBody" + p.getId(), paymentZone);
 	}
-	
+
+	void onDelete(int paymentId) {
+		loopPaymentId = paymentId;
+		loopPayment = null;
+		if (dispatcher.canDeletePayments())
+			dao.delete(Payment.class, paymentId);
+		else
+			loopPayment = dao.find(Payment.class, loopPaymentId);
+		renderer.addRender("paymentBody" + paymentId, paymentZone);
+	}
+
 	@Inject
 	private CrudServiceDAO dao;
-	void onSuccessFromPaymentEditor(){
+
+	void onSuccessFromPaymentEditor() {
 		dao.update(loopPayment);
-		editing=false;
-		renderer.addRender("paymentBody"+loopPayment.getId(), paymentZone);
+		editing = false;
+		renderer.addRender("paymentBody" + loopPayment.getId(), paymentZone);
 	}
 
 	public String getPagerPosition() {

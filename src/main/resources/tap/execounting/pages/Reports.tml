@@ -1,9 +1,7 @@
-<html t:type="layout"
-		t:pageTitle="Клиенты"
-      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
-      xmlns:p="tapestry:parameter">
-    
-    <ul class="nav child">
+<html t:type="layout" t:pageTitle="Клиенты"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+
+	<ul class="nav child">
 		<t:pagelink page="clients">
 			<li>Сводка</li>
 		</t:pagelink>
@@ -11,80 +9,105 @@
 			<li>Отчеты</li>
 		</t:pagelink>
 	</ul>
-    
-      
+
+
 	<span style="position: absolute; top: 90px; right: 70px;">
 		<t:form t:id="switchPagesForm">
-			<t:checkbox t:id="switchPages" value="switchPages" onclick="this.form.submit();"/>
-			<t:label for="switchPages"/>
+			<t:checkbox t:id="switchPages" value="switchPages"
+				onclick="this.form.submit();" />
+			<t:label for="switchPages" />
 		</t:form>
 	</span>
-      
+
 	<div style="margin-top:60px;">
-	  	<h3>Осталось не более 2 занятий</h3>
-	  	<t:grid source="endingLessons" model="modelOfEnding" row="client" 
-	  	pagerPosition="${pagerPosition}" rowsPerPage="${rows}">
-	  		<p:nameCell>
-	  			<t:eventlink event="details" context="client">${client.name}</t:eventlink>
-	  		</p:nameCell>
-	  		<p:endingInfoCell>
-	  			${endingInfo}
-	  		</p:endingInfoCell>
-	  	</t:grid>
+		<h3>Осталось не более 2 занятий</h3>
+		<t:grid source="endingLessons" model="modelOfEnding" row="client"
+			pagerPosition="${pagerPosition}" rowsPerPage="${rows}">
+			<p:nameCell>
+				<t:eventlink event="details" context="client">${client.name}
+				</t:eventlink>
+			</p:nameCell>
+			<p:endingInfoCell>
+				${endingInfo}
+			</p:endingInfoCell>
+		</t:grid>
 	</div>
-	  
+
 	<div style="margin-top:30px;">
-	  	<h3>Платеж в ближайшие 2 недели</h3>
-	  	<t:grid source="schedPayments" model="modelOfPayments" row="client" 
-	  	pagerPosition="${pagerPosition}" rowsPerPage="${rows}">
-	  		<p:nameCell>
-	  			<t:eventlink event="details" context="client">${client.name}</t:eventlink>
-	  		</p:nameCell>
-	  		<p:paymentsInfoCell>
+		<h3>Платеж в ближайшие 2 недели</h3>
+		<t:grid source="schedPayments" model="modelOfPayments" row="client"
+			pagerPosition="${pagerPosition}" rowsPerPage="${rows}">
+			<p:nameCell>
+				<t:eventlink event="details" context="client">${client.name}
+				</t:eventlink>
+			</p:nameCell>
+			<p:paymentsInfoCell>
 				<t:loop source="client.plannedPayments" value="loopPayment">
-					<t:zone t:id="paymentZone" id="paymentBody${loopPayment.id}" update="show">
-						<t:if test="!editing">
-							<div class="panel" style="min-height: 45px; min-width: 100px; 
-							margin-top: 5px; max-width: 300px; padding: 5px; margin: 5px;">	
-								${paymentInfo}
-								<t:if test="loopPayment.contract.freeze">
-									<br/>
-									По замороженному договору.
-								</t:if>
-								<t:if test="loopPayment.contract.canceled">
-									<br/>
-									По расторгнутому договору.
-								</t:if>
-								<br/>
-								(<t:eventlink event="delete" context="loopPayment" t:zone="paymentBody${loopPayment.id}">удалить</t:eventlink> |
-								<t:eventlink event="edit" context="loopPayment"
-								t:zone="paymentBody${loopPayment.id}">изменить</t:eventlink>)
-							</div>
-						</t:if>
-						<t:if test="editing">
-							Платеж ${loopPayment.id} : Редактирование
-							<div>
-								<t:beaneditform object="loopPayment" t:id="paymentEditor" submitlabel="message:submit-label" 
-								exclude="id,contractId" t:zone="paymentBody${loopPayment.id}"/>
-							</div>
+					<t:zone t:id="paymentZone" id="paymentBody${loopPaymentId}"
+						update="show">
+						<t:if test="loopPayment">
+							<t:if test="!editing">
+								<div class="panel"
+									style="min-height: 45px; min-width: 100px; 
+							margin-top: 5px; max-width: 300px; padding: 5px; margin: 5px;">
+									${paymentInfo}
+									<t:if test="loopPayment.contract.freeze">
+										<br />
+										По замороженному договору.
+									</t:if>
+									<t:if test="loopPayment.contract.canceled">
+										<br />
+										По расторгнутому договору.
+									</t:if>
+									<br />
+									(
+									<t:delegate to="DeleteBlock" />
+									|
+									<t:eventlink event="edit" context="loopPayment"
+										t:zone="paymentBody${loopPayment.id}">изменить</t:eventlink>
+									)
+								</div>
+							</t:if>
+							<t:if test="editing">
+								Платеж ${loopPayment.id} : Редактирование
+								<div>
+									<t:beaneditform object="loopPayment" t:id="paymentEditor"
+										submitlabel="message:submit-label" exclude="id,contractId"
+										t:zone="paymentBody${loopPayment.id}" />
+								</div>
+							</t:if>
 						</t:if>
 					</t:zone>
 				</t:loop>
-	  		</p:paymentsInfoCell>
-	  	</t:grid>
+			</p:paymentsInfoCell>
+		</t:grid>
 	</div>
-	  
+
 	<div style="margin-top:30px;">
 		<h3>Должники</h3>
-	  	<t:grid source="debtors" model="modelOfDebtors" row="client" 
-	  	pagerPosition="${pagerPosition}" rowsPerPage="${rows}">
-	  		<p:nameCell>
-	  			<t:eventlink event="details" context="client">${client.name}</t:eventlink>
-	  		</p:nameCell>
-	  		<p:debtInfoCell>
-	  			${debtInfo}
+		<t:grid source="debtors" model="modelOfDebtors" row="client"
+			pagerPosition="${pagerPosition}" rowsPerPage="${rows}">
+			<p:nameCell>
+				<t:eventlink event="details" context="client">${client.name}
+				</t:eventlink>
+			</p:nameCell>
+			<p:debtInfoCell>
+				${debtInfo}
 			</p:debtInfoCell>
 		</t:grid>
 	</div>
-      
+	<t:block t:id="confirmBlock">
+		<t:eventlink event="delete" context="loopPayment.id"
+			t:zone="paymentBody${loopPayment.id}">
+			<span t:type="any" t:mixins="confirm" t:confirmEnabled="true"
+				t:confirmMessage="message:delete-payment-confirmation-message">удалить</span>
+		</t:eventlink>
+	</t:block>
+	<t:block t:id="authBlock">
+		<t:eventlink event="delete" context="loopPayment.id"
+			t:zone="paymentBody${loopPayment.id}">
+			<span t:type="any" t:mixins="auth"
+				t:authMessage="message:delete-payment-auth-message">удалить</span>
+		</t:eventlink>
+	</t:block>
 </html>

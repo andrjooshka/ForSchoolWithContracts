@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.tapestry5.annotations.Import;
-import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
@@ -34,28 +33,29 @@ public class Payroll {
 
 	private TeacherAddition addition;
 	@Property
-	@Persist
 	private Date dateOne;
 	@Property
-	@Persist
 	private Date dateTwo;
+	@Property
+	private String filtration;
 	@Property
 	private Contract contract;
 	private int iteration;
 	private int totalMoney = 0;
 
 	void onActivate(int teacherId) {
-		onActivate(teacherId, null, null);
+		onActivate(teacherId, null, null, "FilterOn");
 	}
 
-	boolean onActivate(int teacherId, String one, String two) {
+	boolean onActivate(int teacherId, String one, String two, String filtration) {
 		tM.setId(teacherId);
 		setDates(one, two);
+		this.filtration = filtration;
 		return true;
 	}
 
-	int onPassivate() {
-		return tM.getId();
+	Object[] onPassivate() {
+		return new Object[] { tM.getId(), dateOne, dateTwo, filtration };
 	}
 
 	void setupRender() {
@@ -90,28 +90,49 @@ public class Payroll {
 	}
 
 	public String getField1() {
-		return addition.getField_1();
+		try {
+			return addition.getField_1();
+		} catch (NullPointerException e) {
+			return "нет данных для отображения";
+		}
 	}
 
 	public String getField2() {
-		return addition.getField_2();
+		try {
+			return addition.getField_2();
+		} catch (NullPointerException e) {
+			return "нет данных для отображения";
+		}
 	}
 
 	public String getField3() {
-		return addition.getField_3();
+		try {
+			return addition.getField_3();
+		} catch (NullPointerException e) {
+			return "нет данных для отображения";
+		}
 	}
 
 	public String getField4() {
-		return addition.getField_4();
+		try {
+			return addition.getField_4();
+		} catch (NullPointerException e) {
+			return "нет данных для отображения";
+		}
 	}
 
 	public String getField5() {
-		return addition.getField_5();
+		try {
+			return addition.getField_5();
+		} catch (NullPointerException e) {
+			return "нет данных для отображения";
+		}
 	}
 
 	public List<Contract> getContracts() {
 		List<Event> source = raw();
-		filter(source);
+		if (filtration.contains("On"))
+			filter(source);
 		List<Contract> contracts = toContracts(source);
 
 		return contracts;

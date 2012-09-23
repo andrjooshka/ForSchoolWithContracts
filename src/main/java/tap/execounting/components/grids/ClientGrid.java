@@ -2,7 +2,6 @@ package tap.execounting.components.grids;
 
 import java.util.List;
 
-
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
@@ -16,6 +15,7 @@ import tap.execounting.components.editors.AddClient;
 import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Teacher;
+import tap.execounting.security.AuthorizationDispatcher;
 
 public class ClientGrid {
 	@Inject
@@ -26,7 +26,9 @@ public class ClientGrid {
 	private CrudServiceDAO dao;
 	@InjectComponent
 	private Zone ezone;
-	
+	@Inject
+	@Property
+	private AuthorizationDispatcher dispatcher;
 
 	@InjectComponent
 	private AddClient editor;
@@ -42,30 +44,42 @@ public class ClientGrid {
 
 	public List<Client> getSource() {
 		List<Client> list = dao.findWithNamedQuery(Client.ALL);
-		if(nameFilter!=null && nameFilter.length()>2)
-			for(int i =list.size()-1;i>=0;i--)
-				if(!list.get(i).getName().toLowerCase().contains(nameFilter.toLowerCase()))
+		if (nameFilter != null && nameFilter.length() > 2)
+			for (int i = list.size() - 1; i >= 0; i--)
+				if (!list.get(i).getName().toLowerCase()
+						.contains(nameFilter.toLowerCase()))
 					list.remove(i);
 		return list;
 	}
 
 	Object onActionFromEdit(Client c) {
-		editorActive = true;
-		editor.setup(c);
+		// AUTHORIZATION MOUNT POINT EDIT
+		if (dispatcher.canEditClients()) {
+			editorActive = true;
+			editor.setup(c);
+		}
 		return ezone.getBody();
 	}
 
 	Object onActionFromAdd() {
-		editorActive = true;
-		editor.reset();
+		// AUTHORIZATION MOUNT POINT CREATE
+		if (dispatcher.canCreateClients()) {
+			editorActive = true;
+			editor.reset();
+		}
 		return ezone.getBody();
 	}
 
 	void onDelete(Client c) {
-		if(c.getContracts().size()>0)
-			throw new IllegalArgumentException("У данного заключены с вами договора, пожалуйста сначала удалите их.");
-		else
-		dao.delete(Client.class, c.getId());
+		// AUTHORIZATION MOUNT POINT DELETE
+		if (dispatcher.canDeleteClients()) {
+			if (c.getContracts().size() > 0)
+				// TODO JAVASCRIPT ALERT MOUNT POINT
+				throw new IllegalArgumentException(
+						"У данного заключены с вами договора, пожалуйста сначала удалите их.");
+			else
+				dao.delete(Client.class, c.getId());
+		}
 	}
 
 	void setupRender() {

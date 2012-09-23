@@ -2,7 +2,6 @@ package tap.execounting.components.grids;
 
 import java.util.List;
 
-
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Property;
@@ -14,6 +13,7 @@ import org.apache.tapestry5.services.BeanModelSource;
 import tap.execounting.components.editors.AddEventType;
 import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.entities.EventType;
+import tap.execounting.security.AuthorizationDispatcher;
 
 public class TypeGrid {
 	@Inject
@@ -24,7 +24,10 @@ public class TypeGrid {
 	private CrudServiceDAO dao;
 	@InjectComponent
 	private Zone ezone;
-	
+	@Inject
+	@Property
+	private AuthorizationDispatcher dispatcher;
+
 	@InjectComponent
 	private AddEventType editor;
 	@Property
@@ -34,24 +37,32 @@ public class TypeGrid {
 	@Property
 	private EventType unit;
 
-	public List<EventType> getSource(){
+	public List<EventType> getSource() {
 		return dao.findWithNamedQuery(EventType.ALL);
 	}
-	
+
 	Object onActionFromEdit(EventType c) {
-		editorActive = true;
-		editor.setup(c);
+		// AUTHORIZATION MOUNT POINT
+		if (dispatcher.canEditEventTypes()) {
+			editorActive = true;
+			editor.setup(c);
+		}
 		return ezone.getBody();
 	}
 
 	Object onActionFromAdd() {
-		editorActive = true;
-		editor.reset();
+		// AUTHORIZATION MOUNT POINT
+		if (dispatcher.canCreateEventTypes()) {
+			editorActive = true;
+			editor.reset();
+		}
 		return ezone.getBody();
 	}
 
 	void onDelete(EventType c) {
-		dao.delete(EventType.class, c.getId());
+		// AUTHORIZATION MOUNT POINT
+		if (dispatcher.canDeleteEventTypes())
+			dao.delete(EventType.class, c.getId());
 	}
 
 	void setupRender() {

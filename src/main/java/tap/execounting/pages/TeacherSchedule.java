@@ -19,6 +19,7 @@ import tap.execounting.data.selectmodels.TeacherSelectModel;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;
+import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.RusCalendar;
 import tap.execounting.services.SuperCalendar;
 
@@ -64,6 +65,9 @@ public class TeacherSchedule {
 	@Property
 	private int row;
 
+	@Inject
+	private AuthorizationDispatcher dispatcher;
+
 	void onActionFromWeekBackward() {
 		firstDate.addDays(-7);
 		secondDate.addDays(-7);
@@ -97,13 +101,12 @@ public class TeacherSchedule {
 	}
 
 	Object onActionFromAddNew() {
-		try {
+		// AUTHORIZATION MOUNT POINT EVENT CREATE
+		if (dispatcher.canCreateEvents()) {
 			adding = true;
 			eventEditor.setup(getTeacher());
-			return editZone.getBody();
-		} catch (Exception exc) {
-			return null;
 		}
+		return editZone;
 	}
 
 	public void setup(Teacher t) {
@@ -283,7 +286,7 @@ public class TeacherSchedule {
 	public void setTeacher(Teacher teacher) {
 		this.teacherId = teacher.getId();
 	}
-	
+
 	public String getFormattedDate() {
 		return firstDate.dateString();
 	}

@@ -2,7 +2,6 @@ package tap.execounting.components.grids;
 
 import java.util.List;
 
-
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Property;
@@ -15,6 +14,7 @@ import tap.execounting.components.editors.AddTeacher;
 import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;
+import tap.execounting.security.AuthorizationDispatcher;
 
 public class TeacherGrid {
 	@Inject
@@ -25,7 +25,10 @@ public class TeacherGrid {
 	private CrudServiceDAO dao;
 	@InjectComponent
 	private Zone tzone;
-	
+	@Inject
+	@Property
+	private AuthorizationDispatcher dispatcher;
+
 	@InjectComponent
 	private AddTeacher editor;
 	@Property
@@ -36,32 +39,41 @@ public class TeacherGrid {
 	private Teacher unit;
 
 	public Facility facility(Integer id) {
-		if(id == null) return null;
+		if (id == null)
+			return null;
 		return dao.find(Facility.class, id);
 	}
 
 	public String state(Teacher t) {
 		return t.isActive() ? "да" : "нет";
 	}
-	
-	public List<Teacher> getSource(){
+
+	public List<Teacher> getSource() {
 		return dao.findWithNamedQuery(Teacher.ALL);
 	}
-	
+
 	Object onActionFromEdit(Teacher c) {
-		editorActive = true;
-		editor.setup(c);
-		return tzone.getBody();
+		// AUTHORIZATION MOUNT POINT
+		if (dispatcher.canEditTeachers()) {
+			editorActive = true;
+			editor.setup(c);
+		}
+		return tzone;
 	}
 
 	Object onActionFromAdd() {
-		editorActive = true;
-		editor.reset();
-		return tzone.getBody();
+		// AUTHORIZATION MOUNT POINT
+		if (dispatcher.canCreateTeachers()) {
+			editorActive = true;
+			editor.reset();
+		}
+		return tzone;
 	}
 
 	void onDelete(Teacher c) {
-		dao.delete(Teacher.class, c.getId());
+		// AUTHORIZATION MOUNT POINT
+		if (dispatcher.canDeleteTeachers())
+			dao.delete(Teacher.class, c.getId());
 	}
 
 	void setupRender() {
@@ -69,7 +81,7 @@ public class TeacherGrid {
 			model = beanModelSource.createDisplayModel(Teacher.class,
 					componentResources.getMessages());
 			model.add("Action", null);
-			
+
 			model.exclude("id");
 			for (String pn : model.getPropertyNames())
 				model.get(pn).sortable(false);

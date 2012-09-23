@@ -2,7 +2,6 @@ package tap.execounting.components.grids;
 
 import java.util.List;
 
-
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Property;
@@ -14,6 +13,7 @@ import org.apache.tapestry5.services.BeanModelSource;
 import tap.execounting.components.editors.AddFacility;
 import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.entities.Facility;
+import tap.execounting.security.AuthorizationDispatcher;
 
 public class FacilityGrid {
 	@Inject
@@ -24,7 +24,10 @@ public class FacilityGrid {
 	private CrudServiceDAO dao;
 	@InjectComponent
 	private Zone ezone;
-	
+	@Inject
+	@Property
+	private AuthorizationDispatcher dispatcher;
+
 	@InjectComponent
 	private AddFacility editor;
 	@Property
@@ -34,24 +37,32 @@ public class FacilityGrid {
 	@Property
 	private Facility unit;
 
-	public List<Facility> getSource(){
+	public List<Facility> getSource() {
 		return dao.findWithNamedQuery(Facility.ALL);
 	}
-	
+
 	Object onActionFromEdit(Facility c) {
-		editorActive = true;
-		editor.setup(c);
+		// AUTHORIZATION MOUNT POINT
+		if (dispatcher.canEditFacilities()) {
+			editorActive = true;
+			editor.setup(c);
+		}
 		return ezone.getBody();
 	}
 
 	Object onActionFromAdd() {
-		editorActive = true;
-		editor.reset();
+		// AUTHORIZATION MOUNT POINT
+		if (dispatcher.canCreateFacilities()) {
+			editorActive = true;
+			editor.reset();
+		}
 		return ezone.getBody();
 	}
 
 	void onDelete(Facility c) {
-		dao.delete(Facility.class, c.getFacilityId());
+		// AUTHORIZATION MOUNT POINT
+		if (dispatcher.canDeleteFacilities())
+			dao.delete(Facility.class, c.getFacilityId());
 	}
 
 	void setupRender() {

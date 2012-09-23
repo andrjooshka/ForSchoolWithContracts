@@ -2,7 +2,7 @@
 	
 	<t:form class="panel" style="width:300px;padding: 5px;">
 		<t:label for="text" style="display:inline-table"/> 
-		<t:textfield t:id="text" value="commentText" style="display:inline-table;height:40px;width:290px;"/>
+		<t:textarea t:id="text" value="commentText" style="display:inline-table;height:40px;width:290px;"/>
 		<br/>
 		<t:submit style="display:inline-table"/>
 	</t:form>

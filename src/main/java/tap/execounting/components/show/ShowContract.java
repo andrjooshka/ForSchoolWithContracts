@@ -3,6 +3,7 @@ package tap.execounting.components.show;
 import java.util.HashMap;
 import java.util.List;
 
+import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.SuperCalendar;
 
 import org.apache.tapestry5.annotations.Component;
@@ -38,6 +39,9 @@ public class ShowContract {
 	private SuperCalendar calendar;
 	@Inject
 	private Request request;
+	@Inject
+	@Property
+	private AuthorizationDispatcher dispatcher;
 
 	@InjectComponent
 	private Zone bodyZone;
@@ -69,65 +73,88 @@ public class ShowContract {
 	private boolean addingPayment;
 
 	Object onEdit(Contract e) {
-		editor.setup(e);
-		updateMode = true;
+		// AUTHORIZATION MOUNT POINT EDIT CONTRACT
+		if (dispatcher.canEditContracts()) {
+			editor.setup(e);
+			updateMode = true;
+		}
 		return bodyZone.getBody();
 	}
 
 	void onDelete(Contract con) {
-		if (con.getEvents().size() > 0 || con.getPayments().size() > 0)
-			throw new IllegalArgumentException(
-					"Перед удалением договора - удалите все платежи по нему и все его события");
-		dao.delete(Contract.class, con.getId());
+		// AUTHORIZATION MOUNT POINT DELETE CONTRACT
+		if (dispatcher.canDeleteContracts()) {
+			if (con.getEvents().size() > 0 || con.getPayments().size() > 0)
+				// JAVASCRIPT MOUNT POINT ALERT
+				throw new IllegalArgumentException(
+						"Перед удалением договора - удалите все платежи по нему и все его события");
+			dao.delete(Contract.class, con.getId());
+		}
 	}
 
 	void onFreeze(Contract con) {
-		System.out.print("\n\n onFreeze\n");
-		con.setFreeze(!con.isFreeze());
-		dao.update(con);
+		// AUTHORIZATION MOUNT POINT EDIT CONTRACT FREEZE
+		if (dispatcher.canEditContracts()) {
+			con.setFreeze(!con.isFreeze());
+			dao.update(con);
+		}
 	}
 
 	Object onAddEvent(Contract con) {
-		addingEvent = true;
-		newEvent = new Event();
-		newEvent.setTypeId(con.getTypeId());
-		newEvent.addContract(con);
-		Client c = dao.find(Client.class, con.getClientId());
-		newEvent.getClients().add(c);
-		newEvent.setHostId(con.getTeacherId());
-		eventEditor.setup(newEvent, false);
-
+		// AUTHORIZATION MOUNT POINT CREATE EVENT
+		if (dispatcher.canCreateEvents()) {
+			addingEvent = true;
+			newEvent = new Event();
+			newEvent.setTypeId(con.getTypeId());
+			newEvent.addContract(con);
+			Client c = dao.find(Client.class, con.getClientId());
+			newEvent.getClients().add(c);
+			newEvent.setHostId(con.getTeacherId());
+			eventEditor.setup(newEvent, false);
+		}
 		return eventZone.getBody();
 	}
 
 	Object onAddPayment(Contract con) {
-		addingPayment = true;
-		Payment p = new Payment();
-		p.setContractId(con.getId());
-		paymentEditor.setup(p);
-
+		// AUTHORIZATION MOUNT POINT CREATE PAYMENT
+		if (dispatcher.canCreatePayments()) {
+			addingPayment = true;
+			Payment p = new Payment();
+			p.setContractId(con.getId());
+			paymentEditor.setup(p);
+		}
 		return paymentZone.getBody();
 	}
 
 	Object onEditPayment(Payment p) {
-		addingPayment = true;
-		paymentEditor.setup(p);
-
+		// AUTHORIZATION MOUNT POINT EDIT PAYMENT
+		if (dispatcher.canEditPayments()) {
+			addingPayment = true;
+			paymentEditor.setup(p);
+		}
 		return request.isXHR() ? paymentZone.getBody() : null;
 	}
 
 	void onDeletePayment(Payment p) {
-		dao.delete(Payment.class, p.getId());
+		// AUTHORIZATION MOUNT POINT DELETE PAYMENT
+		if (dispatcher.canDeletePayments()) {
+			dao.delete(Payment.class, p.getId());
+		}
 	}
 
 	void onDeleteEvent(Event e) {
-		dao.delete(Event.class, e.getId());
+		// AUTHORIZATION MOUNT POINT DELETE EVENT
+		if (dispatcher.canDeleteEvents()) {
+			dao.delete(Event.class, e.getId());
+		}
 	}
 
 	Object onEditEvent(Event e) {
-		addingEvent = true;
-		eventEditor.setup(e, true);
-
+		// AUTHORIZATION MOUNT POINT EDIT EVENT
+		if (dispatcher.canEditEvents()) {
+			addingEvent = true;
+			eventEditor.setup(e, true);
+		}
 		return request.isXHR() ? eventZone.getBody() : null;
 	}
 
@@ -138,7 +165,7 @@ public class ShowContract {
 	public String getEtype() {
 		return dao.find(EventType.class, contract.getTypeId()).getTitle();
 	}
-	
+
 	public String getTeacher() {
 		String s;
 		if (contract.getTeacherId() == 0)

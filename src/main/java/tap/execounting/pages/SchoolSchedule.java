@@ -21,13 +21,16 @@ import tap.execounting.data.selectmodels.FacilitySelectModel;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Room;
+import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.SuperCalendar;
 
 public class SchoolSchedule {
 
-	//code helpers
+	// code helpers
 	@Inject
 	private CrudServiceDAO dao;
+	@Inject
+	private AuthorizationDispatcher dispatcher;
 	@Inject
 	private Request request;
 	@Inject
@@ -35,19 +38,19 @@ public class SchoolSchedule {
 	@Inject
 	private AjaxResponseRenderer renderer;
 
-	//page components
+	// page components
 	@Component
 	private Zone editorZone;
-	@Component(id="resultszone")
+	@Component(id = "resultszone")
 	private Zone resultsZone;
-	@Component(id="datelabelzone")
+	@Component(id = "datelabelzone")
 	private Zone datelabelZone;
 	@Component
 	private AddEvent eventEditor;
 	@Property
 	private FacilitySelectModel facilityselect;
-	
-	//page properties
+
+	// page properties
 	@Property
 	@Persist
 	private Facility facility;
@@ -67,7 +70,6 @@ public class SchoolSchedule {
 	private boolean adding;
 	private Event[][] eventsArray;
 
-	
 	public List<Integer> getRows() {
 		List<Integer> list = new ArrayList<Integer>();
 		for (int i = 0; i < rows; i++)
@@ -85,8 +87,7 @@ public class SchoolSchedule {
 		for (int i = 0; i < facility.getRoomsNumber(); i++)
 			if (facility.getRooms().get(i).getRoomId() == room.getRoomId())
 				idx = i;
-		System.out.println("idx: " + idx + " row: " + row);
-		return eventsArray[idx][row-1];
+		return eventsArray[idx][row - 1];
 	}
 
 	void setup(Facility f) {
@@ -100,22 +101,24 @@ public class SchoolSchedule {
 		facilityselect = new FacilitySelectModel(dao);
 		refreshEvents();
 	}
-	
-	void onSuccessFromControlPanel(){
+
+	void onSuccessFromControlPanel() {
 		refreshEvents();
 		facility = dao.find(Facility.class, facilityId);
-		if(request.isXHR()) renderer.addRender(resultsZone).addRender(datelabelZone); 
+		if (request.isXHR())
+			renderer.addRender(resultsZone).addRender(datelabelZone);
 	}
-	
-	Object onAdd(){
-		adding = true;
-		eventEditor.setup(facility);
-		return request.isXHR() ? editorZone.getBody() : null;
+
+	Object onAdd() {
+		// AUTHORIZATION MOUNT POINT EVENT CREATE
+		if (dispatcher.canCreateEvents()) {
+			adding = true;
+			eventEditor.setup(facility);
+		}
+		return request.isXHR() ? editorZone : null;
 	}
 
 	private void refreshEvents() {
-		
-		System.out.println("\n\nRefreshing\n\n");
 		@SuppressWarnings("unchecked")
 		List<Event>[] pan = new List[facility.getRoomsNumber()];
 		List<Room> rooms = facility.getRooms();
@@ -127,9 +130,6 @@ public class SchoolSchedule {
 			Room r = rooms.get(i);
 			params.put("roomId", r.getRoomId());
 			pan[i] = dao.findWithNamedQuery(Event.BY_ROOM_ID_AND_DATE, params);
-			String s = "room: " + r.getRoomId() + "\tevents: " + pan[i].size();
-			System.out.println("params: " + params.get("roomId") + " " + params.get("date"));
-			System.out.println("\n" + s + "\n");
 			sort(pan[i]);
 
 			if (pan[i].size() > rows)
@@ -146,8 +146,6 @@ public class SchoolSchedule {
 				j++;
 			}
 		}
-		
-		System.out.println("\n\nfinished refreshing\n\n");
 	}
 
 	private void sort(List<Event> list) {

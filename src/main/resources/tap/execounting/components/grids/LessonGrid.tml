@@ -37,7 +37,11 @@
 				<img src="icons/edit.png" class="icons"  />
 			</t:actionlink>
 			
-			<t:eventlink event="delete" context="unit">
+			<t:eventlink event="delete" context="unit" t:mixins="auth,confirm"
+			authEnabled="!dispatcher.canDeleteEvents()"
+			authMessage="message:delete-event-auth-message"
+			confirmEnabled="dispatcher.canDeleteEvents()"
+			confirmMessage="message:delete-event-confirm-message">
 				<img src="icons/trash.png" class="icons" />
 			</t:eventlink>
 		</p:actionCell>

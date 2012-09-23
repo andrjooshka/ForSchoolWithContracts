@@ -21,6 +21,6 @@ public class DevelopmentModule
         // assets. Web browsers will cache assets because of the far future expires
         // header. If existing assets are changed, the version number should also
         // change, to force the browser to download new versions.
-        configuration.add(SymbolConstants.APPLICATION_VERSION, "2.3-DEV");
+        configuration.add(SymbolConstants.APPLICATION_VERSION, "3.2-DEV");
     }
 }

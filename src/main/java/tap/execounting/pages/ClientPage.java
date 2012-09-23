@@ -1,7 +1,5 @@
 package tap.execounting.pages;
 
-import static java.lang.System.out;
-
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +14,7 @@ import tap.execounting.components.editors.AddContract;
 import tap.execounting.dal.CrudServiceDAO;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
+import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.SuperCalendar;
 
 public class ClientPage {
@@ -25,6 +24,8 @@ public class ClientPage {
 	private Client client;
 	@Inject
 	private CrudServiceDAO dao;
+	@Inject
+	private AuthorizationDispatcher dispatcher;
 	private boolean editorActive;
 	@Property
 	@Persist
@@ -43,28 +44,29 @@ public class ClientPage {
 	private boolean mode;
 	@Inject
 	private SuperCalendar calendar;
-	
 
-	// page events	
-	void onActivate(int clientId){
+	// page events
+	void onActivate(int clientId) {
 		this.client = dao.find(Client.class, clientId);
 	}
-	
-	int onPassivate(){
+
+	int onPassivate() {
 		return client.getId();
 	}
-	
+
 	void onPrepare() {
-		out.println("\n\nOnPrepare");
-		out.println("Number of contracts: " + client.getContracts().size());
+		// out.println("Number of contracts: " + client.getContracts().size());
 		client = dao.find(Client.class, client.getId());
 		setup(client);
 	}
 
 	Object onAddContract() {
-		editorActive = true;
-		return ezone.getBody();
+		// AUTHORIZATION MOUNT POINT CONTRACT CREATE
+		if (dispatcher.canCreateContracts())
+			editorActive = true;
+		return ezone;
 	}
+
 	// setup
 	public void setup(Client c) {
 		client = c;
@@ -102,7 +104,5 @@ public class ClientPage {
 	public boolean getEditorActive() {
 		return editorActive || editorActiveAlways;
 	}
-
-	
 
 }

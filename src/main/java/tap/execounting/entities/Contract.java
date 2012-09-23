@@ -94,7 +94,7 @@ public class Contract implements Comparable<Contract>, Dated {
 	@JoinColumn(name = "teacher_id", nullable = false, updatable = false, insertable = false)
 	private Teacher teacher;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "contract_id")
 	private List<Payment> payments = new ArrayList<Payment>();
 

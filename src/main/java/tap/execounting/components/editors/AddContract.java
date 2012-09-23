@@ -47,14 +47,12 @@ public class AddContract {
 	@Persist
 	private String etype;
 
-	@Persist
 	private List<EventType> etypes;
 
 	@Property
 	@Persist
 	private String teacher;
 
-	@Persist
 	private List<Teacher> teachers;
 
 	@Property
@@ -146,7 +144,8 @@ public class AddContract {
 			teacherId();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new IllegalArgumentException("Учителя c именем: " + teacher + ", не найдено.");
+			throw new IllegalArgumentException("Учителя c именем: " + teacher
+					+ ", не найдено.");
 		}
 
 		// Contract/Teacher Schedule compatibility check
@@ -165,7 +164,7 @@ public class AddContract {
 			e.printStackTrace();
 			String errorString = "Типа занятий: " + etype + ", не найдено.";
 			throw new IllegalArgumentException(errorString);
-			//editor.recordError(errorString);
+			// editor.recordError(errorString);
 		}
 	}
 

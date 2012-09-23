@@ -33,15 +33,19 @@ import tap.execounting.entities.Comment;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.Teacher;
+import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.DateService;
 
-@Import(stylesheet = {"context:/layout/weekschedule.css", "context:/layout/teacherpage.css"})
+@Import(stylesheet = { "context:/layout/weekschedule.css",
+		"context:/layout/teacherpage.css" })
 public class TeacherPage {
 
 	@Inject
 	private AjaxResponseRenderer renderer;
 	@Inject
 	private PageRenderLinkSource linkSource;
+	@Inject
+	private AuthorizationDispatcher dispatcher;
 
 	@InjectComponent
 	private Zone scheduleZone;
@@ -97,6 +101,9 @@ public class TeacherPage {
 	@Property
 	@Persist
 	private Date payrollDateTwo;
+	@Property
+	@Persist
+	private boolean payrollFiltration;
 
 	@Property
 	@Persist
@@ -128,7 +135,9 @@ public class TeacherPage {
 	}
 
 	void onActionFromScheduleEditLink() {
-		scheduleEdit = true;
+		// AUTHORIZATION MOUNT POINT TEACHER.SCHEDULE EDIT
+		if (dispatcher.canEditTeachers())
+			scheduleEdit = true;
 		renderer.addRender(scheduleZone);
 	}
 
@@ -170,8 +179,10 @@ public class TeacherPage {
 	}
 
 	Object onSuccessFromPayrollForm() {
+		String filterString = payrollFiltration ? "FilterOn" : "FilterOff";
 		return linkSource.createPageRenderLinkWithContext(Payroll.class, tMed
-				.getUnit().getId(), getPayrollDateOneS(), getPayrollDateTwoS());
+				.getUnit().getId(), getPayrollDateOneS(), getPayrollDateTwoS(),
+				filterString);
 	}
 
 	// requests from page
@@ -348,7 +359,7 @@ public class TeacherPage {
 		return tMed.getComments();
 	}
 
-	public String getPayrollDateOneS() {		
+	public String getPayrollDateOneS() {
 		SimpleDateFormat t = new SimpleDateFormat("dd.MM.YYYY");
 		return t.format(payrollDateOne);
 	}

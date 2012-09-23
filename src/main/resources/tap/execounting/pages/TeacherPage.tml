@@ -5,14 +5,17 @@
 	<h3>${tMed.name}</h3>
 	<div id="payrollController">
 		<h4>Ведомость</h4>
-		<t:form t:id="payrollForm">
+		<t:form t:id="payrollForm" >
 			<div>
 				 <t:datefield value="payrollDateOne" />
 			</div>
 			<div>
 				<t:datefield value="payrollDateTwo" />
 			</div>
-			<t:submit />
+			<div>
+				<t:checkbox value="payrollFiltration" label="message:payroll-check-label" />
+			</div>
+			<t:submit value="message:payroll-submit-label" />
 		</t:form>
 	</div>
 	<h4 style="margin-bottom:8px;">Расписание</h4>
@@ -103,7 +106,7 @@
 				<t:form zone="clientsZone" t:id="clientsDateForm">
 					<t:errors />
 					<t:datefield value="eventsDate" />
-					<t:submit style="margin-left:15px;" />
+					<t:submit value="message:submit-label" style="margin-left:15px;" />
 				</t:form>
 
 				<div
@@ -184,7 +187,7 @@
 			<t:datefield t:id="date1" />
 			<t:label for="date2" style="margin: 5px; margin-left: 25px;" />
 			<t:datefield t:id="date2" />
-			<t:submit style="margin-left: 20px;" />
+			<t:submit style="margin-left: 20px;" value="message:submit-label" />
 		</t:form>
 		<table class="panel contract">
 			<tr>
