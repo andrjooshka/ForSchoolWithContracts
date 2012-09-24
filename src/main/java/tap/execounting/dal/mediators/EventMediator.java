@@ -129,7 +129,7 @@ public class EventMediator implements EventMed {
 			return null;
 		}
 	}
-	
+
 	public EventType loadEventType(int id) {
 		return dao.find(EventType.class, id);
 	}
@@ -218,18 +218,41 @@ public class EventMediator implements EventMed {
 	}
 
 	public EventMed filter(EventState state) {
-		if (cache == null || appliedFilters == null
-				|| appliedFilters.size() == 0) {
-			cache = getDao().findWithNamedQuery(
-					Event.BY_STATE,
-					QueryParameters.with("stateCode", state.getCode())
-							.parameters());
-		} else {
+		if (state != EventState.paid) {
+			if (cache == null || appliedFilters == null
+					|| appliedFilters.size() == 0) {
+				cache = getDao().findWithNamedQuery(
+						Event.BY_STATE,
+						QueryParameters.with("stateCode", state.getCode())
+								.parameters());
+			} else {
 
-			List<Event> cache = getGroup();
-			for (int i = countGroupSize() - 1; i >= 0; i--)
-				if (cache.get(i).getState() != state)
-					cache.remove(i);
+				List<Event> cache = getGroup();
+				for (int i = countGroupSize() - 1; i >= 0; i--)
+					if (cache.get(i).getState() != state)
+						cache.remove(i);
+			}
+		} else {
+			if (cache == null || appliedFilters == null
+					|| appliedFilters.size() == 0) {
+				cache = getDao().findWithNamedQuery(
+						Event.BY_STATE,
+						QueryParameters.with("stateCode",
+								EventState.complete.getCode()).parameters());
+				List<Event> addition = getDao().findWithNamedQuery(
+						Event.BY_STATE,
+						QueryParameters.with("stateCode",
+								EventState.failedByClient.getCode())
+								.parameters());
+				cache.addAll(addition);
+
+			} else {
+				List<Event> cache = getGroup();
+				for (int i = countGroupSize() - 1; i >= 0; i--)
+					if (cache.get(i).getState() != EventState.failedByClient
+							&& cache.get(i).getState() != EventState.complete)
+						cache.remove(i);
+			}
 		}
 		getAppliedFilters().put("EventState", state);
 		return this;

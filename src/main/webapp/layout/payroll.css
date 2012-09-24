@@ -1,7 +1,8 @@
 body {
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
 	width: 210mm;
-	min-height: 297mm;
-	border: 1px solid #999;
+	min-height: 290mm;
 }
 
 #margin {
@@ -27,14 +28,14 @@ body {
 
 #bodytextone {
 	margin-top: 3mm;
-	width:180mm;
+	width: 180mm;
 }
 
 #bodytextone :first-child {
 	margin-top: 2mm;
 }
 
-.li{
+.li {
 	font-size: 11pt;
 	margin-left: 1mm;
 }

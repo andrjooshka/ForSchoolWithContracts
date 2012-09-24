@@ -109,7 +109,7 @@ public class Statistics {
 			date2 = DateService.maxOutDayTime(date2);
 			criteria.add(Restrictions.le("date", date2));
 		}
-		if (state != null)
+		if (state != null && state != EventState.paid)
 			criteria.add(Restrictions.eq("state", state.getCode()));
 
 		events = criteria.list();
@@ -119,6 +119,9 @@ public class Statistics {
 				if (!events.get(i).getEventType().getTitle().contains(typeId))
 					events.remove(i);
 		}
+
+		if (state == EventState.paid)
+			eventMed.setGroup(events).filter(state);
 
 		eventsCache = events;
 

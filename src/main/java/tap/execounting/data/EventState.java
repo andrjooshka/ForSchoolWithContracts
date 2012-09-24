@@ -4,8 +4,9 @@ public enum EventState {
 	planned(0, "Запланировано"), 
 	complete(1, "Состоялось"), 
 	failed(2,"Не состоялось"), 
-	failedByClient(3,"НС - Клиент"), 
-	failedByTeacher(4,"НС - Учитель");
+	failedByClient(3,"Сгорело"), 
+	failedByTeacher(4,"НС : педагог"), 
+	paid(5, "Состоявшиеся и сгоревшие");
 
 	private int code;
 	private String translation;

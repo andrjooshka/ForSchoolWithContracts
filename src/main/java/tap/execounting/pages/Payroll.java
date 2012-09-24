@@ -183,7 +183,7 @@ public class Payroll {
 		Map<Integer, Integer[]> fm = new HashMap<Integer, Integer[]>();
 		fm.put(6, new Integer[] { 21, 22, 23, 475 });
 		fm.put(9, new Integer[] { 38 });
-		fm.put(14, new Integer[] { 9, 14, 37, 39, 40, 112, 113, 116, 117, 404 });
+		fm.put(14, new Integer[] { 9, 14, 37, 39, 40, 112, 113, 116, 117, 260, 404 });
 		fm.put(17, new Integer[] { 133, 136, 141, 142, 143, 343, 344, 407 });
 		fm.put(50, new Integer[] { 462 });
 

@@ -2,13 +2,11 @@ package tap.execounting.components.grids;
 
 import java.util.List;
 
-
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CrudServiceDAO;
-import tap.execounting.data.EventState;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.EventType;
@@ -41,7 +39,7 @@ public class EventGrid {
 	}
 
 	public String getState() {
-		return event.getState()==EventState.complete ? "Проведено" : "Не проведено";
+		return event.getState().toString();
 	}
 
 	public String getTypeTitle() {
