@@ -5,7 +5,7 @@ import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.entities.Facility;
 
 public class AddFacility {
@@ -15,7 +15,7 @@ public class AddFacility {
 	private boolean updateMode;
 
 	@Inject
-	private CrudServiceDAO dao;
+	private CRUDServiceDAO dao;
 
 	@Persist
 	private Facility facility;

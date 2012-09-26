@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.QueryParameters;
 import tap.execounting.dal.mediators.interfaces.DateFilter;
 import tap.execounting.dal.mediators.interfaces.PaymentMed;
@@ -18,13 +18,13 @@ import tap.execounting.entities.Payment;
 public class PaymentMediator implements PaymentMed {
 
 	@Inject
-	private CrudServiceDAO dao;
+	private CRUDServiceDAO dao;
 
 	@Inject
 	private DateFilter dateFilter;
 
 	private Payment unit;
-	private CrudServiceDAO getDao(){
+	private CRUDServiceDAO getDao(){
 		return dao;
 	}
 	

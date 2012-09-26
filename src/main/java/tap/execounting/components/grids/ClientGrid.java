@@ -12,7 +12,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
 
 import tap.execounting.components.editors.AddClient;
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Teacher;
 import tap.execounting.security.AuthorizationDispatcher;
@@ -23,7 +23,7 @@ public class ClientGrid {
 	@Inject
 	private ComponentResources componentResources;
 	@Inject
-	private CrudServiceDAO dao;
+	private CRUDServiceDAO dao;
 	@InjectComponent
 	private Zone ezone;
 	@Inject

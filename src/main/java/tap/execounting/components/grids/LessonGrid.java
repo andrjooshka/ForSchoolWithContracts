@@ -11,7 +11,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
 
 import tap.execounting.components.editors.AddEvent;
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.data.EventState;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Event;
@@ -27,7 +27,7 @@ public class LessonGrid {
 	@Inject
 	private ComponentResources componentResources;
 	@Inject
-	private CrudServiceDAO dao;
+	private CRUDServiceDAO dao;
 	@Inject
 	@Property
 	private AuthorizationDispatcher dispatcher;

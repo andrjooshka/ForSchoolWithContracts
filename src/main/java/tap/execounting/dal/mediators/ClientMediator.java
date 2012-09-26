@@ -11,7 +11,7 @@ import java.util.Set;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.QueryParameters;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
@@ -29,7 +29,7 @@ import tap.execounting.entities.interfaces.Dated;
 public class ClientMediator implements ClientMed {
 
 	@Inject
-	private CrudServiceDAO dao;
+	private CRUDServiceDAO dao;
 	@Inject
 	private ContractMed contractMed;
 	@Inject
@@ -39,7 +39,7 @@ public class ClientMediator implements ClientMed {
 
 	private Client unit;
 
-	private CrudServiceDAO getDao() {
+	private CRUDServiceDAO getDao() {
 		return dao;
 	}
 

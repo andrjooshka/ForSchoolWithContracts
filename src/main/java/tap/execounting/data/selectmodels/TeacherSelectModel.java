@@ -9,14 +9,14 @@ import org.apache.tapestry5.OptionModel;
 import org.apache.tapestry5.internal.OptionModelImpl;
 import org.apache.tapestry5.util.AbstractSelectModel;
 
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.entities.Teacher;
 
 public class TeacherSelectModel extends AbstractSelectModel {
 
 	private List<OptionModel> options = new ArrayList<OptionModel>(3);
 
-	public TeacherSelectModel(CrudServiceDAO dao) {
+	public TeacherSelectModel(CRUDServiceDAO dao) {
 		List<Teacher> teachers = dao.findWithNamedQuery(Teacher.ALL);
 		for (Teacher t : teachers)
 			options.add(new OptionModelImpl(t.getName(), t.getId()));

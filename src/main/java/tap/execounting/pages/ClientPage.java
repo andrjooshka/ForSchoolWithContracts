@@ -11,7 +11,7 @@ import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.components.editors.AddContract;
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.security.AuthorizationDispatcher;
@@ -23,7 +23,7 @@ public class ClientPage {
 	@Persist
 	private Client client;
 	@Inject
-	private CrudServiceDAO dao;
+	private CRUDServiceDAO dao;
 	@Inject
 	private AuthorizationDispatcher dispatcher;
 	private boolean editorActive;

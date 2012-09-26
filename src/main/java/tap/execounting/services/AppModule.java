@@ -30,7 +30,7 @@ import fr.exanpe.t5.lib.services.ExanpeLibraryModule;
  * it's a good place to configure and extend Tapestry, or to place your own
  * service definitions.
  */
-@SubModule({ HibernateModule.class, MediatorModule.class, ExanpeLibraryModule.class })
+@SubModule({ HibernateModule.class, MediatorModule.class, ExanpeLibraryModule.class, ValidationModule.class})
 public class AppModule {
 	public static void bind(ServiceBinder binder) {
 		// binder.bind(MyServiceInterface.class, MyServiceImpl.class);

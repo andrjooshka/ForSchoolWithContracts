@@ -17,7 +17,7 @@ import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.data.ClientState;
 import tap.execounting.data.selectmodels.ContractTypeIdSelectModel;
@@ -40,7 +40,7 @@ public class Clients {
 	@Inject
 	private AjaxResponseRenderer ajaxResponseRenderer;
 	@Inject
-	private CrudServiceDAO dao;
+	private CRUDServiceDAO dao;
 	@Inject
 	private SuperCalendar calendar;
 

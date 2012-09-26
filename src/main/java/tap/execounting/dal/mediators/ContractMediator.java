@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.QueryParameters;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.dal.mediators.interfaces.DateFilter;
@@ -39,11 +39,11 @@ public class ContractMediator implements ContractMed {
 	private PaymentMed paymentMed;
 
 	@Inject
-	private CrudServiceDAO dao;
+	private CRUDServiceDAO dao;
 
 	private Contract unit;
 
-	private CrudServiceDAO getDao() {
+	private CRUDServiceDAO getDao() {
 		return dao;
 	}
 
@@ -190,7 +190,7 @@ public class ContractMediator implements ContractMed {
 	}
 
 	public void planEvents() {
-		CrudServiceDAO dao = getDao();
+		CRUDServiceDAO dao = getDao();
 		unit = dao.find(Contract.class, unit.getId());
 		for (Event e : unit.getEvents())
 			if (e.getState() == EventState.planned)

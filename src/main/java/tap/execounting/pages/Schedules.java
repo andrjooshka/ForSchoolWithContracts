@@ -10,7 +10,7 @@ import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;
@@ -19,7 +19,7 @@ import tap.execounting.entities.Teacher;
 public class Schedules {
 	
 	@Inject
-	private CrudServiceDAO dao;
+	private CRUDServiceDAO dao;
 	
 	@Property
 	private Teacher teacher;

@@ -20,7 +20,7 @@ import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Payment;
@@ -232,7 +232,7 @@ public class Reports {
 	}
 
 	@Inject
-	private CrudServiceDAO dao;
+	private CRUDServiceDAO dao;
 
 	void onSuccessFromPaymentEditor() {
 		dao.update(loopPayment);

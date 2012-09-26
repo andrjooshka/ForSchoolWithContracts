@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.QueryParameters;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
@@ -24,7 +24,7 @@ import tap.execounting.entities.TeacherAddition;
 public class TeacherMediator implements TeacherMed {
 
 	@Inject
-	private CrudServiceDAO dao;
+	private CRUDServiceDAO dao;
 	@Inject
 	private EventMed eventMed;
 	@Inject
@@ -32,7 +32,7 @@ public class TeacherMediator implements TeacherMed {
 	@Inject
 	private ContractMed contractMed;
 
-	private CrudServiceDAO getDao() {
+	private CRUDServiceDAO getDao() {
 		return dao;
 	}
 

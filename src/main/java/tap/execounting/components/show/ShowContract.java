@@ -18,7 +18,7 @@ import org.apache.tapestry5.services.Request;
 import tap.execounting.components.editors.AddContract;
 import tap.execounting.components.editors.AddEvent;
 import tap.execounting.components.editors.AddPayment;
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Event;
@@ -34,7 +34,7 @@ public class ShowContract {
 	private Contract contract;
 
 	@Inject
-	private CrudServiceDAO dao;
+	private CRUDServiceDAO dao;
 	@Inject
 	private SuperCalendar calendar;
 	@Inject

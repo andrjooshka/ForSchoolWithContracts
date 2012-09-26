@@ -9,7 +9,7 @@ import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.entities.User;
 
 
@@ -21,7 +21,7 @@ import tap.execounting.entities.User;
 public class Settings
 {
     @Inject
-    private CrudServiceDAO crudServiceDAO;
+    private CRUDServiceDAO crudServiceDAO;
 
     @Inject
     private Messages messages;

@@ -8,14 +8,14 @@ import org.apache.tapestry5.OptionModel;
 import org.apache.tapestry5.internal.OptionModelImpl;
 import org.apache.tapestry5.util.AbstractSelectModel;
 
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.entities.Facility;
 
 public class FacilitySelectModel extends AbstractSelectModel {
 	
 	private List<OptionModel> options = new ArrayList<OptionModel>(3);
 
-	public FacilitySelectModel(CrudServiceDAO dao) {
+	public FacilitySelectModel(CRUDServiceDAO dao) {
 		List<Facility> facilities = dao.findWithNamedQuery(Facility.ALL);
 		for (Facility f : facilities)
 			options.add(new OptionModelImpl(f.getName(), f.getFacilityId()));

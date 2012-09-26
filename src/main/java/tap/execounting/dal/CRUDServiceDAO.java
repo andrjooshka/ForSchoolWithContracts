@@ -10,7 +10,7 @@ import org.apache.tapestry5.hibernate.annotations.CommitAfter;
  * 
  * @author karesti
  */
-public interface CrudServiceDAO
+public interface CRUDServiceDAO
 {
     /**
      * Creates a new object for the given type. After a call to this method the entity will be

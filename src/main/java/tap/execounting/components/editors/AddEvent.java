@@ -16,7 +16,7 @@ import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.internal.OptionModelImpl;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.data.selectmodels.FacilitySelectModel;
 import tap.execounting.data.selectmodels.RoomSelectModel;
 import tap.execounting.data.selectmodels.TeacherSelectModel;
@@ -35,7 +35,7 @@ public class AddEvent {
 	private boolean updateMode;
 
 	@Inject
-	private CrudServiceDAO dao;
+	private CRUDServiceDAO dao;
 
 	@Property
 	@Persist

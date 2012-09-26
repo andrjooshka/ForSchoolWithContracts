@@ -5,7 +5,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.Session;
 
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.QueryParameters;
 import tap.execounting.entities.User;
 import tap.execounting.security.AuthenticationException;
@@ -23,7 +23,7 @@ public class BasicAuthenticator implements Authenticator
     public static final String AUTH_TOKEN = "authToken";
 
     @Inject
-    private CrudServiceDAO crudService;
+    private CRUDServiceDAO crudService;
 
     @Inject
     private Request request;

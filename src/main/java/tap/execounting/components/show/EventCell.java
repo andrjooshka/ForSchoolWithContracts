@@ -13,7 +13,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.data.EventRowElement;
 import tap.execounting.data.EventState;
 import tap.execounting.entities.Event;
@@ -31,7 +31,7 @@ public class EventCell {
 	@Inject
 	private AuthorizationDispatcher dispatcher;
 	@Inject
-	private CrudServiceDAO dao;
+	private CRUDServiceDAO dao;
 	@Persist
 	private EventRowElement back;
 

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
@@ -14,7 +15,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.mediators.interfaces.EventMed;
 import tap.execounting.data.EventState;
 import tap.execounting.data.selectmodels.FacilitySelectModel;
@@ -26,11 +27,12 @@ import tap.execounting.entities.EventType;
 import tap.execounting.entities.Facility;
 import tap.execounting.services.DateService;
 
+@Import(library="context:/js/updateEffects.js")
 public class Statistics {
 
 	// Code Helpers
 	@Inject
-	private CrudServiceDAO dao;
+	private CRUDServiceDAO dao;
 	@Inject
 	private Session session;
 	@Inject

@@ -4,7 +4,7 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.QueryParameters;
 import tap.execounting.entities.Comment;
 import tap.execounting.entities.User;
@@ -19,7 +19,7 @@ public class ShowComment {
 	private boolean showDeleted;
 
 	@Inject
-	private CrudServiceDAO dao;
+	private CRUDServiceDAO dao;
 
 	public boolean getShow() {
 		return !comment.isDeleted() || showDeleted;

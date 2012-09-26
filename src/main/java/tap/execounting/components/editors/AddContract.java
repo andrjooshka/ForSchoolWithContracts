@@ -5,14 +5,14 @@ import java.util.List;
 
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValidationException;
-import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Import;
+import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.BeanEditForm;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.data.selectmodels.ContractTypeIdSelectModel;
 import tap.execounting.entities.Client;
@@ -26,13 +26,13 @@ import tap.execounting.services.SuperCalendar;
 public class AddContract {
 
 	@Inject
-	private CrudServiceDAO dao;
+	private CRUDServiceDAO dao;
 	@Inject
 	private SuperCalendar calendar;
 	@Inject
 	private ContractMed contractMed;
 
-	@Component
+	@InjectComponent
 	private BeanEditForm editor;
 
 	@Property
@@ -163,8 +163,9 @@ public class AddContract {
 		} catch (Exception e) {
 			e.printStackTrace();
 			String errorString = "Типа занятий: " + etype + ", не найдено.";
-			throw new IllegalArgumentException(errorString);
-			// editor.recordError(errorString);
+			//thrsow new IllegalArgumentException(errorString);
+			editor.recordError(errorString);
+			throw new ValidationException(errorString);
 		}
 	}
 

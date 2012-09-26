@@ -12,12 +12,15 @@ import org.apache.tapestry5.beaneditor.NonVisual;
 
 @Entity
 @NamedQueries({ @NamedQuery(name = EventType.ALL, query = "Select et from EventType et" +
-		" order by et.title")
+		" order by et.title"),
+		@NamedQuery(name = EventType.ACTUAL, query = "from EventType where deleted=0")
 })
 @Table(name = "event_types")
 public class EventType {
 
 	public static final String ALL = "EventType.all";
+
+	public static final String ACTUAL = "EventType.actual";
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

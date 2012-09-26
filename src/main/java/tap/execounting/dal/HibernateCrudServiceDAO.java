@@ -17,7 +17,7 @@ import org.hibernate.Session;
  * @param <T>, type entity
  * @param <PK>, primarykey, the primary key
  */
-public class HibernateCrudServiceDAO implements CrudServiceDAO {
+public class HibernateCrudServiceDAO implements CRUDServiceDAO {
 
 	@Inject
 	private Session session;

@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.QueryParameters;
 import tap.execounting.dal.mediators.interfaces.DateFilter;
 import tap.execounting.dal.mediators.interfaces.EventMed;
@@ -27,14 +27,14 @@ import tap.execounting.services.DateService;
 public class EventMediator implements EventMed {
 
 	@Inject
-	private CrudServiceDAO dao;
+	private CRUDServiceDAO dao;
 
 	@Inject
 	private DateFilter dateFilter;
 
 	private Event unit;
 
-	private CrudServiceDAO getDao() {
+	private CRUDServiceDAO getDao() {
 		return dao;
 	}
 

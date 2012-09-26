@@ -5,7 +5,7 @@
         
         <div>
         	<h3>Сводка</h3>
-        	<t:zone t:id="statZone" id="statZone">
+        	<t:zone t:id="statZone" id="statZone" update="shake">
 	        	<table class="stats">
 	        		<tr>
 	        			<th>

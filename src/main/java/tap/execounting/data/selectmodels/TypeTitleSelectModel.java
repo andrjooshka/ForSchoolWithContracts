@@ -9,14 +9,14 @@ import org.apache.tapestry5.OptionModel;
 import org.apache.tapestry5.internal.OptionModelImpl;
 import org.apache.tapestry5.util.AbstractSelectModel;
 
-import tap.execounting.dal.CrudServiceDAO;
+import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.entities.EventType;
 
 public class TypeTitleSelectModel extends AbstractSelectModel {
 
 	List<OptionModel> options;
 
-	public TypeTitleSelectModel(CrudServiceDAO dao) {
+	public TypeTitleSelectModel(CRUDServiceDAO dao) {
 		options = new ArrayList<OptionModel>();
 		List<EventType> types = dao.findWithNamedQuery(EventType.ALL);
 		for (EventType et : types)

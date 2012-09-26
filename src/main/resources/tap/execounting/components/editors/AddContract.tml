@@ -10,7 +10,7 @@
 	<div>
 		<t:beaneditform t:id="editor" object="con" submitlabel="message:submit-label" 
 			exclude="id,clientId,freeze" reorder="teacherId,typeId,contractTypeId"
-			add="schedule">
+			add="schedule" clientValidation="none">
 			
 			<p:contractTypeId>
 				<t:label for="contractTypeSelect"/>
