@@ -16,6 +16,7 @@ import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.dal.mediators.interfaces.EventMed;
 import tap.execounting.dal.mediators.interfaces.TeacherMed;
 import tap.execounting.entities.Contract;
+import tap.execounting.entities.ContractType;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.TeacherAddition;
 import tap.execounting.services.DateService;
@@ -177,13 +178,28 @@ public class Payroll {
 				}
 				break;
 			}
+
+		/*
+		 * In this part of the filter we will remove all events of trial
+		 * contracts and where type contains "раз"
+		 */
+		for (int i = events.size() - 1; i >= 0; i--) {
+			List<Contract> cts = events.get(i).getContracts();
+			for (int j = cts.size() - 1; j >= 0; j--)
+				if (cts.get(j).getContractTypeId() == ContractType.Trial
+						|| cts.get(j).getEventType().getTitle().contains("раз"))
+					cts.remove(j);
+			if (cts.size() == 0)
+				events.remove(i);
+		}
 	}
 
 	private Map<Integer, Integer[]> filterMap() {
 		Map<Integer, Integer[]> fm = new HashMap<Integer, Integer[]>();
 		fm.put(6, new Integer[] { 21, 22, 23, 475 });
 		fm.put(9, new Integer[] { 38 });
-		fm.put(14, new Integer[] { 9, 14, 37, 39, 40, 112, 113, 116, 117, 260, 404 });
+		fm.put(14, new Integer[] { 9, 14, 37, 39, 40, 112, 113, 116, 117, 260,
+				404 });
 		fm.put(17, new Integer[] { 133, 136, 141, 142, 143, 343, 344, 407 });
 		fm.put(50, new Integer[] { 462 });
 
