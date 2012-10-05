@@ -11,6 +11,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
 
 import tap.execounting.components.editors.AddEventType;
+import tap.execounting.components.show.SmartIcon;
 import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.entities.EventType;
 import tap.execounting.security.AuthorizationDispatcher;
@@ -70,9 +71,13 @@ public class TypeGrid {
 			model = beanModelSource.createDisplayModel(EventType.class,
 					componentResources.getMessages());
 			model.exclude("id", "typeTitle");
-			model.add("Action");
+			model.add("Action", null);
 			model.add("deleted");
 			model.reorder("deleted");
 		}
+	}
+
+	public String getIconType() {
+		return unit.isDeleted() ? SmartIcon.DELETED : "";
 	}
 }

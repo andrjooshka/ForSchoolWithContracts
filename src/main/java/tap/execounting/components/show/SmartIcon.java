@@ -3,10 +3,9 @@ package tap.execounting.components.show;
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.MarkupWriter;
+import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.ioc.annotations.Inject;
-
-import com.beust.jcommander.Parameter;
 
 public class SmartIcon {
 

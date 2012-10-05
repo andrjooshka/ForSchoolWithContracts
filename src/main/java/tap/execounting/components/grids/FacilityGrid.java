@@ -11,6 +11,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
 
 import tap.execounting.components.editors.AddFacility;
+import tap.execounting.components.show.SmartIcon;
 import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.entities.Facility;
 import tap.execounting.security.AuthorizationDispatcher;
@@ -74,5 +75,8 @@ public class FacilityGrid {
 			model.add("deleted");
 			model.reorder("deleted");
 		}
+	}
+	public String getIconType(){
+		return unit.isDeleted() ? SmartIcon.DELETED : "";
 	}
 }

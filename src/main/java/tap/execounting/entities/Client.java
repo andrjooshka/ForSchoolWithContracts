@@ -9,6 +9,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -54,8 +55,7 @@ public class Client implements Dated, Deletable {
 	@Column(unique = true)
 	private String name;
 
-	@OneToMany
-	// (mappedBy="client")
+	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "client_id")
 	private List<Contract> contracts = new ArrayList<Contract>();
 
