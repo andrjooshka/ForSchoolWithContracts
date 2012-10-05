@@ -81,7 +81,7 @@ public class ShowEvent {
 	}
 
 	public int getMoney() {
-		int m1 = dao.find(EventType.class, event.getTypeId()).getMoney();
+		int m1 = dao.find(EventType.class, event.getTypeId()).getPrice();
 		int c = event.getClients().size();
 		if (c > 1)
 			m1 *= c;

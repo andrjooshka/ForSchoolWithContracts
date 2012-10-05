@@ -8,6 +8,7 @@ import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.EventType;
+import tap.execounting.entities.EventTypeAddition;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Room;
 import tap.execounting.entities.Teacher;
@@ -51,6 +52,8 @@ public interface EventMed {
 	
 	//EventTypeLoader
 	public EventType loadEventType(int id);
+	// EventTypeAddition Loading 
+	public EventTypeAddition loadProbation(int id);
 
 //group methods:
 	//group

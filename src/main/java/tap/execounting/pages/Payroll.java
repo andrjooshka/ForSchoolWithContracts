@@ -18,6 +18,8 @@ import tap.execounting.dal.mediators.interfaces.TeacherMed;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.ContractType;
 import tap.execounting.entities.Event;
+import tap.execounting.entities.EventType;
+import tap.execounting.entities.EventTypeAddition;
 import tap.execounting.entities.TeacherAddition;
 import tap.execounting.services.DateService;
 
@@ -207,6 +209,7 @@ public class Payroll {
 	}
 
 	List<Contract> toContracts(List<Event> source) {
+		// First step is to fill the contracts with the events
 		List<Contract> contracts = new ArrayList<Contract>();
 		while (source.size() > 0) {
 			Event init = source.get(source.size() - 1);
@@ -233,7 +236,76 @@ public class Payroll {
 					}
 			}
 		}
+
+		// Step 2. Loading EventTypes
+		for (Contract c : contracts)
+			c.setEventType(eM.loadEventType(c.getTypeId()));
+
+		// Here could be grouping of events by contract client name
+		// Step three is to separate the probation included events
+		// Only for teachers-probationers
+		Date prob = tM.getUnit().getProbationEndDate();
+		if (prob != null && inProbation(dateOne)) {
+			List<Contract> probContracts = new ArrayList<Contract>();
+			for (int i = contracts.size() - 1; i >= 0; i--) {
+				// setup
+				Contract c = contracts.get(i);
+				Contract pc = probationized(c);
+
+				for (int j = c.getEvents().size() - 1; j >= 0; j--) {
+					if (inProbation(c.getEvents().get(j).getDate())) {
+						pc.getEvents().add(c.getEvents().get(j));
+						c.getEvents().remove(j);
+					}
+				}
+
+				// if contract with probation have events it should be added to
+				// the stack
+				if (pc.getEvents().size() > 0)
+					probContracts.add(pc);
+			}
+			contracts.addAll(probContracts);
+		}
+		// Step four. Removing empty contracts
+		for (int i = contracts.size() - 1; i >= 0; i--)
+			if (contracts.get(i).getEvents().size() == 0)
+				contracts.remove(i);
+
 		return contracts;
+	}
+
+	/**
+	 * Adds probation prices and title to the returned contract
+	 * 
+	 * @param input
+	 * @return
+	 */
+	private Contract probationized(Contract input) {
+
+		Contract out = new Contract();
+		out.setId(input.getId());
+		EventType inType = input.getEventType();
+		EventType pType = new EventType();
+		pType.setPrice(inType.getPrice());
+		pType.setSchoolMoney(inType.getSchoolMoney());
+		pType.setId(inType.getId());
+		out.setEventType(pType);
+
+		// Title
+		pType.setTitle("Стаж. " + inType.getTitle());
+		// Lowering the teacher's money
+		EventTypeAddition pa = eM.loadProbation(pType.getId());
+		if (pa != null)
+			pType.setSchoolMoney(pType.getSchoolMoney() + pa.getAdditionValue());
+
+		return out;
+	}
+
+	private boolean inProbation(Date d) {
+		Date prob = tM.getUnit().getProbationEndDate();
+		if (prob == null)
+			return false;
+		return !d.after(prob);
 	}
 
 	public String getName() {
@@ -241,11 +313,11 @@ public class Payroll {
 	}
 
 	public String getType() {
-		return eM.loadEventType(contract.getTypeId()).getTypeTitle();
+		return contract.getEventType().getTypeTitle();
 	}
 
 	public int getLessonPrice() {
-		return eM.loadEventType(contract.getTypeId()).getShareTeacher();
+		return contract.getEventType().getShareTeacher();
 	}
 
 	public int getLessonsNumber() {

@@ -195,6 +195,8 @@ public class ShowContract {
 		sb.append(loopPayment.getAmount());
 		if (loopPayment.isScheduled())
 			sb.append(" (план.)");
+		if(loopPayment.getComment()!=null)
+			sb.append(loopPayment.getComment());
 
 		return sb.toString();
 	}

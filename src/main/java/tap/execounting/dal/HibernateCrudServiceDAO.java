@@ -10,6 +10,8 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import tap.execounting.entities.interfaces.Deletable;
+
 /**
  * Hibernate CrudService
  * 
@@ -42,7 +44,11 @@ public class HibernateCrudServiceDAO implements CRUDServiceDAO {
 	public <T, PK extends Serializable> void delete(Class<T> type, PK id) {
 		@SuppressWarnings("unchecked")
 		T ref = (T) session.get(type, id);
-		session.delete(ref);
+		if (ref instanceof Deletable) {
+			((Deletable) ref).setDeleted(true);
+			session.persist(ref);
+		}else
+			session.delete(ref);
 	}
 
 	@SuppressWarnings("unchecked")

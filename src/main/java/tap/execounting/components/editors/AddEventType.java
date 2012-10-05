@@ -1,15 +1,15 @@
 package tap.execounting.components.editors;
 
-
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CRUDServiceDAO;
+import tap.execounting.dal.QueryParameters;
 import tap.execounting.entities.EventType;
+import tap.execounting.entities.EventTypeAddition;
 
 public class AddEventType {
-
 
 	@Property
 	@Persist
@@ -21,6 +21,11 @@ public class AddEventType {
 	@Property
 	@Persist
 	private EventType etype;
+
+	@Property
+	private EventTypeAddition probationAddition;
+	@Property
+	private boolean probationLauncher;
 
 	public void setup(EventType et) {
 		updateMode = true;
@@ -38,5 +43,28 @@ public class AddEventType {
 		} else {
 			dao.create(etype);
 		}
+		if (probationLauncher) {
+			if (probationAddition.getId() == null) {
+				probationAddition.setEventTypeId(etype.getId());
+				dao.create(probationAddition);
+			} else
+				dao.update(probationAddition);
+		} else if (probationAddition.getId() != null) {
+			dao.delete(EventTypeAddition.class, probationAddition.getId());
+		}
 	}
+
+	void onPrepare() {
+		probationAddition = dao.findUniqueWithNamedQuery(
+				EventTypeAddition.PROBATION_BY_EVENT_TYPE_ID, QueryParameters
+						.with("eventTypeId", etype.getId()).parameters());
+
+		if (probationAddition == null) {
+			probationAddition = new EventTypeAddition();
+			probationAddition
+					.setAdditionCode(EventTypeAddition.PROBATION_ADJUSTMENT);
+		} else
+			probationLauncher = true;
+	}
+
 }

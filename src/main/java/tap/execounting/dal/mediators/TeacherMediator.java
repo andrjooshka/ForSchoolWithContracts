@@ -53,6 +53,10 @@ public class TeacherMediator implements TeacherMed {
 	public List<Teacher> getAllTeachers() {
 		return getDao().findWithNamedQuery(Teacher.ALL);
 	}
+	
+	public List<Teacher> getWorkingTeachers(){
+		return dao.findWithNamedQuery(Teacher.WORKING);
+	}
 
 	// Unit methods:
 	public Teacher getUnit() {

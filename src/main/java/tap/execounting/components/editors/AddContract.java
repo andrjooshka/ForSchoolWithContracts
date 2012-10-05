@@ -93,7 +93,7 @@ public class AddContract {
 
 	private List<EventType> types() {
 		if (etypes == null)
-			etypes = dao.findWithNamedQuery(EventType.ALL);
+			etypes = dao.findWithNamedQuery(EventType.ACTUAL);
 		return etypes;
 	}
 
@@ -107,7 +107,7 @@ public class AddContract {
 
 	private List<Teacher> teachers() {
 		if (teachers == null)
-			teachers = dao.findWithNamedQuery(Teacher.ALL);
+			teachers = dao.findWithNamedQuery(Teacher.WORKING);
 		return teachers;
 	}
 

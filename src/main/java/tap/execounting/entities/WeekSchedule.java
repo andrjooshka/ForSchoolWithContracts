@@ -6,6 +6,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * Database table for that table should cleaned sometimes.
+ * @author truth0
+ *
+ */
 @Entity
 @Table(name = "weekSchedules")
 public class WeekSchedule {

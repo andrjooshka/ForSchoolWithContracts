@@ -25,9 +25,10 @@ import tap.execounting.data.selectmodels.TypeTitleSelectModel;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.EventType;
 import tap.execounting.entities.Facility;
+import tap.execounting.entities.Teacher;
 import tap.execounting.services.DateService;
 
-@Import(library="context:/js/updateEffects.js")
+@Import(library = "context:/js/updateEffects.js")
 public class Statistics {
 
 	// Code Helpers
@@ -137,9 +138,9 @@ public class Statistics {
 			int typeId = e.getTypeId();
 			EventType et = dao.find(EventType.class, typeId);
 			if (e.getClients().size() > 0)
-				summ += et.getMoney() * e.getClients().size();
+				summ += et.getPrice() * e.getClients().size();
 			else
-				summ += et.getMoney();
+				summ += et.getPrice();
 		}
 
 		return summ;
@@ -174,8 +175,11 @@ public class Statistics {
 	}
 
 	void onPrepareForRender() {
-		teacherSelect = new TeacherSelectModel(dao);
-		facilitySelect = new FacilitySelectModel(dao);
+		List<Teacher> teachers = dao.findWithNamedQuery(Teacher.ALL);
+		teacherSelect = new TeacherSelectModel(teachers);
+		List<Facility> facilities = dao.findWithNamedQuery(Facility.ALL);
+		facilitySelect = new FacilitySelectModel(facilities);
+
 		roomSelect = facilityId == null ? new RoomSelectModel(null)
 				: new RoomSelectModel(dao.find(Facility.class, facilityId));
 		typeSelect = new TypeTitleSelectModel(dao);

@@ -23,15 +23,24 @@ import org.apache.tapestry5.beaneditor.NonVisual;
 
 import tap.execounting.data.ContractState;
 import tap.execounting.entities.interfaces.Dated;
+import tap.execounting.entities.interfaces.Deletable;
 import tap.execounting.services.DateService;
 
+/**
+ * This class does support interface entities.interfaces.Deletable, since it is
+ * an accounting unit and it should not be deleted in any case, to not break the
+ * data
+ * 
+ * @author truth0
+ * 
+ */
 @Entity
 @Table(name = "clients")
 @NamedQueries({
 		@NamedQuery(name = Client.ALL, query = "from Client"),
 		@NamedQuery(name = Client.ALL_NAMES, query = "select c.name from Client c"),
 		@NamedQuery(name = Client.BY_NAME, query = "from Client c where lower(c.name) = lower(:name)") })
-public class Client implements Dated {
+public class Client implements Dated, Deletable {
 
 	public static final String ALL = "Client.all";
 	public static final String ALL_NAMES = "Client.allNames";
@@ -52,16 +61,16 @@ public class Client implements Dated {
 
 	@NonVisual
 	private boolean canceled;
-	
+
 	@NonVisual
 	private boolean deleted;
-	
-	public boolean getDeleted(){
+
+	public boolean isDeleted() {
 		return deleted;
 	}
-	
-	public void setDeleted(){
-		deleted=true;
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 	public int getId() {
@@ -81,7 +90,7 @@ public class Client implements Dated {
 	}
 
 	public List<Contract> getContracts() {
-			return contracts;
+		return contracts;
 	}
 
 	public List<Contract> getContracts(boolean sortAsc) {
@@ -188,8 +197,7 @@ public class Client implements Dated {
 			return getContracts(true).get(0).getDate();
 		} catch (NullPointerException npe) {
 			return null;
-		}
-		catch (IndexOutOfBoundsException iob){
+		} catch (IndexOutOfBoundsException iob) {
 			return null;
 		}
 	}

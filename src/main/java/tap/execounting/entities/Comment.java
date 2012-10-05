@@ -11,7 +11,12 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.tapestry5.beaneditor.NonVisual;
-
+/**
+ * This class does not support interface entities.interfaces.Deletable,
+ * since some comments certainly should be removed.
+ * @author truth0
+ *
+ */
 @Entity
 @Table(name = "comment")
 @NamedQueries({

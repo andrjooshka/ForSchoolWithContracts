@@ -15,6 +15,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
 import tap.execounting.dal.CRUDServiceDAO;
@@ -53,7 +54,7 @@ public class Clients {
 	// Mediators
 	@Inject
 	private ClientMed clientMed;
-	
+
 	// filtering fields
 
 	// planned payments
@@ -95,9 +96,10 @@ public class Clients {
 
 	@Persist
 	private List<Client> clients;
+
 	@SuppressWarnings("unchecked")
 	public List<Client> getClients() {
-		if(clients!=null)
+		if (clients != null)
 			return new ArrayList<Client>(clients);
 		List<Client> cs;
 		Criteria criteria = session.createCriteria(Client.class);
@@ -211,12 +213,12 @@ public class Clients {
 	}
 
 	public int getNewClients() {
-		List<Client> clients = getClients(); 
+		List<Client> clients = getClients();
 		clientMed.setGroup(clients);
 		int newbies = clientMed.countNewbies(null, null);
 		clientMed.setGroup(getClients());
 		int trial = clientMed.countTrial(null, null);
-		
+
 		return trial + newbies;
 	}
 
@@ -248,8 +250,12 @@ public class Clients {
 
 		params.put("earlierDate", paramEarlier);
 		params.put("laterDate", paramLater);
-		List<Payment> payments = dao.findWithNamedQuery(Payment.BY_DATES,
-				params);
+		List<Payment> payments = null;
+		try {
+			payments = dao.findWithNamedQuery(Payment.BY_DATES, params);
+		} catch (HibernateException e) {
+			e.printStackTrace();
+		}
 		return payments;
 	}
 

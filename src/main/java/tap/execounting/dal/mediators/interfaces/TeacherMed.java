@@ -77,6 +77,7 @@ public interface TeacherMed {
 	
 //group methods
 	public List<Teacher> getAllTeachers();
+	public List<Teacher> getWorkingTeachers();
 	
 	//count:
 	public Integer countGroupSize();

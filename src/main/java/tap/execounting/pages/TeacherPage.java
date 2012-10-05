@@ -32,6 +32,7 @@ import tap.execounting.entities.Client;
 import tap.execounting.entities.Comment;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Event;
+import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;
 import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.DateService;
@@ -145,8 +146,10 @@ public class TeacherPage {
 	private CRUDServiceDAO dao;
 
 	void onPrepareForRender() {
-		if (facilitySelectModel == null)
-			facilitySelectModel = new FacilitySelectModel(dao);
+		if (facilitySelectModel == null) {
+			List<Facility> facilities = dao.findWithNamedQuery(Facility.ACTUAL);
+			facilitySelectModel = new FacilitySelectModel(facilities);
+		}
 	}
 
 	Object onSuccessFromStatsDateForm() {

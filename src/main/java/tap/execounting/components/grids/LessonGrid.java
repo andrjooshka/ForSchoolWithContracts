@@ -106,8 +106,8 @@ public class LessonGrid {
 	public int getMoney() {
 		EventType et = dao.find(EventType.class, unit.getTypeId());
 		if (unit.getClients().size() > 0)
-			return et.getMoney() * unit.getClients().size();
-		return et.getMoney();
+			return et.getPrice() * unit.getClients().size();
+		return et.getPrice();
 	}
 
 	public String getClients() {

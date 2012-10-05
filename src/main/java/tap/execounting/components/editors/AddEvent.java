@@ -81,8 +81,8 @@ public class AddEvent {
 	public void setup(Event e) {
 		roomSelect = new RoomSelectModel(dao.find(Facility.class,
 				e.getFacilityId()));
-		
-		if(!updateMode && event != null){
+
+		if (!updateMode && event != null) {
 			e.setFacilityId(event.getFacilityId());
 			e.setRoomId(event.getRoomId());
 		}
@@ -162,7 +162,7 @@ public class AddEvent {
 					// typeMatch = con.getTypeId() == evet.getId(); // strict
 					// type_id check;
 					typeMatch = con.getEventType().getTypeTitle()
-							.equals(eventType.getTypeTitle());	// soft check
+							.equals(eventType.getTypeTitle()); // soft check
 
 					if (event.haveContract(con)) {
 						if (!typeMatch) {
@@ -228,8 +228,7 @@ public class AddEvent {
 			for (Client c : event.getClients())
 				clientNames.add(c.getName());
 
-		teacherSelect = new TeacherSelectModel(dao);
-		facilitySelect = new FacilitySelectModel(dao);
+		initSelectModels();
 		// roomSelect
 		if (event == null) {
 			roomSelect = new RoomSelectModel(dao.find(Facility.class,
@@ -245,11 +244,15 @@ public class AddEvent {
 		}
 
 		typeSelect = new TypeSelectModel(dao);
-		if(!updateMode) event.setComment("");
+		if (!updateMode)
+			event.setComment("");
 	}
-	
-	void setupRender(){
-		if(!updateMode) event.setComment("");
+
+	private void initSelectModels() {
+		List<Teacher> teachers = dao.findWithNamedQuery(Teacher.WORKING);
+		teacherSelect = new TeacherSelectModel(teachers);
+		List<Facility> facilities = dao.findWithNamedQuery(Facility.ACTUAL);
+		facilitySelect = new FacilitySelectModel(facilities);
 	}
 
 	List<String> onProvideCompletionsFromEventTypes(String starts) {

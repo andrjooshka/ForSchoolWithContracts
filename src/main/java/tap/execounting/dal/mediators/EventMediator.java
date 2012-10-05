@@ -19,6 +19,7 @@ import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.EventType;
+import tap.execounting.entities.EventTypeAddition;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Room;
 import tap.execounting.entities.Teacher;
@@ -96,7 +97,7 @@ public class EventMediator implements EventMed {
 	}
 
 	public int getPrice() {
-		return unit.getEventType().getMoney();
+		return unit.getEventType().getPrice();
 	}
 
 	public EventState getState() {
@@ -132,6 +133,12 @@ public class EventMediator implements EventMed {
 
 	public EventType loadEventType(int id) {
 		return dao.find(EventType.class, id);
+	}
+
+	public EventTypeAddition loadProbation(int id) {
+		return dao.findUniqueWithNamedQuery(
+				EventTypeAddition.PROBATION_BY_EVENT_TYPE_ID, QueryParameters
+						.with("eventTypeId", id).parameters());
 	}
 
 	private Map<String, Object> appliedFilters;
@@ -376,7 +383,7 @@ public class EventMediator implements EventMed {
 		int summ = 0;
 		// TODO Tuleneva
 		for (Event e : getGroup())
-			summ += e.getMoney() - e.getEventType().getShare();
+			summ += e.getMoney() - e.getEventType().getSchoolMoney();
 		return summ;
 	}
 
@@ -385,7 +392,7 @@ public class EventMediator implements EventMed {
 			return null;
 		int summ = 0;
 		for (Event e : getGroup())
-			summ += e.getEventType().getShare();
+			summ += e.getEventType().getSchoolMoney();
 		return summ;
 	}
 

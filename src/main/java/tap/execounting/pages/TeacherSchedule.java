@@ -257,7 +257,8 @@ public class TeacherSchedule {
 
 	@SetupRender
 	void onPrepareForRender() {
-		teacherSelectModel = new TeacherSelectModel(dao);
+		List<Teacher> teachers = dao.findWithNamedQuery(Teacher.WORKING);
+		teacherSelectModel = new TeacherSelectModel(teachers);
 
 		StringBuilder sb = new StringBuilder();
 		sb.append("datedEvents().size(): " + datedEvents().size());

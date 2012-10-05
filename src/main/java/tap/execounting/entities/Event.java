@@ -23,7 +23,13 @@ import org.apache.tapestry5.beaneditor.Validate;
 
 import tap.execounting.data.EventState;
 import tap.execounting.entities.interfaces.Dated;
-
+/**
+ * This class does not support interface entities.interfaces.Deletable,
+ * since some events certainly should be removed, and it is not an accounting item,
+ * but accounting unit.
+ * @author truth0
+ *
+ */
 @Entity
 @NamedQueries({
 		@NamedQuery(name = Event.ALL, query = "Select se from Event se"),

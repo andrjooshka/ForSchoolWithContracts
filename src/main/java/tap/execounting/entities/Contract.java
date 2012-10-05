@@ -20,8 +20,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.apache.tapestry5.beaneditor.NonVisual;
+import javax.validation.constraints.Min;
 
 import tap.execounting.data.ContractState;
 import tap.execounting.data.EventState;
@@ -30,6 +29,13 @@ import tap.execounting.services.DateService;
 import tap.execounting.services.RusCalendar;
 import tap.execounting.services.SuperCalendar;
 
+/**
+ * This class does not support interface entities.interfaces.Deletable,
+ * since some contracts certainly should be removed, and it is not an accounting item,
+ * but accounting unit.
+ * @author truth0
+ *
+ */
 @Entity
 @Table(name = "contracts")
 @NamedQueries({
@@ -67,8 +73,7 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	private boolean canceled;
 	
-	@NonVisual
-	private boolean deleted;
+	private String comment;
 
 	@Column(name = "contract_type_id", unique = false)
 	private int contractTypeId;
@@ -85,6 +90,7 @@ public class Contract implements Comparable<Contract>, Dated {
 	private EventType eventType;
 
 	@Column(name = "lessons_number")
+	@Min(value = 1)
 	private int lessonsNumber;
 
 	@Column(name = "teacher_id", nullable = true, unique = false)
@@ -157,7 +163,7 @@ public class Contract implements Comparable<Contract>, Dated {
 	}
 
 	/**
-	 * @return returns written number of events in contract 
+	 * @return returns written number of events in contract
 	 */
 	public int getLessonsNumber() {
 		return lessonsNumber;
@@ -173,6 +179,14 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	public void setTeacherId(int teacherId) {
 		this.teacherId = teacherId;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	public boolean isGift() {
@@ -209,14 +223,6 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	public void setCanceled(boolean canceled) {
 		this.canceled = canceled;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
 	}
 
 	public int getContractTypeId() {
@@ -261,6 +267,10 @@ public class Contract implements Comparable<Contract>, Dated {
 	public EventType getEventType() {
 		return eventType;
 	}
+	
+	public void setEventType(EventType et){
+		this.eventType = et;
+	}
 
 	public boolean isActive() {
 		boolean active = !isComplete() && !isFreeze() && !isCanceled();
@@ -304,7 +314,7 @@ public class Contract implements Comparable<Contract>, Dated {
 	 * @return full contract price
 	 */
 	public int getMoney() {
-		int lessonCost = getEventType().getMoney();
+		int lessonCost = getEventType().getPrice();
 		int lessons = getLessonsNumber();
 		int total = lessonCost * lessons;
 		total -= discount;
@@ -338,9 +348,9 @@ public class Contract implements Comparable<Contract>, Dated {
 	}
 
 	public int getSingleLessonCost() {
-		if(lessonsNumber==0)
+		if (lessonsNumber == 0)
 			throw new IllegalArgumentException("Contract id: " + id);
-		int totalLessonsCost = lessonsNumber * eventType.getMoney() - discount;
+		int totalLessonsCost = lessonsNumber * eventType.getPrice() - discount;
 		int singleLessonCost = totalLessonsCost / lessonsNumber;
 		return singleLessonCost;
 	}

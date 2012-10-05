@@ -98,7 +98,8 @@ public class SchoolSchedule {
 
 	@SetupRender
 	void onPrepareForRender() {
-		facilityselect = new FacilitySelectModel(dao);
+		List<Facility> facilities = dao.findWithNamedQuery(Facility.ACTUAL);
+		facilityselect = new FacilitySelectModel(facilities);
 		refreshEvents();
 	}
 

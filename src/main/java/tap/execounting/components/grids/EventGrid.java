@@ -49,8 +49,8 @@ public class EventGrid {
 	public int getMoney() {
 		EventType et = dao.find(EventType.class, event.getTypeId());
 		if (event.getClients().size() > 0)
-			return et.getMoney() * event.getClients().size();
-		return et.getMoney();
+			return et.getPrice() * event.getClients().size();
+		return et.getPrice();
 	}
 	
 	public String getClients(){
