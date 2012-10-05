@@ -86,6 +86,8 @@ public class TeacherGrid {
 			for (String pn : model.getPropertyNames())
 				model.get(pn).sortable(false);
 			model.get("name").sortable(true);
+			model.add("deleted");
+			model.reorder("deleted");
 		}
 	}
 }

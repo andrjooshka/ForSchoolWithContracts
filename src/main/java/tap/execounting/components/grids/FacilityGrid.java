@@ -71,6 +71,8 @@ public class FacilityGrid {
 					componentResources.getMessages());
 			model.add("Action", null);
 			model.exclude("facilityId");
+			model.add("deleted");
+			model.reorder("deleted");
 		}
 	}
 }

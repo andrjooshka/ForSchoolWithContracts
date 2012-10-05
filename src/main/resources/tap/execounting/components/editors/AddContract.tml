@@ -17,6 +17,10 @@
 				<t:select t:id="contractTypeSelect" value="con.contractTypeId" 
 				model="contractTypeIdsModel"/>
 			</p:contractTypeId>
+			<p:comment>
+				<t:label for="comment"/>
+				<t:textarea t:id="comment" value="con.comment"/>
+			</p:comment>
 			<p:date>
 				<t:label for="date"/>
 				<t:datefield t:id="date" value="con.date" validate="required"/>

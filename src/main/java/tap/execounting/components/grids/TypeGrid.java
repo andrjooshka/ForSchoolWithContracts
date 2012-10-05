@@ -70,7 +70,9 @@ public class TypeGrid {
 			model = beanModelSource.createDisplayModel(EventType.class,
 					componentResources.getMessages());
 			model.exclude("id", "typeTitle");
-			model.add("Action", null);
+			model.add("Action");
+			model.add("deleted");
+			model.reorder("deleted");
 		}
 	}
 }

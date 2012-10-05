@@ -12,6 +12,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.BeanModelSource;
 
 import tap.execounting.components.editors.AddClient;
+import tap.execounting.components.show.SmartIcon;
 import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Teacher;
@@ -76,7 +77,7 @@ public class ClientGrid {
 			if (c.getContracts().size() > 0)
 				// TODO JAVASCRIPT ALERT MOUNT POINT
 				throw new IllegalArgumentException(
-						"У данного заключены с вами договора, пожалуйста сначала удалите их.");
+						"У данного клиента заключены с вами договора, пожалуйста сначала удалите их.");
 			else
 				dao.delete(Client.class, c.getId());
 		}
@@ -87,9 +88,11 @@ public class ClientGrid {
 			model = beanModelSource.createDisplayModel(Client.class,
 					componentResources.getMessages());
 			model.exclude("return", "balance", "state", "firstContractDate",
-					"studentInfo", "firstPlannedPaymentDate", "date");
+					"studentInfo", "firstPlannedPaymentDate", "date", "id");
 			model.add("teachers", null);
 			model.add("Action", null);
+			model.add("deleted");
+			model.reorder("deleted");
 		}
 	}
 
@@ -102,5 +105,8 @@ public class ClientGrid {
 				sb.append(", ");
 		}
 		return sb.toString();
+	}
+	public String getIconType(){
+		return unit.isDeleted() ? SmartIcon.DELETED : "";
 	}
 }

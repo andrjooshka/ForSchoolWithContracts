@@ -17,6 +17,9 @@
 	<br/>
 	<t:grid source="source" model="model" row="unit" rowsPerPage="message:rowsperpage" 
 		pagerPosition="top">
+		<p:deletedCell>
+			<t:show.smarticon t:icontype="icontype"/>
+		</p:deletedCell>
 		<p:teachersCell>
 			${teachers}
 		</p:teachersCell>

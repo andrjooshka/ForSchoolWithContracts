@@ -35,6 +35,7 @@ import tap.execounting.entities.Event;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;
 import tap.execounting.security.AuthorizationDispatcher;
+import tap.execounting.services.ContractByClientComparator;
 import tap.execounting.services.DateService;
 
 @Import(stylesheet = { "context:/layout/weekschedule.css",
@@ -214,8 +215,10 @@ public class TeacherPage {
 
 	public List<Contract> getActiveContracts() {
 		cMed.reset();
-		return cMed.filter(tMed.getUnit()).filter(ContractState.active)
-				.getGroup();
+		Collections.sort(
+				cMed.filter(tMed.getUnit()).filter(ContractState.active)
+						.getGroup(), new ContractByClientComparator());
+		return cMed.getGroup();
 	}
 
 	public List<Contract> getOtherContracts() {

@@ -42,6 +42,13 @@
 							</td>
 						</tr>
 					</t:if>
+					<t:if test="contract.comment">
+						<tr>
+							<td colspan="2">
+								<t:textoutput value="contract.comment" />
+							</td>
+						</tr>
+					</t:if>
 					<tr>
 						<th>${message:teacher-label}</th>
 						<td colspan="2">${teacher}</td>

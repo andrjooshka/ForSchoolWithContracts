@@ -4,8 +4,8 @@
 }
 #content li{
 	display: inline-block;
-	width: 21em;
+	width: 20.5em;
 	list-style: disc;
-	font-size: 1.2em;
+	font-size: 1.18em;
 	line-height: 2.35em;
 }
