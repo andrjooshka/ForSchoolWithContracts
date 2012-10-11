@@ -14,101 +14,121 @@ import tap.execounting.entities.Room;
 import tap.execounting.entities.Teacher;
 
 public interface EventMed {
-//unit methods:
-	//unit
+	// unit methods:
+	// unit
 	public Event getUnit();
+
 	public EventMed setUnit(Event unit);
 
-	//getters:
-	//Date
+	// getters:
+	// Date
 	public Date getDate();
-	
-	//Teacher
+
+	// Teacher
 	public Teacher getTeacher();
 
-	//Clients
+	// Clients
 	public List<Client> getClients();
 
-	//Discipline (EventType)
+	// Discipline (EventType)
 	public EventType getEventType();
-	
-	//Contracts
+
+	// Contracts
 	public List<Contract> getContracts();
-	
-	//Price
+
+	// Price
 	public int getPrice();
 
-	//State
+	// State
 	public EventState getState();
 
-	//Comment
+	// Comment
 	public String getComment();
-	
-	//Facility
+
+	// Facility
 	public Facility getFacility();
 
-	//Room
+	// Room
 	public Room getRoom();
-	
-	//EventTypeLoader
+
+	// EventTypeLoader
 	public EventType loadEventType(int id);
-	// EventTypeAddition Loading 
+
+	// EventTypeAddition Loading
 	public EventTypeAddition loadProbation(int id);
 
-//group methods:
-	//group
+	// group methods:
+	// group
 	public List<Event> getGroup();
+
 	public List<Event> getGroup(boolean resetAfter);
+
 	public EventMed setGroup(List<Event> items);
+
 	public List<Event> getAllEvents();
+
 	public void reset();
+
 	public String getFilterState();
-	
-	//filters
-	//Teacher
+
+	// filters
+	// Teacher
 	public EventMed filter(Teacher unit);
-	
-	//Contract
+
+	// Contract
 	public EventMed filter(Contract unit);
 
-	//State
+	// State
 	public EventMed filter(EventState state);
 
-	//Facility
+	// Facility
 	public EventMed filter(Facility unit);
 
-	//Room
+	// Room
 	public EventMed filter(Room unit);
-	
-	//Discipline
+
+	// Discipline
 	public EventMed filter(EventType type);
 
-	//Date
-	public EventMed filter(Date date1, Date date2); 
+	// Date
+	public EventMed filter(Date date1, Date date2);
 
-	//counters
-	//group length
+	// Filter paid events, which is complete and failed by client
+	public EventMed filterPaidEvents();
+
+	// counters
+	// group length
 	public Integer countGroupSize();
 
-	//state
+	// state
 	public Integer count(EventState state);
+
 	public Integer countEventsComplete();
+
 	public Integer countEventsFailed();
+
 	public Integer countEventsFailedByClient();
+
 	public Integer countEventsFailedByTeacher();
 
-	//money
+	// money
 	public Integer countMoney();
+
 	public Integer countTeacherMoney();
+
 	public Integer countSchoolMoney();
+
 	public Integer countMoneyOfCompleteEvents();
+
 	public Integer countMoneyOfFailedEvents();
+
 	public Integer countMoneyOfEventsFailedByClient();
+
 	public Integer countMoneyOfEventsFailedByTeacher();
 
-	//percent
+	// percent
 	public Integer countGivenPercentOfMoney(int percent);
 
-	//days
+	// days
 	public int countDaysInEventsGroup();
 }

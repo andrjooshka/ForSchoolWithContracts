@@ -20,7 +20,7 @@ public interface TeacherMed {
 	//id
 	public int getId();
 	//this method sets the unit itself
-	public void setId(int id);
+	public TeacherMed setId(int id);
 	
 	//name
 	public String getName();

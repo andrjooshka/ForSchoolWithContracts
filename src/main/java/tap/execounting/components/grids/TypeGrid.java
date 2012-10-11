@@ -1,5 +1,7 @@
 package tap.execounting.components.grids;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.tapestry5.ComponentResources;
@@ -39,7 +41,24 @@ public class TypeGrid {
 	private EventType unit;
 
 	public List<EventType> getSource() {
-		return dao.findWithNamedQuery(EventType.ALL);
+		List<EventType> types = dao.findWithNamedQuery(EventType.ALL);
+		Collections.sort(types, new Comparator<EventType>() {
+
+			@Override
+			public int compare(EventType o1, EventType o2) {
+				if (o1.isDeleted()) {
+					if (o2.isDeleted())
+						return o1.getTitle().compareTo(o2.getTitle());
+					return +1;
+				} else {
+					if (o2.isDeleted())
+						return -1;
+					return o1.getTitle().compareTo(o2.getTitle());
+				}
+			}
+
+		});
+		return types;
 	}
 
 	Object onActionFromEdit(EventType c) {

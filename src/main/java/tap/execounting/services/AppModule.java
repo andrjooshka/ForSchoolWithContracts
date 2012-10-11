@@ -59,7 +59,7 @@ public class AppModule {
 		// DevelopmentModule or
 		// QaModule.
 
-		configuration.override(SymbolConstants.APPLICATION_VERSION, "2.2");
+		configuration.override(SymbolConstants.APPLICATION_VERSION, "3.5");
 		configuration.override(SymbolConstants.DATEPICKER, "assets/");
 	}
 

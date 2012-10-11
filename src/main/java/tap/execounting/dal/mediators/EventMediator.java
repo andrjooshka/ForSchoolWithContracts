@@ -224,43 +224,46 @@ public class EventMediator implements EventMed {
 		return this;
 	}
 
-	public EventMed filter(EventState state) {
-		if (state != EventState.paid) {
-			if (cache == null || appliedFilters == null
-					|| appliedFilters.size() == 0) {
-				cache = getDao().findWithNamedQuery(
-						Event.BY_STATE,
-						QueryParameters.with("stateCode", state.getCode())
-								.parameters());
-			} else {
+	public EventMed filterPaidEvents() {
+		if (cache == null || appliedFilters == null
+				|| appliedFilters.size() == 0) {
+			cache = getDao().findWithNamedQuery(
+					Event.BY_STATE,
+					QueryParameters.with("stateCode",
+							EventState.complete.getCode()).parameters());
+			List<Event> addition = getDao().findWithNamedQuery(
+					Event.BY_STATE,
+					QueryParameters.with("stateCode",
+							EventState.failedByClient.getCode()).parameters());
+			cache.addAll(addition);
 
-				List<Event> cache = getGroup();
-				for (int i = countGroupSize() - 1; i >= 0; i--)
-					if (cache.get(i).getState() != state)
-						cache.remove(i);
-			}
 		} else {
-			if (cache == null || appliedFilters == null
-					|| appliedFilters.size() == 0) {
-				cache = getDao().findWithNamedQuery(
-						Event.BY_STATE,
-						QueryParameters.with("stateCode",
-								EventState.complete.getCode()).parameters());
-				List<Event> addition = getDao().findWithNamedQuery(
-						Event.BY_STATE,
-						QueryParameters.with("stateCode",
-								EventState.failedByClient.getCode())
-								.parameters());
-				cache.addAll(addition);
-
-			} else {
-				List<Event> cache = getGroup();
-				for (int i = countGroupSize() - 1; i >= 0; i--)
-					if (cache.get(i).getState() != EventState.failedByClient
-							&& cache.get(i).getState() != EventState.complete)
-						cache.remove(i);
-			}
+			List<Event> cache = getGroup();
+			for (int i = countGroupSize() - 1; i >= 0; i--)
+				if (cache.get(i).getState() != EventState.failedByClient
+						&& cache.get(i).getState() != EventState.complete)
+					cache.remove(i);
 		}
+		getAppliedFilters().put("EventState", "paid");
+		return this;
+	}
+
+	public EventMed filter(EventState state) {
+
+		if (cache == null || appliedFilters == null
+				|| appliedFilters.size() == 0) {
+			cache = getDao().findWithNamedQuery(
+					Event.BY_STATE,
+					QueryParameters.with("stateCode", state.getCode())
+							.parameters());
+		} else {
+
+			List<Event> cache = getGroup();
+			for (int i = countGroupSize() - 1; i >= 0; i--)
+				if (cache.get(i).getState() != state)
+					cache.remove(i);
+		}
+
 		getAppliedFilters().put("EventState", state);
 		return this;
 	}
@@ -352,8 +355,8 @@ public class EventMediator implements EventMed {
 	}
 
 	public Integer countEventsFailed() {
-		return count(EventState.failed) + count(EventState.failedByClient)
-				+ count(EventState.failedByTeacher);
+		return count(EventState.failed) + count(EventState.failedByClient);
+		// + count(EventState.failedByTeacher);
 	}
 
 	public Integer countEventsFailedByClient() {
@@ -361,7 +364,7 @@ public class EventMediator implements EventMed {
 	}
 
 	public Integer countEventsFailedByTeacher() {
-		return count(EventState.failedByTeacher);
+		return count(EventState.movedByTeacher);
 	}
 
 	public Integer countMoney() {
@@ -397,7 +400,7 @@ public class EventMediator implements EventMed {
 	}
 
 	public Integer countMoneyOfFailedEvents() {
-		return filter(EventState.complete).countMoney()
+		return filter(EventState.failed).countMoney()
 				+ countMoneyOfEventsFailedByClient()
 				+ countMoneyOfEventsFailedByTeacher();
 	}
@@ -407,7 +410,7 @@ public class EventMediator implements EventMed {
 	}
 
 	public Integer countMoneyOfEventsFailedByTeacher() {
-		return filter(EventState.failedByTeacher).countMoney();
+		return filter(EventState.movedByTeacher).countMoney();
 	}
 
 	public Integer countGivenPercentOfMoney(int percent) {

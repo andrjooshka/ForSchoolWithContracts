@@ -209,7 +209,7 @@ public class TeacherPage {
 	}
 
 	public List<Event> getShiftedLessons() {
-		return eMed.filter(tMed.getUnit()).filter(EventState.failedByTeacher)
+		return eMed.filter(tMed.getUnit()).filter(EventState.movedByTeacher)
 				.getGroup(true);
 	}
 
@@ -309,7 +309,7 @@ public class TeacherPage {
 					for (Event ev : evs) {
 						EventState es = ev.getState();
 						if (es == EventState.planned
-								|| es == EventState.failedByTeacher
+								|| es == EventState.movedByTeacher
 								|| es == EventState.failed) {
 							e.setState(EventState.planned);
 							break;

@@ -1,5 +1,7 @@
 package tap.execounting.components.grids;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.tapestry5.ComponentResources;
@@ -50,6 +52,20 @@ public class ClientGrid {
 				if (!list.get(i).getName().toLowerCase()
 						.contains(nameFilter.toLowerCase()))
 					list.remove(i);
+		Collections.sort(list, new Comparator<Client>() {
+
+			@Override
+			public int compare(Client o1, Client o2) {
+				if (o1.isDeleted()) {
+					if (o2.isDeleted())
+						return o1.getName().compareTo(o2.getName());
+					return 1;
+				}
+				if (o2.isDeleted())
+					return -1;
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
 		return list;
 	}
 
@@ -106,7 +122,8 @@ public class ClientGrid {
 		}
 		return sb.toString();
 	}
-	public String getIconType(){
+
+	public String getIconType() {
 		return unit.isDeleted() ? SmartIcon.DELETED : "";
 	}
 }

@@ -49,8 +49,10 @@ public class EventCell {
 				return "failed";
 			case failedByClient:
 				return "failed client";
-			case failedByTeacher:
-				return "failed teacher";
+			case movedByTeacher:
+				return "moved teacher";
+			case movedByClient:
+				return "moved client";
 			default:
 				return "";
 			}

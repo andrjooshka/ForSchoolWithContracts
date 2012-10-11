@@ -1,44 +1,42 @@
-<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
-	
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
+	xmlns:p="tapestry:parameter">
+
 	<div>
 		<t:form style="margin-bottom:20px;">
-			<t:label for="nameFilter" style="margin-right:10px;"/>
-			<t:textfield t:id="nameFilter" value="nameFilter"/>
-			<t:submit value="Обновить"/>
+			<t:label for="nameFilter" style="margin-right:10px;" />
+			<t:textfield t:id="nameFilter" value="nameFilter" />
+			<t:submit value="Обновить" />
 		</t:form>
 	</div>
 	<t:zone t:id="ezone">
 		<t:if test="editorActive">
-			<t:editors.addclient t:id="editor"/>
+			<t:editors.addclient t:id="editor" />
 		</t:if>
 	</t:zone>
-	
-	<t:actionlink t:id="add" zone="ezone">Добавить нового</t:actionlink>
-	<br/>
-	<t:grid source="source" model="model" row="unit" rowsPerPage="message:rowsperpage" 
+
+	<t:actionlink t:id="add" zone="ezone">Добавить нового
+	</t:actionlink>
+	<br />
+	<t:grid source="source" model="model" row="unit" rowsPerPage="message:rowsperpage"
 		pagerPosition="top">
 		<p:deletedCell>
-
-			<t:show.smarticon icontype="iconType"/>
-
+			<t:show.smarticon icontype="iconType" />
 		</p:deletedCell>
 		<p:teachersCell>
 			${teachers}
 		</p:teachersCell>
 		<p:actionCell>
 			<t:actionlink t:id="edit" zone="ezone" context="unit">
-				<img src="icons/edit.png" class="icons"  />
+				<img src="icons/edit.png" class="icons" />
 			</t:actionlink>
-			
+
 			<t:eventlink event="delete" context="unit" t:mixins="auth,confirm"
-			confirmEnabled="dispatcher.canDeleteClients()"
-			confirmMessage="message:delete-client-confirm-message"
-			authEnabled="!dispatcher.canDeleteClients()"
-			authMessage="message:delete-client-auth-message">
+				confirmEnabled="dispatcher.canDeleteClients()" confirmMessage="message:delete-client-confirm-message"
+				authEnabled="!dispatcher.canDeleteClients()" authMessage="message:delete-client-auth-message">
 				<img src="icons/trash.png" class="icons" />
 			</t:eventlink>
 		</p:actionCell>
-		
+
 		<p:canceledCell>
 			<t:if test="unit.canceled">
 				Ушел

@@ -14,6 +14,8 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
+import tap.execounting.dal.mediators.interfaces.EventMed;
+import tap.execounting.dal.mediators.interfaces.TeacherMed;
 import tap.execounting.data.selectmodels.ContractTypeIdSelectModel;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
@@ -31,6 +33,10 @@ public class AddContract {
 	private SuperCalendar calendar;
 	@Inject
 	private ContractMed contractMed;
+	@Inject
+	private TeacherMed tm;
+	@Inject
+	private EventMed em;
 
 	@InjectComponent
 	private BeanEditForm editor;
@@ -66,9 +72,9 @@ public class AddContract {
 		if (con.getTeacherId() == 0)
 			teacher = "";
 		else
-			teacher = dao.find(Teacher.class, con.getTeacherId()).getName();
+			teacher = tm.setId(con.getId()).getName();
 
-		etype = dao.find(EventType.class, con.getTypeId()).getTitle();
+		etype = em.loadEventType(con.getTypeId()).getTitle();
 		updateMode = true;
 		this.con = con;
 	}
@@ -107,12 +113,12 @@ public class AddContract {
 
 	private List<Teacher> teachers() {
 		if (teachers == null)
-			teachers = dao.findWithNamedQuery(Teacher.WORKING);
+			teachers = tm.getWorkingTeachers();
 		return teachers;
 	}
 
 	private Teacher teacher() {
-		for (Teacher t : teachers())
+		for (Teacher t : tm.getAllTeachers())
 			if (t.getName().equals(teacher))
 				return t;
 		return null;

@@ -73,8 +73,9 @@ public class TeacherMediator implements TeacherMed {
 		return unit.getId();
 	}
 
-	public void setId(int id) {
+	public TeacherMed setId(int id) {
 		setUnit(dao.find(Teacher.class, id));
+		return this;
 	}
 
 	private void clearCaches() {

@@ -107,7 +107,7 @@
 			    </tr>
 			    <tr>
 			    	<td>
-				    	<t:select value="state" 
+				    	<t:select value="state" model="eventStateModel"
 				    	blankLabel="message:blank-label" t:validate="none"/>
 			    	</td>
 			    	

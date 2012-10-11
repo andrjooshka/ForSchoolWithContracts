@@ -1,5 +1,7 @@
 package tap.execounting.components.grids;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.tapestry5.ComponentResources;
@@ -50,7 +52,24 @@ public class TeacherGrid {
 	}
 
 	public List<Teacher> getSource() {
-		return dao.findWithNamedQuery(Teacher.ALL);
+		List<Teacher> teachers = dao.findWithNamedQuery(Teacher.ALL);
+		Collections.sort(teachers, new Comparator<Teacher>() {
+
+			@Override
+			public int compare(Teacher o1, Teacher o2) {
+				if (o1.isDeleted()) {
+					if (o2.isDeleted())
+						return o1.getName().compareTo(o2.getName());
+					return +1;
+				} else {
+					if (o2.isDeleted())
+						return -1;
+					return o1.getName().compareTo(o2.getName());
+				}
+			}
+
+		});
+		return teachers;
 	}
 
 	Object onActionFromEdit(Teacher c) {
@@ -91,7 +110,8 @@ public class TeacherGrid {
 			model.reorder("deleted");
 		}
 	}
-	public String getIconType(){
+
+	public String getIconType() {
 		return unit.isDeleted() ? SmartIcon.DELETED : "";
 	}
 }

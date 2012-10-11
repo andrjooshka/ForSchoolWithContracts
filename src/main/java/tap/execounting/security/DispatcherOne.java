@@ -38,9 +38,9 @@ public class DispatcherOne implements AuthorizationDispatcher {
 			byte[][] permissionMatrix = new byte[7][4];
 			permissionMatrix[Entities.CLIENT] = new byte[] { 1, 1, 1, 0 };
 			permissionMatrix[Entities.CONTRACT] = new byte[] { 1, 1, 1, 0 };
-			permissionMatrix[Entities.EVENT] = new byte[] { 1, 1, 1, 0 };
+			permissionMatrix[Entities.EVENT] = new byte[] { 1, 1, 1, 1 };
 			permissionMatrix[Entities.EVENT_TYPE] = new byte[] { 1, 1, 1, 0 };
-			permissionMatrix[Entities.PAYMENT] = new byte[] { 1, 1, 1, 0 };
+			permissionMatrix[Entities.PAYMENT] = new byte[] { 1, 1, 1, 1 };
 			permissionMatrix[Entities.TEACHER] = new byte[] { 1, 1, 1, 0 };
 			permissionMatrix[Entities.FACILITY] = new byte[] { 1, 1, 1, 0 };
 			return permissionMatrix[row][column] == 1;
