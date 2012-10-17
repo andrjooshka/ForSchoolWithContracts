@@ -80,13 +80,17 @@ public class EventType implements Deletable {
 	public int getSchoolMoney() {
 		return schoolMoney;
 	}
-
-	public void setSchoolMoney(int share) {
-		this.schoolMoney = share;
-	}
+//
+//	public void setSchoolMoney(int share) {
+//		this.schoolMoney = share;
+//	}
 	
 	public int getShareTeacher(){
 		return price - schoolMoney;
+	}
+	
+	public void setShareTeacher(int money){
+		schoolMoney = price - money;
 	}
 	
 	//Difference between typeTitle and title - that typeTitle returns 

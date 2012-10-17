@@ -11,19 +11,17 @@ import org.apache.tapestry5.SelectModelVisitor;
 import org.apache.tapestry5.internal.OptionModelImpl;
 
 public class StringValueSelectModel implements SelectModel {
-	private final Map<String, Object> strings;
+	private final List<OptionModel> options;
 
-	public StringValueSelectModel(final Map<String, Object> strings) {
-		this.strings = strings;
+	public StringValueSelectModel(Map<Integer, String> strings) {
+		this.options = new ArrayList<OptionModel>();
+
+		for (Integer i : strings.keySet()) {
+			options.add(new OptionModelImpl(strings.get(i), i));
+		}
 	}
 
 	public List<OptionModel> getOptions() {
-		final List<OptionModel> options = new ArrayList<OptionModel>();
-
-		for (final String string : this.strings.keySet()) {
-			options.add(new OptionModelImpl(string, strings.get(string)));
-		}
-
 		return options;
 	}
 

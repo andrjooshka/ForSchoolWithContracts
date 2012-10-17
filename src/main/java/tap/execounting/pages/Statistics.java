@@ -1,11 +1,8 @@
 package tap.execounting.pages;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Persist;
@@ -20,8 +17,6 @@ import org.hibernate.criterion.Restrictions;
 
 import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.mediators.interfaces.EventMed;
-import tap.execounting.data.EventState;
-import tap.execounting.data.StringValueSelectModel;
 import tap.execounting.data.selectmodels.FacilitySelectModel;
 import tap.execounting.data.selectmodels.RoomSelectModel;
 import tap.execounting.data.selectmodels.TeacherSelectModel;
@@ -160,20 +155,7 @@ public class Statistics {
 
 	// school share
 	public int getShare() {
-		// int total = 0;
-		// for (Event e : getEvents())
-		// total += e.getSchoolShare();
 		return getEventMed().setGroup(getEvents()).countSchoolMoney();
-	}
-
-	public SelectModel getEventStateModel() {
-		Map<String, Object> map = new HashMap<String, Object>(7);
-		for (int i = 0; i < 6; i++) {
-			String s = EventState.fromCode(i).toString();
-			map.put(EventState.fromCode(i).toString(), i);
-		}
-		map.put("Проведенные и сгоревшие", 6);
-		return new StringValueSelectModel(map);
 	}
 
 	Object onValueChangedFromFacilityId(Integer facId) {
@@ -199,4 +181,5 @@ public class Statistics {
 				: new RoomSelectModel(dao.find(Facility.class, facilityId));
 		typeSelect = new TypeTitleSelectModel(dao);
 	}
+
 }
