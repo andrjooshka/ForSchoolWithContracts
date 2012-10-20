@@ -15,11 +15,18 @@
 								class="icons" style="padding: 4px 8px; width: 23px;" />
 						</t:eventlink>
 					</li>
+					
+					<li>
+						<t:eventlink t:id="writeoff" context="contract.id">
+							<img src="context:/icons/writeoff_64.png" title="cписать остаток" alt="cписать остаток"
+								class="icons"/>
+						</t:eventlink>
+					</li>
 
 					<li>
 						<t:eventlink event="edit" zone="contractBody${contract.id}"
 							context="contract">
-							<img src="${context:/icons/edit.png}" title="редактировать"
+							<img src="${context:/icons/edit_64.png}" title="редактировать"
 								alt="редактировать" class="icons" />
 						</t:eventlink>
 					</li>
@@ -29,7 +36,7 @@
 							t:mixins="confirm,auth" authEnabled="!dispatcher.canDeleteContracts()"
 							authMessage="message:delete-contract-auth-message"
 							confirmEnabled="dispatcher.canDeleteContracts()" confirmMessage="message:delete-contract-confirm-message">
-							<img src="${context:/icons/trash.png}" title="удалить" alt="удалить"
+							<img src="${context:/icons/trash_64.png}" title="удалить" alt="удалить"
 								class="icons" />
 						</t:eventlink>
 					</li>
@@ -151,11 +158,10 @@
 									${paymentInfo} &#09;
 									(
 									<t:eventlink context="loopPayment" event="deletePayment"
-									t:mixins="auth,confirm"
-									authEnabled="!dispatcher.canDeletePayments()"
-									authMessage="message:delete-payment-auth-message"
-									confirmEnabled="dispatcher.canDeletePayments()"
-									confirmMessage="message:delete-payment-confirm-message">удалить
+										t:mixins="auth,confirm" authEnabled="!dispatcher.canDeletePayments()"
+										authMessage="message:delete-payment-auth-message"
+										confirmEnabled="dispatcher.canDeletePayments()"
+										confirmMessage="message:delete-payment-confirm-message">удалить
 									</t:eventlink>
 									|
 									<t:eventlink context="loopPayment" event="editPayment"

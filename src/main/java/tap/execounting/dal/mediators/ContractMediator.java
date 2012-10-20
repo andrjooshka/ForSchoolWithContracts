@@ -189,7 +189,14 @@ public class ContractMediator implements ContractMed {
 		}
 	}
 
-	public void planEvents() {
+	public EventType loadEventType(int id) {
+		return dao.find(EventType.class, id);
+	}
+
+	// This method does all the planning activity for single contract. It plans
+	// all available events, corresponding to the contract event schedule, which
+	// corresponds to the teacher schedule.
+	public void doPlanEvents() {
 		CRUDServiceDAO dao = getDao();
 		unit = dao.find(Contract.class, unit.getId());
 		for (Event e : unit.getEvents())
@@ -224,8 +231,17 @@ public class ContractMediator implements ContractMed {
 		}
 	}
 
-	public EventType loadEventType(int id) {
-		return dao.find(EventType.class, id);
+	// When client is no longer doing any study, he is gone, and all his money
+	// remain on the school account. So we should write them as profit, but we
+	// don't share them with teacher.
+	// Today (20.10.2012) the most simple and consistent way to this is:
+	// 1) Delete all planned events.
+	// 2) Add new events with 'Writeoff' header, whose price is equal to the
+	// price of original events, but school share is 100%.
+	// 3) Make a comment '$N events were written off, $WriteoffDate.
+	public void doWriteOff() {
+		// TODO Auto-generated method stub
+
 	}
 
 	// group methods

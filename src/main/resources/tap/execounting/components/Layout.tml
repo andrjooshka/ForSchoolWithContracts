@@ -9,13 +9,14 @@
 		<t:security.authenticated>
 			<!--start header -->
 			<ul class="nav">
-				<span style="float: left;">
+				<span class="spacer first">
 					<li class="last" style="line-height:30px;">${user?.fullName}</li>
 				</span>
-				<span style="float: right; margin-right: 5%;">
+				<span class="spacer middle">
 					<a href="#" t:type="pageLink" t:page="home">
 						<li class="${cssForLi('Бюро')}">
-							<img src="${context:/icons/home.png}" style="height: 15px; width:19px;" />
+							<img src="${context:/icons/home_32.png}"
+								style="height: 19px; width: 19px;margin-top: 4px;margin-bottom: -3px;" />
 						</li>
 					</a>
 					<a href="#" t:type="pageLink" t:page="teachers">
@@ -54,6 +55,7 @@
 						</li>
 					</a>
 				</span>
+				<span class="spacer last" />
 			</ul>
 			<!--end header -->
 		</t:security.authenticated>

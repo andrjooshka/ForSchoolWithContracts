@@ -287,7 +287,7 @@ public class Payroll {
 		EventType inType = input.getEventType();
 		EventType pType = new EventType();
 		pType.setPrice(inType.getPrice());
-		pType.setSchoolMoney(inType.getSchoolMoney());
+		pType.setShareTeacher(inType.getShareTeacher());
 		pType.setId(inType.getId());
 		out.setEventType(pType);
 
@@ -296,7 +296,7 @@ public class Payroll {
 		// Lowering the teacher's money
 		EventTypeAddition pa = eM.loadProbation(pType.getId());
 		if (pa != null)
-			pType.setSchoolMoney(pType.getSchoolMoney() + pa.getAdditionValue());
+			pType.setShareTeacher(pType.getShareTeacher() - pa.getAdditionValue());
 
 		return out;
 	}

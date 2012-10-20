@@ -185,7 +185,7 @@ public class AddContract {
 			dao.create(con);
 		}
 
-		getContractMed().setUnit(con).planEvents();
+		getContractMed().setUnit(con).doPlanEvents();
 	}
 
 	void setupRender() {

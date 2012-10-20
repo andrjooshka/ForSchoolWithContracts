@@ -13,114 +13,108 @@ import tap.execounting.entities.Payment;
 import tap.execounting.entities.Teacher;
 
 public interface ContractMed {
-//unit methods
-	//unit
+	// unit methods
+	// unit
 	public Contract getUnit();
+
 	public ContractMed setUnit(Contract unit);
+
 	public ContractMed setUnitId(int id);
-	
-	//getters:
-	//Teacher name
+
+	// getters:
+	// Teacher name
 	public String getTeacherName();
-	
-	//Client name
+
+	// Client name
 	public String getClientName();
-	
-	//discipline
+
+	// discipline
 	public EventType getEventType();
-	
-	//contract type
+
+	// contract type
 	public ContractType getContractType();
-	
-	//state
+
+	// state
 	public ContractState getContractState();
-	
-	//date
+
+	// date
 	public Date getDate();
-	
-	//lessons number
+
+	// lessons number
 	public int getLessonsNumber();
-	
-	//remaining events
+
+	// remaining events
 	public int getRemainingLessons();
-	
-	//price
+
+	// price
 	public int getPrice();
-	
-	//balance
+
+	// balance
 	public int getBalance();
-	
-	//events
+
+	// events
 	public List<Event> getEvents();
-	
-	//payments
+
+	// payments
 	public List<Payment> getPayments();
-	
-	//event planner method
-	public void planEvents();
-	
+
 	public EventType loadEventType(int id);
+
+	// Unit action methods
 	
-//group methods
-	//group
+	// Write off all remaining events, to transfer all the money to the school
+	// account.
+	public void doWriteOff();
+
+	// Event planner method
+	public void doPlanEvents();
+
+	// group methods
+	// group
 	public List<Contract> getGroup();
+
 	public ContractMed setGroup(List<Contract> group);
+
 	public List<Contract> getAllContracts();
+
 	public void reset();
-	public String getFilterState();	
-////filters:
-	
-	//client
+
+	public String getFilterState();
+
+	// //filters:
+
+	// client
 	public ContractMed filter(Client c);
-	
-	//teacher
+
+	// teacher
 	public ContractMed filter(Teacher t);
-	
-	//state
+
+	// state
 	public ContractMed filter(ContractState state);
-	
-	//remaining lessons
+
+	// remaining lessons
 	public ContractMed filter(int remainingLessons);
-	
-	//date
+
+	// date
 	public ContractMed filter(Date date1, Date date2);
-	
-	//planned payments date
+
+	// planned payments date
 	public ContractMed filterByPlannedPaymentsDate(Date date1, Date date2);
-	
-	//contract type
+
+	// contract type
 	public ContractMed filterByContractType(int type);
-	
-////counters:
-	
-	//actual group size
+
+	// //counters:
+
+	// actual group size
 	public Integer countGroupSize();
-	
-	//state
+
+	// state
 	public Integer count(ContractState state);
-	
-	//money for complete events
+
+	// money for complete events
 	public Integer countCompleteLessonsMoney();
-	
-	//money paid on contract
+
+	// money paid on contract
 	public Integer countMoneyPaid();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

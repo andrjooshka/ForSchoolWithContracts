@@ -19,6 +19,7 @@ import tap.execounting.components.editors.AddContract;
 import tap.execounting.components.editors.AddEvent;
 import tap.execounting.components.editors.AddPayment;
 import tap.execounting.dal.CRUDServiceDAO;
+import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Event;
@@ -42,6 +43,8 @@ public class ShowContract {
 	@Inject
 	@Property
 	private AuthorizationDispatcher dispatcher;
+	@Inject
+	private ContractMed contractMed;
 
 	@InjectComponent
 	private Zone bodyZone;
@@ -98,6 +101,12 @@ public class ShowContract {
 			con.setFreeze(!con.isFreeze());
 			dao.update(con);
 		}
+	}
+	
+	Object onWriteOff(int contractId){
+		contractMed.setUnitId(contractId);
+		contractMed.doWriteOff();
+		return bodyZone.getBody();
 	}
 
 	Object onAddEvent(Contract con) {
