@@ -15,11 +15,13 @@
 								class="icons" style="padding: 4px 8px; width: 23px;" />
 						</t:eventlink>
 					</li>
-					
+
 					<li>
-						<t:eventlink t:id="writeoff" context="contract.id">
-							<img src="context:/icons/writeoff_64.png" title="cписать остаток" alt="cписать остаток"
-								class="icons"/>
+						<t:eventlink t:id="writeoff" context="contract.id"
+							zone="contractBody${contract.id}" t:mixins="confirm"
+							confirmEnabled="literal:true" confirmMessage="message:writeoff-confirm-message">
+							<img src="${context:/icons/writeoff.png}" title="cписать остаток"
+								alt="cписать остаток" class="icons" />
 						</t:eventlink>
 					</li>
 
@@ -36,8 +38,8 @@
 							t:mixins="confirm,auth" authEnabled="!dispatcher.canDeleteContracts()"
 							authMessage="message:delete-contract-auth-message"
 							confirmEnabled="dispatcher.canDeleteContracts()" confirmMessage="message:delete-contract-confirm-message">
-							<img src="${context:/icons/trash_64.png}" title="удалить" alt="удалить"
-								class="icons" />
+							<img src="${context:/icons/trash_64.png}" title="удалить"
+								alt="удалить" class="icons" />
 						</t:eventlink>
 					</li>
 				</ul>

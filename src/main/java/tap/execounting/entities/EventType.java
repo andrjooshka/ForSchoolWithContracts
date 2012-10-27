@@ -15,7 +15,8 @@ import tap.execounting.entities.interfaces.Deletable;
 @Entity
 @NamedQueries({ @NamedQuery(name = EventType.ALL, query = "Select et from EventType et" +
 		" order by et.title"),
-		@NamedQuery(name = EventType.ACTUAL, query = "from EventType where deleted = false")
+		@NamedQuery(name = EventType.ACTUAL, query = "from EventType where deleted = false"),
+		@NamedQuery(name = EventType.WITH_TITLE, query = "from EventType where title like :title")
 })
 @Table(name = "event_types")
 public class EventType implements Deletable {
@@ -23,6 +24,8 @@ public class EventType implements Deletable {
 	public static final String ALL = "EventType.all";
 
 	public static final String ACTUAL = "EventType.actual";
+
+	public static final String WITH_TITLE = "EventType.withTitle";
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

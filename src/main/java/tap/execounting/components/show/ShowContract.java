@@ -102,10 +102,11 @@ public class ShowContract {
 			dao.update(con);
 		}
 	}
-	
-	Object onWriteOff(int contractId){
+
+	Object onWriteOff(int contractId) {
 		contractMed.setUnitId(contractId);
 		contractMed.doWriteOff();
+		this.contract = contractMed.getUnit();
 		return bodyZone.getBody();
 	}
 

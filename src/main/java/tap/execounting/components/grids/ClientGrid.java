@@ -94,8 +94,11 @@ public class ClientGrid {
 				// TODO JAVASCRIPT ALERT MOUNT POINT
 				throw new IllegalArgumentException(
 						"У данного клиента заключены с вами договора, пожалуйста сначала удалите их.");
-			else
+			else {
+				c.setName(c.getName() + " [deleted]");
+				dao.update(c);
 				dao.delete(Client.class, c.getId());
+			}
 		}
 	}
 

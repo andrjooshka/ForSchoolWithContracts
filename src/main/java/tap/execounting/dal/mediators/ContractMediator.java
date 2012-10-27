@@ -15,6 +15,7 @@ import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.dal.mediators.interfaces.DateFilter;
 import tap.execounting.dal.mediators.interfaces.EventMed;
 import tap.execounting.dal.mediators.interfaces.PaymentMed;
+import tap.execounting.data.Const;
 import tap.execounting.data.ContractState;
 import tap.execounting.data.EventState;
 import tap.execounting.entities.Client;
@@ -236,12 +237,67 @@ public class ContractMediator implements ContractMed {
 	// don't share them with teacher.
 	// Today (20.10.2012) the most simple and consistent way to this is:
 	// 1) Delete all planned events.
-	// 2) Add new events with 'Writeoff' header, whose price is equal to the
-	// price of original events, but school share is 100%.
+	// 2) Add new event with 'Writeoff' header, whose price is equal to the
+	// balance of the contract.
 	// 3) Make a comment '$N events were written off, $WriteoffDate.
 	public void doWriteOff() {
-		// TODO Auto-generated method stub
 
+		// TODO WRITEOFF
+		// Delete all planned events
+		List<Event> events = unit.getEvents();
+		for (int i = events.size() - 1; i >= 0; i--)
+			if (events.get(i).getState() == EventState.planned
+					|| events.get(i).isWriteOff()) {
+				List<Contract> eventContracts = events.get(i).getContracts();
+				for (int j = eventContracts.size() - 1; j >= 0; j--)
+					if (eventContracts.get(j).getId() == unit.getId())
+						eventContracts.remove(j);
+				dao.update(events.get(i));
+				if (events.get(i).getContracts().size() == 0)
+					dao.delete(Event.class, events.get(i).getId());
+				unit.getEvents().remove(i);
+			}
+		dao.update(unit);
+
+		// 'Writeoff' events
+		EventType writeOffEventType = loadWriteOffType();
+
+		Event e = new Event();
+		e.setTypeId(writeOffEventType.getId());
+		e.setHostId(Const.WriteOffTeacherId);
+		e.setState(EventState.complete);
+		e.setComment("[" + writeOffEventType.getTitle() + "]");
+		e.setFacilityId(Const.WriteOffFacilityId);
+		e.setRoomId(Const.WriteOffRoomId);
+		dao.create(e);
+		e.getContracts().add(unit);
+		dao.update(e);
+		unit.setCanceled(true);
+		unit.getEvents().add(e);
+
+		// Comment
+		String comment = "Списано " + writeOffEventType.getPrice() + " р.";
+
+		if (unit.getComment() != null)
+			comment = unit.getComment().concat(comment);
+		unit.setComment(comment);
+		dao.update(unit);
+	}
+
+	private EventType loadWriteOffType() {
+		String title = Const.WriteOffPrefix + " : " + unit.getBalance();
+		EventType writeOff = dao.findUniqueWithNamedQuery(EventType.WITH_TITLE,
+				QueryParameters.with("title", title).parameters());
+		if (writeOff == null) {
+			writeOff = new EventType();
+			writeOff.setPrice(unit.getBalance());
+			writeOff.setShareTeacher(0);
+			writeOff.setTitle(title);
+			writeOff.setDeleted(true);
+			dao.create(writeOff);
+		}
+
+		return writeOff;
 	}
 
 	// group methods
