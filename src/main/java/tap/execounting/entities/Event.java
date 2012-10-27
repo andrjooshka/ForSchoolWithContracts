@@ -21,14 +21,17 @@ import javax.validation.constraints.NotNull;
 import org.apache.tapestry5.beaneditor.NonVisual;
 import org.apache.tapestry5.beaneditor.Validate;
 
+import tap.execounting.data.Const;
 import tap.execounting.data.EventState;
 import tap.execounting.entities.interfaces.Dated;
+
 /**
- * This class does not support interface entities.interfaces.Deletable,
- * since some events certainly should be removed, and it is not an accounting item,
+ * This class does not support interface entities.interfaces.Deletable, since
+ * some events certainly should be removed, and it is not an accounting item,
  * but accounting unit.
+ * 
  * @author truth0
- *
+ * 
  */
 @Entity
 @NamedQueries({
@@ -78,7 +81,7 @@ public class Event implements Comparable<Event>, Dated {
 	private Date date;
 
 	private int state;
-	
+
 	@NonVisual
 	private boolean deleted;
 
@@ -257,5 +260,10 @@ public class Event implements Comparable<Event>, Dated {
 		e.setId(this.id);
 		e.setState(EventState.fromCode(this.state));
 		return e;
+	}
+
+	@NonVisual
+	public boolean isWriteOff() {
+		return this.getEventType().getTitle().startsWith(Const.WriteOffPrefix);
 	}
 }

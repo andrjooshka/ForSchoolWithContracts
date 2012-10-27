@@ -30,11 +30,12 @@ import tap.execounting.services.RusCalendar;
 import tap.execounting.services.SuperCalendar;
 
 /**
- * This class does not support interface entities.interfaces.Deletable,
- * since some contracts certainly should be removed, and it is not an accounting item,
+ * This class does not support interface entities.interfaces.Deletable, since
+ * some contracts certainly should be removed, and it is not an accounting item,
  * but accounting unit.
+ * 
  * @author truth0
- *
+ * 
  */
 @Entity
 @Table(name = "contracts")
@@ -72,7 +73,7 @@ public class Contract implements Comparable<Contract>, Dated {
 	private boolean freeze;
 
 	private boolean canceled;
-	
+
 	private String comment;
 
 	@Column(name = "contract_type_id", unique = false)
@@ -267,8 +268,8 @@ public class Contract implements Comparable<Contract>, Dated {
 	public EventType getEventType() {
 		return eventType;
 	}
-	
-	public void setEventType(EventType et){
+
+	public void setEventType(EventType et) {
 		this.eventType = et;
 	}
 
@@ -361,6 +362,7 @@ public class Contract implements Comparable<Contract>, Dated {
 		return completeLessonsCost;
 	}
 
+	// Does not counts the writeoffs;
 	public int getCompleteLessonsNumber(boolean countFailedByClientAsComplete) {
 		int count = 0;
 
@@ -373,7 +375,11 @@ public class Contract implements Comparable<Contract>, Dated {
 			for (Event e : getEvents())
 				if (e.getState() == EventState.complete)
 					count++;
-
+		for (Event e : getEvents())
+			if (e.isWriteOff()) {
+				count--;
+				break;
+			}
 		return count;
 	}
 
@@ -444,7 +450,14 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	public int getBalance() {
 		return getMoneyPaid() - getCompleteLessonsCost()
-				- (isGift() ? getGiftPrice() : 0);
+				- (isGift() ? getGiftPrice() : 0) - getWrittenOffMoney();
+	}
+
+	private int getWrittenOffMoney() {
+		for (Event e : getEvents())
+			if (e.isWriteOff())
+				return e.getEventType().getPrice();
+		return 0;
 	}
 
 	public ContractType getContractType() {

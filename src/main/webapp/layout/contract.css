@@ -42,13 +42,14 @@ table.showcontract th div {
 tbody :last-child td {
 	border-bottom: 0px;
 }
+
 ul.sider {
 	margin-top: 2px;
-	width: 160px;
+	width: 200px;
 	list-style: none;
 	padding: 5px;
 	position: relative;
-	left: 480px;
+	left: 441px;
 	top: 12px;
 }
 

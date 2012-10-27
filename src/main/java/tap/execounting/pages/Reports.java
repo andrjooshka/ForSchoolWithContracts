@@ -76,7 +76,7 @@ public class Reports {
 				list.remove(i);
 		// remaining lessons
 		for (int i = list.size() - 1; i >= 0; i--)
-			if (list.get(i).getLessonsRemain() > 2)
+			if (list.get(i).getLessonsRemain() > 2 || list.get(i).isCanceled())
 				list.remove(i);
 
 		Set<Client> clients = new HashSet<Client>(list.size());

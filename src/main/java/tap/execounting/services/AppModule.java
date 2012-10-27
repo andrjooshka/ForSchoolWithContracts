@@ -1,22 +1,14 @@
 package tap.execounting.services;
 
-import java.io.IOException;
-
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Contribute;
-import org.apache.tapestry5.ioc.annotations.Local;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.services.ComponentRequestFilter;
 import org.apache.tapestry5.services.ComponentRequestHandler;
-import org.apache.tapestry5.services.Request;
-import org.apache.tapestry5.services.RequestFilter;
-import org.apache.tapestry5.services.RequestHandler;
-import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.validator.ValidatorMacro;
-import org.slf4j.Logger;
 
 import tap.execounting.dal.HibernateModule;
 import tap.execounting.dal.mediators.MediatorModule;
@@ -43,6 +35,18 @@ public class AppModule {
 	public static void contributeFactoryDefaults(
 			MappedConfiguration<String, Object> configuration) {
 		configuration.override(SymbolConstants.APPLICATION_VERSION, "3.5");
+		// The application version number is incorprated into URLs for some
+		// assets. Web browsers will cache assets because of the far future
+		// expires
+		// header. If existing assets are changed, the version number should
+		// also
+		// change, to force the browser to download new versions. This overrides
+		// Tapesty's default
+		// (a random hexadecimal number), but may be further overriden by
+		// DevelopmentModule or
+		// QaModule.
+
+		configuration.override(SymbolConstants.APPLICATION_VERSION, "3.6");
 		configuration.override(SymbolConstants.DATEPICKER, "assets/");
 	}
 
@@ -61,35 +65,13 @@ public class AppModule {
 	@Contribute(ValidatorMacro.class)
 	public static void combineValidators(
 			MappedConfiguration<String, String> configuration) {
-		configuration.add("username", "required, minlength=3, maxlength=15");
-		configuration.add("password", "required, minlength=6, maxlength=12");
+		configuration.add("username", "required, minlength=4, maxlength=15");
+		configuration.add("password", "required, minlength=8, maxlength=12");
 	}
 
 	@Contribute(ComponentRequestHandler.class)
 	public static void contributeComponentRequestHandler(
 			OrderedConfiguration<ComponentRequestFilter> configuration) {
 		configuration.addInstance("RequiresLogin", AuthenticationFilter.class);
-	}
-
-	public RequestFilter buildTimingFilter(final Logger log) {
-		return new RequestFilter() {
-			public boolean service(Request request, Response response,
-					RequestHandler handler) throws IOException {
-				long startTime = System.currentTimeMillis();
-
-				try {
-					return handler.service(request, response);
-				} finally {
-					long elapsed = System.currentTimeMillis() - startTime;
-
-					log.info(String.format("Request time: %d ms", elapsed));
-				}
-			}
-		};
-	}
-	public void contributeRequestHandler(
-			OrderedConfiguration<RequestFilter> configuration,
-			@Local RequestFilter filter) {
-		configuration.add("Timing", filter);
 	}
 }

@@ -15,7 +15,7 @@ import tap.execounting.services.Authenticator;
 /**
  * Layout component for pages of application.
  */
-@Import(stylesheet = { "context:/layout/style.css", "context:/layout/home.css" })
+@Import(stylesheet = { "context:/layout/style.css", "context:/layout/home.css" }, library = "context:/js/SpacerResizer.js")
 public class Layout {
 	@Property
 	private String pageName;
@@ -45,36 +45,18 @@ public class Layout {
 		authenticator.logout();
 		return Index.class;
 	}
-	
-	public String cssForLi(String link){
+
+	public String cssForLi(String link) {
 		link = link.toLowerCase();
 		String ptitle = pageTitle.toLowerCase();
 		boolean active = false;
-		
+
 		active = ptitle.equals(link);
-		
-		
+
 		return active ? "activeMenuItem" : "";
 	}
-	
-	//@Import(stylesheet = { "context:/layout/datepicker.css" })
-	void afterRender() { }
+
+	// @Import(stylesheet = { "context:/layout/datepicker.css" })
+	void afterRender() {
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
