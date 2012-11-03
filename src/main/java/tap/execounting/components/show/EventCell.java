@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Persist;
@@ -13,6 +14,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import tap.execounting.components.EventMover;
 import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.data.EventRowElement;
 import tap.execounting.data.EventState;
@@ -34,6 +36,10 @@ public class EventCell {
 	private CRUDServiceDAO dao;
 	@Persist
 	private EventRowElement back;
+	@Inject
+	private ComponentResources resources;
+	@Property
+	private boolean moving;
 
 	@Property
 	private boolean editing;
@@ -45,8 +51,6 @@ public class EventCell {
 				return "planned";
 			case complete:
 				return "complete";
-			case failed:
-				return "failed";
 			case failedByClient:
 				return "failed client";
 			case movedByTeacher:
@@ -83,16 +87,33 @@ public class EventCell {
 		return cellZone;
 	}
 
-	public Object onValueChanged(EventState state) {
-		back.getEvent().setState(state);
-		dao.update(back.getEvent());
-		element = back;
+	@InjectComponent
+	private EventMover mover;
 
-		editing = false;
-		return cellZone;
+	public Object onValueChanged(EventState state) {
+		if (state == EventState.movedByClient
+				|| state == EventState.movedByTeacher) {
+			// CaptureResultCallback<EventMover> callback = new
+			// CaptureResultCallback<EventMover>();
+			// resources.triggerEvent(Const.EVENT_EventMoved,
+			// new Object[] { back.getEvent(), state, this }, callback);
+			// return callback.getResult();
+			moving = true;
+			element = back;
+			mover.setup(this.back.getEvent(), state);
+			return cellZone;
+		} else {
+			back.getEvent().setState(state);
+			dao.update(back.getEvent());
+			element = back;
+
+			editing = false;
+			return cellZone;
+		}
 	}
 
 	Object onSubmit() {
+		element = back;
 		dao.update(element.getEvent());
 		editing = false;
 		return cellZone;

@@ -1,6 +1,10 @@
 div.datePicker {
 	background: Window;
+	position: relative;
+	left:50%;
+	top:0px;
 	width: 200px;
+	height: 200px;
 	cursor: default;
 	-moz-user-focus: normal;
 	padding: 3px;

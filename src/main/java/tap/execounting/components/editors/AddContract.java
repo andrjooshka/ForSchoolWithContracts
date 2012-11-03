@@ -72,7 +72,7 @@ public class AddContract {
 		if (con.getTeacherId() == 0)
 			teacher = "";
 		else
-			teacher = tm.setId(con.getId()).getName();
+			teacher = tm.setId(con.getTeacherId()).getName();
 
 		etype = em.loadEventType(con.getTypeId()).getTitle();
 		updateMode = true;
@@ -169,9 +169,9 @@ public class AddContract {
 		} catch (Exception e) {
 			e.printStackTrace();
 			String errorString = "Типа занятий: " + etype + ", не найдено.";
-			//thrsow new IllegalArgumentException(errorString);
 			editor.recordError(errorString);
-			throw new ValidationException(errorString);
+			throw new IllegalArgumentException(errorString);
+			// throw new ValidationException(errorString);
 		}
 	}
 

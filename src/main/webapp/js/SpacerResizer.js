@@ -1,10 +1,16 @@
-$j(document).ready(function() {
-	totalWidth = $j(document).width();
-	spacerOne = $j(".spacer.first");
-	spacerTwo = $j(".spacer.middle");
-	spacerThree = $j(".spacer.last");
-	availWidth = totalWidth - spacerOne.width() - spacerTwo.width();
+Event.observe(window, "resize", ResizeSpace);
+
+function ResizeSpace() {
+	totalWidth = $('mainmenu').getWidth();
+
+	spacerOne = $('spacerOne');
+	spacerTwo = $('spacerTwo');
+	spacerThree = $('spacerThree');
+	availWidth = totalWidth - spacerOne.getWidth() - spacerTwo.getWidth() - 1;
 	if (availWidth < 0)
 		availWidth = 0;
-	spacerThree.css("width", availWidth + "px");
-});
+	style = {
+		width : new String(availWidth+'px')
+	};
+	spacerThree.setStyle(style);
+}

@@ -5,9 +5,9 @@
 	<h3>${tMed.name}</h3>
 	<div id="payrollController">
 		<h4>Ведомость</h4>
-		<t:form t:id="payrollForm" >
+		<t:form t:id="payrollForm">
 			<div>
-				 <t:datefield value="payrollDateOne" />
+				<t:datefield value="payrollDateOne" />
 			</div>
 			<div>
 				<t:datefield value="payrollDateTwo" />
@@ -114,6 +114,11 @@
 					text-align: right;padding-right: 30px;">
 					<h4 style="font-size: 1.6em">${monthName}</h4>
 				</div>
+
+
+				<t:remove>
+					<!-- Отображаем дни календаря учителя -->
+				</t:remove>
 				<div class="calendar" style="display: inline-table;">
 					<t:show.EventRow displayNull="true" displayDate="true"
 						elements="dates" />

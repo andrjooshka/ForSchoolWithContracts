@@ -75,10 +75,11 @@ public class ShowContract {
 	@Property
 	private boolean addingPayment;
 
-	Object onEdit(Contract e) {
+	Object onEdit(int contractId) {
 		// AUTHORIZATION MOUNT POINT EDIT CONTRACT
 		if (dispatcher.canEditContracts()) {
-			editor.setup(e);
+			Contract c = dao.find(Contract.class, contractId);
+			editor.setup(c);
 			updateMode = true;
 		}
 		return bodyZone.getBody();

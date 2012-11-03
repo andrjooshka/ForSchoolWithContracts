@@ -53,8 +53,8 @@ public class TeacherMediator implements TeacherMed {
 	public List<Teacher> getAllTeachers() {
 		return getDao().findWithNamedQuery(Teacher.ALL);
 	}
-	
-	public List<Teacher> getWorkingTeachers(){
+
+	public List<Teacher> getWorkingTeachers() {
 		return dao.findWithNamedQuery(Teacher.WORKING);
 	}
 
@@ -275,7 +275,7 @@ public class TeacherMediator implements TeacherMed {
 
 	public int getDaysWorked(Date date1, Date date2) {
 		int res = getEventMed().filter(unit).filter(date1, date2)
-				.countDaysInEventsGroup();
+				.filter(EventState.complete).countDaysInEventsGroup();
 		getEventMed().reset();
 		return res;
 	}

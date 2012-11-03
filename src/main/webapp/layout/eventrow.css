@@ -40,9 +40,13 @@ div.calendar .mini {
 		100%); /* IE10+ */
 	background: linear-gradient(to bottom, #ffffff 0%, #f1f1f1 50%, #e1e1e1 51%, #f6f6f6
 		100%); /* W3C */
-	filter: progid:   DXImageTransform.Microsoft.gradient(     startColorstr=
+	filter: progid:      DXImageTransform.Microsoft.gradient(        startColorstr=
+		
+		
+		
 		 
-	'#ffffff', endColorstr=   '#f6f6f6', GradientType=   0 ); /* IE6-9 */
+	'#ffffff', endColorstr=      '#f6f6f6', GradientType=      0 );
+	/* IE6-9 */
 	width: 50px;
 	margin: 3px;
 	border-radius: 2px;
@@ -61,7 +65,7 @@ div.calendar .mini {
 		100%); /* IE10+ */
 	background: linear-gradient(to bottom, #ffffff 0%, #f1f1f1 50%, #e1e1e1 51%, #f6f6f6
 		100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient(    startColorstr='#ffffff',
+	filter: progid:DXImageTransform.Microsoft.gradient(       startColorstr='#ffffff',
 		endColorstr='#f6f6f6', GradientType=0 );
 }
 
@@ -127,7 +131,7 @@ div.calendar div.mini.planned {
 		15%, rgba(241, 218, 54, 1) 81% ); /* IE10+ */
 	background: radial-gradient(ellipse at center, rgba(254, 252, 234, 1)
 		15%, rgba(241, 218, 54, 1) 81% ); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient(   startColorstr='#fefcea',
+	filter: progid:DXImageTransform.Microsoft.gradient(      startColorstr='#fefcea',
 		endColorstr='#f1da36', GradientType=1 );
 	/* IE6-9 fallback on horizontal gradient */
 }
@@ -147,7 +151,7 @@ div.calendar div.mini.complete {
 		4%, rgba(102, 229, 59, 1) 83% ); /* IE10+ */
 	background: radial-gradient(ellipse at center, rgba(254, 252, 234, 1) 4%,
 		rgba(102, 229, 59, 1) 83% ); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient(  startColorstr='#fefcea',
+	filter: progid:DXImageTransform.Microsoft.gradient(     startColorstr='#fefcea',
 		endColorstr='#66e53b', GradientType=1 );
 	/* IE6-9 fallback on horizontal gradient */
 }
@@ -187,7 +191,7 @@ div.calendar div.mini.complete {
 		0%, hsla(107, 73%, 45%, 1) 100% ); /* IE10+ */
 	background: radial-gradient(ellipse at center, hsla(106, 100%, 76%, 1)
 		0%, hsla(107, 73%, 45%, 1) 100% ); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient(       startColorstr='#9fff82',
+	filter: progid:DXImageTransform.Microsoft.gradient(          startColorstr='#9fff82',
 		endColorstr='#43c41f', GradientType=1 );
 	/* IE6-9 fallback on horizontal gradient */
 }
@@ -207,7 +211,26 @@ div.calendar div.mini.complete {
 		0%, hsla(53, 87%, 58%, 1) 100% ); /* IE10+ */
 	background: radial-gradient(ellipse at center, hsla(54, 91%, 96%, 1) 0%,
 		hsla(53, 87%, 58%, 1) 100% ); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient(         startColorstr='#fefcea',
+	filter: progid:DXImageTransform.Microsoft.gradient(            startColorstr='#fefcea',
 		endColorstr='#f1da36', GradientType=1 );
+	/* IE6-9 fallback on horizontal gradient */
+}
+
+.moved {
+	background: -moz-radial-gradient(center, ellipse cover, rgba(178, 178, 178, 1)
+		0%, rgba(173, 173, 173, 0.83) 100% ); /* FF3.6+ */
+	background: -webkit-gradient(radial, center center, 0px, center center, 100%,
+		color-stop(0%, rgba(178, 178, 178, 1) ),
+		color-stop(100%, rgba(173, 173, 173, 0.83) ) ); /* Chrome,Safari4+ */
+	background: -webkit-radial-gradient(center, ellipse cover, rgba(178, 178, 178, 1)
+		0%, rgba(173, 173, 173, 0.83) 100% ); /* Chrome10+,Safari5.1+ */
+	background: -o-radial-gradient(center, ellipse cover, rgba(178, 178, 178, 1)
+		0%, rgba(173, 173, 173, 0.83) 100% ); /* Opera 12+ */
+	background: -ms-radial-gradient(center, ellipse cover, rgba(178, 178, 178, 1)
+		0%, rgba(173, 173, 173, 0.83) 100% ); /* IE10+ */
+	background: radial-gradient(ellipse at center, rgba(178, 178, 178, 1) 0%,
+		rgba(173, 173, 173, 0.83) 100% ); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient(  startColorstr='#b2b2b2',
+		endColorstr='#d4adadad', GradientType=1 );
 	/* IE6-9 fallback on horizontal gradient */
 }

@@ -11,7 +11,7 @@
 		<t:beaneditform t:id="editor" object="con" submitlabel="message:submit-label" 
 			exclude="id,clientId,freeze" reorder="teacherId,typeId,contractTypeId"
 			add="schedule" clientValidation="none">
-			
+			<t:errors />
 			<p:contractTypeId>
 				<t:label for="contractTypeSelect"/>
 				<t:select t:id="contractTypeSelect" value="con.contractTypeId" 

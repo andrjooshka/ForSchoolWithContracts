@@ -27,7 +27,7 @@
 
 					<li>
 						<t:eventlink event="edit" zone="contractBody${contract.id}"
-							context="contract">
+							context="contract.id">
 							<img src="${context:/icons/edit_64.png}" title="редактировать"
 								alt="редактировать" class="icons" />
 						</t:eventlink>

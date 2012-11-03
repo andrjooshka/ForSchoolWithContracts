@@ -1,9 +1,9 @@
 package tap.execounting.data;
 
 public enum EventState {
-	planned(0, "Запланировано"), complete(1, "Состоялось"), failed(2,
-			"Не состоялось"), failedByClient(3, "Сгорело"), movedByTeacher(4,
-			"Перенос : педагог"), movedByClient(5, "Перенос : клиент");
+	planned(0, "Запланировано"), complete(1, "Состоялось"), failedByClient(3,
+			"Сгорело"), movedByTeacher(4, "Перенос : педагог"), movedByClient(
+			5, "Перенос : клиент");
 
 	private int code;
 	private String translation;
@@ -23,13 +23,11 @@ public enum EventState {
 			return planned;
 		case 1:
 			return complete;
-		case 2:
-			return failed;
 		case 3:
 			return failedByClient;
 		case 4:
 			return movedByTeacher;
-		case 5: 
+		case 5:
 			return movedByClient;
 		default:
 			return planned;

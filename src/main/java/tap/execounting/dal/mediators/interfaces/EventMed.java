@@ -56,6 +56,13 @@ public interface EventMed {
 
 	// EventTypeAddition Loading
 	public EventTypeAddition loadProbation(int id);
+	
+	// Creates or updates event instance
+	public void save(Event event);
+	
+	// Moves event on dates
+	public void move(EventState newState, Date newDate,
+			int transferType) throws IllegalAccessException;
 
 	// group methods:
 	// group
@@ -131,4 +138,5 @@ public interface EventMed {
 
 	// days
 	public int countDaysInEventsGroup();
+
 }

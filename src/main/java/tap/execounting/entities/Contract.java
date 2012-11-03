@@ -22,6 +22,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Min;
 
+import org.apache.tapestry5.beaneditor.NonVisual;
+
 import tap.execounting.data.ContractState;
 import tap.execounting.data.EventState;
 import tap.execounting.entities.interfaces.Dated;
@@ -279,6 +281,9 @@ public class Contract implements Comparable<Contract>, Dated {
 	}
 
 	public ContractState getState() {
+		// TODO hotfix alert
+		if (ContractType.Trial == contractTypeId)
+			return ContractState.active;
 		ContractState state = null;
 		if (isCanceled())
 			state = ContractState.canceled;
@@ -296,6 +301,11 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	private boolean undefinedStateTest() {
 		try {
+			// Check if contract is new
+			Date neww = DateService.fromNowPlusDays(-30);
+			if (neww.before(date))
+				return false;
+
 			boolean result = true;
 			Date former = DateService.fromNowPlusDays(-360);
 			for (Event e : getEvents())
@@ -481,5 +491,15 @@ public class Contract implements Comparable<Contract>, Dated {
 	// Util
 	public int compareTo(Contract contract) {
 		return getDate().compareTo(contract.getDate());
+	}
+
+	@NonVisual
+	public boolean hasSchedule() {
+		if (this.schedule == null)
+			return false;
+		for (int i = 1; i < 8; i++)
+			if (schedule.get(i))
+				return true;
+		return false;
 	}
 }

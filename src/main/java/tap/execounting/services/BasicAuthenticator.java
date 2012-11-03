@@ -11,12 +11,6 @@ import tap.execounting.entities.User;
 import tap.execounting.security.AuthenticationException;
 
 
-/**
- * Basic Security Realm implementation
- * 
- * @author karesti
- * @version 1.0
- */
 public class BasicAuthenticator implements Authenticator
 {
 

@@ -34,19 +34,7 @@ public class AppModule {
 
 	public static void contributeFactoryDefaults(
 			MappedConfiguration<String, Object> configuration) {
-		configuration.override(SymbolConstants.APPLICATION_VERSION, "3.5");
-		// The application version number is incorprated into URLs for some
-		// assets. Web browsers will cache assets because of the far future
-		// expires
-		// header. If existing assets are changed, the version number should
-		// also
-		// change, to force the browser to download new versions. This overrides
-		// Tapesty's default
-		// (a random hexadecimal number), but may be further overriden by
-		// DevelopmentModule or
-		// QaModule.
-
-		configuration.override(SymbolConstants.APPLICATION_VERSION, "3.6");
+		// configuration.override(SymbolConstants.APPLICATION_VERSION, "3.6");
 		configuration.override(SymbolConstants.DATEPICKER, "assets/");
 	}
 

@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 public class DevelopmentModule {
 	public static void contributeApplicationDefaults(
 			MappedConfiguration<String, Object> configuration) {
-		configuration.add(SymbolConstants.APPLICATION_VERSION, "3.8-DEV");
+		configuration.add(SymbolConstants.APPLICATION_VERSION, "3.8.2-DEV");
 	}
 
 	public RequestFilter buildTimingFilter(final Logger log) {

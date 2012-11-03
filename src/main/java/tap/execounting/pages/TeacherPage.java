@@ -146,6 +146,7 @@ public class TeacherPage {
 	@Inject
 	private CRUDServiceDAO dao;
 
+
 	void onPrepareForRender() {
 		if (facilitySelectModel == null) {
 			List<Facility> facilities = dao.findWithNamedQuery(Facility.ACTUAL);
@@ -279,25 +280,28 @@ public class TeacherPage {
 		return c.getActualMaximum(Calendar.DAY_OF_MONTH);
 	}
 
+	// Get dates for calendar
 	public List<EventRowElement> getDates() {
 		List<EventRowElement> list = new ArrayList<EventRowElement>();
 		Date now = DateService.trimToDate(new Date());
+
+		// Generating date set. Magically.
 		for (Date d : DateService.generateDaySet(getEventsDate(),
 				getRenderDays())) {
 			Event e = new Event();
 			e.setDate(d);
-			System.out.println("\n\n d and now");
-			System.out.println(d);
-			System.out.println(now);
+			int dow = DateService.dayOfWeekRus(d);
 
+			// First do something with days that are today or later.
 			if (!d.before(now)) {
-				int dow = DateService.dayOfWeekRus(d);
 				Integer sched = tMed.getUnit().getScheduleDay(dow);
 				if (sched != null && sched > 0)
 					e.setState(EventState.planned);
 				else
 					e = null;
 			} else {
+				// Then think about days before today.
+				// Find events
 				List<Event> evs = dao.findWithNamedQuery(
 						Event.BY_TEACHER_ID_AND_DATE,
 						QueryParameters
@@ -305,20 +309,20 @@ public class TeacherPage {
 								.and("earlierDate", d).and("laterDate", d)
 								.parameters());
 				if (evs.size() > 0) {
-					e.setState(EventState.complete);
+					// If you did find some, then mark the day as planned
+					e.setState(EventState.planned);
+
+					// Then search for complete events to mark day as complete
 					for (Event ev : evs) {
 						EventState es = ev.getState();
-						if (es == EventState.planned
-								|| es == EventState.movedByTeacher
-								|| es == EventState.failed) {
-							e.setState(EventState.planned);
+						if (es == EventState.complete) {
+							e.setState(es);
 							break;
 						}
 					}
 
-				} else if (tMed.getUnit().getScheduleDay(
-						DateService.dayOfWeekRus(now)) != null)
-					e.setState(EventState.failed);
+				} else if (tMed.getUnit().getScheduleDay(dow) != null)
+					e.setState(EventState.planned);
 				else
 					e = null;
 			}

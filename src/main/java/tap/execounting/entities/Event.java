@@ -252,7 +252,25 @@ public class Event implements Comparable<Event>, Dated {
 		return false;
 	}
 
-	/*
+	public void move(EventState newState, Date newDate) {
+		String moveComment = String.format(
+				"\n$%s: %2$tm %2$tm %2$tY -- %3$tm %3$tm %3$tY",
+				newState.toString(), this.date, newDate);
+		if (comment == null)
+			comment = "";
+		this.comment = this.comment.concat(moveComment);
+		setState(EventState.planned);
+		setDate(newDate);
+	}
+
+	public boolean wasMoved() {
+		if (comment.contains(EventState.movedByClient.toString())
+				|| comment.contains(EventState.movedByTeacher.toString()))
+			return true;
+		return false;
+	}
+
+	/**
 	 * Not full clone only ID and eventstate are copied. only for delete.
 	 */
 	public Event clone() {

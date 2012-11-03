@@ -141,6 +141,47 @@ public class EventMediator implements EventMed {
 						.with("eventTypeId", id).parameters());
 	}
 
+	public void save(Event event) {
+		if (event.getId() != 0)
+			dao.update(event);
+		else
+			dao.create(event);
+	}
+
+	public void move(EventState newState, Date newDate, int transferType)
+			throws IllegalAccessException {
+		// Scheduled transfer type = 0
+		if (transferType == 0) {
+			// TODO group scheduled transfers
+			// 1. Check that event has only one contract on it. Group events are
+			// not for scheduled transfer yet.
+			unit = dao.find(Event.class, unit.getId());
+			if (unit.getContracts().size() > 1)
+				throw new IllegalAccessException(
+						"Перенос по расписанию, пока недоступен для групповых занятий");
+			// 2. Check that contract have schedule.
+			Contract con = unit.getContracts().get(0);
+			if (!con.hasSchedule())
+				throw new IllegalAccessException(
+						"По данному договору расписания не найдено.");
+			// 3. Find the latest event in contract even if it is current event.
+			List<Event> events = con.getEvents(true);
+			Event last = events.get(events.size() - 1);
+			newDate = last.getDate();
+			// 4. Get day of the week for the latest event.
+			int dow = DateService.dayOfWeekRus(last.getDate()) + 1;
+			// 5. Get next day of the week in schedule for that contract.
+			while (!con.getSchedule().get(dow % 8)) {
+				dow++;
+				newDate = DateService.datePlusDays(newDate, 1);
+			}
+			// 6. Set newDate.
+			// 7. Move the event.
+		}
+		unit.move(newState, newDate);
+		save(unit);
+	}
+
 	private Map<String, Object> appliedFilters;
 	private List<Event> cache;
 
@@ -355,7 +396,7 @@ public class EventMediator implements EventMed {
 	}
 
 	public Integer countEventsFailed() {
-		return count(EventState.failed) + count(EventState.failedByClient);
+		return count(EventState.failedByClient);
 		// + count(EventState.failedByTeacher);
 	}
 
@@ -400,8 +441,7 @@ public class EventMediator implements EventMed {
 	}
 
 	public Integer countMoneyOfFailedEvents() {
-		return filter(EventState.failed).countMoney()
-				+ countMoneyOfEventsFailedByClient()
+		return countMoneyOfEventsFailedByClient()
 				+ countMoneyOfEventsFailedByTeacher();
 	}
 

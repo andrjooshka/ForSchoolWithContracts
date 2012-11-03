@@ -15,6 +15,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.dal.mediators.interfaces.EventMed;
 import tap.execounting.dal.mediators.interfaces.TeacherMed;
+import tap.execounting.data.EventState;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.ContractType;
 import tap.execounting.entities.Event;
@@ -144,7 +145,8 @@ public class Payroll {
 	private List<Event> raw() {
 		// step1
 		eM.reset();
-		return eM.filter(dateOne, dateTwo).filter(tM.getUnit()).getGroup();
+		return eM.filter(dateOne, dateTwo).filter(tM.getUnit())
+				.filter(EventState.complete).getGroup();
 	}
 
 	private void filter(List<Event> events) {
@@ -296,7 +298,8 @@ public class Payroll {
 		// Lowering the teacher's money
 		EventTypeAddition pa = eM.loadProbation(pType.getId());
 		if (pa != null)
-			pType.setShareTeacher(pType.getShareTeacher() - pa.getAdditionValue());
+			pType.setShareTeacher(pType.getShareTeacher()
+					- pa.getAdditionValue());
 
 		return out;
 	}

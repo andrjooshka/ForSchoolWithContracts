@@ -5,14 +5,14 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<title>${pageTitle}</title>
 	</head>
-	<body id="homepage">
+	<body id="homepage" onLoad="ResizeSpace()">
 		<t:security.authenticated>
 			<!--start header -->
-			<ul class="nav">
-				<span class="spacer first">
+			<ul id="mainmenu" class="nav">
+				<span id="spacerOne" class="spacer first">
 					<li class="last" style="line-height:30px;">${user?.fullName}</li>
 				</span>
-				<span class="spacer middle">
+				<span id="spacerTwo" class="spacer middle">
 					<a href="#" t:type="pageLink" t:page="home">
 						<li class="${cssForLi('Бюро')}">
 							<img src="${context:/icons/home_32.png}"
@@ -55,7 +55,7 @@
 						</li>
 					</a>
 				</span>
-				<span class="spacer last" />
+				<span id="spacerThree" class="spacer last" />
 			</ul>
 			<!--end header -->
 		</t:security.authenticated>

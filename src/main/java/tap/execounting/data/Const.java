@@ -5,4 +5,5 @@ public class Const {
 	public static final int WriteOffTeacherId = 2;
 	public static final int WriteOffFacilityId = 1;
 	public static final int WriteOffRoomId = 11;
+	public static final String EVENT_EventMoved = "EventMoved";
 }

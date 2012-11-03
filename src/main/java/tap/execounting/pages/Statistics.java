@@ -181,5 +181,4 @@ public class Statistics {
 				: new RoomSelectModel(dao.find(Facility.class, facilityId));
 		typeSelect = new TypeTitleSelectModel(dao);
 	}
-
 }
