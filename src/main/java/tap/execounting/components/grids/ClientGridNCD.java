@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
@@ -19,6 +20,7 @@ import tap.execounting.entities.Teacher;
 import tap.execounting.pages.ClientPage;
 import tap.execounting.services.SuperCalendar;
 
+@Import(stylesheet = "context:layout/datatable.css")
 public class ClientGridNCD {
 	@Inject
 	private BeanModelSource beanModelSource;
@@ -50,27 +52,15 @@ public class ClientGridNCD {
 		return clientMed;
 	}
 
-	void setupRender() {
-		if (model == null) {
-			model = beanModelSource.createDisplayModel(Client.class,
-					componentResources.getMessages());
-			model.exclude("return", "firstPlannedPaymentDate", "date",
-					"canceled");
-			// model.add("teachers", null);
-			model.add("state", null);
-			model.add("contracts", null);
-			model.reorder("id", "name", "contracts");
-		}
-	}
-
 	public BeanModel<Client> getModel() {
 		if (model == null) {
 			model = beanModelSource.createDisplayModel(Client.class,
 					componentResources.getMessages());
-			// model.exclude("id,return");
-			model.add("teachers", null);
+			model.exclude("id", "return", "firstPlannedPaymentDate", "date",
+					"canceled");
+			model.add("state", null);
 			model.add("contracts", null);
-			model.reorder("contracts");
+			model.reorder("name", "contracts");
 		}
 		return model;
 	}

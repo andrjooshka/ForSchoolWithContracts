@@ -1,31 +1,35 @@
-<html t:type="layout"
-      t:pageTitle="Вход"
-      xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
-      xmlns:p="tapestry:parameter">
+<html t:type="layout" t:pageTitle="Вход"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
 
-	<img src="images/logo.png" style="margin-left: 40%; margin-top: 5%; width: 150px; padding-left: 48px;" />
+	<img src="images/logo.png"
+		style="margin-left: 40%; margin-top: 5%; width: 150px; padding-left: 48px;" />
 
 	<form t:type="form" class="full-form" t:id="loginForm" style="margin-left: 40%;">
-		
-		<t:errors />	
+
+		<t:errors />
 		<table class="login">
 			<tr>
 				<th>
 					<label t:type="label" t:for="username">логин:</label>
 				</th>
 				<td>
-					<input t:type="textfield" t:id="username" t:validate="username"/>
-				</td>	
+					<input t:type="textfield" t:id="username" t:validate="username" />
+				</td>
 			</tr>
 			<tr>
-				<th><label t:type="label" t:for="password">пароль:</label></th>
-				<td><input type="password" t:type="passwordfield" t:id="password" t:validate="password"/></td>
+				<th>
+					<label t:type="label" t:for="password">пароль:</label>
+				</th>
+				<td>
+					<input type="password" t:type="passwordfield" t:id="password"
+						t:validate="password" />
+				</td>
 			</tr>
 		</table>
-		
+
 		<div class="form-submit">
 			<input type="submit" value="Войти" />
 		</div>
 	</form>
-  
+
 </html>

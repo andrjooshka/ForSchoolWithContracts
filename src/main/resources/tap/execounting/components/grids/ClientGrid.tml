@@ -26,15 +26,17 @@
 			${teachers}
 		</p:teachersCell>
 		<p:actionCell>
-			<t:actionlink t:id="edit" zone="ezone" context="unit">
-				<img src="icons/edit.png" class="icons" />
-			</t:actionlink>
+			<div class="actionIconsContainer">
+				<t:actionlink t:id="edit" zone="ezone" context="unit">
+					<img src="icons/edit.png" class="icons" />
+				</t:actionlink>
 
-			<t:eventlink event="delete" context="unit" t:mixins="auth,confirm"
-				confirmEnabled="dispatcher.canDeleteClients()" confirmMessage="message:delete-client-confirm-message"
-				authEnabled="!dispatcher.canDeleteClients()" authMessage="message:delete-client-auth-message">
-				<img src="icons/trash.png" class="icons" />
-			</t:eventlink>
+				<t:eventlink event="delete" context="unit" t:mixins="auth,confirm"
+					confirmEnabled="dispatcher.canDeleteClients()" confirmMessage="message:delete-client-confirm-message"
+					authEnabled="!dispatcher.canDeleteClients()" authMessage="message:delete-client-auth-message">
+					<img src="icons/trash.png" class="icons" />
+				</t:eventlink>
+			</div>
 		</p:actionCell>
 
 		<p:canceledCell>

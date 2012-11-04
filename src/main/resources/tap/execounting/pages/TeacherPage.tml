@@ -13,7 +13,8 @@
 				<t:datefield value="payrollDateTwo" />
 			</div>
 			<div>
-				<t:checkbox value="payrollFiltration" label="message:payroll-check-label" />
+				<t:checkbox t:id="payrollFiltration"/>
+				<t:label for="payrollFiltration"/>
 			</div>
 			<t:submit value="message:payroll-submit-label" />
 		</t:form>

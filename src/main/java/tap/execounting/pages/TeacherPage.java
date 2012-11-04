@@ -39,7 +39,7 @@ import tap.execounting.services.ContractByClientComparator;
 import tap.execounting.services.DateService;
 
 @Import(stylesheet = { "context:/layout/weekschedule.css",
-		"context:/layout/teacherpage.css" })
+		"context:/layout/teacherpage.css", "context:/layout/cardtable.css" })
 public class TeacherPage {
 
 	@Inject

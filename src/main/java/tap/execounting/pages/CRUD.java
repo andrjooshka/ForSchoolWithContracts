@@ -1,8 +1,11 @@
 package tap.execounting.pages;
 
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 
+@Import(stylesheet = { "context:layout/CRUD.css",
+		"context:layout/datatable.css" })
 public class CRUD {
 
 	@Persist
@@ -21,17 +24,19 @@ public class CRUD {
 				"Школы" };
 	}
 
-	void onSwitchTab(String tab){
+	void onSwitchTab(String tab) {
 		selectedTab = tab;
 	}
-	
-	public String getLast(){
-		if(tab.equals("Школы")) return "last";
+
+	public String getLast() {
+		if (tab.equals("Школы"))
+			return "last";
 		return "";
 	}
-	
-	public String getCssForLi(){
-		if(tab.equals(selectedTab)) return "activeMenuItem";
+
+	public String getCssForLi() {
+		if (tab.equals(selectedTab))
+			return "activeMenuItem";
 		return "";
 	}
 }

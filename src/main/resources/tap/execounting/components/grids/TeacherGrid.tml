@@ -42,15 +42,17 @@
 		</p:activeCell>
 
 		<p:actionCell>
-			<t:actionlink t:id="edit" zone="tzone" context="unit">
-				<img src="icons/edit.png" class="icons" />
-			</t:actionlink>
+			<div class="actionIconsContainer">
+				<t:actionlink t:id="edit" zone="tzone" context="unit">
+					<img src="icons/edit.png" class="icons" />
+				</t:actionlink>
 
-			<t:eventlink event="delete" context="unit" t:mixins="auth,confirm"
-				authEnabled="!dispatcher.canDeleteTeachers()" authMessage="message:delete-teacher-auth-message"
-				confirmEnabled="dispatcher.canDeleteTeachers()" confirmMessage="message:delete-teacher-confirm-message">
-				<img src="icons/trash.png" class="icons" />
-			</t:eventlink>
+				<t:eventlink event="delete" context="unit" t:mixins="auth,confirm"
+					authEnabled="!dispatcher.canDeleteTeachers()" authMessage="message:delete-teacher-auth-message"
+					confirmEnabled="dispatcher.canDeleteTeachers()" confirmMessage="message:delete-teacher-confirm-message">
+					<img src="icons/trash.png" class="icons" />
+				</t:eventlink>
+			</div>
 		</p:actionCell>
 	</t:grid>
 </t:container>

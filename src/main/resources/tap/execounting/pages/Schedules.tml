@@ -3,7 +3,7 @@
       xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
       xmlns:p="tapestry:parameter">
       <div style="position:relative; padding-top: 40px;" >
-      	<t:zone t:id="showZone">
+      	<t:zone t:id="showZone" update="none">
 	      	<div class="controller">
 		      	<t:if test="schoolmode">
 		      		Вы просматриваете школы<br/>
@@ -17,7 +17,7 @@
 	      	</div>
 			      	
 	      	<t:if test="schoolMode">
-	      		<ul>
+	      		<ul style="list-style:none;line-height:200%;font-size:130%;margin-top:20px;">
 		      		<t:loop source="facilities" value="facility">
 		      			<li>
 			      			<t:actionlink t:id="facilitySelected" context="facility"> 

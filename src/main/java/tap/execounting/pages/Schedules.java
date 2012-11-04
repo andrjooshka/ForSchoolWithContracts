@@ -3,6 +3,7 @@ package tap.execounting.pages;
 import java.util.List;
 
 import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
@@ -15,12 +16,12 @@ import tap.execounting.entities.Event;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;
 
-
+@Import(stylesheet = "context:layout/datatable.css")
 public class Schedules {
-	
+
 	@Inject
 	private CRUDServiceDAO dao;
-	
+
 	@Property
 	private Teacher teacher;
 	@Property
@@ -34,39 +35,40 @@ public class Schedules {
 	private Zone showZone;
 	@InjectPage
 	private SchoolSchedule schoolPage;
-	
+
 	@InjectPage
 	private TeacherSchedule ts;
-	
-	public List<Event> getAllEvents(){
+
+	public List<Event> getAllEvents() {
 		return dao.findWithNamedQuery(Event.ALL);
 	}
-	
-	public List<Teacher> getAllTeachers(){
+
+	public List<Teacher> getAllTeachers() {
 		return dao.findWithNamedQuery(Teacher.ALL);
 	}
-	
-	public List<Facility> getFacilities(){
+
+	public List<Facility> getFacilities() {
 		return dao.findWithNamedQuery(Facility.ALL);
 	}
-	
-	public Facility facility(Integer id){
-		if(id == null) return null;
+
+	public Facility facility(Integer id) {
+		if (id == null)
+			return null;
 		return dao.find(Facility.class, id);
 	}
-	
-	Object onActionFromFacilitySelected(Facility f){
+
+	Object onActionFromFacilitySelected(Facility f) {
 		schoolPage.setup(f);
 		return schoolPage;
 	}
-	
-	Object onActionFromTeacherLink(Teacher t){
+
+	Object onActionFromTeacherLink(Teacher t) {
 		ts.setup(t);
 		return ts;
 	}
-	
-	Object onViewModeChanged(){
+
+	Object onViewModeChanged() {
 		schoolMode = !schoolMode;
-		return request.isXHR() ? showZone.getBody() : null; 
+		return request.isXHR() ? showZone.getBody() : null;
 	}
 }

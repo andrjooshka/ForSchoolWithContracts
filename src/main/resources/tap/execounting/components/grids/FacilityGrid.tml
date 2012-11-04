@@ -16,16 +16,17 @@
 			<t:show.smarticon icontype="icontype" />
 		</p:deletedCell>
 		<p:actionCell>
+			<div class="actionIconsContainer">
+				<t:actionlink t:id="edit" zone="ezone" context="unit">
+					<img src="icons/edit.png" class="icons" />
+				</t:actionlink>
 
-			<t:actionlink t:id="edit" zone="ezone" context="unit">
-				<img src="icons/edit.png" class="icons" />
-			</t:actionlink>
-
-			<t:eventlink event="delete" context="unit" t:mixins="auth,confirm"
-				authEnabled="!dispatcher.canDeleteFacilities()" authMessage="message:delete-facility-auth-message"
-				confirmEnabled="dispatcher.canDeleteFacilities()" confirmMessage="message:delete-facility-confirm-message">
-				<img src="icons/trash.png" class="icons" />
-			</t:eventlink>
+				<t:eventlink event="delete" context="unit" t:mixins="auth,confirm"
+					authEnabled="!dispatcher.canDeleteFacilities()" authMessage="message:delete-facility-auth-message"
+					confirmEnabled="dispatcher.canDeleteFacilities()" confirmMessage="message:delete-facility-confirm-message">
+					<img src="icons/trash.png" class="icons" />
+				</t:eventlink>
+			</div>
 		</p:actionCell>
 	</t:grid>
 </t:container>

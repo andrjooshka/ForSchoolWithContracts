@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
@@ -28,6 +29,7 @@ import tap.execounting.entities.ContractType;
 import tap.execounting.entities.Payment;
 import tap.execounting.services.SuperCalendar;
 
+@Import(stylesheet = "context:layout/filtertable.css")
 public class Clients {
 
 	@Inject

@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
@@ -24,6 +25,8 @@ import tap.execounting.entities.Room;
 import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.SuperCalendar;
 
+@Import(stylesheet = { "context:/layout/schoolschedule.css",
+		"context:/layout/cardtable.css" })
 public class SchoolSchedule {
 
 	// code helpers
