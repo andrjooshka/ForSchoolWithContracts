@@ -225,6 +225,14 @@ public class ShowContract {
 		return sb.toString();
 	}
 
+	public int getEventShiftsByClient() {
+		return contract.getEventShiftsByClient();
+	}
+
+	public boolean hasEventShiftsByClient() {
+		return contract.hasEventShiftsByClient();
+	}
+
 	public String getContractDate() {
 		calendar.setTime(contract.getDate());
 		return calendar.stringByTuple("day", "month", "year");

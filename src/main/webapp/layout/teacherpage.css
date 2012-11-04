@@ -23,12 +23,34 @@
 		rgba(130, 140, 149, 1) 36%, rgba(40, 52, 59, 1) 100% ); /* IE10+ */
 	background: linear-gradient(to bottom, rgba(181, 189, 200, 1) 0%,
 		rgba(130, 140, 149, 1) 36%, rgba(40, 52, 59, 1) 100% ); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient(  startColorstr='#b5bdc8',
+	filter: progid:DXImageTransform.Microsoft.gradient(    startColorstr='#b5bdc8',
 		endColorstr='#28343b', GradientType=0 ); /* IE6-9 */
 	padding: 0px 10px 8px 10px;
 	border-radius: 5px;
 	box-shadow: 2px 4px 5px black, inset 0 0 5px silver;
 }
+
 #payrollController {
 	margin: 8px 0px 8px 0px;
+}
+
+div.contractBody {
+	height: 115px;
+}
+
+div.contractHeader {
+	display: inline-table;
+	width: 150px;
+	height: 45px;
+	text-align: right;
+	padding-right: 10px;
+}
+
+.contractHeader .student {
+	font-weight: 700;
+	margin-bottom: 5px;
+}
+
+.contractHeader .contractType {
+	
 }

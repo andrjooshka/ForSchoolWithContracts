@@ -58,6 +58,16 @@
 							</td>
 						</tr>
 					</t:if>
+					<t:if test="hasEventShiftsByClient()">
+						<tr style="font-size: 120%;color: red;">
+							<th>
+								<t:textoutput value="message:event-shifts-label" />
+							</th>
+							<td style="font-weight: 900;text-shadow: 1px 1px 1px #888;">
+								<t:textoutput value="eventShiftsByClient" />
+							</td>
+						</tr>
+					</t:if>
 					<tr>
 						<th>${message:teacher-label}</th>
 						<td colspan="2">${teacher}</td>

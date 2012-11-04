@@ -502,4 +502,31 @@ public class Contract implements Comparable<Contract>, Dated {
 				return true;
 		return false;
 	}
+
+	@NonVisual
+	public int getEventShiftsByTeacher() {
+		int count = 0;
+		for (Event e : getEvents())
+			if (e.getComment() != null
+					&& e.getComment().contains(
+							EventState.movedByTeacher.toString()))
+				count++;
+		return count;
+	}
+
+	@NonVisual
+	public int getEventShiftsByClient() {
+		int count = 0;
+		for (Event e : getEvents())
+			if (e.getComment() != null
+					&& e.getComment().contains(
+							EventState.movedByClient.toString()))
+				count++;
+		return count;
+	}
+
+	@NonVisual
+	public boolean hasEventShiftsByClient() {
+		return getEventShiftsByClient() > 0;
+	}
 }

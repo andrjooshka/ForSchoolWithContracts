@@ -126,17 +126,13 @@
 			</t:if>
 
 
-			<t:loop t:source="activeContracts" t:value="contract" class=""
-				style="height: 110px;">
+			<t:loop t:source="activeContracts" t:value="contract" class="contractBody">
 				<div style="margin-top:20px;">
 					<t:zone t:id="contractZone" id="contractZone${contract.id}"
 						update="show">
-						<div
-							style="display: inline-table; width:150px; height: 45px;
-					text-align: right;padding-right: 10px;">
-							${clientName}
-							<br />
-							${discipline}
+						<div class="contractHeader">
+							<div class="student">${clientName}</div>
+							<div class="contractType">${discipline}</div>
 						</div>
 						<t:show.EventRow displayNull="true" displayDate="true"
 							elements="elements" />
