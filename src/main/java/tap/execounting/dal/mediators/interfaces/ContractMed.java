@@ -61,7 +61,7 @@ public interface ContractMed {
 	public EventType loadEventType(int id);
 
 	// Unit action methods
-	
+
 	// Write off all remaining events, to transfer all the money to the school
 	// account.
 	public void doWriteOff();
@@ -103,6 +103,10 @@ public interface ContractMed {
 
 	// contract type
 	public ContractMed filterByContractType(int type);
+
+	// this removes finished contracts from group. added as Tema asked, to
+	// remove finished trials from TeacherPage
+	public ContractMed removeComlete();
 
 	// //counters:
 

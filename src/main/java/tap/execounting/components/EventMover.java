@@ -40,8 +40,9 @@ public class EventMover {
 		this.newDate = e.getDate();
 	}
 
-	void onSuccess() throws IllegalAccessException {
+	boolean onSuccess() throws IllegalAccessException {
 		med.setUnit(event);
 		med.move(newState, newDate, transferType);
+		return false;
 	}
 }

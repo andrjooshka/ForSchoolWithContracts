@@ -114,7 +114,9 @@ public class EventCell {
 
 	Object onSubmit() {
 		element = back;
-		dao.update(element.getEvent());
+		if (back.getEvent().getState() != EventState.movedByClient
+				&& back.getEvent().getState() != EventState.movedByTeacher)
+			dao.update(element.getEvent());
 		editing = false;
 		return cellZone;
 	}

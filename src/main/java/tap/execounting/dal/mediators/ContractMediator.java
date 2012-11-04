@@ -469,6 +469,15 @@ public class ContractMediator implements ContractMed {
 		}
 		return this;
 	}
+	
+	public ContractMed removeComlete() {
+		getAppliedFilters().put("Complete", false);
+		List<Contract> cache=  getGroup();
+		for(int i = cache.size()-1;i>=0;i--)
+			if(cache.get(i).isComplete())
+				cache.remove(i);
+		return this;
+	}
 
 	public Integer countGroupSize() {
 		try {

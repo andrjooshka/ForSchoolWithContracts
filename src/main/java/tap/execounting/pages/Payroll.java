@@ -145,8 +145,13 @@ public class Payroll {
 	private List<Event> raw() {
 		// step1
 		eM.reset();
-		return eM.filter(dateOne, dateTwo).filter(tM.getUnit())
+		List<Event> list1 = eM.filter(dateOne, dateTwo).filter(tM.getUnit())
 				.filter(EventState.complete).getGroup();
+		eM.reset();
+		// Include events failed by client
+		eM.filter(dateOne, dateTwo).filter(tM.getUnit())
+				.filter(EventState.failedByClient).getGroup().addAll(list1);
+		return eM.getGroup();
 	}
 
 	private void filter(List<Event> events) {
