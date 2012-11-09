@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
@@ -17,6 +18,7 @@ import tap.execounting.entities.Contract;
 import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.SuperCalendar;
 
+@Import(stylesheet="context:layout/stattable.css")
 public class ClientPage {
 
 	@Property

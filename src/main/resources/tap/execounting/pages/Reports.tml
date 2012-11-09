@@ -19,7 +19,7 @@
 		</t:form>
 	</span>
 
-	<div style="margin-top:60px;">
+	<div style="margin-top:60px;" class="datatable">
 		<h3>Осталось не более 2 занятий</h3>
 		<t:grid source="endingLessons" model="modelOfEnding" row="client"
 			pagerPosition="${pagerPosition}" rowsPerPage="${rows}">
@@ -33,7 +33,7 @@
 		</t:grid>
 	</div>
 
-	<div style="margin-top:30px;">
+	<div style="margin-top:30px;" class="datatable">
 		<h3>Платеж в ближайшие 2 недели</h3>
 		<t:grid source="schedPayments" model="modelOfPayments" row="client"
 			pagerPosition="${pagerPosition}" rowsPerPage="${rows}">

@@ -45,9 +45,13 @@ public class HibernateCrudServiceDAO implements CRUDServiceDAO {
 		@SuppressWarnings("unchecked")
 		T ref = (T) session.get(type, id);
 		if (ref instanceof Deletable) {
-			((Deletable) ref).setDeleted(true);
+			Deletable dref = (Deletable) ref;
+			if (dref.isDeleted())
+				dref.setDeleted(false);
+			else
+				dref.setDeleted(true);
 			session.persist(ref);
-		}else
+		} else
 			session.delete(ref);
 	}
 

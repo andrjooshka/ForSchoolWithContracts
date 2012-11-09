@@ -8,6 +8,7 @@ import java.util.Set;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
@@ -27,6 +28,7 @@ import tap.execounting.entities.Payment;
 import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.SuperCalendar;
 
+@Import(stylesheet="context:layout/datatable.css")
 public class Reports {
 	// Injected
 	@Inject

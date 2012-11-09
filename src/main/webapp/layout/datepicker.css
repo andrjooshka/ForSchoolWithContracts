@@ -1,9 +1,13 @@
 div.datePicker {
 	background: Window;
+	position: relative;
+	left: 50%;
+	top: 0px;
 	width: 200px;
+	height: 200px;
 	cursor: default;
 	-moz-user-focus: normal;
-	padding: 4px;
+	padding: 3px;
 	border: 1px solid #AAA;
 	border-radius: 5px;
 	z-index: 30;
@@ -17,26 +21,25 @@ div.datePicker {
 	cursor: default;
 	font-weight: 400 !important;
 	-moz-user-select: none;
-	height: 0px; /*��� ������ �� ������ ����� � ������� � ����� ������*/
 	border: 1px solid #CCC;
 	width: 18px;
 	font-size: 11px;
-	background: #fafafa; /* Old browsers */
-	background: -moz-linear-gradient(top, #fafafa 0%, #ececec 50%, #dddddd 51%, #f1f1f1
-		100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fafafa),
-		color-stop(50%, #ececec), color-stop(51%, #dddddd),
-		color-stop(100%, #f1f1f1) ); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #fafafa 0%, #ececec 50%, #dddddd 51%,
-		#f1f1f1 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #fafafa 0%, #ececec 50%, #dddddd 51%, #f1f1f1
-		100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #fafafa 0%, #ececec 50%, #dddddd 51%, #f1f1f1
-		100%); /* IE10+ */
-	background: linear-gradient(top, #fafafa 0%, #ececec 50%, #dddddd 51%, #f1f1f1 100%);
-	/* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient(              startColorstr='#fafafa',
-		endColorstr='#f1f1f1', GradientType=0 ); /* IE6-9 */
+	background: rgb(255, 255, 255); /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%,
+		rgba(229, 229, 229, 1) 100% ); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255,
+		255, 255, 1) ), color-stop(100%, rgba(229, 229, 229, 1) ) );
+	/* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%,
+		rgba(229, 229, 229, 1) 100% ); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, rgba(255, 255, 255, 1) 0%,
+		rgba(229, 229, 229, 1) 100% ); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, rgba(255, 255, 255, 1) 0%,
+		rgba(229, 229, 229, 1) 100% ); /* IE10+ */
+	background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%,
+		rgba(229, 229, 229, 1) 100% ); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient(   startColorstr='#ffffff',
+		endColorstr='#e5e5e5', GradientType=0 ); /* IE6-9 */
 }
 
 .datePicker td.red {
@@ -49,15 +52,21 @@ div.datePicker {
 
 .datePicker .gridTable .daysRow td {
 	font-weight: 700 !important;
-	border: 0px;
-	border-bottom: 1px solid ThreeDDarkShadow;
+	border: none;
 	background: none;
 	padding: 3px 0px;
+	text-align: center;
 }
 
-.datePicker .grid .gridTable .upperLine {
-	width: 100%;
-	height: 2px;
+.daysRow {
+	margin-bottom: -3px;
+	margin-top: -1px;
+}
+
+.datePicker .gridTable .upperLine {
+	height: 0px;
+	padding: 0px;
+	border: none;
 	overflow: hidden;
 	background: transparent;
 }
@@ -71,12 +80,19 @@ div.datePicker {
 	color: HighlightText !important;
 }
 
-.datePicker td .topLabel {
+.datePicker td .topLabel,a.topLabel {
 	color: CaptionText;
 	display: block;
+	font-size: 13px;
+	font-family: Helvetica, Verdana;
 	font-weight: 700 !important;
 	width: 100%;
 	text-decoration: none;
+}
+
+tr.daysRow td {
+	text-align: center;
+	border-bottom: 1px solid #CCC;
 }
 
 .datePicker button {
@@ -89,16 +105,20 @@ div.datePicker {
 .datePicker .previousButton,.datePicker .nextButton {
 	width: 14px;
 	height: 14px;
-	border-radius: 5px;
-	box-shadow: inset 0px 0px 1px 0px white;
+	border-radius: 6px;
+	box-shadow: inset 0px 0px 1px white;
+}
+
+.datePicker .headerTable button {
+	margin-top: 21%;
 }
 
 .datePicker .previousButton {
-	background: buttonface url("../images/prev.png") no-repeat center center;
+	background: buttonface url("prev.png") no-repeat center center;
 }
 
 .datePicker .nextButton {
-	background: buttonface url("../images/next.png") no-repeat center center;
+	background: buttonface url("next.png") no-repeat center center;
 }
 
 .datePicker .todayButton,.datePicker .noneButton {
@@ -135,7 +155,7 @@ div.datePicker {
 	background: linear-gradient(top, rgba(255, 255, 255, 1) 0%,
 		rgba(243, 243, 243, 1) 50%, rgba(237, 237, 237, 1) 51%,
 		rgba(255, 255, 255, 1) 100% ); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient(            startColorstr='#ffffff',
+	filter: progid:DXImageTransform.Microsoft.gradient(               startColorstr='#ffffff',
 		endColorstr='#ffffff', GradientType=0 ); /* IE6-9 */
 }
 
@@ -143,8 +163,13 @@ div.datePicker {
 	position: absolute;
 	min-width: 130px;
 	background: Window;
-	border: 1px solid WindowText;
-	padding: 1px;
+	border: 1px solid #CCC;
+	padding: 5px 10px;
+	border-radius: 5px;
+}
+
+.datePicker .labelContainer {
+	text-align: center;
 }
 
 .datePicker .labelPopup a {
@@ -153,6 +178,7 @@ div.datePicker {
 	color: WindowText;
 	text-decoration: none;
 	white-space: nowrap;
+	text-align: left;
 }
 
 .datePicker .labelPopup a:hover {
@@ -176,7 +202,7 @@ div.datePicker {
 
 .datePicker table {
 	margin: 0px;
-	border-spacing: 3px 2px;
+	border-spacing: 2px;
 	border-collapse: separate;
 	empty-cells: hide;
 	border-collapse: separate;
@@ -198,19 +224,16 @@ table.headerTable {
 		rgba(204, 204, 204, 1) 100% ); /* IE10+ */
 	background: linear-gradient(top, rgba(224, 224, 224, 1) 0%,
 		rgba(204, 204, 204, 1) 100% ); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient(             startColorstr='#e0e0e0',
+	filter: progid:DXImageTransform.Microsoft.gradient(                startColorstr='#e0e0e0',
 		endColorstr='#cccccc', GradientType=0 ); /* IE6-9 */
-	border-radius: 5px;
+	border-radius: 4px;
 }
 
-.datePicker .header,.datePicker .footer,.datePicker .grid {
-	border: 0px;
-	padding: 0px;
-}
-.datePicker .header {
-	border-bottom: 0px;
+table.showcontract div.datePicker td {
+	padding: 1px 0px 1px 0px;
 }
 
-.datePicker td {
-	padding: 0px;
+table.showcontract div.datePicker .gridTable td {
+	padding: 1px 5px 1px 0px;
+	box-shadow: inset 0 0 4px #fff;
 }

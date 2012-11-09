@@ -17,8 +17,7 @@
 					</li>
 
 					<li>
-						<t:eventlink t:id="writeoff" context="contract.id"
-							zone="contractBody${contract.id}" t:mixins="confirm"
+						<t:eventlink t:id="writeoff" context="contract.id" t:mixins="confirm"
 							confirmEnabled="literal:true" confirmMessage="message:writeoff-confirm-message">
 							<img src="${context:/icons/writeoff.png}" title="cписать остаток"
 								alt="cписать остаток" class="icons" />

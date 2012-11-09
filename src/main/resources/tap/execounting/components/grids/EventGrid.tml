@@ -1,7 +1,7 @@
 <t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd"
 	xmlns:p="tapestry:parameter">
 	<t:grid source="source" row="event" rowsPerPage="message:rowsperpage"
-		pagerPosition="top" add="clients">
+		pagerPosition="top" add="clients" exclude="Id">
 		<p:hostIdCell>
 			${hostName}
 		</p:hostIdCell>

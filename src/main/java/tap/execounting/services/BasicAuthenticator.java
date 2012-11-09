@@ -1,6 +1,6 @@
 package tap.execounting.services;
 
-
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.Session;
@@ -10,60 +10,56 @@ import tap.execounting.dal.QueryParameters;
 import tap.execounting.entities.User;
 import tap.execounting.security.AuthenticationException;
 
+public class BasicAuthenticator implements Authenticator {
 
-public class BasicAuthenticator implements Authenticator
-{
+	public static final String AUTH_TOKEN = "authToken";
 
-    public static final String AUTH_TOKEN = "authToken";
+	@Inject
+	private CRUDServiceDAO crudService;
 
-    @Inject
-    private CRUDServiceDAO crudService;
+	@Inject
+	private Request request;
 
-    @Inject
-    private Request request;
+	public void login(String username, String password)
+			throws AuthenticationException {
+		password = DigestUtils.md5Hex(password);
+		User user = crudService.findUniqueWithNamedQuery(
+				User.BY_CREDENTIALS,
+				QueryParameters.with("username", username)
+						.and("password", password).parameters());
 
-    public void login(String username, String password) throws AuthenticationException
-    {
+		if (user == null) {
+			throw new AuthenticationException("The user doesn't exist");
+		}
 
-        User user = crudService.findUniqueWithNamedQuery(User.BY_CREDENTIALS, QueryParameters.with(
-                "username",
-                username).and("password", password).parameters());
+		request.getSession(true).setAttribute(AUTH_TOKEN, user);
+	}
 
-        if (user == null) { throw new AuthenticationException("The user doesn't exist"); }
+	public boolean isLoggedIn() {
+		Session session = request.getSession(false);
+		if (session != null) {
+			return session.getAttribute(AUTH_TOKEN) != null;
+		}
+		return false;
+	}
 
-        request.getSession(true).setAttribute(AUTH_TOKEN, user);
-    }
+	public void logout() {
+		Session session = request.getSession(false);
+		if (session != null) {
+			session.setAttribute(AUTH_TOKEN, null);
+			session.invalidate();
+		}
+	}
 
-    public boolean isLoggedIn()
-    {
-        Session session = request.getSession(false);
-        if (session != null) { return session.getAttribute(AUTH_TOKEN) != null; }
-        return false;
-    }
+	public User getLoggedUser() {
+		User user = null;
 
-    public void logout()
-    {
-        Session session = request.getSession(false);
-        if (session != null)
-        {
-            session.setAttribute(AUTH_TOKEN, null);
-            session.invalidate();
-        }
-    }
-
-    public User getLoggedUser()
-    {
-        User user = null;
-
-        if (isLoggedIn())
-        {
-            user = (User) request.getSession(true).getAttribute(AUTH_TOKEN);
-        }
-        else
-        {
-            throw new IllegalStateException("The user is not logged ! ");
-        }
-        return user;
-    }
+		if (isLoggedIn()) {
+			user = (User) request.getSession(true).getAttribute(AUTH_TOKEN);
+		} else {
+			throw new IllegalStateException("The user is not logged ! ");
+		}
+		return user;
+	}
 
 }

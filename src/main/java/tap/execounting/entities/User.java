@@ -59,7 +59,7 @@ public class User {
 	private String email;
 
 	@Column(nullable = false)
-	@Size(min = 3, max = 12)
+	@Size(min = 6, max = 200)
 	@NotNull
 	private String password;
 

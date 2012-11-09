@@ -1,8 +1,8 @@
 div.datePicker {
 	background: Window;
 	position: relative;
-	left:50%;
-	top:0px;
+	left: 50%;
+	top: 0px;
 	width: 200px;
 	height: 200px;
 	cursor: default;
@@ -24,22 +24,22 @@ div.datePicker {
 	border: 1px solid #CCC;
 	width: 18px;
 	font-size: 11px;
-	background: #fafafa; /* Old browsers */
-	background: -moz-linear-gradient(top, #fafafa 0%, #ececec 50%, #dddddd 51%, #f1f1f1
-		100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fafafa),
-		color-stop(50%, #ececec), color-stop(51%, #dddddd),
-		color-stop(100%, #f1f1f1) ); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #fafafa 0%, #ececec 50%, #dddddd 51%,
-		#f1f1f1 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #fafafa 0%, #ececec 50%, #dddddd 51%, #f1f1f1
-		100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #fafafa 0%, #ececec 50%, #dddddd 51%, #f1f1f1
-		100%); /* IE10+ */
-	background: linear-gradient(top, #fafafa 0%, #ececec 50%, #dddddd 51%, #f1f1f1 100%);
-	/* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient(              startColorstr='#fafafa',
-		endColorstr='#f1f1f1', GradientType=0 ); /* IE6-9 */
+	background: rgb(255, 255, 255); /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(255, 255, 255, 1) 0%,
+		rgba(229, 229, 229, 1) 100% ); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255,
+		255, 255, 1) ), color-stop(100%, rgba(229, 229, 229, 1) ) );
+	/* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, rgba(255, 255, 255, 1) 0%,
+		rgba(229, 229, 229, 1) 100% ); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, rgba(255, 255, 255, 1) 0%,
+		rgba(229, 229, 229, 1) 100% ); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, rgba(255, 255, 255, 1) 0%,
+		rgba(229, 229, 229, 1) 100% ); /* IE10+ */
+	background: linear-gradient(to bottom, rgba(255, 255, 255, 1) 0%,
+		rgba(229, 229, 229, 1) 100% ); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient(   startColorstr='#ffffff',
+		endColorstr='#e5e5e5', GradientType=0 ); /* IE6-9 */
 }
 
 .datePicker td.red {
@@ -80,7 +80,7 @@ div.datePicker {
 	color: HighlightText !important;
 }
 
-.datePicker td .topLabel, a.topLabel {
+.datePicker td .topLabel,a.topLabel {
 	color: CaptionText;
 	display: block;
 	font-size: 13px;
@@ -92,7 +92,7 @@ div.datePicker {
 
 tr.daysRow td {
 	text-align: center;
-	border-bottom: 1px solid #CCC; 
+	border-bottom: 1px solid #CCC;
 }
 
 .datePicker button {
@@ -106,7 +106,11 @@ tr.daysRow td {
 	width: 14px;
 	height: 14px;
 	border-radius: 6px;
-	box-shadow: inset 0px 0px 1px 0px white;
+	box-shadow: inset 0px 0px 1px white;
+}
+
+.datePicker .headerTable button {
+	margin-top: 21%;
 }
 
 .datePicker .previousButton {
@@ -151,7 +155,7 @@ tr.daysRow td {
 	background: linear-gradient(top, rgba(255, 255, 255, 1) 0%,
 		rgba(243, 243, 243, 1) 50%, rgba(237, 237, 237, 1) 51%,
 		rgba(255, 255, 255, 1) 100% ); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient(            startColorstr='#ffffff',
+	filter: progid:DXImageTransform.Microsoft.gradient(               startColorstr='#ffffff',
 		endColorstr='#ffffff', GradientType=0 ); /* IE6-9 */
 }
 
@@ -220,19 +224,16 @@ table.headerTable {
 		rgba(204, 204, 204, 1) 100% ); /* IE10+ */
 	background: linear-gradient(top, rgba(224, 224, 224, 1) 0%,
 		rgba(204, 204, 204, 1) 100% ); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient(             startColorstr='#e0e0e0',
+	filter: progid:DXImageTransform.Microsoft.gradient(                startColorstr='#e0e0e0',
 		endColorstr='#cccccc', GradientType=0 ); /* IE6-9 */
-	border-radius: 5px;
+	border-radius: 4px;
 }
 
-.datePicker .header,.datePicker .footer,.datePicker .grid {
-	border: 0px;
-	padding: 0px;
-}
-.datePicker .header {
-	border-bottom: 0px;
+table.showcontract div.datePicker td, div.datePicker td {
+	padding: 1px 0px 1px 0px;
 }
 
-.datePicker td {
-	padding: 0px;
+table.showcontract div.datePicker .gridTable td, div.datePicker .gridTable td {
+	padding: 1px 5px 1px 0px;
+	box-shadow: inset 0 0 4px #fff;
 }
