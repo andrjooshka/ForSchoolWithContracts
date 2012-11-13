@@ -58,11 +58,11 @@ public interface TeacherMed {
 		//complete
 	public int getLessonsComplete(Date date1, Date date2);
 		//failed
-	public int getLessonsFailed(Date date1, Date date2);
+	public int getLessonsFired(Date date1, Date date2);
 		//failed by teacher
-	public int getLessonsFailedByTeacher(Date date1, Date date2);
+	public int getLessonsMovedByTeacher(Date date1, Date date2);
 		//failed by client
-	public int getLessonsFailedByClient(Date date1, Date date2);
+	public int getLessonsMovedByClient(Date date1, Date date2);
 	//days worked
 	public int getDaysWorked(Date date1, Date date2);
 	//money earned

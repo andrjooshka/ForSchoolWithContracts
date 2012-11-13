@@ -290,8 +290,39 @@ public class EventMediator implements EventMed {
 	}
 
 	public EventMed filter(EventState state) {
+		// Added new conditions to count events moved by teacher and client
+		if (state == EventState.movedByClient
+				|| state == EventState.movedByTeacher) {
+			List<Event> cache = getGroup();
+			Event e;
+			if (state == EventState.movedByClient) {
+				for (int i = countGroupSize() - 1; i >= 0; i--) {
+					e = cache.get(i);
+					if (e.getState() == state
+							|| (e.getComment() != null && e
+									.getComment()
+									.contains(
+											EventState.movedByClient.toString())))
+						continue;
+					else
+						cache.remove(i);
+				}
+			}
+			if (state == EventState.movedByTeacher) {
+				for (int i = countGroupSize() - 1; i >= 0; i--) {
+					e = cache.get(i);
+					if (e.getState() == state
+							|| (e.getComment() != null && e.getComment()
+									.contains(
+											EventState.movedByTeacher
+													.toString())))
+						continue;
+					else
+						cache.remove(i);
+				}
+			}
 
-		if (cache == null || appliedFilters == null
+		} else if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
 			cache = getDao().findWithNamedQuery(
 					Event.BY_STATE,
@@ -395,16 +426,15 @@ public class EventMediator implements EventMed {
 		return count(EventState.complete);
 	}
 
-	public Integer countEventsFailed() {
-		return count(EventState.failedByClient);
-		// + count(EventState.failedByTeacher);
-	}
-
-	public Integer countEventsFailedByClient() {
+	public Integer countEventsFired() {
 		return count(EventState.failedByClient);
 	}
 
-	public Integer countEventsFailedByTeacher() {
+	public Integer countEventsMovedByClient() {
+		return count(EventState.movedByClient);
+	}
+
+	public Integer countEventsMovedByTeacher() {
 		return count(EventState.movedByTeacher);
 	}
 

@@ -112,11 +112,11 @@ public interface EventMed {
 
 	public Integer countEventsComplete();
 
-	public Integer countEventsFailed();
+	public Integer countEventsFired();
 
-	public Integer countEventsFailedByClient();
+	public Integer countEventsMovedByClient();
 
-	public Integer countEventsFailedByTeacher();
+	public Integer countEventsMovedByTeacher();
 
 	// money
 	public Integer countMoney();

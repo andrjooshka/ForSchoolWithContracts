@@ -13,8 +13,8 @@
 				<t:datefield value="payrollDateTwo" />
 			</div>
 			<div>
-				<t:checkbox t:id="payrollFiltration"/>
-				<t:label for="payrollFiltration"/>
+				<t:checkbox t:id="payrollFiltration" />
+				<t:label for="payrollFiltration" />
 			</div>
 			<t:submit value="message:payroll-submit-label" />
 		</t:form>
@@ -210,10 +210,10 @@
 
 			<tr>
 				<th>
-					Отменено занятий
+					Занятий сгорело
 				</th>
 				<td>
-					${lessonsFailed}
+					${lessonsFired}
 				</td>
 
 				<th></th>
@@ -222,17 +222,17 @@
 
 			<tr>
 				<th>
-					Из-за клиента
+					Переносы педагога
 				</th>
 				<td>
-					${lessonsFailedByClient}
+					${lessonsMovedByTeacher}
 				</td>
 
 				<th>
-					Из-за педагога
+					Переносы клиентов
 				</th>
 				<td>
-					${lessonsFailedByTeacher}
+					${lessonsMovedByClient}
 				</td>
 			</tr>
 			<tr>
@@ -278,13 +278,14 @@
 		</t:loop>
 	</t:zone>
 
-	<h4>Долги по перенесенным занятиям:</h4>
-	<t:loop source="shiftedLessons" value="lesson">
-		<div style="display:inline-block;">
-			<t:show.showevent event="lesson" />
-		</div>
-	</t:loop>
-
+	<div t:type="if" t:test="hasShiftedLessons()">
+		<h4>Долги по перенесенным занятиям:</h4>
+		<t:loop source="shiftedLessons" value="lesson">
+			<div style="display:inline-block;">
+				<t:show.showevent event="lesson" />
+			</div>
+		</t:loop>
+	</div>
 </html>
 
 

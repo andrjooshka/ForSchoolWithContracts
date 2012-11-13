@@ -146,7 +146,6 @@ public class TeacherPage {
 	@Inject
 	private CRUDServiceDAO dao;
 
-
 	void onPrepareForRender() {
 		if (facilitySelectModel == null) {
 			List<Facility> facilities = dao.findWithNamedQuery(Facility.ACTUAL);
@@ -217,8 +216,9 @@ public class TeacherPage {
 	public List<Contract> getActiveContracts() {
 		cMed.reset();
 		Collections.sort(
-				cMed.filter(tMed.getUnit()).filter(ContractState.active).removeComlete()
-						.getGroup(), new ContractByClientComparator());
+				cMed.filter(tMed.getUnit()).filter(ContractState.active)
+						.removeComlete().getGroup(),
+				new ContractByClientComparator());
 		return cMed.getGroup();
 	}
 
@@ -337,16 +337,16 @@ public class TeacherPage {
 		return tMed.getLessonsComplete(date1, date2);
 	}
 
-	public int getLessonsFailed() {
-		return tMed.getLessonsFailed(date1, date2);
+	public int getLessonsFired() {
+		return tMed.getLessonsFired(date1, date2);
 	}
 
-	public int getLessonsFailedByClient() {
-		return tMed.getLessonsFailedByClient(date1, date2);
+	public int getLessonsMovedByClient() {
+		return tMed.getLessonsMovedByClient(date1, date2);
 	}
 
-	public int getLessonsFailedByTeacher() {
-		return tMed.getLessonsFailedByTeacher(date1, date2);
+	public int getLessonsMovedByTeacher() {
+		return tMed.getLessonsMovedByTeacher(date1, date2);
 	}
 
 	public int getDaysWorked() {
@@ -377,5 +377,9 @@ public class TeacherPage {
 	public String getPayrollDateTwoS() {
 		SimpleDateFormat t = new SimpleDateFormat("dd.MM.YYYY");
 		return t.format(payrollDateTwo);
+	}
+
+	public boolean hasShiftedLessons() {
+		return getShiftedLessons().size() > 0;
 	}
 }

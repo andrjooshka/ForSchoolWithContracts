@@ -252,23 +252,23 @@ public class TeacherMediator implements TeacherMed {
 		return res;
 	}
 
-	public int getLessonsFailed(Date date1, Date date2) {
+	public int getLessonsFired(Date date1, Date date2) {
 		int res = getEventMed().filter(unit).filter(date1, date2)
-				.countEventsFailed();
+				.countEventsFired();
 		getEventMed().reset();
 		return res;
 	}
 
-	public int getLessonsFailedByTeacher(Date date1, Date date2) {
+	public int getLessonsMovedByTeacher(Date date1, Date date2) {
 		int res = getEventMed().filter(unit).filter(date1, date2)
-				.countEventsFailedByTeacher();
+				.countEventsMovedByTeacher();
 		getEventMed().reset();
 		return res;
 	}
 
-	public int getLessonsFailedByClient(Date date1, Date date2) {
+	public int getLessonsMovedByClient(Date date1, Date date2) {
 		int res = getEventMed().filter(unit).filter(date1, date2)
-				.countEventsFailedByClient();
+				.countEventsMovedByClient();
 		getEventMed().reset();
 		return res;
 	}
