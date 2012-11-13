@@ -74,6 +74,9 @@ public interface ContractMed {
 	public List<Contract> getGroup();
 
 	public ContractMed setGroup(List<Contract> group);
+	
+	// Translates all contracts in group to clients
+	public List<Client> getClients();
 
 	public List<Contract> getAllContracts();
 

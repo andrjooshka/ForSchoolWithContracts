@@ -184,20 +184,25 @@ public class ClientMediator implements ClientMed {
 		if (unit.isCanceled())
 			return ClientState.canceled;
 		// check if client is active
-		if (hasActiveContracts()) {
+		// check if client has active contracts
+		List<Contract> activeContracts = getActiveContracts();
+		if (activeContracts.size() > 0) {
 			// if he is active, he is one of three:
 			// trial | beginner | continuer
 			boolean notOnlyTrial = false;
-			for (Contract c : getActiveContracts())
+			for (Contract c : activeContracts)
 				if (c.getContractTypeId() != ContractType.Trial) {
 					notOnlyTrial = true;
 					break;
 				}
 			if (!notOnlyTrial)
 				return ClientState.trial;
-			if (hasFinishedContracts()) {
+
+			// check if client has finished contracts
+			List<Contract> finishedContracts = getFinishedContracts();
+			if (finishedContracts.size() > 0) {
 				notOnlyTrial = false;
-				for (Contract c : getFinishedContracts())
+				for (Contract c : finishedContracts)
 					if (c.getContractTypeId() != ContractType.Trial) {
 						notOnlyTrial = true;
 						break;
@@ -335,11 +340,11 @@ public class ClientMediator implements ClientMed {
 		List<Contract> contractsCache = getContractMed().filter(teacher)
 				.filter(ContractState.active).getGroup();
 		getContractMed().reset();
-		cache = toClients(contractsCache);
+		cache = contractsToClients(contractsCache);
 		return this;
 	}
 
-	private List<Client> toClients(List<Contract> contracts) {
+	public List<Client> contractsToClients(List<Contract> contracts) {
 		Set<Client> list = new HashSet<Client>();
 		for (Contract c : contracts)
 			list.add(c.getClient());
@@ -431,7 +436,7 @@ public class ClientMediator implements ClientMed {
 	}
 
 	public Integer count(ClientState state, Date date1, Date date2) {
-		return filter(state).filterDateOfFirstContract(date1, date2)
+		return filterDateOfFirstContract(date1, date2).filter(state)
 				.countGroupSize();
 	}
 

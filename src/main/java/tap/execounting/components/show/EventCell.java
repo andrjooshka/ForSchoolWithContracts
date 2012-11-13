@@ -2,7 +2,6 @@ package tap.execounting.components.show;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
@@ -80,8 +79,6 @@ public class EventCell {
 			Event e = dao.find(Event.class, id);
 			element = new EventRowElement(e.getDate(), e);
 			back = new EventRowElement(element.getDate(), element.getEvent());
-			if (e.getDate().after(new Date()))
-				return cellZone;
 			editing = true;
 		}
 		return cellZone;

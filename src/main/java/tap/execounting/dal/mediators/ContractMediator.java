@@ -11,6 +11,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.QueryParameters;
+import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.dal.mediators.interfaces.DateFilter;
 import tap.execounting.dal.mediators.interfaces.EventMed;
@@ -38,6 +39,9 @@ public class ContractMediator implements ContractMed {
 
 	@Inject
 	private PaymentMed paymentMed;
+	
+	@Inject
+	private ClientMed clientMed;
 
 	@Inject
 	private CRUDServiceDAO dao;
@@ -333,6 +337,10 @@ public class ContractMediator implements ContractMed {
 		cache = group;
 		return this;
 	}
+	
+	public List<Client> getClients(){
+		return clientMed.contractsToClients(getGroup());
+	}
 
 	public List<Contract> getAllContracts() {
 		return getDao().findWithNamedQuery(Contract.ALL);
@@ -429,7 +437,7 @@ public class ContractMediator implements ContractMed {
 		getAppliedFilters().put("Date2", date2);
 
 		List<Contract> cache = getGroup();
-		dateFilter.filterWithReturn(cache, date1, date2);
+		dateFilter.filter(cache, date1, date2);
 		return this;
 	}
 

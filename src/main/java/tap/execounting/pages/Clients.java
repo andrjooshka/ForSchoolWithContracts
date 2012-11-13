@@ -21,6 +21,7 @@ import org.hibernate.Session;
 
 import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
+import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.data.ClientState;
 import tap.execounting.data.selectmodels.ContractTypeIdSelectModel;
 import tap.execounting.entities.Client;
@@ -56,6 +57,8 @@ public class Clients {
 	// Mediators
 	@Inject
 	private ClientMed clientMed;
+	@Inject
+	private ContractMed contractMed;
 
 	// filtering fields
 
@@ -73,6 +76,16 @@ public class Clients {
 	@Property
 	@Persist
 	private Date fcLaterDate;
+	// Date of any contract
+
+	// Before
+	@Property
+	@Persist
+	private Date acDate1;
+	// After
+	@Property
+	@Persist
+	private Date acDate2;
 	// misc
 	@Property
 	@Persist
@@ -110,6 +123,7 @@ public class Clients {
 		boolean filterOnPlannedPayments = earlyDate != null
 				|| laterDate != null;
 		boolean filterOnFCDate = fcEarlyDate != null || fcLaterDate != null;
+		boolean filterOnACDate = acDate1 != null || acDate2 != null;
 		boolean filterOnNames = name != null && name.length() > 1;
 		boolean filterOnState = state != null;
 		boolean filterOnContractType = contractTypeId != null;
@@ -140,22 +154,29 @@ public class Clients {
 			for (int i = cs.size() - 1; i >= 0; i--) {
 				Client client = cs.get(i);
 				boolean pass = false;
-				if (client.getFirstContractDate() != null) {
+				Date d = client.getFirstContractDate();
+				if (d != null) {
 					pass = true;
 
 					if (fcEarlyDate != null)
-						pass &= fcEarlyDate.before(client
-								.getFirstContractDate());
+						pass &= fcEarlyDate.before(d);
 					if (fcLaterDate != null)
-						pass &= fcLaterDate
-								.after(client.getFirstContractDate());
+						pass &= fcLaterDate.after(d);
 				} else
 					pass = false;
 				if (!pass)
 					cs.remove(i);
 			}
-
 		}
+
+		// Any contract Date filter
+		if (filterOnACDate) {
+			contractMed.reset();
+			List<Client> toRetain = contractMed.filter(acDate1, acDate2)
+					.getClients();
+			cs.retainAll(toRetain);
+		}
+
 		// Name Filtration
 		if (filterOnNames) {
 			for (int i = cs.size() - 1; i >= 0; i--) {
@@ -215,13 +236,8 @@ public class Clients {
 	}
 
 	public int getNewClients() {
-		List<Client> clients = getClients();
-		clientMed.setGroup(clients);
-		int newbies = clientMed.countNewbies(null, null);
 		clientMed.setGroup(getClients());
-		int trial = clientMed.countTrial(null, null);
-
-		return trial + newbies;
+		return clientMed.countNewbies(null, null);
 	}
 
 	public int getExpClients() {
@@ -269,6 +285,16 @@ public class Clients {
 		}
 
 		return summ;
+	}
+
+	public int getCreditorsDebt() {
+		int debt = 0;
+		for (Client c : getClients()) {
+			int bal = c.getBalance();
+			if (bal > 0)
+				debt += bal;
+		}
+		return debt;
 	}
 
 	// events

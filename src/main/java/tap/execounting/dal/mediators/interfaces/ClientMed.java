@@ -110,6 +110,9 @@ public interface ClientMed {
 	
 		//frozen
 	public Integer countFrozen(Date date1, Date date2);
+	
+	// Translates given contracts to clients
+	public List<Client> contractsToClients(List<Contract> contract);
 }
 
 
