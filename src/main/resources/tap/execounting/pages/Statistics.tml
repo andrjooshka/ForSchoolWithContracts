@@ -33,6 +33,14 @@
 				</tr>
 				<tr>
 					<th>
+						Деньги педагога:
+					</th>
+					<td>
+						${teacherShare}
+					</td>
+				</tr>
+				<tr>
+					<th>
 						Указанный процент:
 					</th>
 					<td>
@@ -128,7 +136,7 @@
 		<t:submit value="Обновить" />
 	</t:form>
 
-	<t:zone t:id="resultZone" id="resultZone">
+	<t:zone t:id="resultZone" id="resultZone" update="shake">
 		<t:grids.eventgrid source="events" />
 	</t:zone>
 

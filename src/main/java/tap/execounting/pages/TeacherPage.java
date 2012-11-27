@@ -38,8 +38,10 @@ import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.ContractByClientComparator;
 import tap.execounting.services.DateService;
 
-@Import(stylesheet = { "context:/layout/weekschedule.css",
-		"context:/layout/teacherpage.css", "context:/layout/cardtable.css" })
+@Import(library = { "context:js/updateEffects.js", "context:js/jquery-1.8.3.min.js",
+		"context:js/magicalResizer.js" }, stylesheet = {
+		"context:layout/weekschedule.css", "context:layout/teacherpage.css",
+		"context:layout/cardtable.css" })
 public class TeacherPage {
 
 	@Inject

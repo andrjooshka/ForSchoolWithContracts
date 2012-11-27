@@ -11,7 +11,7 @@
 	<br />
 
 	<t:grid source="source" model="model" row="unit" rowsPerPage="message:rowsperpage"
-		pagerPosition="top">
+		pagerPosition="both">
 		<p:hostIdCell>
 			${hostName}
 		</p:hostIdCell>

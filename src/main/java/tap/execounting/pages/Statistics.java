@@ -22,7 +22,6 @@ import tap.execounting.data.selectmodels.RoomSelectModel;
 import tap.execounting.data.selectmodels.TeacherSelectModel;
 import tap.execounting.data.selectmodels.TypeTitleSelectModel;
 import tap.execounting.entities.Event;
-import tap.execounting.entities.EventType;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;
 import tap.execounting.services.DateService;
@@ -134,18 +133,21 @@ public class Statistics {
 	}
 
 	public int getMoney() {
-		List<Event> events = getEvents();
-		int summ = 0;
-		for (Event e : events) {
-			int typeId = e.getTypeId();
-			EventType et = dao.find(EventType.class, typeId);
-			if (e.getClients().size() > 0)
-				summ += et.getPrice() * e.getClients().size();
-			else
-				summ += et.getPrice();
-		}
-
-		return summ;
+		// Olde code
+		// List<Event> events = getEvents();
+		// int summ = 0;
+		// for (Event e : events) {
+		// int typeId = e.getTypeId();
+		// EventType et = dao.find(EventType.class, typeId);
+		// if (e.getClients().size() > 0)
+		// summ += et.getPrice() * e.getClients().size();
+		// else
+		// summ += et.getPrice();
+		// }
+		//
+		// return summ;
+		// New code
+		return getEventMed().setGroup(getEvents()).countMoney();
 	}
 
 	public int getPercentedMoney() {
@@ -158,6 +160,10 @@ public class Statistics {
 	// school share
 	public int getShare() {
 		return getEventMed().setGroup(getEvents()).countSchoolMoney();
+	}
+
+	public int getTeacherShare() {
+		return getEventMed().setGroup(getEvents()).countTeacherMoney();
 	}
 
 	Object onValueChangedFromFacilityId(Integer facId) {

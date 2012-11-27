@@ -24,29 +24,6 @@
 }
 
 div.calendar .mini {
-	background: #ffffff; /* Old browsers */
-	background: -moz-linear-gradient(top, #ffffff 0%, #f1f1f1 50%, #e1e1e1 51%, #f6f6f6
-		100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff),
-		color-stop(50%, #f1f1f1), color-stop(51%, #e1e1e1),
-		color-stop(100%, #f6f6f6) );
-	/* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #ffffff 0%, #f1f1f1 50%, #e1e1e1 51%,
-		#f6f6f6 100%);
-	/* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #ffffff 0%, #f1f1f1 50%, #e1e1e1 51%, #f6f6f6
-		100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #ffffff 0%, #f1f1f1 50%, #e1e1e1 51%, #f6f6f6
-		100%); /* IE10+ */
-	background: linear-gradient(to bottom, #ffffff 0%, #f1f1f1 50%, #e1e1e1 51%, #f6f6f6
-		100%); /* W3C */
-	filter: progid:      DXImageTransform.Microsoft.gradient(        startColorstr=
-		
-		
-		
-		 
-	'#ffffff', endColorstr=      '#f6f6f6', GradientType=      0 );
-	/* IE6-9 */
 	width: 50px;
 	margin: 3px;
 	border-radius: 2px;
@@ -76,15 +53,14 @@ div.mini h3.date {
 	color: #001;
 	font-family: serif;
 	display: block;
-	margin-bottom: -0.18em;
+	margin-bottom: -0.12em;
 }
 
 h4.dow {
 	display: inline;
-	margin-left: 61%;
+	margin-left: 57%;
 	font-size: 0.97em;
 	color: #444;
-	margin-top: -2px;
 }
 
 div.calendar div.glass {

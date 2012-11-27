@@ -183,7 +183,7 @@
 	<!--/CLIENTS -->
 
 	<h3 style="margin-top: 70px; margin-bottom: 20px;">${message:stats}</h3>
-	<t:zone t:id="statsZone" id="statsZone">
+	<t:zone t:id="statsZone" id="statsZone" update="shake">
 		<t:form t:id="statsDateForm" zone="statsZone">
 			<t:label for="date1" style="margin: 5px;" />
 			<t:datefield t:id="date1" />

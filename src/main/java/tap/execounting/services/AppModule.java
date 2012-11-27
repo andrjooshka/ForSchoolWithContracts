@@ -42,6 +42,7 @@ public class AppModule {
 			MappedConfiguration<String, Object> configuration) {
 		configuration.add(SymbolConstants.SUPPORTED_LOCALES, "ru");
 		configuration.add(SymbolConstants.PRODUCTION_MODE, "false");
+		configuration.add(SymbolConstants.HMAC_PASSPHRASE, "fjads;lfkja;flkjqf;qlfkjqe;flkwjefw;lefkj");
 	}
 
 	public static void contributeClasspathAssetAliasManager(
