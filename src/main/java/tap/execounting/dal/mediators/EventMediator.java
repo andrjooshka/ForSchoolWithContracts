@@ -1,6 +1,7 @@
 package tap.execounting.dal.mediators;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -226,6 +227,25 @@ public class EventMediator implements EventMed {
 		return sb.toString();
 	}
 
+	public EventMed filter(Client c) {
+		List<Event> cache = getGroup();
+		for (int i = countGroupSize() - 1; i >= 0; i--) {
+			List<Contract> toCheck = cache.get(i).getContracts();
+			boolean thereIsNoSuchClient = true;
+			for (Contract con : toCheck) {
+				if (con.getClientId() == c.getId()) {
+					thereIsNoSuchClient = false;
+					break;
+				}
+			}
+			if (thereIsNoSuchClient)
+				cache.remove(i);
+		}
+
+		getAppliedFilters().put("Teacher", unit);
+		return this;
+	}
+
 	public EventMed filter(Teacher unit) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
@@ -395,10 +415,19 @@ public class EventMediator implements EventMed {
 	public EventMed filter(Date date1, Date date2) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
-			cache = getDao().findWithNamedQuery(
-					Event.BETWEEN_DATE1_AND_DATE2,
-					QueryParameters.with("date1", date1).and("date2", date2)
-							.parameters());
+			if (date1 != null && date2 != null)
+				cache = getDao().findWithNamedQuery(
+						Event.BETWEEN_DATE1_AND_DATE2,
+						QueryParameters.with("date1", date1)
+								.and("date2", date2).parameters());
+			else if (date1 != null)
+				cache = getDao().findWithNamedQuery(Event.AFTER_DATE,
+						QueryParameters.with("date", date1).parameters());
+			else if (date2 != null)
+				cache = getDao().findWithNamedQuery(Event.BEFORE_DATE,
+						QueryParameters.with("date", date2).parameters());
+			else
+				cache = getGroup();
 		} else {
 			dateFilter.filter(getGroup(), date1, date2);
 		}
@@ -492,5 +521,13 @@ public class EventMediator implements EventMed {
 		for (Event e : getGroup())
 			days.add(DateService.trimToDate(e.getDate()));
 		return days.size();
+	}
+
+	public EventMed sortByDate(boolean ascending) {
+		Collections.sort(getGroup());
+		if (!ascending)
+			Collections.reverse(getGroup());
+
+		return this;
 	}
 }

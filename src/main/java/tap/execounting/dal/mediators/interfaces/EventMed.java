@@ -79,6 +79,9 @@ public interface EventMed {
 	public String getFilterState();
 
 	// filters
+	// Client
+	public EventMed filter(Client client);
+	
 	// Teacher
 	public EventMed filter(Teacher unit);
 
@@ -139,4 +142,5 @@ public interface EventMed {
 	// days
 	public int countDaysInEventsGroup();
 
+	public EventMed sortByDate(boolean ascending);
 }

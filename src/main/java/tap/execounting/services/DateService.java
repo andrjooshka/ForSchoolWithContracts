@@ -21,10 +21,8 @@ public class DateService {
 	private static int YEAR = Calendar.YEAR;
 	private static int MONTH = Calendar.MONTH;
 	private static int DAY_OF_YEAR = Calendar.DAY_OF_YEAR;
-	private static int DAY_OF_MONTH = Calendar.DAY_OF_MONTH;
+	//private static int DAY_OF_MONTH = Calendar.DAY_OF_MONTH;
 	private static int MILLISECOND = Calendar.MILLISECOND;
-
-	// private static int DAY_OF_MONTH = Calendar.DAY_OF_MONTH;
 
 	public DateService() {
 		timeZone = TimeZone.getTimeZone("Europe/Moscow");
@@ -65,7 +63,6 @@ public class DateService {
 		return c;
 	}
 
-
 	public void setMinute(Calendar c, int value) {
 		c.set(MINUTE, value);
 	}
@@ -82,7 +79,6 @@ public class DateService {
 
 		return year1 == year2 && day1 == day2;
 	}
-
 
 	public TimeZone getTimeZone() {
 		return timeZone;
@@ -185,8 +181,6 @@ public class DateService {
 		return calendar.getTime();
 	}
 
-	
-	
 	public static List<Date> generateDaySet(Date eventsDate, int days) {
 		List<Date> list = new ArrayList<Date>(days);
 		for (int i = 0; i < days; i++)
@@ -213,8 +207,8 @@ public class DateService {
 		r.set(MONTH, c.get(MONTH));
 		return r.getTime();
 	}
-	
-	public static Date maxOutDayTime(Date date){
+
+	public static Date maxOutDayTime(Date date) {
 		Calendar c = getMoscowCalendar(trimToDate(date));
 		c.add(DAY_OF_YEAR, 1);
 		c.add(MILLISECOND, -1);
@@ -229,7 +223,7 @@ public class DateService {
 		Calendar c = new GregorianCalendar(getMoscowTimeZone());
 		return c;
 	}
-	
+
 	public static Calendar getMoscowCalendar(Date time) {
 		Calendar c = new GregorianCalendar(getMoscowTimeZone());
 		c.setTime(time);
@@ -237,33 +231,29 @@ public class DateService {
 	}
 
 	public static int dayOfWeekRus(Date d) {
-		//TODO check
+		// TODO check
 		Calendar date = new GregorianCalendar();
 		date.setTime(d);
 		int dow = date.get(Calendar.DAY_OF_WEEK);
 		dow = dow == 1 ? 7 : dow - 1;
 		return dow;
 	}
-	public static String toString(String format, Date date){
+
+	public static String toString(String format, Date date) {
 		SimpleDateFormat f = new SimpleDateFormat(format);
-		//f.setTimeZone(TimeZone.getTimeZone("Europe/London"));
+		// f.setTimeZone(TimeZone.getTimeZone("Europe/London"));
 		return f.format(date);
 	}
-	public static String fullRepresentation(Date date){
+
+	public static String fullRepresentation(Date date) {
 		return toString("H:m dd MM yyyy", date);
 	}
-	public static String fullRepresentation(Calendar cal){
-		StringBuilder sb = new StringBuilder();
-		sb.append(cal.get(HOUR));
-		sb.append(':');
-		sb.append(cal.get(MINUTE));
-		sb.append(' ');
-		sb.append(cal.get(DAY_OF_MONTH));
-		sb.append(' ');
-		sb.append(cal.get(MONTH));
-		sb.append(' ');
-		sb.append(cal.get(YEAR));
-		
-		return sb.toString();
+
+	public static String fullRepresentation(Calendar cal) {
+		return toString("H:m dd MM yyyy", cal.getTime());
+	}
+
+	public static String formatDayMonthNameYear(Date date) {
+		return toString("d M y", date);
 	}
 }

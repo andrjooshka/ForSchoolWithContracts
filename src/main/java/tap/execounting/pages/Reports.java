@@ -22,15 +22,23 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 
 import tap.execounting.dal.CRUDServiceDAO;
+import tap.execounting.dal.mediators.interfaces.ClientMed;
+import tap.execounting.dal.mediators.interfaces.EventMed;
+import tap.execounting.data.ClientState;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
+import tap.execounting.entities.Event;
 import tap.execounting.entities.Payment;
 import tap.execounting.security.AuthorizationDispatcher;
+import tap.execounting.services.DateService;
 import tap.execounting.services.SuperCalendar;
 
-@Import(stylesheet="context:layout/datatable.css")
+@Import(stylesheet = {"context:layout/datatable.css","context:layout/reports.css"})
 public class Reports {
-	// Injected
+
+	// Activation context
+	// Screen fields
+	// Generally useful bits and pieces
 	@Inject
 	private Session session;
 	@Inject
@@ -39,7 +47,11 @@ public class Reports {
 	private AjaxResponseRenderer renderer;
 	@Inject
 	private AuthorizationDispatcher dispatcher;
-	
+	@Inject
+	private ClientMed clientMed;
+	@Inject
+	private EventMed eventMed;
+
 	// Page components
 	@Component
 	private Zone paymentZone;
@@ -47,6 +59,8 @@ public class Reports {
 	private BeanModelSource beanModelSource;
 	@Property
 	private BeanModel<Client> modelOfEnding;
+	@Property
+	private BeanModel<Client> modelOfEnded;
 	@Property
 	private BeanModel<Client> modelOfPayments;
 	@Property
@@ -67,6 +81,51 @@ public class Reports {
 	@InjectPage
 	private ClientPage clientPage;
 
+	// The code
+
+	// // Render setup
+	void setupRender() {
+		// end of subscription
+		if (modelOfEnding == null) {
+			modelOfEnding = beanModelSource.createDisplayModel(Client.class,
+					componentResources.getMessages());
+			modelOfEnding.add("endingInfo", null);
+			modelOfEnding.exclude("return", "date", "id", "balance",
+					"studentInfo", "firstContractDate", "state",
+					"firstPlannedPaymentDate");
+		}
+
+		// subscription ended
+		if (modelOfEnded == null) {
+			modelOfEnded = beanModelSource.createDisplayModel(Client.class,
+					componentResources.getMessages());
+			modelOfEnded.add("endedInfo", null);
+			modelOfEnded.exclude("return", "date", "id", "balance",
+					"studentInfo", "firstContractDate", "state",
+					"firstPlannedPaymentDate");
+		}
+
+		// soon payments
+		if (modelOfPayments == null) {
+			modelOfPayments = beanModelSource.createDisplayModel(Client.class,
+					componentResources.getMessages());
+			modelOfPayments.add("paymentsInfo", null);
+			modelOfPayments.exclude("return", "date", "id", "balance",
+					"studentInfo", "firstContractDate", "state");
+		}
+
+		// debtors
+		if (modelOfDebtors == null) {
+			modelOfDebtors = beanModelSource.createDisplayModel(Client.class,
+					componentResources.getMessages());
+			modelOfDebtors.add("debtInfo", null);
+			modelOfDebtors.exclude("return", "date", "id", "balance",
+					"studentInfo", "firstContractDate", "state",
+					"firstPlannedPaymentDate");
+		}
+	}
+
+	// //// getters
 	// TODO check if SQL will work better
 	// Question is: should we remember about freezed contracts?
 	public List<Client> getEndingLessons() {
@@ -85,6 +144,31 @@ public class Reports {
 		for (Contract c : list)
 			clients.add(c.getClient());
 		return new ArrayList<Client>(clients);
+	}
+
+	public List<Client> getEndedContracts() {
+		return clientMed.filter(ClientState.undefined).getGroup();
+	}
+
+	public String getEndedInfo() {
+		// TODO optimize that by caching recent events
+		if (client.getContracts().size() == 0)
+			return messages.get("no-contracts");
+		Event lastEvent = null;
+		List<Event> cache = eventMed.filter(DateService.fromNowPlusDays(-31),
+				null).getGroup();
+		try {
+			lastEvent = eventMed
+					.setGroup(cache.subList(0, eventMed.countGroupSize()))
+					.filter(client).sortByDate(false).getGroup().get(0);
+		} catch (IndexOutOfBoundsException e) {
+			return messages.get("no-events");
+		} finally {
+			eventMed.reset();
+		}
+		String result = DateService.formatDayMonthNameYear(lastEvent.getDate());
+		result += "\t" + lastEvent.getEventType().getTitle();
+		return result;
 	}
 
 	public String getEndingInfo() {
@@ -136,35 +220,6 @@ public class Reports {
 		return client.getBalance() * (-1) + "";
 	}
 
-	void setupRender() {
-		// end of subscription
-		if (modelOfEnding == null) {
-			modelOfEnding = beanModelSource.createDisplayModel(Client.class,
-					componentResources.getMessages());
-			modelOfEnding.add("endingInfo", null);
-			modelOfEnding.exclude("return", "balance", "studentInfo",
-					"firstContractDate", "state", "firstPlannedPaymentDate");
-		}
-
-		// soon payments
-		if (modelOfPayments == null) {
-			modelOfPayments = beanModelSource.createDisplayModel(Client.class,
-					componentResources.getMessages());
-			modelOfPayments.add("paymentsInfo", null);
-			modelOfPayments.exclude("return", "balance", "studentInfo",
-					"firstContractDate", "state");
-		}
-
-		// debtors
-		if (modelOfDebtors == null) {
-			modelOfDebtors = beanModelSource.createDisplayModel(Client.class,
-					componentResources.getMessages());
-			modelOfDebtors.add("debtInfo", null);
-			modelOfDebtors.exclude("return", "balance", "studentInfo",
-					"firstContractDate", "state", "firstPlannedPaymentDate");
-		}
-	}
-
 	ClientPage onDetails(Client c) {
 		clientPage.setup(c);
 		return clientPage;
@@ -210,8 +265,8 @@ public class Reports {
 		return builder.toString();
 	}
 
-	public Block getDeleteBlock(){
-		if(dispatcher.canDeletePayments())
+	public Block getDeleteBlock() {
+		if (dispatcher.canDeletePayments())
 			return confirmBlock;
 		return authBlock;
 	}

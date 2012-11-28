@@ -46,7 +46,9 @@ import tap.execounting.entities.interfaces.Dated;
 		@NamedQuery(name = Event.BY_TYPE_ID, query = "Select e from Event e where e.typeId = :typeId"),
 		@NamedQuery(name = Event.BY_ROOM_ID, query = "from Event as e where e.roomId = :roomId"),
 		@NamedQuery(name = Event.BETWEEN_DATE1_AND_DATE2, query = "from Event as e where e.date <= :date2 and e.date >= :date1"),
-		@NamedQuery(name = Event.BY_STATE, query = "from Event as e where e.state=:stateCode") })
+		@NamedQuery(name = Event.BY_STATE, query = "from Event as e where e.state=:stateCode"),
+		@NamedQuery(name = Event.AFTER_DATE, query = "from Event as e where e.date >= :date"),
+		@NamedQuery(name = Event.BEFORE_DATE, query = "from Event as e where e.date <= :date")})
 @Table(name = "events")
 public class Event implements Comparable<Event>, Dated {
 
@@ -59,7 +61,9 @@ public class Event implements Comparable<Event>, Dated {
 	public static final String BY_STATE = "Event.byStateCode";
 	public static final String BY_ROOM_ID = "Event.byRoomId";
 	public static final String BETWEEN_DATE1_AND_DATE2 = "Event.betweenDate1andDate2";
-
+	public static final String AFTER_DATE = "Event.AfterDate";
+	public static final String BEFORE_DATE = "Event.BeforeDate";
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "event_id")

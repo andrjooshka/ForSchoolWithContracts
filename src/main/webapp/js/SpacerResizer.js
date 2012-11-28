@@ -1,16 +1,27 @@
 Event.observe(window, "resize", ResizeSpace);
 
 function ResizeSpace() {
-	totalWidth = $('mainmenu').getWidth();
+	var windowWidth = document.viewport.getDimensions().width;
+	var mainMenu = $('mainmenu');
+	var totalWidth = mainMenu.getWidth();
 
-	spacerOne = $('spacerOne');
-	spacerTwo = $('spacerTwo');
-	spacerThree = $('spacerThree');
-	availWidth = totalWidth - spacerOne.getWidth() - spacerTwo.getWidth() - 1;
+	var spacerOne = $('spacerOne');
+	if (windowWidth < 1100) {
+		spacerOne.setStyle({
+			width : 160 + 'px'
+		});
+	} else
+		spacerOne.setStyle({
+			width : '40%'
+		});
+
+	var spacerTwo = $('spacerTwo');
+	var spacerThree = $('spacerThree');
+	var availWidth = totalWidth - spacerOne.getWidth() - spacerTwo.getWidth()
+			- 1;
 	if (availWidth < 0)
 		availWidth = 0;
-	style = {
-		width : new String(availWidth+'px')
-	};
-	spacerThree.setStyle(style);
+	spacerThree.setStyle({
+		width : availWidth + 'px'
+	});
 }

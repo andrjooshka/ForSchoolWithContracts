@@ -219,25 +219,48 @@ public class Payroll {
 		// First step is to fill the contracts with the events
 		List<Contract> contracts = new ArrayList<Contract>();
 		while (source.size() > 0) {
+			// Initial event?
 			Event init = source.get(source.size() - 1);
+			// Temporary contract group
 			List<Contract> cts = init.getContracts();
 
+			// First contract to join this party?
 			Contract c = new Contract();
+			// Add this contract to the group
 			contracts.add(c);
+
+			// Create link for temporal storage
 			Contract t = cts.get(cts.size() - 1);
+
+			// Remove it from temporal group
 			cts.remove(cts.size() - 1);
+			// If temporary group is zero-size -- remove it from the source
 			if (cts.size() == 0)
 				source.remove(source.size() - 1);
+			// Set up new contract which will be added to the result
 			c.setId(t.getId());
-			c.setTypeId(t.getTypeId());
+			// Look ma, no hands. That is the bitchy place. Here I change the
+			// oreder of everything. If school did event with type that differ
+			// from what they have in contract -- the type here is taken from
+			// the event
+			// we had: c.setTypeId(t.getTypeId());
+			// and now we got:
+			c.setTypeId(init.getTypeId());
 			c.getEvents().add(init);
 
 			for (int i = source.size() - 1; i >= 0; i--) {
+				// Take the next contracts group
 				cts = source.get(i).getContracts();
+				// For each contract in that group
 				for (int j = cts.size() - 1; j > -1; j--)
-					if (cts.get(j).getId() == c.getId()) {
+					// Another change, where I am not sure. That could make
+					// mistakes in the future, possible unprocessed contracts.
+					// Earlier we had only first part of the condition
+					if (cts.get(j).getId() == c.getId()
+							&& cts.get(j).getTypeId() == init.getTypeId()) {
 						c.getEvents().add(source.get(i));
 						cts.remove(j);
+
 						if (cts.size() == 0)
 							source.remove(i);
 					}
