@@ -185,10 +185,10 @@ public class TeacherPage {
 	}
 
 	Object onSuccessFromPayrollForm() {
-		String filterString = payrollFiltration ? "FilterOn" : "FilterOff";
+		//String filterString = payrollFiltration ? "FilterOn" : "FilterOff";
 		return linkSource.createPageRenderLinkWithContext(Payroll.class, tMed
 				.getUnit().getId(), getPayrollDateOneS(), getPayrollDateTwoS(),
-				filterString);
+				payrollFiltration);
 	}
 
 	// requests from page

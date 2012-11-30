@@ -20,6 +20,7 @@ import tap.execounting.dal.mediators.interfaces.PaymentMed;
 import tap.execounting.data.ClientState;
 import tap.execounting.data.ContractState;
 import tap.execounting.entities.Client;
+import tap.execounting.entities.Comment;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.ContractType;
 import tap.execounting.entities.Payment;
@@ -62,6 +63,14 @@ public class ClientMediator implements ClientMed {
 	public ClientMed setUnit(Client unit) {
 		this.unit = unit;
 		return this;
+	}
+
+	public Comment getComment() {
+		List<Comment> list = dao.findWithNamedQuery(Comment.BY_CLIENT_ID,
+				QueryParameters.with("id", unit.getId()).parameters());
+		if (list != null && list.size() > 0)
+			return list.get(0);
+		return null;
 	}
 
 	public boolean hasContracts() {

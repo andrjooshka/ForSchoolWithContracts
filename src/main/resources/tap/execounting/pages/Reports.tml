@@ -49,6 +49,16 @@
 			<p:endingInfoCell>
 				${endingInfo}
 			</p:endingInfoCell>
+			<!-- TODO need some comment solution, actually -->
+<!-- 			<p:commentCell> -->
+<!-- 				<t:if test="comment"> -->
+<!-- 					<t:show.ShowComment comment="comment" /> -->
+<!-- 				</t:if> -->
+<!-- 				<t:if test="!comment"> -->
+<!-- 					<t:editors.addcomment code="1" -->
+<!-- 						entityid="client.id" /> -->
+<!-- 				</t:if> -->
+<!-- 			</p:commentCell> -->
 		</t:grid>
 	</div>
 

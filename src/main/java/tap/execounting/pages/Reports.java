@@ -26,6 +26,7 @@ import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.dal.mediators.interfaces.EventMed;
 import tap.execounting.data.ClientState;
 import tap.execounting.entities.Client;
+import tap.execounting.entities.Comment;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.Payment;
@@ -90,6 +91,7 @@ public class Reports {
 			modelOfEnding = beanModelSource.createDisplayModel(Client.class,
 					componentResources.getMessages());
 			modelOfEnding.add("endingInfo", null);
+			modelOfEnding.add("comment", null);
 			modelOfEnding.exclude("return", "date", "id", "balance",
 					"studentInfo", "firstContractDate", "state",
 					"firstPlannedPaymentDate");
@@ -100,6 +102,7 @@ public class Reports {
 			modelOfEnded = beanModelSource.createDisplayModel(Client.class,
 					componentResources.getMessages());
 			modelOfEnded.add("endedInfo", null);
+			modelOfEnded.add("comment", null);
 			modelOfEnded.exclude("return", "date", "id", "balance",
 					"studentInfo", "firstContractDate", "state",
 					"firstPlannedPaymentDate");
@@ -110,6 +113,7 @@ public class Reports {
 			modelOfPayments = beanModelSource.createDisplayModel(Client.class,
 					componentResources.getMessages());
 			modelOfPayments.add("paymentsInfo", null);
+			modelOfPayments.add("comment", null);
 			modelOfPayments.exclude("return", "date", "id", "balance",
 					"studentInfo", "firstContractDate", "state");
 		}
@@ -119,6 +123,7 @@ public class Reports {
 			modelOfDebtors = beanModelSource.createDisplayModel(Client.class,
 					componentResources.getMessages());
 			modelOfDebtors.add("debtInfo", null);
+			modelOfDebtors.add("comment", null);
 			modelOfDebtors.exclude("return", "date", "id", "balance",
 					"studentInfo", "firstContractDate", "state",
 					"firstPlannedPaymentDate");
@@ -149,6 +154,10 @@ public class Reports {
 	public List<Client> getEndedContracts() {
 		return clientMed.filter(ClientState.undefined).getGroup();
 	}
+	
+	public Comment getComment(){
+		return clientMed.setUnit(client).getComment();
+	}
 
 	public String getEndedInfo() {
 		// TODO optimize that by caching recent events
@@ -156,7 +165,7 @@ public class Reports {
 			return messages.get("no-contracts");
 		Event lastEvent = null;
 		List<Event> cache = eventMed.filter(DateService.fromNowPlusDays(-31),
-				null).getGroup();
+				DateService.fromNowPlusDays(1)).getGroup();
 		try {
 			lastEvent = eventMed
 					.setGroup(cache.subList(0, eventMed.countGroupSize()))

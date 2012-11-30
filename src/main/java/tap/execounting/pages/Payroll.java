@@ -40,18 +40,21 @@ public class Payroll {
 	private Date dateOne;
 	@Property
 	private Date dateTwo;
-	@Property
-	private String filtration;
+	private boolean filtration;
 	@Property
 	private Contract contract;
 	private int iteration;
-	private int totalMoney = 0;
+	private int specialIteration;
+	private int trialIteration;
+	private int totalMoney;
+	private int trialMoney;
+	private int specialMoney;
 
 	void onActivate(int teacherId) {
-		onActivate(teacherId, null, null, "FilterOn");
+		onActivate(teacherId, null, null, filtration);
 	}
 
-	boolean onActivate(int teacherId, String one, String two, String filtration) {
+	boolean onActivate(int teacherId, String one, String two, boolean filtration) {
 		tM.setId(teacherId);
 		setDates(one, two);
 		this.filtration = filtration;
@@ -83,10 +86,26 @@ public class Payroll {
 		dateTwo = two == null ? new Date() : two;
 	}
 
+	public boolean getFiltration() {
+		return filtration;
+	}
+
 	public int getIteration() {
 		cM.setUnitId(contract.getId());
 		totalMoney += getLessonPrice() * getLessonsNumber();
 		return ++iteration;
+	}
+
+	public int getTrialIteration() {
+		cM.setUnitId(contract.getId());
+		trialMoney += getLessonPrice() * getLessonsNumber();
+		return ++trialIteration;
+	}
+
+	public int getSpecialIteration() {
+		cM.setUnitId(contract.getId());
+		specialMoney += getLessonPrice() * getLessonsNumber();
+		return ++specialIteration;
 	}
 
 	public Date getToday() {
@@ -133,13 +152,57 @@ public class Payroll {
 		}
 	}
 
+	// From 28.11.12 -- this method actually also caches the contracts if
+	// cacheMode==true.
+	// StandartContracts makes cachemode true, SpecialContracts makes
+	// cachemode==false.
+	private boolean cacheMode;
+	private List<Contract> cache = null;
+
 	public List<Contract> getContracts() {
+		if (cacheMode && cache != null)
+			return cache;
 		List<Event> source = raw();
-		if (filtration.contains("On"))
+		if (getFiltration())
 			filter(source);
 		List<Contract> contracts = toContracts(source);
 
+		if (cacheMode)
+			cache = contracts;
+
 		return contracts;
+	}
+
+	public List<Contract> getStandartContracts() {
+		cacheMode = true;
+		List<Contract> filtered = Contract.cleanList();
+		List<Contract> localCache = getContracts();
+		for (Contract c : localCache)
+			if (c.getContractTypeId() == ContractType.Standard)
+				filtered.add(c);
+		return filtered;
+	}
+
+	public List<Contract> getTrialContracts() {
+		List<Contract> filtered = Contract.cleanList();
+		List<Contract> localCache = getContracts();
+		for (Contract c : localCache)
+			if (c.getContractTypeId() == ContractType.Trial)
+				filtered.add(c);
+		return filtered;
+	}
+
+	public List<Contract> getSpecialContracts() {
+		List<Contract> filtered = Contract.cleanList();
+		List<Contract> localCache = getContracts();
+		for (Contract c : localCache)
+			if (c.getContractTypeId() == ContractType.Special)
+				filtered.add(c);
+
+		cacheMode = false;
+		cache = null;
+
+		return filtered;
 	}
 
 	private List<Event> raw() {
@@ -356,9 +419,19 @@ public class Payroll {
 	}
 
 	public int getTotalMoney() {
-		return totalMoney;
+		return totalMoney + trialMoney + specialMoney;
 	}
 
+	public int getTrialMoney() {
+		return trialMoney;
+	}
+
+	public int getSpecialMoney() {
+		return specialMoney;
+	}
+
+	// Total money -- is the only thing that gets taxed.
+	// Trial money, and special money -- are not.
 	public int getTax() {
 		return totalMoney * 13 / 100;
 	}

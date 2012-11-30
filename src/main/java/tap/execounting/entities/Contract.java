@@ -529,4 +529,8 @@ public class Contract implements Comparable<Contract>, Dated {
 	public boolean hasEventShiftsByClient() {
 		return getEventShiftsByClient() > 0;
 	}
+	
+	public static List<Contract> cleanList(){
+		return new ArrayList<Contract>();
+	}
 }

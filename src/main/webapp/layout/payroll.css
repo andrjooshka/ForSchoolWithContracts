@@ -79,3 +79,11 @@ td.num {
 	top: -6.8mm;
 	line-height: 6.5mm;
 }
+
+#tablecontainer2,#tablecontainer3 {
+	margin-top: 1em;
+}
+#final{
+	margin-top: 2em;
+	font-size: 110%;
+}

@@ -5,6 +5,7 @@ import java.util.List;
 
 import tap.execounting.data.ClientState;
 import tap.execounting.entities.Client;
+import tap.execounting.entities.Comment;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Teacher;
 
@@ -15,6 +16,8 @@ public interface ClientMed {
 
 	//getters
 
+	//comment
+	public Comment getComment();
 	//contracts
 	public boolean hasContracts();
 	public List<Contract> getContracts();
