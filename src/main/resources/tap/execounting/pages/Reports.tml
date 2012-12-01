@@ -1,6 +1,7 @@
 <html t:type="layout" t:pageTitle="Клиенты"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
-
+	<t:eventlink id="aj" event="AJ" />
+	<t:eventlink id="ajpoll" event="AJpoll" />
 	<!-- Switcher clients / reports -->
 	<ul class="nav child">
 		<t:pagelink page="clients">
@@ -50,15 +51,13 @@
 				${endingInfo}
 			</p:endingInfoCell>
 			<!-- TODO need some comment solution, actually -->
-<!-- 			<p:commentCell> -->
-<!-- 				<t:if test="comment"> -->
-<!-- 					<t:show.ShowComment comment="comment" /> -->
-<!-- 				</t:if> -->
-<!-- 				<t:if test="!comment"> -->
-<!-- 					<t:editors.addcomment code="1" -->
-<!-- 						entityid="client.id" /> -->
-<!-- 				</t:if> -->
-<!-- 			</p:commentCell> -->
+			<p:commentCell>
+				<form>
+					<textarea model-clientId="${client.id}" class="cool">
+						${comment}
+					</textarea>
+				</form>
+			</p:commentCell>
 		</t:grid>
 	</div>
 
@@ -74,6 +73,13 @@
 			<p:endedInfoCell>
 				${endedInfo}
 			</p:endedInfoCell>
+			<p:commentCell>
+				<form>
+					<textarea model-clientId="${client.id}" class="cool">
+						${comment}
+					</textarea>
+				</form>
+			</p:commentCell>
 		</t:grid>
 	</div>
 
@@ -125,6 +131,13 @@
 					</t:zone>
 				</t:loop>
 			</p:paymentsInfoCell>
+			<p:commentCell>
+				<form>
+					<textarea model-clientId="${client.id}" class="cool">
+						${comment}
+					</textarea>
+				</form>
+			</p:commentCell>
 		</t:grid>
 	</div>
 
@@ -140,6 +153,13 @@
 			<p:debtInfoCell>
 				${debtInfo}
 			</p:debtInfoCell>
+			<p:commentCell>
+				<form>
+					<textarea model-clientId="${client.id}" class="cool">
+						${comment}
+					</textarea>
+				</form>
+			</p:commentCell>
 		</t:grid>
 	</div>
 

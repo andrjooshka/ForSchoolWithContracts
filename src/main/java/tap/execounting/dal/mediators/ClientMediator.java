@@ -26,6 +26,7 @@ import tap.execounting.entities.ContractType;
 import tap.execounting.entities.Payment;
 import tap.execounting.entities.Teacher;
 import tap.execounting.entities.interfaces.Dated;
+import tap.execounting.services.Authenticator;
 
 public class ClientMediator implements ClientMed {
 
@@ -37,6 +38,8 @@ public class ClientMediator implements ClientMed {
 	private PaymentMed paymentMed;
 	@Inject
 	private DateFilter dateFilter;
+	@Inject
+	private Authenticator authenticator;
 
 	private Client unit;
 
@@ -63,6 +66,26 @@ public class ClientMediator implements ClientMed {
 	public ClientMed setUnit(Client unit) {
 		this.unit = unit;
 		return this;
+	}
+
+	public ClientMed setUnitId(int id) {
+		this.unit = dao.find(Client.class, id);
+		return this;
+	}
+
+	public void comment(String text) {
+		Comment c = getComment();
+		if (c == null) {
+			c = new Comment(Comment.ClientCode, authenticator.getLoggedUser()
+					.getId(), unit.getId());
+			c.setText(text);
+			c.setDate(new Date());
+			dao.create(c);
+		} else {
+			c.setText(text);
+			c.setDate(new Date());
+			dao.update(c);
+		}
 	}
 
 	public Comment getComment() {

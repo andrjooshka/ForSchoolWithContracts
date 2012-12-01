@@ -14,10 +14,13 @@ public interface ClientMed {
 	public Client getUnit();
 	public ClientMed setUnit(Client c);
 
+	public ClientMed setUnitId(int id);
+	
 	//getters
 
 	//comment
 	public Comment getComment();
+	public void comment(String comment);
 	//contracts
 	public boolean hasContracts();
 	public List<Contract> getContracts();

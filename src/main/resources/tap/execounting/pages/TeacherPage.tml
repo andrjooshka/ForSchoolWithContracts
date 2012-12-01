@@ -98,11 +98,13 @@
 	<div style="width:${width}px;" id="clients block">
 		<t:zone t:id="clientsZone" id="clientsZone" update="show">
 			<t:if test="calendarCentric">
-				<t:actionlink t:id="eventsDateBackwardLink" zone="clientsZone">На
-					месяц назад
+				<t:actionlink t:id="eventsDateBackwardLink" id="eventsDateBackwardLink"
+					zone="clientsZone">
+					На месяц назад
 				</t:actionlink>&nbsp;&nbsp;&nbsp;
-				<t:actionlink t:id="eventsDateForwardLink" zone="clientsZone">На
-					месяц вперед
+				<t:actionlink t:id="eventsDateForwardLink" id="eventsDateForwardLink"
+					zone="clientsZone">
+					На месяц вперед
 				</t:actionlink>
 				<t:form zone="clientsZone" t:id="clientsDateForm">
 					<t:errors />

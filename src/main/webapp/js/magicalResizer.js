@@ -88,7 +88,7 @@ function rc() {
 			'margin' : margin + 'px',
 			'width' : width + 'px',
 			'height' : height + 'px',
-			'transition' : 'all .3s ease'
+			'transition' : 'all .4s ease'
 		});
 	}
 	function ResizeDow() {
@@ -97,7 +97,7 @@ function rc() {
 		m('h4.dow').css({
 			'font-size' : fontSize + 'em',
 			'margin-left' : marginLeft + '%',
-			'transition' : 'all .3s ease'
+			'transition' : 'all .4s ease'
 		});
 	}
 	function ResizeMiniDate() {
@@ -106,7 +106,7 @@ function rc() {
 		m('div.mini h3.date').css({
 			'margin-bottom' : mB + 'em',
 			'margin-top' : mT + '%',
-			'transition' : 'all .3s ease'
+			'transition' : 'all .4s ease'
 		});
 	}
 	function ResizeCalendar() {
@@ -117,7 +117,7 @@ function rc() {
 			'width' : w + 'px',
 			'margin' : margin + 'px',
 			'height' : h + 'px',
-			'transition' : 'all .3s ease'
+			'transition' : 'all .4s ease'
 		});
 	}
 	ResizeMini();
@@ -126,5 +126,20 @@ function rc() {
 	ResizeCalendar();
 }
 
+function linksHandle() {
+	// Get links
+	// if they are not ready -- wait for 300ms then call self again
+	// If they are ready -- run resize
+	clientsLinks = m('div#clientsZone.t-zone a');
+	if(clientsLinks==null)
+		setTimeout(linksHandle, 300);
+
+	rc();
+	clientsLinks.click(function(e) {
+		setTimeout(linksHandle, 300);
+	});
+}
+
 m(document).ready(rc);
+m(document).ready(linksHandle);
 m(window).resize(rc);

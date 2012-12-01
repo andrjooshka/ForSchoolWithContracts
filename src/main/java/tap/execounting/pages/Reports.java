@@ -1,6 +1,7 @@
 package tap.execounting.pages;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,16 +13,20 @@ import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.RequestParameter;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.json.JSONArray;
+import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 
 import tap.execounting.dal.CRUDServiceDAO;
+import tap.execounting.dal.QueryParameters;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.dal.mediators.interfaces.EventMed;
 import tap.execounting.data.ClientState;
@@ -34,7 +39,9 @@ import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.DateService;
 import tap.execounting.services.SuperCalendar;
 
-@Import(stylesheet = {"context:layout/datatable.css","context:layout/reports.css"})
+@Import(library = { "context:js/jquery-1.8.3.min.js",
+		"context:js/reportsAjax.js" }, stylesheet = {
+		"context:layout/datatable.css", "context:layout/reports.css" })
 public class Reports {
 
 	// Activation context
@@ -52,6 +59,8 @@ public class Reports {
 	private ClientMed clientMed;
 	@Inject
 	private EventMed eventMed;
+	@Inject
+	private ComponentResources resources;
 
 	// Page components
 	@Component
@@ -130,6 +139,33 @@ public class Reports {
 		}
 	}
 
+	public JSONObject onAJpoll(@RequestParameter("timestamp") long timestamp) {
+		JSONObject js = new JSONObject("{'status':'ok'}");
+		List<Comment> list = dao.findWithNamedQuery(Comment.CLIENT_AFTER_DATE,
+				QueryParameters.with("date", new Date(timestamp)).parameters());
+		if (list.size() > 0) {
+			JSONArray jr = new JSONArray();
+			for (Comment c : list)
+				jr.put(new JSONObject("id", c.getEntityId() + "", "comment", c
+						.getText()));
+			js.put("updates", jr);
+		}
+		return js;
+	}
+
+	public JSONObject onAJ(@RequestParameter("id") int id,
+			@RequestParameter("text") String text) {
+
+		clientMed.setUnitId(id).comment(text);
+		JSONObject js = new JSONObject("{'status':'ok'}");
+		return js;
+	}
+
+	public String getComment() {
+		Comment c = clientMed.setUnit(client).getComment();
+		return c == null ? "" : c.getText();
+	}
+
 	// //// getters
 	// TODO check if SQL will work better
 	// Question is: should we remember about freezed contracts?
@@ -152,11 +188,8 @@ public class Reports {
 	}
 
 	public List<Client> getEndedContracts() {
-		return clientMed.filter(ClientState.undefined).getGroup();
-	}
-	
-	public Comment getComment(){
-		return clientMed.setUnit(client).getComment();
+		clientMed.reset();
+		return clientMed.filter(ClientState.undefined).getGroup(true);
 	}
 
 	public String getEndedInfo() {

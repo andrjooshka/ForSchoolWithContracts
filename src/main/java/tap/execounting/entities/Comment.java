@@ -24,11 +24,13 @@ import org.apache.tapestry5.beaneditor.NonVisual;
 @NamedQueries({
 		@NamedQuery(name = Comment.ALL, query = "from Comment"),
 		@NamedQuery(name = Comment.BY_TEACHER_ID, query = "from Comment where code=0 and entityId=:teacherId"),
-		@NamedQuery(name = Comment.BY_CLIENT_ID, query = "from Comment where code=1 and entityId=:id") })
+		@NamedQuery(name = Comment.BY_CLIENT_ID, query = "from Comment where code=1 and entityId=:id"),
+		@NamedQuery(name = Comment.CLIENT_AFTER_DATE, query = "from Comment where code=1 and date >= :date") })
 public class Comment {
 	public static final String ALL = "Comment.all";
 	public static final String BY_TEACHER_ID = "Comment.byTeacherId";
 	public static final String BY_CLIENT_ID = "Comment.byClientId";
+	public static final String CLIENT_AFTER_DATE = "Comment.clientAfterDate";
 
 	public static final int TeacherCode = 0;
 	public static final int ClientCode = 1;
