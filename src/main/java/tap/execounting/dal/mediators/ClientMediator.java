@@ -73,17 +73,17 @@ public class ClientMediator implements ClientMed {
 		return this;
 	}
 
-	public void comment(String text) {
+	public void comment(String text, long time) {
 		Comment c = getComment();
 		if (c == null) {
 			c = new Comment(Comment.ClientCode, authenticator.getLoggedUser()
 					.getId(), unit.getId());
 			c.setText(text);
-			c.setDate(new Date());
+			c.setDate(new Date(time));
 			dao.create(c);
 		} else {
 			c.setText(text);
-			c.setDate(new Date());
+			c.setDate(new Date(time));
 			dao.update(c);
 		}
 	}

@@ -20,7 +20,7 @@ public interface ClientMed {
 
 	//comment
 	public Comment getComment();
-	public void comment(String comment);
+	public void comment(String comment, long time);
 	//contracts
 	public boolean hasContracts();
 	public List<Contract> getContracts();

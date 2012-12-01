@@ -147,16 +147,17 @@ public class Reports {
 			JSONArray jr = new JSONArray();
 			for (Comment c : list)
 				jr.put(new JSONObject("id", c.getEntityId() + "", "comment", c
-						.getText()));
+						.getText(), "timeStamp", c.getDate().getTime() + ""));
 			js.put("updates", jr);
 		}
 		return js;
 	}
 
 	public JSONObject onAJ(@RequestParameter("id") int id,
-			@RequestParameter("text") String text) {
+			@RequestParameter("text") String text,
+			@RequestParameter("time") long timeStamp) {
 
-		clientMed.setUnitId(id).comment(text);
+		clientMed.setUnitId(id).comment(text, timeStamp);
 		JSONObject js = new JSONObject("{'status':'ok'}");
 		return js;
 	}

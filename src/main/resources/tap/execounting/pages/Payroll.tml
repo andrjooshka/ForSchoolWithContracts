@@ -222,9 +222,8 @@
 				<div id="bodytextfour">
 					Итого: ${specialMoney}
 				</div>
-				
 				<div id="final">
-					Итоговая стоимость услуг: ${totalMoney}. Выплатить исполнителю: ${taxed}
+					Итого выплатить: ${taxed}.&nbsp;&nbsp;&nbsp;Итого вся зарплата: ${totalMoney}. 
 				</div>
 			</t:unless>
 		</div>

@@ -302,8 +302,9 @@ public class Payroll {
 				source.remove(source.size() - 1);
 			// Set up new contract which will be added to the result
 			c.setId(t.getId());
+			c.setContractTypeId(t.getContractTypeId());
 			// Look ma, no hands. That is the bitchy place. Here I change the
-			// oreder of everything. If school did event with type that differ
+			// order of everything. If school did event with type that differ
 			// from what they have in contract -- the type here is taken from
 			// the event
 			// we had: c.setTypeId(t.getTypeId());
