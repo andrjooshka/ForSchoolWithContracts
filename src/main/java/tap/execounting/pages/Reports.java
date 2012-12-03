@@ -75,6 +75,8 @@ public class Reports {
 	private BeanModel<Client> modelOfPayments;
 	@Property
 	private BeanModel<Client> modelOfDebtors;
+	@Property
+	private BeanModel<Client> modelOfFrozen;
 	@Inject
 	private ComponentResources componentResources;
 	@Property
@@ -127,6 +129,16 @@ public class Reports {
 					"studentInfo", "firstContractDate", "state");
 		}
 
+		// frozen guys
+		if (modelOfFrozen == null) {
+			modelOfFrozen = beanModelSource.createDisplayModel(Client.class,
+					componentResources.getMessages());
+			modelOfFrozen.add("comment", null);
+			modelOfFrozen.exclude("return", "date", "id", "balance",
+					"studentInfo", "firstContractDate", "state",
+					"firstPlannedPaymentDate");
+		}
+
 		// debtors
 		if (modelOfDebtors == null) {
 			modelOfDebtors = beanModelSource.createDisplayModel(Client.class,
@@ -139,7 +151,7 @@ public class Reports {
 		}
 	}
 
-	public JSONObject onAJpoll(@RequestParameter("timestamp") long timestamp) {
+	public JSONObject onAJpoll(@RequestParameter("timeStamp") long timestamp) {
 		JSONObject js = new JSONObject("{'status':'ok'}");
 		List<Comment> list = dao.findWithNamedQuery(Comment.CLIENT_AFTER_DATE,
 				QueryParameters.with("date", new Date(timestamp)).parameters());
@@ -154,8 +166,8 @@ public class Reports {
 	}
 
 	public JSONObject onAJ(@RequestParameter("id") int id,
-			@RequestParameter("text") String text,
-			@RequestParameter("time") long timeStamp) {
+			@RequestParameter("comment") String text,
+			@RequestParameter("timeStamp") long timeStamp) {
 
 		clientMed.setUnitId(id).comment(text, timeStamp);
 		JSONObject js = new JSONObject("{'status':'ok'}");
@@ -231,6 +243,11 @@ public class Reports {
 		if (builder.substring(builder.length() - 2).equals(", "))
 			builder.replace(builder.length() - 2, builder.length(), "");
 		return builder.toString();
+	}
+
+	public List<Client> getFrozenClients() {
+		clientMed.reset();
+		return clientMed.filter(ClientState.frozen).getGroup(true);
 	}
 
 	public List<Client> getSchedPayments() {

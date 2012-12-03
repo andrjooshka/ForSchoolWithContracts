@@ -1,238 +1,286 @@
 var m = jQuery;
 var attrName = 'model-clientid';
 var attrNameBoxed = '[' + attrName + ']';
+
+//common names and functions
 var xns = {
 	all : function() {
 		return m(attrNameBoxed);
+	},
+	pushUrl : "",
+	pushData : function(greg) {
+		return {
+			url : xns.pushUrl,
+			data : {
+				id : greg.id,
+				comment : greg.comment,
+				timeStamp : greg.timeStamp
+			}
+		};
+	},
+	pullUrl : "",
+	pullData : function(timeStamp) {
+		return {
+			url : xns.pullUrl,
+			data : {
+				timeStamp : timeStamp
+			}
+		};
+	},
+	elem : function(iclientId) {
+		return m('[' + attrName + '=' + iclientId + ']').first();
 	}
 };
 
 m(go);
 
 function go() {
-	resize();
-	initClientModel();
-	initEvents();
-	model.start();
-}
 
-function resize() {
-	m('div#payment textarea.cool').each(function() {
-		this.style.height = (m(this).closest('td').height() - 8) + "px";
-	});
-}
-
-function initClientModel() {
-	xns.all().each(function() {
-		model.register(m(this))
-	});
-}
-
-function initEvents() {
-	onChange = function(e) {
-		var kc = e.keyCode;
-		if (e.type === "keypress"
-				|| (e.type === "keydown" && (kc === 8 || kc === 32 || kc === 13 || kc === 46))) {
-			var elem = m(e.srcElement);
-			var change = {
-				id : elem.attr(attrName),
-				value : elem.val(),
-				timeStamp : e.timeStamp
-			};
-			model.changes(change);
-		}
-	};
-	xns.all().keypress(function(e) {
-		onChange(e);
-	}).keydown(onChange);
-}
-
-var model = {
-	clients : [],
-	register : function(elem) {
-		var id = elem.attr(attrName);
-		var comment = elem.html();
-		var iclt = new iClient(id, comment, new Date().getTime(),
-				model.cooldown);
-		iclt.listeners = [];
-		iclt.listeners.push(model);
-		this.clients.push(iclt);
-	},
-	// Recieves object change {id, value, timeStamp }
-	changes : function(change) {
-		var iClient = this.get2(change.id);
-		iClient.update(change);
-	},
-	get2 : function(id) {
-		for (idx in this.clients)
-			if (this.clients[idx].id == id)
-				return this.clients[idx];
-		throw 'Element with id=' + id + ' not found';
-	},
-	cooldown : function(activate) {
-		var onCooldown = false;
-
-		if (activate)
-			onCooldown = true;
-
-		setTimeout(function() {
-			onCooldown = false;
-		}, 3000);
-		return onCooldown;
-	},
-	onWritten : function(iclient) {
-		var elem = m('[' + attrName + '=' + iclient.id + ']').first();
-		var shadowold = "";
-		var shadownew = "0 0 25px #44FF33, 0 0 10px 4px #77ff88";
-		var wk = '-webkit-transition';
-		var moz = '-moz-transition';
-		var transitionnewwk = "all 3s cubic-bezier(1, .05, .60, .56)";
-		var troldwk = "all 1s cubic-bezier(0, 0, .58, 1)";
-		elem.css(wk, transitionnewwk).css(moz, transitionnewwk).css(
-				'box-shadow', shadownew);
-		setTimeout(function() {
-			elem.css(wk, troldwk).css(moz, troldwk)
-					.css('box-shadow', shadowold);
-		}, 4000);
-	},
-	onCooldown : function(iclient) {
-		for (idx in model.queueWithClientChanges) {
-			cli = model.queueWithClientChanges[idx];
-			if (cli.id === iclient.id) {
-				if (iclient.timeStamp > cli.timeStamp)
-					model.queueWithClientChanges[idx] = iclient;
-				return;
-			}
-		}
-		model.queueWithClientChanges.push(iclient);
-	},
-	start : function() {
-		setInterval(model.updatesPush, 3000);
-		setInterval(model.updatesPull, 3000);
-	},
-	updatesPush : function() {
-		while (model.queueWithClientChanges.length > 0) {
-			var iclient = model.queueWithClientChanges.shift();
-			if (iclient.update) {
-				// object change {id, value, timeStamp } and boolean
-				// cooldownOverride
-				var change = {
-					id : iclient.id,
-					value : iclient.comment,
-					timeStamp : iclient.timeStamp
-				};
-				iclient.update(change, true);
-			}
-		}
-	},
-	queueWithClientChanges : [],
-	updatesPull : function() {
-		// here I subtract 5 seconds to compensate latency, and other
-		// circumstances
-		// of course should be some better approach
-		var iStamp = new Date().getTime() - 5000;
-		var iurl = m("#ajpoll").attr("href");
-		rSettings = {
-			url : iurl,
-			data : {
-				timestamp : iStamp
-			}
-		}
-		m.ajax(rSettings).done(function(data) {
-			if (data)
-				if (data.updates) {
-					for (idx in data.updates)
-						model.clientUpdate(data.updates[idx]);
-				}
-		}).fail(function() {
-			alert('fail');
+	function resize() {
+		m('div#payment textarea.cool').each(function() {
+			this.style.height = (m(this).closest('td').height() - 8) + "px";
 		});
-	},
-	clientUpdate : function(iclient) {
-		var local = model.get2(iclient.id);
-		if (local.updateFromServer && local.updateFromServer(iclient) === true) {
-			var elem = m('[' + attrName + '=' + iclient.id + ']').first();
-			elem.val(iclient.comment)
-			var shadowold = "";
-			var shadownew = "0 0 25px #ffc23f, 0 0 10px 4px #ff6e00";
-			var wk = '-webkit-transition';
-			var moz = '-moz-transition';
-			var transitionnewwk = "all 3s cubic-bezier(1, .05, .60, .56)";
-			var troldwk = "all 1s cubic-bezier(0, 0, .58, 1)";
-			elem.css(wk, transitionnewwk).css(moz, transitionnewwk).css(
-					'box-shadow', shadownew);
-			setTimeout(function() {
-				elem.css(wk, troldwk).css(moz, troldwk).css('box-shadow',
-						shadowold);
-			}, 4000);
-		}
 	}
-};
 
-// Initialized with model-clientid, comment text, timestamp, and the cooldown
-// function
-function iClient(id, comment, time, cooldown) {
-	this.fireWritten = function() {
-		if (this.listeners)
-			for (idx in this.listeners) {
-				var listener = this.listeners[idx];
-				if (listener.onWritten)
-					listener.onWritten(this);
+	function trim() {
+		m('textarea.cool').each(function() {
+			wr = m(this);
+			wr.val(m.trim(wr.val()));
+		});
+	}
+
+	function initNames() {
+		xns.pushUrl = m("#aj").attr("href");
+		xns.pullUrl = m("#ajpoll").attr("href");
+	}
+
+	function initModel() {
+		// Iterate through all elements
+		model.GregReg.get2 = function(idx) {
+			for (var i in model.GregReg)
+			if (model.GregReg[i].id == idx)
+				return model.GregReg[i];
+			throw "Index not found";
+		};
+		xns.all().each(function() {
+			var elem = m(this);
+			var alisa = new model.Alisa(elem);
+
+			var id = alisa.getId();
+			var ts = alisa.getTimeStamp();
+			var cm = alisa.getComment();
+			var greg = new model.Greg(id, ts, cm, [alisa, model.Daemon]);
+			model.GregReg.push(greg);
+		});
+		model.Daemon.awakening();
+	}
+
+	function initHandlers() {
+		myTimeouts = [];
+		// TODO check the caching
+		myTimeouts.get2 = function(idx) {
+			for (var i in myTimeouts) {
+				if (myTimeouts[i].id == idx)
+					return myTimeouts[i];
 			}
-	};
-	this.fireCooldown = function() {
-		if (this.listeners)
-			for (idx in this.listeners) {
-				var listener = this.listeners[idx];
-				if (listener.onCooldown)
-					listener.onCooldown(this);
+			return undefined;
+		};
+
+		onKey = function(e) {
+			var kc = e.keyCode;
+			if (e.type === "keypress" || (e.type === "keydown" && (kc === 8 || kc === 32 || kc === 13 || kc === 46))) {
+				// this code now runs with the timeout of 200 milliseconds.
+				// changes should be applied to the textarea first, then we could retrieve its value
+				var elem = m(e.srcElement);
+				var elementId = elem.attr(attrName);
+				if (myTimeouts.get2(elementId))
+					clearTimeout(myTimeouts.get2(elementId).timeoutId);
+
+				myTimeouts.push({
+					id : elementId,
+					timeoutId : setTimeout(function() {
+						// delete the key from the array
+						for (var j in myTimeouts) {
+							if (myTimeouts[j].id == elementId)
+								delete myTimeouts[j];
+						}
+
+						// push change
+						var temp = model.GregReg.get2(elementId);
+						if (temp.onUpdate)
+							temp.onUpdate({
+								id : elementId,
+								comment : elem.val(),
+								timeStamp : e.timeStamp
+							});
+
+					}, 200)
+				});
 			}
-	};
+		};
+		xns.all().keypress(function(e) {
+			onKey(e);
+		}).keydown(onKey);
+	}
 
-	this.cooldown = cooldown;
-	this.id = id;
-	this.comment = comment;
-	this.timeStamp = time;
-	// Recieves object change {id, value, timeStamp } and boolean
-	// cooldownOverride
-	this.update = function(change, cooldownOverride) {
-		if (change.timeStamp > this.timeStamp) {
-			this.comment = change.value;
-			this.timeStamp = change.timeStamp;
-
-			if (this.cooldown() === false) {
-				if (this.comment !== undefined) {
-					if (cooldownOverride === undefined)
-						this.cooldown(true);
-					var url = m("#aj").attr("href");
-					var data = {
-						id : this.id,
-						text : this.comment,
-						time : this.timeStamp
-					};
-					var self = this;
-					m.ajax({
-						url : url,
-						data : data
-					}).done(function(data) {
-						self.fireWritten();
-					}).fail(function() {
-						alert('Соединение не установлено');
-					});
+	var model = {
+		// Company of good guys Gregs.
+		// To be set up.
+		// Each Greg should have predefined Alisa
+		GregReg : [],
+		// Underlying good guy Greg who is dealing with all updates
+		Greg : function(id, timeStamp, comment, listeners) {
+			this.id = id;
+			this.timeStamp = timeStamp;
+			this.comment = comment;
+			this.listeners = listeners;
+			this.onUpdate = function(greg) {
+				//complete the updates function
+				if (greg.timeStamp > this.timeStamp) {
+					this.comment = greg.comment;
+					this.timeStamp = greg.timeStamp;
+					this.publish();
 				}
-			} else {
-				this.fireCooldown();
+			}
+			this.onPushSuccess = function() {
+				for (var idx in listeners)
+				if (listeners[idx].onPushSuccess)
+					listeners[idx].onPushSuccess();
+			}
+			this.publish = function() {
+				// TODO the only bad thing is updates will be sent to server twice.
+				// if they came from server.
+				for (idx in listeners)
+				if (listeners[idx].onUpdate)
+					listeners[idx].onUpdate(this);
+			}
+		},
+		// Girl who abstracts textarea
+		// textAreaElement is already wrapped jquery element
+		// however we always could abstract this in some getter method
+		// or just wrap these functions. Wrapping is the JS way.
+		Alisa : function(textAreaElement) {
+			this.teya = textAreaElement;
+			// If Greg emits the update, Alisa should update the text and highlight the textArea
+			this.onUpdate = function(greg) {
+				// update, only if Gregs timeStamp is higher
+				if (greg.timeStamp > this.getTimeStamp()) {
+					this.setVal(greg.comment);
+					this.setTimeStamp(greg.timeStamp);
+					this.highlightJuicyFruit();
+				}
+			};
+
+			this.onPushSuccess = function() {
+				this.highlightEternalGreen();
+			};
+
+			this.setVal = function(value) {
+				this.teya.val(value);
+			};
+
+			this.getId = function() {
+				return this.teya.attr('model-clientid');
+			};
+			this.getComment = function() {
+				return this.teya.val();
+			}
+			this.getTimeStamp = function() {
+				var ts = 0;
+				try {
+					ts = this.teya.attr('model-timestamp');
+					if (!( ts instanceof Number))
+						throw 'nan';
+				} catch(e) {
+					ts = 0;
+				};
+				return ts;
+			};
+			this.setTimeStamp = function(timeStamp) {
+				this.teya.attr('model-timestamp', timeStamp);
+			};
+			this.highlightJuicyFruit = function() {
+				var shadowold = "";
+				var shadownew = "0 0 25px #ffc23f, 0 0 10px 4px #ff6e00";
+				var wk = '-webkit-transition';
+				var moz = '-moz-transition';
+				var transitionnewwk = "all 2.5s cubic-bezier(1, .05, .60, .56)";
+				var troldwk = "all .9s cubic-bezier(0, 0, .58, 1)";
+				this.teya.css(wk, transitionnewwk).css(moz, transitionnewwk).css('box-shadow', shadownew);
+
+				// cache the teya to make a closure
+				var gizzelle = this.teya;
+				setTimeout(function() {
+					gizzelle.css(wk, troldwk).css(moz, troldwk).css('box-shadow', shadowold);
+				}, 2700);
+			};
+			this.highlightEternalGreen = function() {
+				var shadowold = "";
+				var shadownew = "0 0 25px #44FF33, 0 0 10px 4px #77ff88";
+				var wk = '-webkit-transition';
+				var moz = '-moz-transition';
+				var transitionnewwk = "all 2.5s cubic-bezier(1, .05, .60, .56)";
+				var troldwk = "all .9s cubic-bezier(0, 0, .58, 1)";
+				this.teya.css(wk, transitionnewwk).css(moz, transitionnewwk).css('box-shadow', shadownew);
+
+				var gizzelle = this.teya;
+				setTimeout(function() {
+					gizzelle.css(wk, troldwk).css(moz, troldwk).css('box-shadow', shadowold);
+				}, 2700);
+			};
+		},
+
+		// Red eyed daemon, who checks pulls and pushes updates from and to server
+		Daemon : {
+			//
+			awakening : function() {
+				// Pull one time in five seconds
+				setInterval(model.Daemon.pull, 5000);
+				// Push function at first checks for availability of
+				// updates, so it is cheap in resources
+				setInterval(model.Daemon.push, 50);
+			},
+			pull : function() {
+				m.ajax(xns.pullData(new Date().getTime() - 7000)).done(function(data) {
+					if (data.updates) {
+						for (var idx in data.updates) {
+							var up = data.updates[idx];
+							// Deliver to the right Greg. This code is candidate for refactor
+							var temp = model.GregReg.get2(up.id);
+							if (temp.onUpdate)
+								temp.onUpdate(up);
+						}
+					}
+				});
+			},
+			pushcache : [],
+			// dumb implementation. Just checks for the objects in the cache,
+			// and if they exist -- pushes it to the client. One by one.
+			push : function() {
+				if (model.Daemon.pushcache.length == 0)
+					return;
+				var oneOfTheGregsToPush = model.Daemon.pushcache.shift();
+				m.ajax(xns.pushData(oneOfTheGregsToPush)).done(function() {
+					oneOfTheGregsToPush.onPushSuccess();
+				});
+			},
+			// Daemon listens to Greg's publish, through this function
+			onUpdate : function(greg) {
+				//put the updated Greg in the cache
+
+				// if comment is empty -- write 'null' to this object comment --
+				// this will delete the comment from the database
+				if (m.trim(greg.comment) == "")
+					greg.comment = "null";
+				model.Daemon.pushcache.push(greg);
 			}
 		}
-	};
-	this.updateFromServer = function(serverVersion) {
-		if (serverVersion.id !== this.id)
-			throw "Id does not match on update";
-		if (serverVersion.timeStamp > this.timeStamp) {
-			this.comment = serverVersion.comment;
-			this.timeStamp = serverVersion.timeStamp;
-			return true;
-		}
-		return false;
 	}
+
+	resize();
+	trim();
+	initNames();
+	initModel();
+	initHandlers();
 }
+

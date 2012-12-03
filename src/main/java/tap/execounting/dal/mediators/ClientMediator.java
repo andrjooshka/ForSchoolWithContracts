@@ -74,18 +74,27 @@ public class ClientMediator implements ClientMed {
 	}
 
 	public void comment(String text, long time) {
+		// if text=="null" (a string) comment will be deleted
+		// TODO upgrade later to support multiple comments for one client
 		Comment c = getComment();
 		if (c == null) {
-			c = new Comment(Comment.ClientCode, authenticator.getLoggedUser()
-					.getId(), unit.getId());
-			c.setText(text);
-			c.setDate(new Date(time));
-			dao.create(c);
+			if (!text.equals("null")) {
+				c = new Comment(Comment.ClientCode, authenticator
+						.getLoggedUser().getId(), unit.getId());
+				c.setText(text);
+				c.setDate(new Date(time));
+				dao.create(c);
+			}
 		} else {
-			c.setText(text);
-			c.setDate(new Date(time));
-			dao.update(c);
+			if (text.equals("null"))
+				dao.delete(Comment.class, c.getId());
+			else {
+				c.setText(text);
+				c.setDate(new Date(time));
+				dao.update(c);
+			}
 		}
+
 	}
 
 	public Comment getComment() {

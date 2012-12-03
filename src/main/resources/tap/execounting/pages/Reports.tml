@@ -23,6 +23,9 @@
 		<a href="#payment">
 			<li>Скоро платеж</li>
 		</a>
+		<a href="#frozen">
+			<li>Замороженные</li>
+		</a>
 		<a href="#debtors">
 			<li>Должники</li>
 		</a>
@@ -131,6 +134,25 @@
 					</t:zone>
 				</t:loop>
 			</p:paymentsInfoCell>
+			<p:commentCell>
+				<form>
+					<textarea model-clientId="${client.id}" class="cool">
+						${comment}
+					</textarea>
+				</form>
+			</p:commentCell>
+		</t:grid>
+	</div>
+
+	<!-- Guys with frozen contracts -->
+	<div id="frozen" style="margin-top:30px;" class="datatable">
+		<h3>Договор заморожен</h3>
+		<t:grid source="frozenClients" model="modelOfFrozen" row="client"
+			pagerPosition="${pagerPosition}" rowsPerPage="${rows}">
+			<p:nameCell>
+				<t:eventlink event="details" context="client">${client.name}
+				</t:eventlink>
+			</p:nameCell>
 			<p:commentCell>
 				<form>
 					<textarea model-clientId="${client.id}" class="cool">
