@@ -29,6 +29,11 @@
 							Клиенты
 						</li>
 					</a>
+					<a href="#" t:type="pageLink" t:page="reports">
+						<li class="${cssForLi('Отчеты')}">
+							Отчеты
+						</li>
+					</a>
 					<a href="#" t:type="pageLink" t:page="statistics">
 						<li class="${cssForLi('Занятия')}">
 							Занятия

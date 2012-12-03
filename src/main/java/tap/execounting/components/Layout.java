@@ -49,11 +49,8 @@ public class Layout {
 	public String cssForLi(String link) {
 		link = link.toLowerCase();
 		String ptitle = pageTitle.toLowerCase();
-		boolean active = false;
 
-		active = ptitle.equals(link);
-
-		return active ? "activeMenuItem" : "";
+		return ptitle.equals(link) ? "activeMenuItem" : "";
 	}
 
 	// @Import(stylesheet = { "context:/layout/datepicker.css" })
