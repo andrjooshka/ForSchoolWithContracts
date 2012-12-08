@@ -8,6 +8,6 @@
 	<div>
 	
 	<t:beaneditform object="payment" submitlabel="message:submit-label" 
-	exclude="id,contractId"/>
+	exclude="id,contractId" zone="^"/>
 	</div>
 </t:container>

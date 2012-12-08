@@ -48,7 +48,7 @@ import tap.execounting.entities.interfaces.Dated;
 		@NamedQuery(name = Event.BETWEEN_DATE1_AND_DATE2, query = "from Event as e where e.date <= :date2 and e.date >= :date1"),
 		@NamedQuery(name = Event.BY_STATE, query = "from Event as e where e.state=:stateCode"),
 		@NamedQuery(name = Event.AFTER_DATE, query = "from Event as e where e.date >= :date"),
-		@NamedQuery(name = Event.BEFORE_DATE, query = "from Event as e where e.date <= :date")})
+		@NamedQuery(name = Event.BEFORE_DATE, query = "from Event as e where e.date <= :date") })
 @Table(name = "events")
 public class Event implements Comparable<Event>, Dated {
 
@@ -63,7 +63,7 @@ public class Event implements Comparable<Event>, Dated {
 	public static final String BETWEEN_DATE1_AND_DATE2 = "Event.betweenDate1andDate2";
 	public static final String AFTER_DATE = "Event.AfterDate";
 	public static final String BEFORE_DATE = "Event.BeforeDate";
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "event_id")
@@ -287,5 +287,15 @@ public class Event implements Comparable<Event>, Dated {
 	@NonVisual
 	public boolean isWriteOff() {
 		return this.getEventType().getTitle().startsWith(Const.WriteOffPrefix);
+	}
+
+	/**
+	 * @return checks if event is free for client. Generally it is written in
+	 *         comments
+	 */
+	public boolean isFree() {
+		if (this.comment == null)
+			return false;
+		return comment.contains(Const.EVENT_isFree);
 	}
 }

@@ -9,9 +9,10 @@
 		</p:else>
 	</t:if> 
 	<div>
-	
+	<t:eventlink event="theCancel" zone="^"
+			style="position: relative;top: 26px;left: 387px;">${message:cancel-label}</t:eventlink>
 	<t:beaneditform t:id="form" object="event" submitlabel="message:submit-label" 
-	exclude="id, contractId" add="clients">
+	exclude="id, contractId" add="clients" zone="^">
 		<p:hostId>
 			<t:label for="hostid"/>
 			<t:select t:id="hostid" model="teacherselect" value="event.hostid" blankOption="ALWAYS" blankLabel="message:blank-label"/>

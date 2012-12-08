@@ -191,10 +191,20 @@ public class AddContract {
 		}
 
 		getContractMed().setUnit(con).doPlanEvents();
-		
-		// 
+
+		// Today we do tricks. This code calls onExperiment in the parent
+		// component. onExperiment from showContract provides us with the zone
+		// body. OnExperiment from the ClientPage -- provides current page.
 		CaptureResultCallback<Object> cb = new CaptureResultCallback<Object>();
 		resources.triggerEvent("Experiment", new Object[] { con }, cb);
+		return cb.getResult();
+	}
+
+	Object onTheCancel() {
+		// Today we do tricks. This code calls onCancel in the parent
+		// component.
+		CaptureResultCallback<Object> cb = new CaptureResultCallback<Object>();
+		resources.triggerEvent("Cancel", new Object[] { con }, cb);
 		return cb.getResult();
 	}
 

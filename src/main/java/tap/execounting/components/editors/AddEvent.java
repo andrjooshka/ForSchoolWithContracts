@@ -5,11 +5,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
+import org.apache.tapestry5.internal.util.CaptureResultCallback;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CRUDServiceDAO;
@@ -31,6 +33,8 @@ public class AddEvent {
 	@Property
 	@Persist
 	private boolean updateMode;
+	@Inject
+	private ComponentResources resources;
 
 	@Inject
 	private CRUDServiceDAO dao;
@@ -53,7 +57,6 @@ public class AddEvent {
 
 	@InjectComponent
 	private Zone roomZone;
-
 
 	private String etype;
 
@@ -139,7 +142,7 @@ public class AddEvent {
 		return c;
 	}
 
-	void onSuccess() {
+	Object onSuccess() {
 		EventType eventType = checkType();
 
 		event.setTypeId(eventType.getId());
@@ -199,6 +202,7 @@ public class AddEvent {
 		} else {
 			dao.create(event);
 		}
+		return onTheCancel();
 	}
 
 	private void sort(List<Contract> list) {
@@ -211,6 +215,14 @@ public class AddEvent {
 					list.set(i, jcon);
 				}
 			}
+	}
+
+	// Event handlers community
+	Object onTheCancel() {
+		CaptureResultCallback<Object> capturer = new CaptureResultCallback<>();
+		resources.triggerEvent("InnerUpdate", new Object[] { event },
+				capturer);
+		return capturer.getResult();
 	}
 
 	Object onValueChangedFromFacilityId(int facilityId) {

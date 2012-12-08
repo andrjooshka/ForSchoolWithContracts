@@ -11,6 +11,7 @@ public interface PaymentMed {
 	//unit
 	public Payment getUnit();
 	public PaymentMed setUnit(Payment unit);
+	public Payment getUnitById(int paymentId);
 
 	//getters
 	//planned

@@ -7,6 +7,8 @@
 		</p:else>
 	</t:if>
 	<div>
+		<t:eventlink event="theCancel" zone="^"
+			style="position: relative;top: 26px;left: 647px;">${message:cancel-label}</t:eventlink>
 		<t:beaneditform t:id="editor" object="con"
 			submitlabel="message:submit-label" exclude="id,clientId,freeze"
 			reorder="teacherId,typeId,contractTypeId" add="schedule" zone="^">
@@ -74,10 +76,6 @@
 					<t:checkbox t:id="sunday" value="con.schedule.sunday" />
 				</div>
 			</p:schedule>
-			<div class="t-beaneditor-row">
-				<t:submit /> <t:eventlink event="cancel">${message:cancel}</t:eventlink>	
-			</div>
-
 		</t:beaneditform>
 	</div>
 </t:container>

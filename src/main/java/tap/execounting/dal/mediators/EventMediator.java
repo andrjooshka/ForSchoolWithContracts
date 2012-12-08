@@ -49,6 +49,10 @@ public class EventMediator implements EventMed {
 		return this;
 	}
 
+	public Event getUnitById(int eventId) {
+		return dao.find(Event.class, eventId);
+	}
+
 	public Date getDate() {
 		try {
 			return unit.getDate();

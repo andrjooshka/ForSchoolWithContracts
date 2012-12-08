@@ -22,6 +22,8 @@ import tap.execounting.components.editors.AddEvent;
 import tap.execounting.components.editors.AddPayment;
 import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
+import tap.execounting.dal.mediators.interfaces.EventMed;
+import tap.execounting.dal.mediators.interfaces.PaymentMed;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Event;
@@ -79,12 +81,16 @@ public class ShowContract {
 
 	Object onEdit(int contractId) {
 		// AUTHORIZATION MOUNT POINT EDIT CONTRACT
+		refreshUnit(contractId);
 		if (dispatcher.canEditContracts()) {
-			Contract c = dao.find(Contract.class, contractId);
-			editor.setup(c);
+			editor.setup(contract);
 			updateMode = true;
 		}
 		return bodyZone.getBody();
+	}
+
+	private void refreshUnit(int conId) {
+		contract = dao.find(Contract.class, conId);
 	}
 
 	void onDelete(Contract con) {
@@ -98,11 +104,12 @@ public class ShowContract {
 		}
 	}
 
-	void onFreeze(Contract con) {
+	void onFreeze(int contractId) {
 		// AUTHORIZATION MOUNT POINT EDIT CONTRACT FREEZE
+		refreshUnit(contractId);
 		if (dispatcher.canEditContracts()) {
-			con.setFreeze(!con.isFreeze());
-			dao.update(con);
+			contract.setFreeze(!contract.isFreeze());
+			dao.update(contract);
 		}
 	}
 
@@ -113,34 +120,52 @@ public class ShowContract {
 		return bodyZone.getBody();
 	}
 
-	Object onAddEvent(Contract con) {
+	Object onAddEvent(int contractId) {
 		// AUTHORIZATION MOUNT POINT CREATE EVENT
+		refreshUnit(contractId);
 		if (dispatcher.canCreateEvents()) {
 			addingEvent = true;
 			newEvent = new Event();
-			newEvent.setTypeId(con.getTypeId());
-			newEvent.addContract(con);
-			Client c = dao.find(Client.class, con.getClientId());
+			newEvent.setTypeId(contract.getTypeId());
+			newEvent.addContract(contract);
+			Client c = dao.find(Client.class, contract.getClientId());
 			newEvent.getClients().add(c);
-			newEvent.setHostId(con.getTeacherId());
+			newEvent.setHostId(contract.getTeacherId());
 			eventEditor.setup(newEvent, false);
 		}
 		return eventZone.getBody();
 	}
 
-	Object onAddPayment(Contract con) {
+	Object onAddPayment(int contractId) {
 		// AUTHORIZATION MOUNT POINT CREATE PAYMENT
+		refreshUnit(contractId);
 		if (dispatcher.canCreatePayments()) {
 			addingPayment = true;
 			Payment p = new Payment();
-			p.setContractId(con.getId());
+			p.setContractId(contractId);
 			paymentEditor.setup(p);
 		}
 		return paymentZone.getBody();
 	}
 
-	Object onEditPayment(Payment p) {
+	Object onInnerPayment(Payment p) {
+		refreshUnit(p.getContractId());
+		if (p.getId() != 0) {
+			for (Payment p2 : contract.getPayments())
+				if (p2.getId() == p.getId())
+					return paymentZone.getBody();
+			contract.getPayments().add(p);
+		}
+		return paymentZone.getBody();
+	}
+
+	@Inject
+	private PaymentMed paymentMed;
+
+	Object onEditPayment(int paymentId) {
 		// AUTHORIZATION MOUNT POINT EDIT PAYMENT
+		Payment p = paymentMed.getUnitById(paymentId);
+		refreshUnit(p.getContractId());
 		if (dispatcher.canEditPayments()) {
 			addingPayment = true;
 			paymentEditor.setup(p);
@@ -148,22 +173,29 @@ public class ShowContract {
 		return request.isXHR() ? paymentZone.getBody() : null;
 	}
 
-	void onDeletePayment(Payment p) {
+	void onDeletePayment(int paymentId) {
 		// AUTHORIZATION MOUNT POINT DELETE PAYMENT
 		if (dispatcher.canDeletePayments()) {
-			dao.delete(Payment.class, p.getId());
+			dao.delete(Payment.class, paymentId);
 		}
 	}
 
-	void onDeleteEvent(Event e) {
+	void onDeleteEvent(int eventId) {
 		// AUTHORIZATION MOUNT POINT DELETE EVENT
 		if (dispatcher.canDeleteEvents()) {
-			dao.delete(Event.class, e.getId());
+			dao.delete(Event.class, eventId);
 		}
 	}
 
-	Object onEditEvent(Event e) {
+	private Integer contractId;
+	@Inject
+	private EventMed eventMed;
+
+	Object onEditEvent(int eventId, int conId) {
 		// AUTHORIZATION MOUNT POINT EDIT EVENT
+		Event e = eventMed.getUnitById(eventId);
+		contractId = conId;
+		refreshUnit(conId);
 		if (dispatcher.canEditEvents()) {
 			addingEvent = true;
 			eventEditor.setup(e, true);
@@ -171,7 +203,8 @@ public class ShowContract {
 		return request.isXHR() ? eventZone.getBody() : null;
 	}
 
-	// Here is a crutch / workaround. Against hibernate lazy initialization exception 
+	// Here is a crutch / workaround. Against hibernate lazy initialization
+	// exception
 	public boolean isCompleteNotPaid() {
 		contract = dao.find(Contract.class, contract.getId());
 		return contract.isComplete() && !contract.isPaid();
@@ -257,9 +290,31 @@ public class ShowContract {
 	public Asset getLockImg() {
 		return contract.isFreeze() ? locked : unlocked;
 	}
-	
-	Object onExperiment(Contract con){
+
+	Object onExperiment(Contract con) {
 		this.contract = con;
 		return bodyZone.getBody();
+	}
+
+	Object onCancel(Contract con) {
+		this.contract = con;
+		return bodyZone.getBody();
+	}
+
+	Object onInnerUpdate(Event e) {
+		// Be carefull, as it returns only the first contract from events
+		if (contractId != null)
+			refreshUnit(contractId);
+		else if (e.getContracts() != null && e.getContracts().size() > 0)
+			this.contract = dao.find(Contract.class, e.getContracts().get(0)
+					.getId());
+
+		if (e.getId() != 0) {
+			for (Event ei : contract.getEvents())
+				if (ei.getId() == e.getId())
+					return eventZone.getBody();
+			this.contract.getEvents().add(e);
+		}
+		return eventZone.getBody();
 	}
 }

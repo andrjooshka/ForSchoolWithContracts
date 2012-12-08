@@ -24,10 +24,10 @@ public class PaymentMediator implements PaymentMed {
 	private DateFilter dateFilter;
 
 	private Payment unit;
-	private CRUDServiceDAO getDao(){
+
+	private CRUDServiceDAO getDao() {
 		return dao;
 	}
-	
 
 	public Payment getUnit() {
 		return this.unit;
@@ -36,6 +36,10 @@ public class PaymentMediator implements PaymentMed {
 	public PaymentMed setUnit(Payment unit) {
 		this.unit = unit;
 		return this;
+	}
+
+	public Payment getUnitById(int paymentId) {
+		return dao.find(Payment.class, paymentId);
 	}
 
 	public boolean getPlanned() {
@@ -67,8 +71,8 @@ public class PaymentMediator implements PaymentMed {
 			cache = getAllPayments();
 		return cache;
 	}
-	
-	public List<Payment> getGroup(boolean reset){
+
+	public List<Payment> getGroup(boolean reset) {
 		List<Payment> innerCache = getGroup();
 		if (reset)
 			reset();
@@ -106,7 +110,8 @@ public class PaymentMediator implements PaymentMed {
 	public PaymentMed filter(Contract unit) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
-			cache = getDao().findWithNamedQuery(Payment.BY_CONTRACT_ID,
+			cache = getDao().findWithNamedQuery(
+					Payment.BY_CONTRACT_ID,
 					QueryParameters.with("contractId", unit.getId())
 							.parameters());
 		} else {
@@ -121,14 +126,15 @@ public class PaymentMediator implements PaymentMed {
 	public PaymentMed filter(Date date1, Date date2) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0)
-			cache = getDao().findWithNamedQuery(Payment.BY_DATES, QueryParameters
-					.with("earlierDate", date1).and("laterDate", date2)
-					.parameters());
+			cache = getDao().findWithNamedQuery(
+					Payment.BY_DATES,
+					QueryParameters.with("earlierDate", date1)
+							.and("laterDate", date2).parameters());
 		else
 			dateFilter.filter(cache, date1, date2);
 		getAppliedFilters().put("Date1", date1);
 		getAppliedFilters().put("Date2", date2);
-		
+
 		return this;
 	}
 
@@ -166,7 +172,7 @@ public class PaymentMediator implements PaymentMed {
 
 	public Integer countReturn(Date date1, Date date2) {
 		PaymentMed pm = new PaymentMediator();
-		return pm.filter(date1,date2).filter(false).countAmount();
+		return pm.filter(date1, date2).filter(false).countAmount();
 	}
 
 }

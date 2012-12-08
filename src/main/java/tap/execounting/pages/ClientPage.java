@@ -61,6 +61,14 @@ public class ClientPage {
 		client = dao.find(Client.class, client.getId());
 		setup(client);
 	}
+	
+	Object onExperiment(Contract con){
+		return this;
+	}
+	
+	Object onCancel(Contract con){
+		return this;
+	}
 
 	Object onAddContract() {
 		// AUTHORIZATION MOUNT POINT CONTRACT CREATE

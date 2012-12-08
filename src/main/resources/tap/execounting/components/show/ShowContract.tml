@@ -17,8 +17,9 @@
 					</li>
 
 					<li>
-						<t:eventlink t:id="writeoff" context="contract.id" t:mixins="confirm"
-							confirmEnabled="literal:true" confirmMessage="message:writeoff-confirm-message">
+						<t:eventlink t:id="writeoff" context="contract.id"
+							t:mixins="confirm" confirmEnabled="literal:true"
+							confirmMessage="message:writeoff-confirm-message">
 							<img src="${context:/icons/writeoff.png}" title="cписать остаток"
 								alt="cписать остаток" class="icons" />
 						</t:eventlink>
@@ -33,7 +34,7 @@
 					</li>
 
 					<li>
-						<t:eventlink event="delete" context="contract"
+						<t:eventlink event="delete" context="contract.id"
 							t:mixins="confirm,auth" authEnabled="!dispatcher.canDeleteContracts()"
 							authMessage="message:delete-contract-auth-message"
 							confirmEnabled="dispatcher.canDeleteContracts()" confirmMessage="message:delete-contract-confirm-message">
@@ -103,85 +104,90 @@
 					<tr>
 						<th>${message:events-label}</th>
 						<td>
-							<strong>Занятий осталось:</strong>
-							${contract.lessonsRemain}
-							<br />
-							<br />
-							Проведенные занятия:
-							<t:zone t:id="eventZone" id="contractNewEventZone${contract.id}">
+							<t:zone t:id="eventZone" id="contractNewEventZone${contract.id}"
+								update="show">
+								<strong>Занятий осталось:</strong>
+								${contract.lessonsRemain}
+								<br />
+								<br />
+								Проведенные занятия:
+
 								<t:if test="addingEvent">
 									<t:editors.addEvent t:id="eventEditor"
 										event="newEvent" />
 									<p:else>
 										<t:eventlink t:zone="contractNewEventZone${contract.id}"
-											event="addEvent" context="contract">${message:addEventToContract}
+											event="addEvent" context="contract.id">${message:addEventToContract}
 										</t:eventlink>
 									</p:else>
 								</t:if>
-							</t:zone>
 
-							<t:loop source="events" value="loopEvent">
-								<div
-									style="-moz-box-shadow: 0px 0px 2px #999;
+
+								<t:loop source="events" value="loopEvent">
+									<div
+										style="-moz-box-shadow: 0px 0px 2px #999;
 									box-shadow: 0px 0px 2px #999; margin: 4px;
 									width:400px;padding:2px;padding-left:5px;margin-left:10px">
-									${eventInfo} &#09;
-									(
-									<t:eventlink context="loopEvent" event="deleteEvent"
-										t:mixins="auth,confirm" confirmEnabled="dispatcher.canDeleteEvents()"
-										confirmMessage="message:delete-event-confirm-message"
-										authEnabled="!dispatcher.canDeleteEvents()" authMessage="message:delete-event-auth-message">удалить
-									</t:eventlink>
-									|
-									<t:eventlink context="loopEvent" event="editEvent"
-										t:zone="contractNewEventZone${contract.id}">редактировать</t:eventlink>
-									)
-									<t:if test="loopEvent.comment">
-										<br />
-										&#09;${loopEvent.comment}
-									</t:if>
-								</div>
-							</t:loop>
+										${eventInfo} &#09;
+										(
+										<t:eventlink context="loopEvent.id" event="deleteEvent"
+											t:mixins="auth,confirm" confirmEnabled="dispatcher.canDeleteEvents()"
+											confirmMessage="message:delete-event-confirm-message"
+											authEnabled="!dispatcher.canDeleteEvents()" authMessage="message:delete-event-auth-message">${message:deletelink-label}
+										</t:eventlink>
+										|
+										<t:eventlink context="[loopEvent.id,contract.id]"
+											event="editEvent" t:zone="contractNewEventZone${contract.id}">${message:editlink-label}
+										</t:eventlink>
+										)
+										<t:if test="loopEvent.comment">
+											<br />
+											&#09;${loopEvent.comment}
+										</t:if>
+									</div>
+								</t:loop>
 
-							На сумму: ${contract.completeLessonsCost}
+								На сумму: ${contract.completeLessonsCost}
+							</t:zone>
 						</td>
 					</tr>
 					<tr>
 						<th>${message:payments-label}</th>
 						<td>
-							<t:zone t:id="paymentZone" id="paymentZone${contract.id}">
+							<t:zone t:id="paymentZone" id="paymentZone${contract.id}" update="show">
 								<t:if test="addingPayment">
 									<t:editors.addPayment t:id="paymentEditor" />
 									<p:else>
-										<t:eventlink t:zone="paymentZone${contract.id}"
-											event="addPayment" context="contract">${message:addPaymenttoContract}
+										<t:eventlink zone="^"
+											event="addPayment" context="contract.id">${message:addPaymenttoContract}
 										</t:eventlink>
 									</p:else>
 								</t:if>
-							</t:zone>
 
 
-							<t:loop source="payments" value="loopPayment">
-								<div
-									style="-moz-box-shadow: 0px 0px 2px #999;
+
+								<t:loop source="payments" value="loopPayment">
+									<div
+										style="-moz-box-shadow: 0px 0px 2px #999;
 									box-shadow: 0px 0px 2px #999; margin: 4px;
 									width:400px;padding:2px;padding-left:5px;margin-left:10px">
-									${paymentInfo} &#09;
-									(
-									<t:eventlink context="loopPayment" event="deletePayment"
-										t:mixins="auth,confirm" authEnabled="!dispatcher.canDeletePayments()"
-										authMessage="message:delete-payment-auth-message"
-										confirmEnabled="dispatcher.canDeletePayments()"
-										confirmMessage="message:delete-payment-confirm-message">удалить
-									</t:eventlink>
-									|
-									<t:eventlink context="loopPayment" event="editPayment"
-										t:zone="paymentZone${contract.id}">редактировать</t:eventlink>
-									)
-								</div>
-							</t:loop>
+										${paymentInfo} &#09;
+										(
+										<t:eventlink context="loopPayment.id" event="deletePayment"
+											t:mixins="auth,confirm" authEnabled="!dispatcher.canDeletePayments()"
+											authMessage="message:delete-payment-auth-message"
+											confirmEnabled="dispatcher.canDeletePayments()"
+											confirmMessage="message:delete-payment-confirm-message">${message:deletelink-label}
+										</t:eventlink>
+										|
+										<t:eventlink context="loopPayment.id" event="editPayment"
+											t:zone="paymentZone${contract.id}">${message:editlink-label}</t:eventlink>
+										)
+									</div>
+								</t:loop>
 
-							Итого: ${contract.moneyPaid}
+								Итого: ${contract.moneyPaid}
+							</t:zone>
 						</td>
 					</tr>
 					<t:if test="contract.discount">

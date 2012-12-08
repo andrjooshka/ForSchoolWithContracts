@@ -19,6 +19,8 @@ public interface EventMed {
 	public Event getUnit();
 
 	public EventMed setUnit(Event unit);
+	
+	public Event getUnitById(int eventId);
 
 	// getters:
 	// Date
