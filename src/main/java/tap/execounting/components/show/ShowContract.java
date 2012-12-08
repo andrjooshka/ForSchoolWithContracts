@@ -6,10 +6,12 @@ import java.util.List;
 import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.SuperCalendar;
 
+import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Parameter;
+import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -169,7 +171,9 @@ public class ShowContract {
 		return request.isXHR() ? eventZone.getBody() : null;
 	}
 
+	// Here is a crutch / workaround. Against hibernate lazy initialization exception 
 	public boolean isCompleteNotPaid() {
+		contract = dao.find(Contract.class, contract.getId());
 		return contract.isComplete() && !contract.isPaid();
 	}
 
@@ -243,10 +247,19 @@ public class ShowContract {
 		return response;
 	}
 
-	public String getLockImg() {
+	@Inject
+	@Path("context:icons/lock.png")
+	private Asset locked;
+	@Inject
+	@Path("context:icons/ulock.png")
+	private Asset unlocked;
 
-		return contract.isFreeze() ? request.getContextPath()
-				+ "/icons/lock.png" : request.getContextPath()
-				+ "/icons/ulock.png";
+	public Asset getLockImg() {
+		return contract.isFreeze() ? locked : unlocked;
+	}
+	
+	Object onExperiment(Contract con){
+		this.contract = con;
+		return bodyZone.getBody();
 	}
 }

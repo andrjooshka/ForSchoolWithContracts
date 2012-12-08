@@ -3,6 +3,7 @@ package tap.execounting.components.editors;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValidationException;
 import org.apache.tapestry5.annotations.Import;
@@ -10,6 +11,7 @@ import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.BeanEditForm;
+import org.apache.tapestry5.internal.util.CaptureResultCallback;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CRUDServiceDAO;
@@ -40,6 +42,9 @@ public class AddContract {
 
 	@InjectComponent
 	private BeanEditForm editor;
+
+	@Inject
+	private ComponentResources resources;
 
 	@Property
 	@Persist
@@ -175,7 +180,7 @@ public class AddContract {
 		}
 	}
 
-	void onSuccess() {
+	Object onSuccess() {
 		con.setTypeId(typeId());
 		con.setTeacherId(teacherId());
 
@@ -186,6 +191,11 @@ public class AddContract {
 		}
 
 		getContractMed().setUnit(con).doPlanEvents();
+		
+		// 
+		CaptureResultCallback<Object> cb = new CaptureResultCallback<Object>();
+		resources.triggerEvent("Experiment", new Object[] { con }, cb);
+		return cb.getResult();
 	}
 
 	void setupRender() {

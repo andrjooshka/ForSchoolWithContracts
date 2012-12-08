@@ -384,6 +384,7 @@ public class Payroll {
 		pType.setShareTeacher(inType.getShareTeacher());
 		pType.setId(inType.getId());
 		out.setEventType(pType);
+		out.setContractTypeId(input.getContractTypeId());
 
 		// Title
 		pType.setTitle("Стаж. " + inType.getTitle());

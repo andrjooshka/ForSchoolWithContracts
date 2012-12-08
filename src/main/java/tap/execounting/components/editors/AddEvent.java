@@ -54,6 +54,7 @@ public class AddEvent {
 	@InjectComponent
 	private Zone roomZone;
 
+
 	private String etype;
 
 	public String getEtype() {

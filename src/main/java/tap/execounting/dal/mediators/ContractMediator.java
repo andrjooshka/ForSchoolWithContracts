@@ -226,7 +226,7 @@ public class ContractMediator implements ContractMed {
 				e.setRoomId(dao.find(Facility.class, e.getFacilityId())
 						.getRooms().get(0).getRoomId());
 				e.setState(EventState.planned);
-				e.setTypeId(unit.getEventType().getId());
+				e.setTypeId(unit.getTypeId());
 				e.setDate(date.getTime());
 				dao.create(e);
 				remain--;

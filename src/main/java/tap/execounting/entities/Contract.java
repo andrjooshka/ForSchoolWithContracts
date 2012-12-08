@@ -157,6 +157,9 @@ public class Contract implements Comparable<Contract>, Dated {
 		this.date = date;
 	}
 
+	/**
+	 * @return Id of event type of that contract
+	 */
 	public int getTypeId() {
 		return typeId;
 	}
