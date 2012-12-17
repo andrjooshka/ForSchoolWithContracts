@@ -118,10 +118,9 @@ public class Clients {
 	// Basically, this is the main method for this page.
 	// It does filtering and assembling of all client and contract data.
 	// At first, client filters are acting:
-	// 1) Planned payments date
-	// 2) Name
-	// 3) State
-	// 4) First contract date
+	// 1) Name
+	// 2) State
+	// 3) First contract date
 	// Then contract filters are applied:
 	// 1) Contract type
 	// 2) Contracts date
@@ -140,9 +139,6 @@ public class Clients {
 		contractMed.reset();
 
 		// Boolean flags processing for filter status
-		// boolean filterOnPlannedPayments = earlyDate != null
-		// || laterDate != null; // If client has planned payments TODO
-		// // delete this functionality
 		boolean filterOnFCDate = fcEarlyDate != null || fcLaterDate != null; // Filter
 																				// on
 																				// date
@@ -161,26 +157,6 @@ public class Clients {
 		boolean filterOnContractType = contractTypeId != null; // Filter on
 																// contract type
 																// id
-
-		// Scheduled payments filtration
-		// if (filterOnPlannedPayments) {
-		// for (int i = clients.size() - 1; i >= 0; i--) {
-		// Client client = clients.get(i);
-		// boolean pass = false;
-		//
-		// for (Payment p : client.getPlannedPayments()) {
-		// pass = true;
-		// if (earlyDate != null)
-		// pass &= earlyDate.before(p.getDate());
-		// if (laterDate != null)
-		// pass &= laterDate.after(p.getDate());
-		// if (pass)
-		// break;
-		// }
-		// if (!pass)
-		// clients.remove(i);
-		// }
-		// }
 
 		// Client filters
 		// First Contract Date filtration

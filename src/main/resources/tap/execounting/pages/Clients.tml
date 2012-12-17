@@ -15,9 +15,6 @@
 		<table class="filters panel">
 			<tr>
 				<th colspan="2" class="rb">
-					Планируемые платежи
-				</th>
-				<th colspan="2">
 					С нами с
 				</th>
 				<th colspan="2">
@@ -37,24 +34,12 @@
 				<th>
 					Не позже
 				</th>
-				<th>
-					Не раньше
-				</th>
-				<th>
-					Не позже
-				</th>
 			</tr>
 			<tr class="bb">
 				<td>
-					<t:datefield value="earlyDate" />
-				</td>
-				<td class="rb">
-					<t:datefield value="laterDate" />
-				</td>
-				<td>
 					<t:datefield value="fcEarlyDate" />
 				</td>
-				<td>
+				<td class="rb">
 					<t:datefield value="fcLaterDate" />
 				</td>
 				<td>
@@ -63,6 +48,7 @@
 				<td>
 					<t:datefield value="acDate2" />
 				</td>
+				<td />
 			</tr>
 
 			<tr>

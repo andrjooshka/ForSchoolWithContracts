@@ -22,12 +22,12 @@ import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 
 import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.QueryParameters;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
+import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.dal.mediators.interfaces.EventMed;
 import tap.execounting.data.ClientState;
 import tap.execounting.entities.Client;
@@ -57,6 +57,8 @@ public class Reports {
 	private AuthorizationDispatcher dispatcher;
 	@Inject
 	private ClientMed clientMed;
+	@Inject
+	private ContractMed contractMed;
 	@Inject
 	private EventMed eventMed;
 	@Inject
@@ -179,9 +181,23 @@ public class Reports {
 		return c == null ? "" : c.getText();
 	}
 
+	// TODO refactor candidate, could be pushed into different package
+	private void nameSort(List<Client> clients) {
+		Client t;
+		for (int i = 0; i < clients.size(); i++)
+			for (int j = clients.size() - 1; j > i; j--) {
+				if (clients.get(i).getName()
+						.compareTo(clients.get(j).getName()) > 0) {
+					t = clients.get(i);
+					clients.set(i, clients.get(j));
+					clients.set(j, t);
+				}
+			}
+	}
+
 	// //// getters
 	// TODO check if SQL will work better
-	// Question is: should we remember about freezed contracts?
+	// Question is: should we remember about frozen contracts?
 	public List<Client> getEndingLessons() {
 
 		List<Contract> list = getAllContracts();
@@ -197,12 +213,20 @@ public class Reports {
 		Set<Client> clients = new HashSet<Client>(list.size());
 		for (Contract c : list)
 			clients.add(c.getClient());
-		return new ArrayList<Client>(clients);
+
+		List<Client> clientslist = new ArrayList<Client>(clients);
+		// Sort
+		nameSort(clientslist);
+		return clientslist;
 	}
 
 	public List<Client> getEndedContracts() {
 		clientMed.reset();
-		return clientMed.filter(ClientState.undefined).getGroup(true);
+		List<Client> list = clientMed.filter(ClientState.undefined).getGroup(
+				true);
+		// Sort
+		nameSort(list);
+		return list;
 	}
 
 	public String getEndedInfo() {
@@ -247,7 +271,10 @@ public class Reports {
 
 	public List<Client> getFrozenClients() {
 		clientMed.reset();
-		return clientMed.filter(ClientState.frozen).getGroup(true);
+		List<Client> list = clientMed.filter(ClientState.frozen).getGroup(true);
+		// Sort
+		nameSort(list);
+		return list;
 	}
 
 	public List<Client> getSchedPayments() {
@@ -264,7 +291,11 @@ public class Reports {
 		for (Contract c : list)
 			set.add(c.getClient());
 
-		return new ArrayList<Client>(set);
+		List<Client> clientlist = new ArrayList<Client>(set);
+
+		// Sort
+		nameSort(clientlist);
+		return clientlist;
 	}
 
 	public List<Client> getDebtors() {
@@ -273,6 +304,9 @@ public class Reports {
 		for (int i = list.size() - 1; i >= 0; i--)
 			if (list.get(i).getBalance() >= 0)
 				list.remove(i);
+
+		// Sort
+		nameSort(list);
 		return list;
 	}
 
@@ -286,10 +320,7 @@ public class Reports {
 	}
 
 	private List<Contract> getAllContracts() {
-		Criteria criteria = session.createCriteria(Contract.class);
-		@SuppressWarnings("unchecked")
-		List<Contract> list = criteria.list();
-		return list;
+		return contractMed.getAllContracts();
 	}
 
 	@Property

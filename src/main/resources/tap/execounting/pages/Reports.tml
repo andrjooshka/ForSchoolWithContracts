@@ -53,7 +53,6 @@
 			<p:endingInfoCell>
 				${endingInfo}
 			</p:endingInfoCell>
-			<!-- TODO need some comment solution, actually -->
 			<p:commentCell>
 				<form>
 					<textarea model-clientId="${client.id}" class="cool">
