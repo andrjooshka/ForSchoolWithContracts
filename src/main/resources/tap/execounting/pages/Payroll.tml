@@ -17,7 +17,7 @@
 					</div>
 					<div id="lefttext">г. Москва</div>
 					<div id="righttext">
-						<t:output value="today" format="literal: d MMM YYYY года" />
+						<t:output value="today" format="literal: d MMMM YYYY года" />
 					</div>
 				</div>
 				<div id="bodytextone">

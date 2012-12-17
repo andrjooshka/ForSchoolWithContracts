@@ -285,8 +285,8 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	public ContractState getState() {
 		// TODO hotfix alert
-		if (ContractType.Trial == contractTypeId)
-			return ContractState.active;
+//		if (ContractType.Trial == contractTypeId)
+//			return ContractState.active;
 		ContractState state = null;
 		if (isCanceled())
 			state = ContractState.canceled;
@@ -422,7 +422,6 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	// Money and Payments
 	/**
-	 * 
 	 * @return сумма денег уплаченная клиентом по этому договору.
 	 */
 	public int getMoneyPaid() {

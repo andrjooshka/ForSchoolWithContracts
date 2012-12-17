@@ -255,12 +255,16 @@ public class Payroll {
 		 * In this part of the filter we will remove all events of trial
 		 * contracts and where type contains "раз"
 		 */
+		Contract c;
 		for (int i = events.size() - 1; i >= 0; i--) {
 			List<Contract> cts = events.get(i).getContracts();
-			for (int j = cts.size() - 1; j >= 0; j--)
-				if (cts.get(j).getContractTypeId() == ContractType.Trial
-						|| cts.get(j).getEventType().getTitle().contains("раз"))
+			for (int j = cts.size() - 1; j >= 0; j--) {
+				c = cts.get(j);
+				if (c.getContractTypeId() == ContractType.Trial
+						|| c.getContractTypeId() == ContractType.Special
+						|| c.getEventType().getTitle().contains("раз"))
 					cts.remove(j);
+			}
 			if (cts.size() == 0)
 				events.remove(i);
 		}

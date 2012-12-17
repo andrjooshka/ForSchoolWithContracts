@@ -1,5 +1,6 @@
 package tap.execounting.dal.mediators;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -335,6 +336,15 @@ public class ContractMediator implements ContractMed {
 
 	public ContractMed setGroup(List<Contract> group) {
 		cache = group;
+		return this;
+	}
+	
+	public ContractMed setGroupFromClients(List<Client> clients){
+		this.cache = new ArrayList<Contract>();
+		
+		for(Client c : clients)
+			this.cache.addAll(c.getContracts());
+		
 		return this;
 	}
 	

@@ -15,7 +15,6 @@ import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
-import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
@@ -23,6 +22,7 @@ import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.data.ClientState;
+import tap.execounting.data.ContractState;
 import tap.execounting.data.selectmodels.ContractTypeIdSelectModel;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
@@ -110,99 +110,114 @@ public class Clients {
 	}
 
 	@Persist
-	private List<Client> clients;
+	private List<Client> clientsCache;
+	@Persist
+	private List<Contract> contractsCache;
 
-	@SuppressWarnings("unchecked")
+	// @SuppressWarnings("unchecked")
+	// Basically, this is the main method for this page.
+	// It does filtering and assembling of all client and contract data.
+	// At first, client filters are acting:
+	// 1) Planned payments date
+	// 2) Name
+	// 3) State
+	// 4) First contract date
+	// Then contract filters are applied:
+	// 1) Contract type
+	// 2) Contracts date
+	// Contract filters are applied to clear contractMed.
+	// Remaining contracts are converted to clients.
+	// Then function retains all the clients from first group, which are listed
+	// in the second;
+	// Intersection operation it is actually.
 	public List<Client> getClients() {
-		if (clients != null)
-			return new ArrayList<Client>(clients);
-		List<Client> cs;
-		Criteria criteria = session.createCriteria(Client.class);
+		if (clientsCache != null && contractsCache != null)
+			return new ArrayList<Client>(clientsCache);
 
-		// filter status
-		boolean filterOnPlannedPayments = earlyDate != null
-				|| laterDate != null;
-		boolean filterOnFCDate = fcEarlyDate != null || fcLaterDate != null;
-		boolean filterOnACDate = acDate1 != null || acDate2 != null;
-		boolean filterOnNames = name != null && name.length() > 1;
-		boolean filterOnState = state != null;
-		boolean filterOnContractType = contractTypeId != null;
+		// Little set up
+		List<Client> clients;
+		clientMed.reset();
+		contractMed.reset();
 
-		cs = criteria.list();
+		// Boolean flags processing for filter status
+		// boolean filterOnPlannedPayments = earlyDate != null
+		// || laterDate != null; // If client has planned payments TODO
+		// // delete this functionality
+		boolean filterOnFCDate = fcEarlyDate != null || fcLaterDate != null; // Filter
+																				// on
+																				// date
+																				// of
+																				// first
+																				// contract
+		boolean filterOnACDate = acDate1 != null || acDate2 != null; // Filter
+																		// on
+																		// date
+																		// of
+																		// any
+																		// contract
+		boolean filterOnNames = name != null && name.length() > 1; // Filter on
+																	// name
+		boolean filterOnState = state != null; // Filter on client state
+		boolean filterOnContractType = contractTypeId != null; // Filter on
+																// contract type
+																// id
 
 		// Scheduled payments filtration
-		if (filterOnPlannedPayments) {
-			for (int i = cs.size() - 1; i >= 0; i--) {
-				Client client = cs.get(i);
-				boolean pass = false;
+		// if (filterOnPlannedPayments) {
+		// for (int i = clients.size() - 1; i >= 0; i--) {
+		// Client client = clients.get(i);
+		// boolean pass = false;
+		//
+		// for (Payment p : client.getPlannedPayments()) {
+		// pass = true;
+		// if (earlyDate != null)
+		// pass &= earlyDate.before(p.getDate());
+		// if (laterDate != null)
+		// pass &= laterDate.after(p.getDate());
+		// if (pass)
+		// break;
+		// }
+		// if (!pass)
+		// clients.remove(i);
+		// }
+		// }
 
-				for (Payment p : client.getPlannedPayments()) {
-					pass = true;
-					if (earlyDate != null)
-						pass &= earlyDate.before(p.getDate());
-					if (laterDate != null)
-						pass &= laterDate.after(p.getDate());
-					if (pass)
-						break;
-				}
-				if (!pass)
-					cs.remove(i);
-			}
-		}
+		// Client filters
 		// First Contract Date filtration
-		if (filterOnFCDate) {
-			for (int i = cs.size() - 1; i >= 0; i--) {
-				Client client = cs.get(i);
-				boolean pass = false;
-				Date d = client.getFirstContractDate();
-				if (d != null) {
-					pass = true;
-
-					if (fcEarlyDate != null)
-						pass &= fcEarlyDate.before(d);
-					if (fcLaterDate != null)
-						pass &= fcLaterDate.after(d);
-				} else
-					pass = false;
-				if (!pass)
-					cs.remove(i);
-			}
-		}
-
-		// Any contract Date filter
-		if (filterOnACDate) {
-			contractMed.reset();
-			List<Client> toRetain = contractMed.filter(acDate1, acDate2)
-					.getClients();
-			cs.retainAll(toRetain);
-		}
+		if (filterOnFCDate)
+			clientMed.filterDateOfFirstContract(fcEarlyDate, fcLaterDate);
 
 		// Name Filtration
-		if (filterOnNames) {
-			for (int i = cs.size() - 1; i >= 0; i--) {
-				if (!cs.get(i).getName().toLowerCase()
-						.contains(name.toLowerCase()))
-					cs.remove(i);
-			}
-		}
+		if (filterOnNames)
+			clientMed.filterName(name);
+
 		// Stud status
 		if (filterOnState)
-			getClientMed().setGroup(cs).filter(state);
+			clientMed.filter(state);
+		// Group 1
+		clients = clientMed.getGroup();
+
+		// FIXME actually here should be mapping of clients into contracts
+		// Alright, first try
+		contractMed.setGroupFromClients(clients);
+
+		// Contract filters
+		// Any contract Date filter
+		if (filterOnACDate)
+			contractMed.filter(acDate1, acDate2);
 		// Contract Type
-		if (filterOnContractType) {
-			for (int i = cs.size() - 1; i >= 0; i--) {
-				boolean match = false;
-				for (Contract c : cs.get(i).getActiveContracts())
-					if (c.getContractTypeId() == contractTypeId) {
-						match = true;
-						break;
-					}
-				if (!match)
-					cs.remove(i);
-			}
-		}
-		clients = cs;
-		return getClients();
+		if (filterOnContractType)
+			contractMed.filterByContractType(contractTypeId);
+
+		// Retain operation
+		List<Client> toRetain = contractMed.getClients();
+		clients.retainAll(toRetain);
+
+		// Cache this contracts and clients for further explorations
+		clientsCache = clients;
+		contractsCache = contractMed.getGroup();
+
+		return clientsCache;
 	}
 
 	public Block getFilter() {
@@ -211,28 +226,31 @@ public class Clients {
 
 	// aggregate fields
 	public int getActiveContracts() {
-		int sum = 0;
-		for (Client c : getClients())
-			for (Contract t : c.getContracts())
-				if (t.isActive())
-					sum++;
-		return sum;
+		int counter = 0;
+		for (Contract t : contractsCache)
+			if (t.getState() == ContractState.active)
+				counter++;
+		return counter;
 	}
 
 	public int getFreezedContracts() {
 		int sum = 0;
-		for (Client c : getClients())
-			for (Contract t : c.getContracts())
-				if (t.isFreeze())
-					sum++;
+		for (Contract t : contractsCache)
+			if (t.getState() == ContractState.frozen)
+				sum++;
 		return sum;
 	}
 
 	public int getTotalContracts() {
-		int sum = 0;
-		for (Client c : getClients())
-			sum += c.getContracts().size();
-		return sum;
+		// OLD VERSION counts all contracts of selected clients
+		// int sum = 0;
+		// for (Client c : getClients())
+		// sum += c.getContracts().size();
+		// return sum;
+
+		// NEW VERSION count all contracts of selected clients
+		// with contract date filter applied
+		return contractsCache.size();
 	}
 
 	public int getNewClients() {
@@ -299,12 +317,15 @@ public class Clients {
 
 	// events
 	void onSubmitFromFilterForm() {
-		clients = null;
+		clientsCache = null;
+		contractsCache = null;
 		if (request.isXHR())
 			ajaxResponseRenderer.addRender(gridZone).addRender(statZone);
 	}
 
 	void setupRender() {
+		// Call it to set up the cache.
+		getClients();
 		@SuppressWarnings("unchecked")
 		List<ContractType> types = session.createCriteria(ContractType.class)
 				.list();

@@ -44,7 +44,7 @@
 							Расписания
 						</li>
 					</a>
-					<a href="#" t:type="pageLink" t:page="crud" style="width:96px">
+					<a href="#" t:type="pageLink" t:page="crud" style="width:100px">
 						<li class="${cssForLi('Работа с БД')}">
 							Работа с БД
 						</li>
