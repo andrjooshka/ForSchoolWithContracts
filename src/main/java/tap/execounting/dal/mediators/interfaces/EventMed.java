@@ -145,4 +145,9 @@ public interface EventMed {
 	public int countDaysInEventsGroup();
 
 	public EventMed sortByDate(boolean ascending);
+
+	// Return a list of events identified by date, client id, teacher id,
+	// and event type title.
+	public List<Event> getByDateClientIdTeacherIdAndEventTypeTitle(Date d,
+			int clientId, int teacherId, String typeTitle);
 }

@@ -131,12 +131,15 @@ function linksHandle() {
 	// if they are not ready -- wait for 300ms then call self again
 	// If they are ready -- run resize
 	clientsLinks = m('div#clientsZone.t-zone a');
-	if(clientsLinks==null)
+	if(clientsLinks==null){
 		setTimeout(linksHandle, 300);
+		return;
+	}
 
 	rc();
 	clientsLinks.click(function(e) {
-		setTimeout(linksHandle, 300);
+		setTimeout(rc, 300);
+		setTimeout(rc, 1800);
 	});
 }
 

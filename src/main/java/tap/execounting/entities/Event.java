@@ -48,7 +48,8 @@ import tap.execounting.entities.interfaces.Dated;
 		@NamedQuery(name = Event.BETWEEN_DATE1_AND_DATE2, query = "from Event as e where e.date <= :date2 and e.date >= :date1"),
 		@NamedQuery(name = Event.BY_STATE, query = "from Event as e where e.state=:stateCode"),
 		@NamedQuery(name = Event.AFTER_DATE, query = "from Event as e where e.date >= :date"),
-		@NamedQuery(name = Event.BEFORE_DATE, query = "from Event as e where e.date <= :date") })
+		@NamedQuery(name = Event.BEFORE_DATE, query = "from Event as e where e.date <= :date"),
+		@NamedQuery(name = Event.BY_DATE_TEACHERID_TITLE, query = "from Event where date = :date and hostId = :teacherId") })
 @Table(name = "events")
 public class Event implements Comparable<Event>, Dated {
 
@@ -63,6 +64,7 @@ public class Event implements Comparable<Event>, Dated {
 	public static final String BETWEEN_DATE1_AND_DATE2 = "Event.betweenDate1andDate2";
 	public static final String AFTER_DATE = "Event.AfterDate";
 	public static final String BEFORE_DATE = "Event.BeforeDate";
+	public static final String BY_DATE_TEACHERID_TITLE = "Event.byDateAndTeacherIdAndTitle";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -297,5 +299,12 @@ public class Event implements Comparable<Event>, Dated {
 		if (this.comment == null)
 			return false;
 		return comment.contains(Const.EVENT_isFree);
+	}
+
+	public boolean containsClient(int clientId) {
+		for (Contract c : getContracts())
+			if (c.getClientId() == clientId)
+				return true;
+		return false;
 	}
 }

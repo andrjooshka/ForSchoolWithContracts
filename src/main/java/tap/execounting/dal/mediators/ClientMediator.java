@@ -446,16 +446,23 @@ public class ClientMediator implements ClientMed {
 
 	public ClientMed filterName(String name) {
 		getAppliedFilters().put("Client name", name);
+		// Setup
+		name = name.toLowerCase();
+
+		// GO
 		if (cache == null) {
-			cache = getDao().findWithNamedQuery(Client.BY_NAME,
-					QueryParameters.with("name", name).parameters());
+			cache = getDao()
+					.findWithNamedQuery(
+							Client.BY_NAME,
+							QueryParameters.with("name", '%' + name + '%')
+									.parameters());
 			return this;
 		}
 		List<Client> cache = getGroup();
 		Client c;
 		for (int i = cache.size() - 1; i >= 0; i--) {
 			c = cache.get(i);
-			if (!c.getName().toLowerCase().contains(name.toLowerCase()))
+			if (!c.getName().toLowerCase().contains(name))
 				cache.remove(i);
 		}
 		return this;

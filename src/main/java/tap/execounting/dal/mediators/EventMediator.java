@@ -223,6 +223,27 @@ public class EventMediator implements EventMed {
 		appliedFilters = null;
 	}
 
+	public List<Event> getByDateClientIdTeacherIdAndEventTypeTitle(Date d,
+			int clientId, int teacherId, String typeTitle) {
+		Map<String, Object> params;
+		List<Event> preliminary;
+		params = QueryParameters.with("date", d).and("teacherId", teacherId)
+				.parameters(); // cut .and("title", '%'+typeTitle+'%')
+		preliminary = dao.findWithNamedQuery(Event.BY_DATE_TEACHERID_TITLE,
+				params);
+
+		// Filter by type title
+		for (int j = preliminary.size() - 1; j >= -0; j--)
+			if (!preliminary.get(j).getEventType().getTypeTitle()
+					.equalsIgnoreCase(typeTitle))
+				preliminary.remove(j);
+		for (int j = preliminary.size() - 1; j >= 0; j--)
+			if (!preliminary.get(j).containsClient(clientId))
+				preliminary.remove(j);
+
+		return preliminary;
+	}
+
 	public String getFilterState() {
 		StringBuilder sb = new StringBuilder();
 		for (Entry<String, Object> entry : getAppliedFilters().entrySet())

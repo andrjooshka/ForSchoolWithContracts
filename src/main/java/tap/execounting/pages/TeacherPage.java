@@ -262,7 +262,13 @@ public class TeacherPage {
 
 		for (Date d : DateService.generateDaySet(getEventsDate(),
 				getRenderDays())) {
-			List<Event> events = contract.getEvents(d);
+			List<Event> events;
+			// Old version
+			// events = contract.getEvents(d);
+			// New version
+			// How about one more switch here??
+			events = eMed.getByDateClientIdTeacherIdAndEventTypeTitle(d, contract.getClientId(), tMed.getId(), contract.getEventType().getTypeTitle());
+			
 			if (events.size() == 0)
 				list.add(new EventRowElement(d, null));
 			else

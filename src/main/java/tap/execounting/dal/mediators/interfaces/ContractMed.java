@@ -67,7 +67,7 @@ public interface ContractMed {
 	public void doWriteOff();
 
 	// Event planner method
-	public void doPlanEvents();
+	public void doPlanEvents(Date eventsStartDate);
 
 	// group methods
 	// group

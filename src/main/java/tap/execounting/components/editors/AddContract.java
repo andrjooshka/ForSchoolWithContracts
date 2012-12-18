@@ -1,6 +1,7 @@
 package tap.execounting.components.editors;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.tapestry5.ComponentResources;
@@ -54,6 +55,9 @@ public class AddContract {
 	@Persist
 	private boolean updateMode;
 
+	// Screen properties
+	@Property
+	private Date eventsStartDate;
 	@Property
 	@Persist
 	private String etype;
@@ -190,7 +194,7 @@ public class AddContract {
 			dao.create(con);
 		}
 
-		getContractMed().setUnit(con).doPlanEvents();
+		getContractMed().setUnit(con).doPlanEvents(eventsStartDate);
 
 		// Today we do tricks. This code calls onExperiment in the parent
 		// component. onExperiment from showContract provides us with the zone

@@ -40,7 +40,7 @@ public class ContractMediator implements ContractMed {
 
 	@Inject
 	private PaymentMed paymentMed;
-	
+
 	@Inject
 	private ClientMed clientMed;
 
@@ -202,7 +202,7 @@ public class ContractMediator implements ContractMed {
 	// This method does all the planning activity for single contract. It plans
 	// all available events, corresponding to the contract event schedule, which
 	// corresponds to the teacher schedule.
-	public void doPlanEvents() {
+	public void doPlanEvents(Date dateOfFirstEvent) {
 		CRUDServiceDAO dao = getDao();
 		unit = dao.find(Contract.class, unit.getId());
 		for (Event e : unit.getEvents())
@@ -211,7 +211,12 @@ public class ContractMediator implements ContractMed {
 
 		int remain = getRemainingLessons();
 		Calendar date = DateService.getMoscowCalendar();
-		date.setTime(DateService.trimToDate(new Date()));
+
+		// From 18.12.12 we have date of first event for planning
+		if (dateOfFirstEvent != null)
+			date.setTime(dateOfFirstEvent);
+		else
+			date.setTime(DateService.trimToDate(new Date()));
 
 		int remain1 = remain;
 		int count = 0;
@@ -338,17 +343,17 @@ public class ContractMediator implements ContractMed {
 		cache = group;
 		return this;
 	}
-	
-	public ContractMed setGroupFromClients(List<Client> clients){
+
+	public ContractMed setGroupFromClients(List<Client> clients) {
 		this.cache = new ArrayList<Contract>();
-		
-		for(Client c : clients)
+
+		for (Client c : clients)
 			this.cache.addAll(c.getContracts());
-		
+
 		return this;
 	}
-	
-	public List<Client> getClients(){
+
+	public List<Client> getClients() {
 		return clientMed.contractsToClients(getGroup());
 	}
 
@@ -487,12 +492,12 @@ public class ContractMediator implements ContractMed {
 		}
 		return this;
 	}
-	
+
 	public ContractMed removeComlete() {
 		getAppliedFilters().put("Complete", false);
-		List<Contract> cache=  getGroup();
-		for(int i = cache.size()-1;i>=0;i--)
-			if(cache.get(i).isComplete())
+		List<Contract> cache = getGroup();
+		for (int i = cache.size() - 1; i >= 0; i--)
+			if (cache.get(i).isComplete())
 				cache.remove(i);
 		return this;
 	}

@@ -40,7 +40,7 @@ import tap.execounting.services.DateService;
 @NamedQueries({
 		@NamedQuery(name = Client.ALL, query = "from Client"),
 		@NamedQuery(name = Client.ALL_NAMES, query = "select c.name from Client c"),
-		@NamedQuery(name = Client.BY_NAME, query = "from Client c where lower(c.name) = lower(:name)") })
+		@NamedQuery(name = Client.BY_NAME, query = "from Client c where lower(c.name) like :name") })
 public class Client implements Dated, Deletable {
 
 	public static final String ALL = "Client.all";

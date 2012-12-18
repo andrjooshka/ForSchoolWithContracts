@@ -40,6 +40,11 @@
 				<div class="t-beaneditor-row">
 					<h4 style="padding-left: 15%;">${message:schedule-label}</h4>
 				</div>
+				
+				<div class="t-beaneditor-row">
+					<t:label for="eventsStartDate" />
+					<t:datefield t:id="eventsStartDate"/>
+				</div>
 
 				<div class="t-beaneditor-row">
 					<t:label for="monday" />
