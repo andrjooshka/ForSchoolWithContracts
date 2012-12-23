@@ -16,8 +16,10 @@ public interface ClientMed {
 
 	public ClientMed setUnitId(int id);
 	
-	//getters
-
+	// Operations
+	
+	public void delete(Client c);
+	// GETTERS
 	//comment
 	public Comment getComment();
 	public void comment(String comment, long time);

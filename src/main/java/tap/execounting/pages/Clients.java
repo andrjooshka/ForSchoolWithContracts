@@ -30,7 +30,7 @@ import tap.execounting.entities.ContractType;
 import tap.execounting.entities.Payment;
 import tap.execounting.services.SuperCalendar;
 
-@Import(stylesheet = "context:layout/filtertable.css")
+@Import(stylesheet = "context:css/filtertable.css")
 public class Clients {
 
 	@Inject
@@ -173,21 +173,19 @@ public class Clients {
 		// Group 1
 		clients = clientMed.getGroup();
 
-		// FIXME actually here should be mapping of clients into contracts
-		// Alright, first try
-		contractMed.setGroupFromClients(clients);
-
 		// Contract filters
 		// Any contract Date filter
-		if (filterOnACDate)
-			contractMed.filter(acDate1, acDate2);
-		// Contract Type
-		if (filterOnContractType)
-			contractMed.filterByContractType(contractTypeId);
-
-		// Retain operation
-		List<Client> toRetain = contractMed.getClients();
-		clients.retainAll(toRetain);
+		if (filterOnACDate || filterOnContractType) {
+			contractMed.setGroupFromClients(clients);
+			if (filterOnACDate)
+				contractMed.filter(acDate1, acDate2);
+			// Contract Type
+			if (filterOnContractType)
+				contractMed.filterByContractType(contractTypeId);
+			// Retain operation
+			List<Client> toRetain = contractMed.getClients();
+			clients.retainAll(toRetain);
+		}
 
 		// Cache this contracts and clients for further explorations
 		clientsCache = clients;

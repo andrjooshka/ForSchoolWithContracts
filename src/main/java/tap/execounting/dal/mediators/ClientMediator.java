@@ -26,6 +26,7 @@ import tap.execounting.entities.ContractType;
 import tap.execounting.entities.Payment;
 import tap.execounting.entities.Teacher;
 import tap.execounting.entities.interfaces.Dated;
+import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.Authenticator;
 
 public class ClientMediator implements ClientMed {
@@ -40,6 +41,8 @@ public class ClientMediator implements ClientMed {
 	private DateFilter dateFilter;
 	@Inject
 	private Authenticator authenticator;
+	@Inject
+	private AuthorizationDispatcher dispatcher;
 
 	private Client unit;
 
@@ -71,6 +74,20 @@ public class ClientMediator implements ClientMed {
 	public ClientMed setUnitId(int id) {
 		this.unit = dao.find(Client.class, id);
 		return this;
+	}
+
+	public void delete(Client c) {
+		// AUTHORIZATION MOUNT POINT DELETE
+		if (dispatcher.canDeleteClients())
+			if (c.getContracts().size() > 0)
+				// TODO JAVASCRIPT ALERT MOUNT POINT
+				throw new IllegalArgumentException(
+						"У данного клиента заключены с вами договора, пожалуйста сначала удалите их.");
+			else {
+				c.setName(c.getName() + " [deleted]");
+				dao.update(c);
+				dao.delete(Client.class, c.getId());
+			}
 	}
 
 	public void comment(String text, long time) {
@@ -333,9 +350,7 @@ public class ClientMediator implements ClientMed {
 	}
 
 	public List<Client> getGroup(boolean reset) {
-		if (cache == null)
-			load();
-		List<Client> innerCache = cache;
+		List<Client> innerCache = getGroup();
 		if (reset)
 			reset();
 		return innerCache;
@@ -459,10 +474,10 @@ public class ClientMediator implements ClientMed {
 			return this;
 		}
 		List<Client> cache = getGroup();
-		Client c;
+		String s;
 		for (int i = cache.size() - 1; i >= 0; i--) {
-			c = cache.get(i);
-			if (!c.getName().toLowerCase().contains(name))
+			s = cache.get(i).getName().toLowerCase();
+			if (!s.contains(name) && !s.equals(name))
 				cache.remove(i);
 		}
 		return this;

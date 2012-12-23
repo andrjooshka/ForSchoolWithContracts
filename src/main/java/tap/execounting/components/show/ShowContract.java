@@ -31,7 +31,7 @@ import tap.execounting.entities.EventType;
 import tap.execounting.entities.Payment;
 import tap.execounting.entities.Teacher;
 
-@Import(stylesheet = "context:/layout/contract.css")
+@Import(stylesheet = "context:css/contract.css")
 public class ShowContract {
 
 	@Parameter

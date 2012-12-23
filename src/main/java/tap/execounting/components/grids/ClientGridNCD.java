@@ -20,7 +20,7 @@ import tap.execounting.entities.Teacher;
 import tap.execounting.pages.ClientPage;
 import tap.execounting.services.SuperCalendar;
 
-@Import(stylesheet = "context:layout/datatable.css")
+@Import(stylesheet = "context:css/datatable.css")
 public class ClientGridNCD {
 	@Inject
 	private BeanModelSource beanModelSource;

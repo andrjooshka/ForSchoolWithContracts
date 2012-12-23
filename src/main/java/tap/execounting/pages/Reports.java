@@ -41,7 +41,7 @@ import tap.execounting.services.SuperCalendar;
 
 @Import(library = { "context:js/jquery-1.8.3.min.js",
 		"context:js/reportsAjax.js" }, stylesheet = {
-		"context:layout/datatable.css", "context:layout/reports.css" })
+		"context:css/datatable.css", "context:css/reports.css" })
 public class Reports {
 
 	// Activation context

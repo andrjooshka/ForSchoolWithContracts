@@ -18,7 +18,7 @@ import tap.execounting.entities.Contract;
 import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.SuperCalendar;
 
-@Import(stylesheet="context:layout/stattable.css")
+@Import(stylesheet="context:css/stattable.css")
 public class ClientPage {
 
 	@Property

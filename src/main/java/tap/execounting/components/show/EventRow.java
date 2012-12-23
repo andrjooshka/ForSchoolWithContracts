@@ -8,7 +8,7 @@ import org.apache.tapestry5.annotations.Property;
 
 import tap.execounting.data.EventRowElement;
 
-@Import(stylesheet="context:/layout/eventrow.css")
+@Import(stylesheet="context:css/eventrow.css")
 public class EventRow {
 	
 	@Property

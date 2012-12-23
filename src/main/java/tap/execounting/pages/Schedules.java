@@ -16,7 +16,7 @@ import tap.execounting.entities.Event;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;
 
-@Import(stylesheet = "context:layout/datatable.css")
+@Import(stylesheet = "context:css/datatable.css")
 public class Schedules {
 
 	@Inject

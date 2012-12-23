@@ -15,7 +15,7 @@ import tap.execounting.services.Authenticator;
 /**
  * Layout component for pages of application.
  */
-@Import(stylesheet = { "context:/layout/style.css", "context:/layout/home.css" }, library = "context:/js/SpacerResizer.js")
+@Import(stylesheet = { "context:css/style.css", "context:css/home.css" }, library = { "context:js/SpacerResizer.js" })
 public class Layout {
 	@Property
 	private String pageName;

@@ -27,7 +27,7 @@ import tap.execounting.entities.EventType;
 import tap.execounting.entities.Teacher;
 import tap.execounting.services.SuperCalendar;
 
-@Import(stylesheet = "context:/layout/addContract.css")
+@Import(stylesheet = "context:css/addContract.css")
 public class AddContract {
 
 	@Inject

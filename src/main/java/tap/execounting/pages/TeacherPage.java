@@ -40,8 +40,8 @@ import tap.execounting.services.DateService;
 
 @Import(library = { "context:js/updateEffects.js", "context:js/jquery-1.8.3.min.js",
 		"context:js/magicalResizer.js" }, stylesheet = {
-		"context:layout/weekschedule.css", "context:layout/teacherpage.css",
-		"context:layout/cardtable.css" })
+		"context:css/weekschedule.css", "context:css/teacherpage.css",
+		"context:css/cardtable.css" })
 public class TeacherPage {
 
 	@Inject

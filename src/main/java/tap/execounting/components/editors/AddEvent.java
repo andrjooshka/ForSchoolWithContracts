@@ -27,7 +27,6 @@ import tap.execounting.entities.EventType;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;
 
-//@Import(library = )
 public class AddEvent {
 
 	@Property

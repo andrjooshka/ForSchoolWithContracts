@@ -189,7 +189,10 @@ public class Client implements Dated, Deletable {
 	}
 
 	public Date getDate() {
-		return getFirstContractDate();
+		// CRUTCH
+		// Fix added to not brake the date filter
+		Date d = getFirstContractDate();
+		return d == null ? new Date() : d;
 	}
 
 	public Date getFirstContractDate() {

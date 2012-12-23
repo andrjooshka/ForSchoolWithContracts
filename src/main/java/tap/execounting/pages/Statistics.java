@@ -27,8 +27,8 @@ import tap.execounting.entities.Teacher;
 import tap.execounting.services.DateService;
 
 @Import(library = "context:/js/updateEffects.js", stylesheet = {
-		"context:layout/datatable.css", "context:layout/filtertable.css",
-		"context:layout/stattable.css" })
+		"context:css/datatable.css", "context:css/filtertable.css",
+		"context:css/stattable.css" })
 public class Statistics {
 
 	// Code Helpers

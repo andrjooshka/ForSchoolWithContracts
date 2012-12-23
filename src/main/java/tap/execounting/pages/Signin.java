@@ -12,7 +12,7 @@ import tap.execounting.annotations.AnonymousAccess;
 import tap.execounting.security.AuthenticationException;
 import tap.execounting.services.Authenticator;
 
-@Import(stylesheet="context:layout/login.css")
+@Import(stylesheet="context:css/login.css")
 @AnonymousAccess
 public class Signin
 {

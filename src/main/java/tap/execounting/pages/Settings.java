@@ -13,7 +13,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.entities.User;
 
-@Import(stylesheet="context:layout/login.css")
+@Import(stylesheet="context:css/login.css")
 public class Settings {
 	@Inject
 	private CRUDServiceDAO dao;

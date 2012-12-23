@@ -24,7 +24,7 @@ import tap.execounting.entities.EventTypeAddition;
 import tap.execounting.entities.TeacherAddition;
 import tap.execounting.services.DateService;
 
-@Import(stylesheet = "context:/layout/payroll.css")
+@Import(stylesheet = "context:/css/payroll.css")
 public class Payroll {
 
 	@Inject

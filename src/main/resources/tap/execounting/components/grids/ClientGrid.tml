@@ -22,6 +22,11 @@
 		<p:deletedCell>
 			<t:show.smarticon icontype="iconType" />
 		</p:deletedCell>
+		<p:nameCell>
+			<t:pagelink page="ClientPage" context="unit.id">
+				${unit.name}
+			</t:pagelink>
+		</p:nameCell>
 		<p:teachersCell>
 			${teachers}
 		</p:teachersCell>

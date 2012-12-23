@@ -8,7 +8,7 @@ import org.apache.tapestry5.annotations.Property;
 
 import tap.execounting.entities.Contract;
 
-@Import(stylesheet = "context:/layout/minicontract.css")
+@Import(stylesheet = "context:css/minicontract.css")
 public class MiniContract {
 
 	@Parameter

@@ -1,7 +1,5 @@
 package tap.execounting.components.grids;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.apache.tapestry5.ComponentResources;
@@ -15,7 +13,7 @@ import org.apache.tapestry5.services.BeanModelSource;
 
 import tap.execounting.components.editors.AddClient;
 import tap.execounting.components.show.SmartIcon;
-import tap.execounting.dal.CRUDServiceDAO;
+import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Teacher;
 import tap.execounting.security.AuthorizationDispatcher;
@@ -25,8 +23,6 @@ public class ClientGrid {
 	private BeanModelSource beanModelSource;
 	@Inject
 	private ComponentResources componentResources;
-	@Inject
-	private CRUDServiceDAO dao;
 	@InjectComponent
 	private Zone ezone;
 	@Inject
@@ -44,29 +40,14 @@ public class ClientGrid {
 	@Property
 	@Persist
 	private String nameFilter;
+	
+	@Inject
+	private ClientMed clientMed;
 
 	public List<Client> getSource() {
-		List<Client> list = dao.findWithNamedQuery(Client.ALL);
 		if (nameFilter != null && nameFilter.length() > 2)
-			for (int i = list.size() - 1; i >= 0; i--)
-				if (!list.get(i).getName().toLowerCase()
-						.contains(nameFilter.toLowerCase()))
-					list.remove(i);
-		Collections.sort(list, new Comparator<Client>() {
-
-			@Override
-			public int compare(Client o1, Client o2) {
-				if (o1.isDeleted()) {
-					if (o2.isDeleted())
-						return o1.getName().compareTo(o2.getName());
-					return 1;
-				}
-				if (o2.isDeleted())
-					return -1;
-				return o1.getName().compareTo(o2.getName());
-			}
-		});
-		return list;
+			clientMed.filterName(nameFilter);
+		return clientMed.getGroup(true);
 	}
 
 	Object onActionFromEdit(Client c) {
@@ -88,18 +69,8 @@ public class ClientGrid {
 	}
 
 	void onDelete(Client c) {
-		// AUTHORIZATION MOUNT POINT DELETE
-		if (dispatcher.canDeleteClients()) {
-			if (c.getContracts().size() > 0)
-				// TODO JAVASCRIPT ALERT MOUNT POINT
-				throw new IllegalArgumentException(
-						"У данного клиента заключены с вами договора, пожалуйста сначала удалите их.");
-			else {
-				c.setName(c.getName() + " [deleted]");
-				dao.update(c);
-				dao.delete(Client.class, c.getId());
-			}
-		}
+		// AUTH moved to the mediator 
+		clientMed.delete(c);
 	}
 
 	void setupRender() {

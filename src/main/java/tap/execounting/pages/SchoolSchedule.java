@@ -25,8 +25,8 @@ import tap.execounting.entities.Room;
 import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.SuperCalendar;
 
-@Import(stylesheet = { "context:/layout/schoolschedule.css",
-		"context:/layout/cardtable.css" })
+@Import(stylesheet = { "context:/css/schoolschedule.css",
+		"context:/css/cardtable.css" })
 public class SchoolSchedule {
 
 	// code helpers

@@ -4,8 +4,7 @@ import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 
-@Import(stylesheet = { "context:layout/CRUD.css",
-		"context:layout/datatable.css" })
+@Import(stylesheet = { "context:/css/CRUD.css", "context:css/datatable.css" })
 public class CRUD {
 
 	@Persist

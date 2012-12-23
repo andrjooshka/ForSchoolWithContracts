@@ -9,7 +9,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import tap.execounting.dal.mediators.interfaces.TeacherMed;
 import tap.execounting.entities.Teacher;
 
-@Import(stylesheet = "context:/layout/teacherslist.css")
+@Import(stylesheet = "context:/css/teacherslist.css")
 public class Teachers {
 
 	@Inject
