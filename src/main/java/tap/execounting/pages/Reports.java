@@ -181,6 +181,11 @@ public class Reports {
 		return c == null ? "" : c.getText();
 	}
 
+	public Date getCommentDate() {
+		Comment c = clientMed.setUnit(client).getComment();
+		return c == null ? null : c.getDate();
+	}
+
 	// TODO refactor candidate, could be pushed into different package
 	private void nameSort(List<Client> clients) {
 		Client t;

@@ -120,19 +120,23 @@ public class ClientMediator implements ClientMed {
 		// If more then two comments are found --> comment with smaller id is
 		// preferred.
 		// FIXME maybe we could roll out some logging here
-		List<Comment> list = dao.findWithNamedQuery(Comment.BY_CLIENT_ID,
-				QueryParameters.with("id", unit.getId()).parameters());
-		if (list != null && list.size() > 0)
-			if (list.size() == 1)
-				return list.get(0);
-			else {
-				int idx = 0;
-				for (int i = 0; i < list.size(); i++)
-					if (list.get(idx).getId() > list.get(i).getId())
-						idx = i;
-				return list.get(idx);
-			}
-		return null;
+		// OBSOLETE
+		// List<Comment> list = dao.findWithNamedQuery(Comment.BY_CLIENT_ID,
+		// QueryParameters.with("id", unit.getId()).parameters());
+		// if (list != null && list.size() > 0)
+		// if (list.size() == 1)
+		// return list.get(0);
+		// else {
+		// int idx = 0;
+		// for (int i = 0; i < list.size(); i++)
+		// if (list.get(idx).getId() > list.get(i).getId())
+		// idx = i;
+		// return list.get(idx);
+		// }
+		// return null;
+		// NEW VERSION
+		Comment c = dao.findUniqueWithNamedQuery(Comment.BY_CLIENT_ID, QueryParameters.with("id", unit.getId()).parameters());
+		return c;
 	}
 
 	public boolean hasContracts() {
@@ -145,16 +149,20 @@ public class ClientMediator implements ClientMed {
 	}
 
 	public List<Contract> getContracts() {
+		// Crutched version
 		try {
 			int l = unit.getContracts().size();
 			List<Contract> contracts = new ArrayList<Contract>();
 			for (int i = 0; i < l; i++)
 				contracts.add(unit.getContracts().get(i));
 			return contracts;
-		} catch (NullPointerException npe) {
-			npe.printStackTrace();
-			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			unit = dao.find(Client.class, unit.getId());
+			return unit.getContracts();
 		}
+		// unit = dao.find(Client.class, unit.getId());
+		// return unit.getContracts();
 	}
 
 	public boolean hasActiveContracts() {
@@ -251,42 +259,69 @@ public class ClientMediator implements ClientMed {
 	}
 
 	public ClientState getState() {
+		// From the last session 26.12.12
+		// Only trial contracts -- trial
+		// Only one standard contract -- standard
+		// More than one standard contract -- continuer.
+		// No undefined state
+
 		// if client is canceled - he have special mark
 		if (unit.isCanceled())
 			return ClientState.canceled;
-		// check if client is active
-		// check if client has active contracts
-		List<Contract> activeContracts = getActiveContracts();
-		if (activeContracts.size() > 0) {
-			// if he is active, he is one of three:
-			// trial | beginner | continuer
-			boolean notOnlyTrial = false;
-			for (Contract c : activeContracts)
-				if (c.getContractTypeId() != ContractType.Trial) {
-					notOnlyTrial = true;
-					break;
-				}
-			if (!notOnlyTrial)
-				return ClientState.trial;
-
-			// check if client has finished contracts
-			List<Contract> finishedContracts = getFinishedContracts();
-			if (finishedContracts.size() > 0) {
-				notOnlyTrial = false;
-				for (Contract c : finishedContracts)
-					if (c.getContractTypeId() != ContractType.Trial) {
-						notOnlyTrial = true;
-						break;
-					}
-				return notOnlyTrial ? ClientState.continuer
-						: ClientState.beginner;
-			}
-			return ClientState.beginner;
-		}
 		if (hasFrozenContracts())
 			return ClientState.frozen;
-
-		return ClientState.undefined;
+		// OBSOLETE
+		// check if client is active
+		// // check if client has active contracts
+		// List<Contract> activeContracts = getActiveContracts();
+		// if (activeContracts.size() > 0) {
+		// // if he is active, he is one of three:
+		// // trial | beginner | continuer
+		//
+		// // Check if he has not trial contracts
+		// // TODO check both times that he has previous contracts
+		// boolean notOnlyTrial = false;
+		// for (Contract c : activeContracts)
+		// if (c.getContractTypeId() != ContractType.Trial) {
+		// notOnlyTrial = true;
+		// break;
+		// }
+		// // Check trial status
+		// if (!notOnlyTrial)
+		// return ClientState.trial;
+		//
+		// // check if client has finished contracts
+		// List<Contract> finishedContracts = getFinishedContracts();
+		// if (finishedContracts.size() > 0) {
+		// notOnlyTrial = false;
+		// for (Contract c : finishedContracts)
+		// if (c.getContractTypeId() != ContractType.Trial) {
+		// notOnlyTrial = true;
+		// break;
+		// }
+		// return notOnlyTrial ? ClientState.continuer
+		// : ClientState.beginner;
+		// }
+		// return ClientState.beginner;
+		// }
+		// Well if client has no active contracts -- he could still be beginner,
+		// or trial, and so on.
+		// If he has recent trial or free contracts -- and nothing else -- he is
+		// a
+		// beginner.
+		int notTrialCounter = 0;
+		for (Contract c : unit.getContracts())
+			if (c.getContractTypeId() != ContractType.Trial)
+				notTrialCounter++;
+		switch (notTrialCounter) {
+		case 0:
+			return ClientState.trial;
+		case 1:
+			return ClientState.beginner;
+		default:
+			return ClientState.continuer;
+		}
+		// return ClientState.undefined;
 	}
 
 	public void cancelClient() {

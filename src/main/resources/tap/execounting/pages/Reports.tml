@@ -54,11 +54,10 @@
 				${endingInfo}
 			</p:endingInfoCell>
 			<p:commentCell>
-				<form>
-					<textarea model-clientId="${client.id}" class="cool">
-						${comment}
-					</textarea>
-				</form>
+				<div class="commentDate"><t:outputraw value="commentDate" /></div>
+				<textarea model-clientId="${client.id}" class="cool">
+					${comment}
+				</textarea>
 			</p:commentCell>
 		</t:grid>
 	</div>
@@ -76,11 +75,10 @@
 				${endedInfo}
 			</p:endedInfoCell>
 			<p:commentCell>
-				<form>
-					<textarea model-clientId="${client.id}" class="cool">
-						${comment}
-					</textarea>
-				</form>
+				<div class="commentDate"><t:outputraw value="commentDate" /></div>
+				<textarea model-clientId="${client.id}" class="cool">
+					${comment}
+				</textarea>
 			</p:commentCell>
 		</t:grid>
 	</div>
@@ -134,11 +132,10 @@
 				</t:loop>
 			</p:paymentsInfoCell>
 			<p:commentCell>
-				<form>
-					<textarea model-clientId="${client.id}" class="cool">
-						${comment}
-					</textarea>
-				</form>
+				<div class="commentDate"><t:outputraw value="commentDate" /></div>
+				<textarea model-clientId="${client.id}" class="cool">
+					${comment}
+				</textarea>
 			</p:commentCell>
 		</t:grid>
 	</div>
@@ -153,11 +150,10 @@
 				</t:eventlink>
 			</p:nameCell>
 			<p:commentCell>
-				<form>
-					<textarea model-clientId="${client.id}" class="cool">
-						${comment}
-					</textarea>
-				</form>
+				<div class="commentDate"><t:outputraw value="commentDate" /></div>
+				<textarea model-clientId="${client.id}" class="cool">
+					${comment}
+				</textarea>
 			</p:commentCell>
 		</t:grid>
 	</div>
@@ -175,11 +171,10 @@
 				${debtInfo}
 			</p:debtInfoCell>
 			<p:commentCell>
-				<form>
-					<textarea model-clientId="${client.id}" class="cool">
-						${comment}
-					</textarea>
-				</form>
+				<div class="commentDate"><t:outputraw value="commentDate" /></div>
+				<textarea model-clientId="${client.id}" class="cool">
+					${comment}
+				</textarea>
 			</p:commentCell>
 		</t:grid>
 	</div>

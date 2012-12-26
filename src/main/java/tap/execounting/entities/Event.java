@@ -247,7 +247,6 @@ public class Event implements Comparable<Event>, Dated {
 		int total = 0;
 		for (Contract c : getContracts())
 			total += c.getSingleLessonCost();
-
 		return total;
 	}
 

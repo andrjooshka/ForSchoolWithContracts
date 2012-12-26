@@ -256,7 +256,9 @@ public class TeacherPage {
 	public String getDiscipline() {
 		return contract.getEventType().getTypeTitle();
 	}
-
+	
+	
+	// TODO -- we should enable here new contracts
 	public List<EventRowElement> getElements() {
 		List<EventRowElement> list = new ArrayList<EventRowElement>();
 
