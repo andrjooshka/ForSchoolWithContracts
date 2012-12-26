@@ -42,6 +42,12 @@ public class AddEvent {
 	@Persist
 	private Event event;
 
+	// Screen properties
+	@Property
+	private boolean freeFromTeacher;
+	@Property
+	private boolean freeFromSchool;
+
 	@Property
 	private SelectModel facilitySelect;
 
@@ -219,8 +225,7 @@ public class AddEvent {
 	// Event handlers community
 	Object onTheCancel() {
 		CaptureResultCallback<Object> capturer = new CaptureResultCallback<>();
-		resources.triggerEvent("InnerUpdate", new Object[] { event },
-				capturer);
+		resources.triggerEvent("InnerUpdate", new Object[] { event }, capturer);
 		return capturer.getResult();
 	}
 
@@ -288,7 +293,15 @@ public class AddEvent {
 		return new StringSelectModel(res);
 	}
 
+	/**
+	 * Validates input from form
+	 */
 	void onValidateFromForm() {
+		// BOTH FREE SWITCHES should be never on together.
+		if (freeFromSchool && freeFromTeacher)
+			throw new IllegalArgumentException(
+					"\nЭЭЭ!! Можно только одну галочку! (Поле бесплатно)\n");
+		
 		for (EventType et : etypes())
 			if (et.getTitle().equals(etype)) {
 				event.setTypeId(et.getId());

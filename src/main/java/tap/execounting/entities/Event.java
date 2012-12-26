@@ -66,6 +66,9 @@ public class Event implements Comparable<Event>, Dated {
 	public static final String BEFORE_DATE = "Event.BeforeDate";
 	public static final String BY_DATE_TEACHERID_TITLE = "Event.byDateAndTeacherIdAndTitle";
 
+	public static final byte FREE_FROM_SCHOOL = 1;
+	public static final byte FREE_FROM_TEACHER = 2;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "event_id")
@@ -87,6 +90,12 @@ public class Event implements Comparable<Event>, Dated {
 	private Date date;
 
 	private int state;
+
+	/**
+	 * It is used to indicate free lessons null and 0 - for usual lessons. 1 -
+	 * for free lessons from school, 2 - for free lessons from teacher
+	 */
+	private byte free;
 
 	@NonVisual
 	private boolean deleted;
@@ -243,11 +252,42 @@ public class Event implements Comparable<Event>, Dated {
 	// return total;
 	// }
 
+	/**
+	 * @return this should say how much money all clients pay
+	 */
 	public int getMoney() {
+		// First blood
+		// Code supports only one-contract lessons
+		if(free>0)
+			return 0;
 		int total = 0;
 		for (Contract c : getContracts())
 			total += c.getSingleLessonCost();
 		return total;
+	}
+
+	public int getTeacherMoney() {
+		if (free == FREE_FROM_TEACHER)
+			return 0;
+		return this.getEventType().getShareTeacher();
+	}
+
+	/**
+	 * @return how much money did school earned from this lesson
+	 */
+	public int getSchoolMoney() {
+		// if it is free from school -- school should pay money to teacher
+		// anyway
+		// so it would be with minus
+		switch (free) {
+		case FREE_FROM_TEACHER:
+			return 0;
+		case FREE_FROM_SCHOOL:
+			return getEventType().getShareTeacher() * (-1);
+		default:
+			// FIXME not for groups
+			return getEventType().getSchoolMoney();
+		}
 	}
 
 	public boolean haveContract(Contract con) {
@@ -291,13 +331,24 @@ public class Event implements Comparable<Event>, Dated {
 	}
 
 	/**
-	 * @return checks if event is free for client. Generally it is written in
-	 *         comments
+	 * @return checks if event is free for client. That means field free is null
+	 *         or 0
 	 */
 	public boolean isFree() {
-		if (this.comment == null)
-			return false;
-		return comment.contains(Const.EVENT_isFree);
+		// OLDE CODE
+		// if (this.comment == null)
+		// return false;
+		// return comment.contains(Const.EVENT_isFree);
+		// NEW CODE
+		return free != 0;
+	}
+
+	private boolean isFreeFromSchool() {
+		return free == FREE_FROM_SCHOOL;
+	}
+
+	private boolean isFreeFromTeacher() {
+		return free == FREE_FROM_TEACHER;
 	}
 
 	public boolean containsClient(int clientId) {

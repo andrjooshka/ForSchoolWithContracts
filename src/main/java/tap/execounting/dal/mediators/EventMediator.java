@@ -506,21 +506,17 @@ public class EventMediator implements EventMed {
 	}
 
 	public Integer countTeacherMoney() {
-		if (cache == null)
-			return null;
 		int summ = 0;
 		// TODO Tuleneva
 		for (Event e : getGroup())
-			summ += e.getMoney() - e.getEventType().getSchoolMoney();
+			summ += e.getTeacherMoney();
 		return summ;
 	}
 
 	public Integer countSchoolMoney() {
-		if (cache == null)
-			return null;
 		int summ = 0;
 		for (Event e : getGroup())
-			summ += e.getEventType().getSchoolMoney();
+			summ += e.getSchoolMoney();
 		return summ;
 	}
 

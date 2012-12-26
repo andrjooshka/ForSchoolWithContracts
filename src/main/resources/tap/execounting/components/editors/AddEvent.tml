@@ -12,7 +12,7 @@
 	<t:eventlink event="theCancel" zone="^"
 			style="position: relative;top: 26px;left: 387px;">${message:cancel-label}</t:eventlink>
 	<t:beaneditform t:id="form" object="event" submitlabel="message:submit-label" 
-	exclude="id, contractId" add="clients" zone="^">
+	exclude="id, contractId" add="free,clients" zone="^">
 		<p:hostId>
 			<t:label for="hostid"/>
 			<t:select t:id="hostid" model="teacherselect" value="event.hostid" blankOption="ALWAYS" blankLabel="message:blank-label"/>
@@ -37,11 +37,19 @@
 				<t:select t:id="state" value="event.state" blankOption="NEVER" />
 		</p:state>
 		
+		<!-- FREE -->
+		<p:free>
+			<t:label for="free"/>
+			<t:checkbox t:id="free" value="freeFromSchool" />${message:freeFromSchool}
+			<t:checkbox t:id="freeFromTeacher"/>${message:freeFromTeacher}
+		</p:free>
 
 		<p:date>
 			<t:label for="date"/>
 			<t:datefield t:id="date" value="event.date" validate="required" />
 		</p:date>
+		
+		
 		
 		<p:typeId>
 			<t:label for="eventTypes"/>

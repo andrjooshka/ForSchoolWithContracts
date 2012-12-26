@@ -162,6 +162,7 @@ public class Statistics {
 		return getEventMed().setGroup(getEvents()).countSchoolMoney();
 	}
 
+	
 	public int getTeacherShare() {
 		return getEventMed().setGroup(getEvents()).countTeacherMoney();
 	}
