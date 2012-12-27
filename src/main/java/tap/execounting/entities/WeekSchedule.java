@@ -27,6 +27,10 @@ public class WeekSchedule {
 	private boolean saturday;
 	private boolean sunday;
 
+	/**
+	 * @param day -- integer in range 1..7
+	 * @return true if this day is checked
+	 */
 	public boolean get(int day) {
 		switch (day) {
 		case 1:

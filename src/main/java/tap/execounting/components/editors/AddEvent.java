@@ -201,6 +201,10 @@ public class AddEvent {
 
 			}
 		}
+		if(freeFromSchool)
+			event.setFree(Event.FREE_FROM_SCHOOL);
+		else if(freeFromTeacher)
+			event.setFree(Event.FREE_FROM_TEACHER);
 
 		if (updateMode) {
 			dao.update(event);
@@ -261,6 +265,10 @@ public class AddEvent {
 		typeSelect = new TypeSelectModel(dao);
 		if (!updateMode)
 			event.setComment("");
+		if(event.isFreeFromSchool())
+			freeFromSchool=true;
+		else if(event.isFreeFromTeacher())
+			freeFromTeacher=true;
 	}
 
 	private void initSelectModels() {

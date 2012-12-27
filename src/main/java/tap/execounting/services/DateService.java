@@ -230,6 +230,10 @@ public class DateService {
 		return c;
 	}
 
+	/**
+	 * @param date from which to calculate this day of week
+	 * @return integer for day of week from 1 to 7
+	 */
 	public static int dayOfWeekRus(Date d) {
 		// TODO check
 		Calendar date = new GregorianCalendar();

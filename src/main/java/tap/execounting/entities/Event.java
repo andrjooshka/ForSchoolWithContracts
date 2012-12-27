@@ -266,6 +266,7 @@ public class Event implements Comparable<Event>, Dated {
 		return total;
 	}
 
+	@NonVisual
 	public int getTeacherMoney() {
 		if (free == FREE_FROM_TEACHER)
 			return 0;
@@ -275,6 +276,7 @@ public class Event implements Comparable<Event>, Dated {
 	/**
 	 * @return how much money did school earned from this lesson
 	 */
+	@NonVisual
 	public int getSchoolMoney() {
 		// if it is free from school -- school should pay money to teacher
 		// anyway
@@ -334,6 +336,7 @@ public class Event implements Comparable<Event>, Dated {
 	 * @return checks if event is free for client. That means field free is null
 	 *         or 0
 	 */
+	@NonVisual
 	public boolean isFree() {
 		// OLDE CODE
 		// if (this.comment == null)
@@ -343,11 +346,13 @@ public class Event implements Comparable<Event>, Dated {
 		return free != 0;
 	}
 
-	private boolean isFreeFromSchool() {
+	@NonVisual
+	public boolean isFreeFromSchool() {
 		return free == FREE_FROM_SCHOOL;
 	}
 
-	private boolean isFreeFromTeacher() {
+	@NonVisual
+	public boolean isFreeFromTeacher() {
 		return free == FREE_FROM_TEACHER;
 	}
 
@@ -356,5 +361,9 @@ public class Event implements Comparable<Event>, Dated {
 			if (c.getClientId() == clientId)
 				return true;
 		return false;
+	}
+
+	public void setFree(byte freeVal) {
+		this.free = freeVal;
 	}
 }

@@ -24,6 +24,7 @@ import tap.execounting.entities.EventTypeAddition;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Room;
 import tap.execounting.entities.Teacher;
+import tap.execounting.entities.WeekSchedule;
 import tap.execounting.services.DateService;
 
 public class EventMediator implements EventMed {
@@ -152,7 +153,6 @@ public class EventMediator implements EventMed {
 		else
 			dao.create(event);
 	}
-
 	public void move(EventState newState, Date newDate, int transferType)
 			throws IllegalAccessException {
 		// Scheduled transfer type = 0
@@ -172,13 +172,15 @@ public class EventMediator implements EventMed {
 			// 3. Find the latest event in contract even if it is current event.
 			List<Event> events = con.getEvents(true);
 			Event last = events.get(events.size() - 1);
-			newDate = last.getDate();
-			// 4. Get day of the week for the latest event.
-			int dow = DateService.dayOfWeekRus(last.getDate()) + 1;
+			// 4. Get day of the week for the latest event, and increment that;
+			newDate = DateService.datePlusDays(last.getDate(),1);
+			int dow = DateService.dayOfWeekRus(newDate);
+			
+			WeekSchedule s = con.getSchedule();
 			// 5. Get next day of the week in schedule for that contract.
-			while (!con.getSchedule().get(dow % 8)) {
-				dow++;
+			while (!s.get(dow)) {
 				newDate = DateService.datePlusDays(newDate, 1);
+				dow = DateService.dayOfWeekRus(newDate);
 			}
 			// 6. Set newDate.
 			// 7. Move the event.
