@@ -1,10 +1,13 @@
 package tap.execounting.dal.mediators;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
@@ -125,12 +128,16 @@ public class PaymentMediator implements PaymentMed {
 
 	public PaymentMed filter(Date date1, Date date2) {
 		if (cache == null || appliedFilters == null
-				|| appliedFilters.size() == 0)
+				|| appliedFilters.size() == 0) {
+			// Query should not get null values
+			date1 = date1 == null ? new Date(0) : date1;
+			date2 = date2 == null ? new Date(Long.MAX_VALUE - Integer.MAX_VALUE)
+					: date2;
 			cache = getDao().findWithNamedQuery(
 					Payment.BY_DATES,
 					QueryParameters.with("earlierDate", date1)
 							.and("laterDate", date2).parameters());
-		else
+		} else
 			dateFilter.filter(cache, date1, date2);
 		getAppliedFilters().put("Date1", date1);
 		getAppliedFilters().put("Date2", date2);
@@ -168,6 +175,36 @@ public class PaymentMediator implements PaymentMed {
 		for (Payment p : cache)
 			summ += p.getAmount();
 		return summ;
+	}
+
+	public int countRealPaymentsAmount() {
+		int summ = 0;
+		for (Payment p : getGroup())
+			if (!p.isScheduled())
+				summ += p.getAmount();
+		return summ;
+	}
+
+	public int countScheduledPaymentsAmount() {
+		int summ = 0;
+		for (Payment p : getGroup())
+			if (p.isScheduled())
+				summ += p.getAmount();
+		return summ;
+	}
+
+	public List<Contract> getContracts() {
+		Set<Contract> contractSet = new HashSet<Contract>();
+		for (Payment p : getGroup())
+			contractSet.add(p.getContract());
+		return new ArrayList<Contract>(contractSet);
+	}
+
+	public PaymentMed setGroupFromContracts(List<Contract> contracts) {
+		cache = new ArrayList<Payment>();
+		for (Contract c : contracts)
+			cache.addAll(c.getPayments());
+		return this;
 	}
 
 	public Integer countReturn(Date date1, Date date2) {

@@ -73,13 +73,18 @@ public class Contract implements Comparable<Contract>, Dated {
 	private boolean freeze;
 
 	private boolean canceled;
-	
+
 	/**
 	 * If contract is certificate
 	 */
 	private boolean gift;
-	
+
 	private int giftMoney;
+
+	/**
+	 * True if contract is a free from school
+	 */
+	private boolean freeFromSchool;
 
 	private String comment;
 
@@ -208,10 +213,6 @@ public class Contract implements Comparable<Contract>, Dated {
 		this.gift = gift;
 	}
 
-	public int getGiftPrice() {
-		return 300;
-	}
-
 	public int getDiscount() {
 		return discount;
 	}
@@ -337,8 +338,7 @@ public class Contract implements Comparable<Contract>, Dated {
 		int lessons = getLessonsNumber();
 		int total = lessonCost * lessons;
 		total -= discount;
-		if (isGift())
-			total += getGiftPrice();
+		total += getGiftMoney();
 		return total;
 	}
 
@@ -394,10 +394,8 @@ public class Contract implements Comparable<Contract>, Dated {
 				if (e.getState() == EventState.complete)
 					count++;
 		for (Event e : getEvents())
-			if (e.isWriteOff() || e.isFree()) {
+			if (e.isWriteOff() || e.isFree())
 				count--;
-				break;
-			}
 		return count;
 	}
 
@@ -436,8 +434,7 @@ public class Contract implements Comparable<Contract>, Dated {
 				total += p.getAmount();
 			}
 		}
-		if (isGift())
-			total += getGiftPrice();
+		total += getGiftMoney();
 		return total;
 	}
 
@@ -466,8 +463,7 @@ public class Contract implements Comparable<Contract>, Dated {
 	}
 
 	public int getBalance() {
-		return getMoneyPaid() - getCompleteLessonsCost()
-				- (isGift() ? getGiftPrice() : 0) - getWrittenOffMoney();
+		return getMoneyPaid() - getCompleteLessonsCost() - getWrittenOffMoney();
 	}
 
 	private int getWrittenOffMoney() {
@@ -546,10 +542,21 @@ public class Contract implements Comparable<Contract>, Dated {
 	}
 
 	public int getGiftMoney() {
+		// TODO do something with database and eliminate default value
+		if (isGift())
+			return giftMoney > 0 ? giftMoney : 300;
 		return giftMoney;
 	}
 
 	public void setGiftMoney(int giftMoney) {
 		this.giftMoney = giftMoney;
+	}
+
+	public boolean isFreeFromSchool() {
+		return freeFromSchool;
+	}
+
+	public void setFreeFromSchool(boolean freeFromSchool) {
+		this.freeFromSchool = freeFromSchool;
 	}
 }

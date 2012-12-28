@@ -1,7 +1,6 @@
 package tap.execounting.pages;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.tapestry5.Block;
@@ -14,19 +13,18 @@ import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
 import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
+import tap.execounting.dal.mediators.interfaces.PaymentMed;
 import tap.execounting.data.ClientState;
 import tap.execounting.data.ContractState;
 import tap.execounting.data.selectmodels.ContractTypeIdSelectModel;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.ContractType;
-import tap.execounting.entities.Payment;
 import tap.execounting.services.SuperCalendar;
 
 @Import(stylesheet = "context:css/filtertable.css")
@@ -58,6 +56,8 @@ public class Clients {
 	private ClientMed clientMed;
 	@Inject
 	private ContractMed contractMed;
+	@Inject
+	private PaymentMed paymentMed;
 
 	// filtering fields
 
@@ -75,7 +75,7 @@ public class Clients {
 	@Property
 	@Persist
 	private Date fcLaterDate;
-	
+
 	// Date of any contract
 	// Before
 	@Property
@@ -105,7 +105,7 @@ public class Clients {
 	@Property
 	@Persist
 	private Date sa2;
-	
+
 	// financial statistics filters and etc
 	@Property
 	@Persist
@@ -122,8 +122,8 @@ public class Clients {
 	private List<Client> clientsCache;
 	@Persist
 	private List<Contract> contractsCache;
-	
-	public List<Client> getClients(){
+
+	public List<Client> getClients() {
 		return clientsCache;
 	}
 
@@ -147,19 +147,21 @@ public class Clients {
 		List<Client> clients;
 		clientMed.reset();
 		contractMed.reset();
-		
+		paymentMed.reset();
 
 		// Boolean flags processing for filter status
-		boolean filterOnFCDate = fcEarlyDate != null || fcLaterDate != null; // Filter
-																				// on
-																				// date
-																				// of
-																				// first
-																				// contract
-		boolean filterOnACDate = acDate1 != null || acDate2 != null; // Filter on date of any contract
-		boolean filterOnNames = name != null && name.length() > 1; // Filter on name
-		boolean filterOnState = state != null; // Filter on client state
-		boolean filterOnContractType = contractTypeId != null; // Filter on contract type id
+		// Filter on date of first contract
+		boolean filterOnFCDate = fcEarlyDate != null || fcLaterDate != null;
+		// Filter on date of any contract
+		boolean filterOnACDate = acDate1 != null || acDate2 != null;
+		// Filter on name
+		boolean filterOnNames = name != null && name.length() > 1;
+		// Filter on client state
+		boolean filterOnState = state != null;
+		// Filter on contract type id
+		boolean filterOnContractType = contractTypeId != null;
+		boolean filterOnPaymentsDate = pfEarlierDate != null
+				|| pfLaterDate != null;
 
 		// Client filters
 		// First Contract Date filtration
@@ -171,38 +173,47 @@ public class Clients {
 			clientMed.filterName(name);
 
 		// Stud status
-		if (filterOnState)
-		{	// OLDE CODE
-			//clientMed.filter(state);
-			// new code calculates also when client has acquired this status
-			Date sa1 = acDate1, sa2= acDate2;
+		if (filterOnState) { // OLDE CODE
+								// clientMed.filter(state);
+								// new code calculates also when client has
+								// acquired this status
+			Date sa1 = acDate1, sa2 = acDate2;
 			// Continuer status acquisition
-			
-			if(state == ClientState.beginner)
+
+			if (state == ClientState.beginner)
 				clientMed.becameNovices(sa1, sa2);
-			else if (ClientState.continuer==state)
+			else if (ClientState.continuer == state)
 				clientMed.becameContinuers(sa1, sa2);
-			else if(state== ClientState.trial)
-			{
-				clientMed.becameTrials(sa1,sa2);
+			else if (state == ClientState.trial) {
+				clientMed.becameTrials(sa1, sa2);
 			}
 		}
+		// Now Clients are fresh filtered and actual
+		// Setup 2. We could set up contracts
 		// Group 1
 		clients = clientMed.getGroup();
+		contractMed.setGroupFromClients(clients);
 
 		// Contract filters
 		// Any contract Date filter
 		if (filterOnACDate || filterOnContractType) {
-			contractMed.setGroupFromClients(clients);
 			if (filterOnACDate)
 				contractMed.filter(acDate1, acDate2);
 			// Contract Type
 			if (filterOnContractType)
 				contractMed.filterByContractType(contractTypeId);
-			// Retain operation
-			List<Client> toRetain = contractMed.getClients();
-			clients.retainAll(toRetain);
 		}
+		// Setup 3
+		paymentMed.setGroupFromContracts(contractMed.getGroup());
+		
+		// Payment filter
+		// Which also does intersection operation as contractmed
+		if(filterOnPaymentsDate){
+			paymentMed.filter(fcEarlyDate, fcLaterDate);
+			// Transform these into contracts
+			contractMed.retain(paymentMed.getContracts());
+		}
+		clients = contractMed.getClients();
 
 		// Cache this contracts and clients for further explorations
 		clientsCache = clients;
@@ -229,7 +240,6 @@ public class Clients {
 		return contractsCache.size();
 	}
 
-	
 	// TODO REMOVE
 	public int getNewClients() {
 		return clientMed.countNewbies(null, null);
@@ -245,56 +255,31 @@ public class Clients {
 		return clientsCache.size();
 	}
 
-	// filtered
-	private List<Payment> getPayments() {
-		HashMap<String, Object> params = new HashMap<String, Object>();
-		Date paramEarlier, paramLater;
-		if (pfEarlierDate == null) {
-			calendar.setTime(new Date());
-			calendar.addDays(-5000);
-			paramEarlier = calendar.getTime();
-		} else
-			paramEarlier = pfEarlierDate;
-		if (pfLaterDate == null) {
-			calendar.setTime(new Date());
-			calendar.addDays(5000);
-			paramLater = calendar.getTime();
-		} else
-			paramLater = pfLaterDate;
-
-		params.put("earlierDate", paramEarlier);
-		params.put("laterDate", paramLater);
-		List<Payment> payments = null;
-		try {
-			payments = dao.findWithNamedQuery(Payment.BY_DATES, params);
-		} catch (HibernateException e) {
-			e.printStackTrace();
-		}
-		return payments;
+	public int getRealPayments() {
+		return paymentMed.countRealPaymentsAmount();
 	}
-
-	public int getTotalPayments() {
-		int summ = 0;
-		for (Payment p : getPayments()) {
-			if (!p.isScheduled())
-				summ += p.getAmount();
-		}
-
-		return summ;
+	
+	public int getScheduledPayments(){
+		return paymentMed.countScheduledPaymentsAmount();
 	}
 
 	public int getCreditorsDebt() {
 		int debt = 0;
-		for (Client c : getClients()) {
+		for (Client c : clientsCache) {
 			int bal = c.getBalance();
 			if (bal > 0)
 				debt += bal;
 		}
 		return debt;
 	}
+	
+	public int getCertificateMoney(){
+		return contractMed.countCertificateMoney();
+	}
 
 	// events
 	void onSubmitFromFilterForm() {
+		// Reset fields
 		clientsCache = null;
 		contractsCache = null;
 		if (request.isXHR())

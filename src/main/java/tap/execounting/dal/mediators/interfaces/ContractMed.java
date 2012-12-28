@@ -130,4 +130,10 @@ public interface ContractMed {
 
 	// money paid on contract
 	public Integer countMoneyPaid();
+	
+	// money paid for the certificate if contract has so
+	public int countCertificateMoney();
+
+	// Intersection operation
+	public ContractMed retain(List<Contract> contracts);
 }

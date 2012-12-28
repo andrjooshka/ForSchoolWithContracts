@@ -30,6 +30,7 @@ public interface PaymentMed {
 	//group
 	public List<Payment> getGroup();
 	public PaymentMed setGroup(List<Payment> payments);
+	public PaymentMed setGroupFromContracts(List<Contract> contracts);
 	public List<Payment> getAllPayments();
 	public void reset();
 	public String getFilterState();
@@ -50,4 +51,8 @@ public interface PaymentMed {
 	//amount
 	public Integer countAmount();
 	public Integer countReturn(Date date1, Date date2);
+	public int countRealPaymentsAmount();
+	public int countScheduledPaymentsAmount();
+	// Maps payments into contracts
+	public List<Contract> getContracts();
 }

@@ -122,6 +122,9 @@
 				<th colspan="3" style="border-right: 1px solid #303030;">
 					<strong>Клиенты</strong>
 				</th>
+				<th colspan="4">
+					<strong>Финансы</strong>
+				</th>
 			</tr>
 			<tr>
 				<th>
@@ -144,10 +147,16 @@
 					Всего
 				</th>
 				<th>
-					Финансовые поступления
+					Платежи : Есть
+				</th>
+				<th>
+					Платежи : План
 				</th>
 				<th>
 					Кредиторская задолженность
+				</th>
+				<th>
+					Сертификаты
 				</th>
 			</tr>
 			<tr>
@@ -176,10 +185,16 @@
 
 				<!-- Finance data -->
 				<td>
-					${totalPayments}
+					${realPayments}
+				</td>
+				<td>
+					${scheduledPayments}
 				</td>
 				<td>
 					${creditorsDebt}
+				</td>
+				<td>
+					${certificateMoney}
 				</td>
 			</tr>
 		</table>

@@ -234,6 +234,8 @@ public class ContractMediator implements ContractMed {
 				e.setState(EventState.planned);
 				e.setTypeId(unit.getTypeId());
 				e.setDate(date.getTime());
+				if(unit.isFreeFromSchool())
+					e.setFree(Event.FREE_FROM_SCHOOL);
 				dao.create(e);
 				remain--;
 			}
@@ -364,6 +366,30 @@ public class ContractMediator implements ContractMed {
 	public void reset() {
 		cache = null;
 		appliedFilters = null;
+	}
+
+	// intersection operation
+	public ContractMed retain(List<Contract> contracts) {
+		List<Contract> cache = getGroup();
+		boolean found;
+		// use this to store cached element id
+		int ci;
+		for (int i = cache.size() - 1; i >= 0; i--) {
+			// Get id of i-th element and start search in contracts
+			found = false;
+			ci = cache.get(i).getId();
+			for (int j = 0; j < contracts.size(); j++) {
+				if (ci == contracts.get(j).getId()) {
+					// If found -- break
+					found = true;
+					break;
+				}
+			}
+			// Remove element with id ci from cache, if it is not found in contracts
+			if (!found)
+				cache.remove(i);
+		}
+		return this;
 	}
 
 	public String getFilterState() {
@@ -509,20 +535,27 @@ public class ContractMediator implements ContractMed {
 			return null;
 		}
 	}
-	
+
 	public int countNotTrial() {
 		int count = 0;
-		for(int i = 0; i < cache.size(); i++)
-			if(cache.get(i).notTrial())
+		for (int i = 0; i < cache.size(); i++)
+			if (cache.get(i).notTrial())
 				count++;
 		return count;
+	}
+	
+	public int countCertificateMoney() {
+		int summ =0 ;
+		for(Contract c : getGroup())
+			summ+=c.getGiftMoney();
+		return summ;
 	}
 
 	// Now it this does not filter anything
 	public Integer count(ContractState state) {
-		int count =0;
-		for(Contract c : getGroup())
-			if(c.getState()==state)
+		int count = 0;
+		for (Contract c : getGroup())
+			if (c.getState() == state)
 				count++;
 		return count;
 	}

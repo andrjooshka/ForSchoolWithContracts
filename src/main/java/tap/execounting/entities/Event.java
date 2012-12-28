@@ -258,7 +258,7 @@ public class Event implements Comparable<Event>, Dated {
 	public int getMoney() {
 		// First blood
 		// Code supports only one-contract lessons
-		if(free>0)
+		if (free > 0)
 			return 0;
 		int total = 0;
 		for (Contract c : getContracts())
@@ -365,5 +365,14 @@ public class Event implements Comparable<Event>, Dated {
 
 	public void setFree(byte freeVal) {
 		this.free = freeVal;
+		// If event is free either from school, or from teacher -- put that in
+		// comments
+		if (freeVal == 1 || freeVal == 2) {
+			if (comment == null)
+				comment = "";
+			comment = comment
+					+ (freeVal == 1 ? "бесплатно от школы"
+							: "бесплатно от учителя");
+		}
 	}
 }
