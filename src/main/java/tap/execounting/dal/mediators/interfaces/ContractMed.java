@@ -118,6 +118,9 @@ public interface ContractMed {
 
 	// actual group size
 	public Integer countGroupSize();
+	
+	// Trial / Not trial dichotomy is in wide use.
+	public int countNotTrial();
 
 	// state
 	public Integer count(ContractState state);

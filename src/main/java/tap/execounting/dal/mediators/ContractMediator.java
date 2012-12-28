@@ -509,9 +509,22 @@ public class ContractMediator implements ContractMed {
 			return null;
 		}
 	}
+	
+	public int countNotTrial() {
+		int count = 0;
+		for(int i = 0; i < cache.size(); i++)
+			if(cache.get(i).notTrial())
+				count++;
+		return count;
+	}
 
+	// Now it this does not filter anything
 	public Integer count(ContractState state) {
-		return filter(state).countGroupSize();
+		int count =0;
+		for(Contract c : getGroup())
+			if(c.getState()==state)
+				count++;
+		return count;
 	}
 
 	public Integer countCompleteLessonsMoney() {

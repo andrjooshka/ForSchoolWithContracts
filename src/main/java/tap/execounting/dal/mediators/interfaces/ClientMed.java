@@ -73,6 +73,11 @@ public interface ClientMed {
 	
 	//filters
 	
+	// who acquired such state in this date period
+	public ClientMed becameContinuers(Date date1, Date date2);
+	public ClientMed becameNovices(Date date1, Date date2);
+	public ClientMed becameTrials(Date sa1, Date sa2);
+	
 	//state
 	public ClientMed filter(ClientState state);
 	

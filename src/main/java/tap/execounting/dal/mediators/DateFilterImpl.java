@@ -33,12 +33,16 @@ public class DateFilterImpl implements DateFilter {
 		return filtered;
 	}
 
+	/**
+	 * remove all items that do not fit in that date borders
+	 */
 	public void filter(List<? extends Dated> items, Date date1, Date date2) {
 		Dated item;
 		if (date1 != null && date2 != null) {
 			for(int i=items.size()-1;i>=0;i--){
 				item = items.get(i);
-				if(item.getDate().before(date1) || item.getDate().after(date2))
+				// FIXME
+				if(item.getDate().after(date2) || item.getDate().before(date1))
 					items.remove(i);
 			}
 		} else if (date1 != null) {
@@ -50,7 +54,7 @@ public class DateFilterImpl implements DateFilter {
 		} else if (date2 != null) {
 			for(int i=items.size()-1;i>=0;i--){
 				item = items.get(i);
-				if(item.getDate().after(date2))
+				if(!item.getDate().before(date2))
 					items.remove(i);
 			}
 		}

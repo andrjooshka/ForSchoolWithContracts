@@ -1,6 +1,5 @@
 package tap.execounting.pages;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -76,8 +75,8 @@ public class Clients {
 	@Property
 	@Persist
 	private Date fcLaterDate;
+	
 	// Date of any contract
-
 	// Before
 	@Property
 	@Persist
@@ -86,17 +85,27 @@ public class Clients {
 	@Property
 	@Persist
 	private Date acDate2;
+	@Property
+	@Persist
+	private Integer contractTypeId;
+
 	// misc
+	// Client name
 	@Property
 	@Persist
 	private String name;
 	@Property
 	@Persist
 	private ClientState state;
+	// Status acquisition date1
 	@Property
 	@Persist
-	private Integer contractTypeId;
-
+	private Date sa1;
+	// Status acquisition date2
+	@Property
+	@Persist
+	private Date sa2;
+	
 	// financial statistics filters and etc
 	@Property
 	@Persist
@@ -113,6 +122,10 @@ public class Clients {
 	private List<Client> clientsCache;
 	@Persist
 	private List<Contract> contractsCache;
+	
+	public List<Client> getClients(){
+		return clientsCache;
+	}
 
 	// @SuppressWarnings("unchecked")
 	// Basically, this is the main method for this page.
@@ -129,14 +142,12 @@ public class Clients {
 	// Then function retains all the clients from first group, which are listed
 	// in the second;
 	// Intersection operation it is actually.
-	public List<Client> getClients() {
-		if (clientsCache != null && contractsCache != null)
-			return new ArrayList<Client>(clientsCache);
-
+	public void dataInit() {
 		// Little set up
 		List<Client> clients;
 		clientMed.reset();
 		contractMed.reset();
+		
 
 		// Boolean flags processing for filter status
 		boolean filterOnFCDate = fcEarlyDate != null || fcLaterDate != null; // Filter
@@ -145,18 +156,10 @@ public class Clients {
 																				// of
 																				// first
 																				// contract
-		boolean filterOnACDate = acDate1 != null || acDate2 != null; // Filter
-																		// on
-																		// date
-																		// of
-																		// any
-																		// contract
-		boolean filterOnNames = name != null && name.length() > 1; // Filter on
-																	// name
+		boolean filterOnACDate = acDate1 != null || acDate2 != null; // Filter on date of any contract
+		boolean filterOnNames = name != null && name.length() > 1; // Filter on name
 		boolean filterOnState = state != null; // Filter on client state
-		boolean filterOnContractType = contractTypeId != null; // Filter on
-																// contract type
-																// id
+		boolean filterOnContractType = contractTypeId != null; // Filter on contract type id
 
 		// Client filters
 		// First Contract Date filtration
@@ -169,7 +172,21 @@ public class Clients {
 
 		// Stud status
 		if (filterOnState)
-			clientMed.filter(state);
+		{	// OLDE CODE
+			//clientMed.filter(state);
+			// new code calculates also when client has acquired this status
+			Date sa1 = acDate1, sa2= acDate2;
+			// Continuer status acquisition
+			
+			if(state == ClientState.beginner)
+				clientMed.becameNovices(sa1, sa2);
+			else if (ClientState.continuer==state)
+				clientMed.becameContinuers(sa1, sa2);
+			else if(state== ClientState.trial)
+			{
+				clientMed.becameTrials(sa1,sa2);
+			}
+		}
 		// Group 1
 		clients = clientMed.getGroup();
 
@@ -190,8 +207,7 @@ public class Clients {
 		// Cache this contracts and clients for further explorations
 		clientsCache = clients;
 		contractsCache = contractMed.getGroup();
-
-		return clientsCache;
+		clientMed.setGroup(clients);
 	}
 
 	public Block getFilter() {
@@ -200,45 +216,33 @@ public class Clients {
 
 	// aggregate fields
 	public int getActiveContracts() {
-		int counter = 0;
-		for (Contract t : contractsCache)
-			if (t.getState() == ContractState.active)
-				counter++;
-		return counter;
+		return contractMed.count(ContractState.active);
 	}
 
 	public int getFreezedContracts() {
-		int sum = 0;
-		for (Contract t : contractsCache)
-			if (t.getState() == ContractState.frozen)
-				sum++;
-		return sum;
+		return contractMed.count(ContractState.frozen);
 	}
 
 	public int getTotalContracts() {
-		// OLD VERSION counts all contracts of selected clients
-		// int sum = 0;
-		// for (Client c : getClients())
-		// sum += c.getContracts().size();
-		// return sum;
-
 		// NEW VERSION count all contracts of selected clients
 		// with contract date filter applied
 		return contractsCache.size();
 	}
 
+	
+	// TODO REMOVE
 	public int getNewClients() {
-		clientMed.setGroup(getClients());
 		return clientMed.countNewbies(null, null);
 	}
 
+	// TODO REMOVE
 	public int getExpClients() {
 		return getClientMed().setGroup(getClients())
 				.countContinuers(null, null);
 	}
 
 	public int getTotalClients() {
-		return getClients().size();
+		return clientsCache.size();
 	}
 
 	// filtered
@@ -299,7 +303,7 @@ public class Clients {
 
 	void setupRender() {
 		// Call it to set up the cache.
-		getClients();
+		dataInit();
 		@SuppressWarnings("unchecked")
 		List<ContractType> types = session.createCriteria(ContractType.class)
 				.list();

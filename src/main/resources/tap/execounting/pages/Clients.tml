@@ -34,6 +34,9 @@
 				<th>
 					Не позже
 				</th>
+				<th>
+					Тип договора
+				</th>
 			</tr>
 			<tr class="bb">
 				<td>
@@ -48,11 +51,23 @@
 				<td>
 					<t:datefield value="acDate2" />
 				</td>
-				<td />
+				<td>
+					<t:select t:id="contractType" model="contractTypeIdsModel"
+						value="contractTypeId" />
+				</td>
 			</tr>
 
 			<tr>
-				<td colspan="4" style="height: 20px" />
+				<!-- Above name - clear -->
+				<th></th>
+				<!-- Above client state -->
+				<th colspan="3" class="rb">
+					Статус клиента
+				</th>
+				<!-- Above Payments -->
+				<th colspan="2">
+					Платежи
+				</th>
 			</tr>
 
 			<tr>
@@ -60,16 +75,16 @@
 					Имя
 				</th>
 				<th>
-					Статус клиента
+					Значение
+				</th>
+				<th colspan="2" class="rb">
+					Период приобретения
 				</th>
 				<th>
-					Тип договора
+					Не раньше:
 				</th>
 				<th>
-					Платежи. Не раньше:
-				</th>
-				<th>
-					Платежи. Не позже:
+					Не позже:
 				</th>
 			</tr>
 			<tr>
@@ -80,8 +95,10 @@
 					<t:select t:id="studStatus" value="state" />
 				</td>
 				<td>
-					<t:select t:id="contractType" model="contractTypeIdsModel"
-						value="contractTypeId" />
+					<t:datefield t:id="sa1" />
+				</td>
+				<td class="rb">
+					<t:datefield t:id="sa2" />
 				</td>
 				<td>
 					<t:datefield value="pfEarlierDate" />
@@ -117,13 +134,13 @@
 					Всего
 				</th>
 
-				<th>
-					Новых
-				</th>
-				<th>
-					Продливших
-				</th>
-				<th style="border-right: 1px solid #303030;">
+				<!-- TODO REMOVE <th> -->
+				<!-- Новых -->
+				<!-- </th> -->
+				<!-- <th> -->
+				<!-- Продливших -->
+				<!-- </th> -->
+				<th colspan="3" style="border-right: 1px solid #303030;">
 					Всего
 				</th>
 				<th>
@@ -146,13 +163,14 @@
 				</td>
 
 				<!-- Clients section -->
-				<td>
-					${newClients}
-				</td>
-				<td>
-					${expClients}
-				</td>
-				<td style="border-right: 1px solid #303030;">
+				<!-- TODO REMOVE -->
+				<!-- <td> -->
+				<!-- ${newClients} -->
+				<!-- </td> -->
+				<!-- <td> -->
+				<!-- ${expClients} -->
+				<!-- </td> -->
+				<td colspan="3" style="border-right: 1px solid #303030;">
 					${totalClients}
 				</td>
 

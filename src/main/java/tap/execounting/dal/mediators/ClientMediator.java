@@ -135,7 +135,8 @@ public class ClientMediator implements ClientMed {
 		// }
 		// return null;
 		// NEW VERSION
-		Comment c = dao.findUniqueWithNamedQuery(Comment.BY_CLIENT_ID, QueryParameters.with("id", unit.getId()).parameters());
+		Comment c = dao.findUniqueWithNamedQuery(Comment.BY_CLIENT_ID,
+				QueryParameters.with("id", unit.getId()).parameters());
 		return c;
 	}
 
@@ -190,6 +191,121 @@ public class ClientMediator implements ClientMed {
 				.filter(ContractState.frozen).countGroupSize() > 0;
 		contractMed.reset();
 		return response;
+	}
+
+	public ClientMed becameContinuers(Date date1, Date date2) {
+		List<Client> list = getGroup();
+		for (int i = list.size() - 1; i >= 0; i--) {
+			setUnit(list.get(i));
+			if (!becameContinuer(date1, date2))
+				list.remove(i);
+		}
+		return this;
+	}
+
+	public ClientMed becameNovices(Date date1, Date date2) {
+		List<Client> list = getGroup();
+		for (int i = list.size() - 1; i >= 0; i--) {
+			setUnit(list.get(i));
+			if (!becameNovice(date1, date2))
+				list.remove(i);
+		}
+		return this;
+	}
+
+	public ClientMed becameTrials(Date date1, Date date2) {
+		List<Client> list = getGroup();
+		for (int i = list.size() - 1; i >= 0; i--) {
+			setUnit(list.get(i));
+			if (!becameTrial(date1, date2))
+				list.remove(i);
+		}
+		return this;
+	}
+
+	public boolean becameTrial(Date date1, Date date2) {
+		contractMed.setGroup(getContracts()).filter(null, date2);
+		int countBeforeDate2 = contractMed.countGroupSize();
+		// That means that he did not have contracts in that period at all
+		if (countBeforeDate2 < 1)
+			return false;
+		contractMed.filter(null, date1);
+		int countBeforeDate1 = contractMed.countGroupSize();
+		// If he already has contracts before date1 -- he already tried
+		// something
+		if (countBeforeDate1 > 0)
+			return false;
+		int notTrial = contractMed.countNotTrial();
+		// If he has more contracts in that period, than he have usual, nontrial
+		// contracts
+		// That means he have trial contracts here
+		if (countBeforeDate2 > notTrial)
+			return true;
+		return false;
+	}
+
+	/**
+	 * 
+	 * @param date1
+	 * @param date2
+	 * @return true if client (unit) became novice between this two dates
+	 */
+	public boolean becameNovice(Date date1, Date date2) {
+		contractMed.setGroup(getContracts()).filter(null, date2);
+		int countBeforeDate2 = contractMed.countNotTrial();
+		if (countBeforeDate2 != 1) // he is not novice at all
+			return false;
+		contractMed.filter(null, date1);
+		int countBeforeDate1 = contractMed.countNotTrial();
+		// If he was a novice before date1 -- he is not interesting for us
+		if (countBeforeDate1 > 0)
+			return false;
+		return true;
+	}
+
+	/**
+	 * @param date1
+	 * @param date2
+	 * @return true if client (unit) have acquired continuer status between this
+	 *         two dates
+	 */
+	public boolean becameContinuer(Date date1, Date date2) {
+		// We need to say if client have acquired this state
+		// between this dates
+		// This means -- we are not interested in those who acquired this state
+		// no before nor after.
+		// First try could be to get all his contracts before date2 and see if
+		// he has continuer state.
+		// Then we could remove contract after date1 and see if state changed
+		// If so -- return true
+		// Else return false;
+
+		// So -- take contracts before the second date
+		contractMed.setGroup(getContracts()).filter(null, date2);
+		List<Contract> list = contractMed.getGroup();
+		int countBeforeDate2 = 0;
+		for (int i = 0; i < list.size(); i++)
+			if (list.get(i).notTrial())
+				countBeforeDate2++;
+		// If count < 2 -- he is not continuer at all. If count >= 2 -- he is a
+		// continuer
+		if (countBeforeDate2 < 2)
+			return false;
+		// OK -- he is a continuer.
+		// Lets look if he was a continuer already
+		// Take only those contracts before the date1
+		contractMed.filter(null, date1);
+		list = contractMed.getGroup();
+		int countBeforeDate1 = 0;
+		for (int i = 0; i < list.size(); i++)
+			if (list.get(i).notTrial())
+				countBeforeDate1++;
+		// That means -- he already was a continuer, before this date
+		if (countBeforeDate1 == countBeforeDate2)
+			return false;
+		if (countBeforeDate1 > countBeforeDate2)
+			System.out.println("DAFUQ");
+		return true;
 	}
 
 	public List<Contract> getFrozenContracts() {
@@ -311,7 +427,7 @@ public class ClientMediator implements ClientMed {
 		// beginner.
 		int notTrialCounter = 0;
 		for (Contract c : unit.getContracts())
-			if (c.getContractTypeId() != ContractType.Trial)
+			if (c.notTrial())
 				notTrialCounter++;
 		switch (notTrialCounter) {
 		case 0:
@@ -456,7 +572,6 @@ public class ClientMediator implements ClientMed {
 	}
 
 	public ClientMed filterDateOfFirstContract(Date date1, Date date2) {
-		// TODO we can do this through hsql
 		getAppliedFilters().put("Date of first contract 1", date1);
 		getAppliedFilters().put("Date of first contract 2", date2);
 		List<Client> cache = getGroup();
@@ -469,7 +584,6 @@ public class ClientMediator implements ClientMed {
 	}
 
 	public ClientMed filterDateOfPlannedPayments(Date date1, Date date2) {
-		// TODO we can do this through hsql
 		getAppliedFilters().put("Date of planned payments 1", date1);
 		getAppliedFilters().put("Date of planned payments 2", date2);
 		List<Payment> payments;
@@ -542,10 +656,12 @@ public class ClientMediator implements ClientMed {
 		return getGroup().size();
 	}
 
+	// TODO REDO
 	public Integer count(ClientState state) {
 		return filter(state).countGroupSize();
 	}
 
+	// TODO REDO
 	public Integer count(ClientState state, Date date1, Date date2) {
 		return filterDateOfFirstContract(date1, date2).filter(state)
 				.countGroupSize();

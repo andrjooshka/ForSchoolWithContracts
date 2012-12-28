@@ -68,13 +68,18 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	private Date date;
 
-	private boolean gift;
-
 	private int discount;
 
 	private boolean freeze;
 
 	private boolean canceled;
+	
+	/**
+	 * If contract is certificate
+	 */
+	private boolean gift;
+	
+	private int giftMoney;
 
 	private String comment;
 
@@ -285,8 +290,8 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	public ContractState getState() {
 		// TODO hotfix alert
-//		if (ContractType.Trial == contractTypeId)
-//			return ContractState.active;
+		// if (ContractType.Trial == contractTypeId)
+		// return ContractState.active;
 		ContractState state = null;
 		if (isCanceled())
 			state = ContractState.canceled;
@@ -534,5 +539,17 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	public static List<Contract> cleanList() {
 		return new ArrayList<Contract>();
+	}
+
+	public boolean notTrial() {
+		return this.contractTypeId != ContractType.Trial;
+	}
+
+	public int getGiftMoney() {
+		return giftMoney;
+	}
+
+	public void setGiftMoney(int giftMoney) {
+		this.giftMoney = giftMoney;
 	}
 }
