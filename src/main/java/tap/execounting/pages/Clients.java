@@ -177,16 +177,15 @@ public class Clients {
 								// clientMed.filter(state);
 								// new code calculates also when client has
 								// acquired this status
-			Date sa1 = acDate1, sa2 = acDate2;
 			// Continuer status acquisition
 
 			if (state == ClientState.beginner)
 				clientMed.becameNovices(sa1, sa2);
 			else if (ClientState.continuer == state)
 				clientMed.becameContinuers(sa1, sa2);
-			else if (state == ClientState.trial) {
+			else if (state == ClientState.trial)
 				clientMed.becameTrials(sa1, sa2);
-			}
+			else clientMed.filter(state);
 		}
 		// Now Clients are fresh filtered and actual
 		// Setup 2. We could set up contracts
