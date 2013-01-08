@@ -1,1 +1,2 @@
 lessc style.less > style.css
+lessc comments.less > comments.css

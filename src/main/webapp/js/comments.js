@@ -45,12 +45,6 @@ m(go);
 
 function go() {
 
-	function resize() {
-		m('div#payment textarea.cool').each(function() {
-			this.style.height = (m(this).closest('td').height() - 8) + "px";
-		});
-	}
-
 	function trim() {
 		m('textarea.cool').each(function() {
 			wr = m(this);
@@ -282,7 +276,6 @@ function go() {
 		}
 	}
 
-	resize();
 	trim();
 	initNames();
 	initModel();

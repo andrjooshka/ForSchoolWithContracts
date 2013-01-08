@@ -41,7 +41,7 @@ import tap.execounting.services.SuperCalendar;
 
 @Import(library = { "context:js/jquery-1.8.3.min.js",
 		"context:js/reportsAjax.js" }, stylesheet = {
-		"context:css/datatable.css", "context:css/reports.css" })
+		"context:css/datatable.css", "context:css/reports.css", "context:css/comments.css" })
 public class Reports {
 
 	// Activation context
@@ -186,7 +186,7 @@ public class Reports {
 		return c == null ? null : c.getDate();
 	}
 
-	// TODO refactor candidate, could be pushed into different package
+	// TODO refactor candidate, should be pushed into different package
 	private void nameSort(List<Client> clients) {
 		Client t;
 		for (int i = 0; i < clients.size(); i++)
@@ -394,7 +394,7 @@ public class Reports {
 	}
 
 	public String getPagerPosition() {
-		return switchPages ? "top" : "none";
+		return switchPages ? "both" : "none";
 	}
 
 	public int getRows() {

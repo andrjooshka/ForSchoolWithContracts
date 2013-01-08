@@ -487,6 +487,9 @@ big {
 input[type=submit] {
   padding: .35em;
 }
+select {
+  height: 23px;
+}
 /* AutoComplete */
 div.t-autocomplete-menu {
   z-index: 9999;
@@ -496,8 +499,8 @@ div.t-autocomplete-menu ul {
   background-color: white;
   padding: 4px 2px;
   overflow: auto;
-  width: 200px;
-  font-size: 10pt;
+  width: 220px;
+  font-size: 9.5pt;
 }
 div.t-autocomplete-menu ul li {
   color: #333;

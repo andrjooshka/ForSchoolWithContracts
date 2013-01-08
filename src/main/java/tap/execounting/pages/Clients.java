@@ -162,6 +162,8 @@ public class Clients {
 		boolean filterOnContractType = contractTypeId != null;
 		boolean filterOnPaymentsDate = pfEarlierDate != null
 				|| pfLaterDate != null;
+		boolean anyFilter = filterOnACDate || filterOnContractType || filterOnFCDate;
+		anyFilter |= filterOnNames || filterOnPaymentsDate || filterOnState;
 
 		// Client filters
 		// First Contract Date filtration
@@ -201,6 +203,8 @@ public class Clients {
 			// Contract Type
 			if (filterOnContractType)
 				contractMed.filterByContractType(contractTypeId);
+			// UPDATE CLIENTS
+			clients = contractMed.getClients();
 		}
 		// Setup 3
 		paymentMed.setGroupFromContracts(contractMed.getGroup());
@@ -211,8 +215,10 @@ public class Clients {
 			paymentMed.filter(pfEarlierDate, pfLaterDate);
 			// Transform these into contracts
 			contractMed.retain(paymentMed.getContracts());
+			// update clients
+			clients = contractMed.getClients();
 		}
-		clients = contractMed.getClients();
+		// clients = contractMed.getClients();
 
 		// Cache this contracts and clients for further explorations
 		clientsCache = clients;
@@ -233,6 +239,7 @@ public class Clients {
 		return contractMed.count(ContractState.frozen);
 	}
 
+	// TODO remove candidate
 	public int getTotalContracts() {
 		// NEW VERSION count all contracts of selected clients
 		// with contract date filter applied

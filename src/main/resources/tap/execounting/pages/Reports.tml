@@ -55,7 +55,7 @@
 			</p:endingInfoCell>
 			<p:commentCell>
 				<div class="commentDate"><t:outputraw value="commentDate" /></div>
-				<textarea model-clientId="${client.id}" class="cool">
+				<textarea model-id="${client.id}" class="cool">
 					${comment}
 				</textarea>
 			</p:commentCell>
@@ -76,7 +76,7 @@
 			</p:endedInfoCell>
 			<p:commentCell>
 				<div class="commentDate"><t:outputraw value="commentDate" /></div>
-				<textarea model-clientId="${client.id}" class="cool">
+				<textarea model-id="${client.id}" class="cool">
 					${comment}
 				</textarea>
 			</p:commentCell>
@@ -133,7 +133,7 @@
 			</p:paymentsInfoCell>
 			<p:commentCell>
 				<div class="commentDate"><t:outputraw value="commentDate" /></div>
-				<textarea model-clientId="${client.id}" class="cool">
+				<textarea model-id="${client.id}" class="cool">
 					${comment}
 				</textarea>
 			</p:commentCell>
@@ -151,7 +151,7 @@
 			</p:nameCell>
 			<p:commentCell>
 				<div class="commentDate"><t:outputraw value="commentDate" /></div>
-				<textarea model-clientId="${client.id}" class="cool">
+				<textarea model-id="${client.id}" class="cool">
 					${comment}
 				</textarea>
 			</p:commentCell>
@@ -172,7 +172,7 @@
 			</p:debtInfoCell>
 			<p:commentCell>
 				<div class="commentDate"><t:outputraw value="commentDate" /></div>
-				<textarea model-clientId="${client.id}" class="cool">
+				<textarea model-id="${client.id}" class="cool">
 					${comment}
 				</textarea>
 			</p:commentCell>

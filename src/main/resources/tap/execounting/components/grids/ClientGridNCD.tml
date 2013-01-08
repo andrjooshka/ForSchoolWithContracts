@@ -1,5 +1,6 @@
 <t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
-
+	<t:eventlink id="aj" event="AJ" />
+	<t:eventlink id="ajpoll" event="AJpoll" />
 	<t:grid source="source" model="model" row="unit" rowsPerPage="message:rowsperpage" 
 		pagerPosition="both">
 		<p:nameCell>
@@ -7,6 +8,12 @@
 				${unit.name}
 			</t:actionlink>
 		</p:nameCell>
+		<p:commentCell>
+			<div class="commentDate"><t:outputraw value="commentDate" /></div>
+				<textarea model-id="${unit.id}" class="cool">
+					${comment}
+				</textarea>
+		</p:commentCell>
 		<p:contractsCell>
 			<t:loop source="contracts" value="loopContract">
 				${contractInfo}

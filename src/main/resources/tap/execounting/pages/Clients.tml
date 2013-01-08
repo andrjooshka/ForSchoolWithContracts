@@ -115,11 +115,11 @@
 		<h4>Счетчики</h4>
 		<table class="filters panel">
 			<tr>
-				<th colspan="3" style="border-right: 1px solid #303030;">
+				<th colspan="2" style="border-right: 1px solid #303030;">
 					<strong>Договора</strong>
 				</th>
 
-				<th colspan="3" style="border-right: 1px solid #303030;">
+				<th style="border-right: 1px solid #303030;">
 					<strong>Клиенты</strong>
 				</th>
 				<th colspan="4">
@@ -127,25 +127,18 @@
 				</th>
 			</tr>
 			<tr>
+				<!-- Contracts -->
 				<th>
 					Активных
 				</th>
-				<th>
+				<th style="border-right: 1px solid #303030;">
 					Заморожено
 				</th>
+				<!-- Clients -->
 				<th style="border-right: 1px solid #303030;">
 					Всего
 				</th>
-
-				<!-- TODO REMOVE <th> -->
-				<!-- Новых -->
-				<!-- </th> -->
-				<!-- <th> -->
-				<!-- Продливших -->
-				<!-- </th> -->
-				<th colspan="3" style="border-right: 1px solid #303030;">
-					Всего
-				</th>
+				<!-- Financial data -->
 				<th>
 					Платежи : Есть
 				</th>
@@ -164,26 +157,14 @@
 				<td>
 					${activeContracts}
 				</td>
-				<td>
+				<td style="border-right: 1px solid #303030;">
 					${freezedContracts}
 				</td>
-				<td style="border-right: 1px solid #303030;">
-					${totalContracts}
-				</td>
-
 				<!-- Clients section -->
-				<!-- TODO REMOVE -->
-				<!-- <td> -->
-				<!-- ${newClients} -->
-				<!-- </td> -->
-				<!-- <td> -->
-				<!-- ${expClients} -->
-				<!-- </td> -->
-				<td colspan="3" style="border-right: 1px solid #303030;">
+				<td style="border-right: 1px solid #303030;">
 					${totalClients}
 				</td>
-
-				<!-- Finance data -->
+				<!-- Financial data -->
 				<td>
 					${realPayments}
 				</td>

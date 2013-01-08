@@ -8,19 +8,27 @@ import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.RequestParameter;
 import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.json.JSONArray;
+import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.BeanModelSource;
 
 import tap.execounting.dal.CRUDServiceDAO;
+import tap.execounting.dal.QueryParameters;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.entities.Client;
+import tap.execounting.entities.Comment;
 import tap.execounting.entities.Contract;
+import tap.execounting.entities.ContractType;
 import tap.execounting.entities.Teacher;
 import tap.execounting.pages.ClientPage;
+import tap.execounting.services.DateService;
 import tap.execounting.services.SuperCalendar;
 
-@Import(stylesheet = "context:css/datatable.css")
+@Import(stylesheet = {"context:css/datatable.css", "context:css/comments.css"}, library = { "context:js/jquery-1.8.3.min.js",
+"context:js/comments.js" })
 public class ClientGridNCD {
 	@Inject
 	private BeanModelSource beanModelSource;
@@ -57,10 +65,11 @@ public class ClientGridNCD {
 			model = beanModelSource.createDisplayModel(Client.class,
 					componentResources.getMessages());
 			model.exclude("id", "return", "firstPlannedPaymentDate", "date",
-					"canceled");
+					"canceled", "firstContractDate");
 			model.add("state", null);
 			model.add("contracts", null);
-			model.reorder("name", "contracts");
+			model.add("comment",null);
+			model.reorder("name", "comment", "contracts");
 		}
 		return model;
 	}
@@ -80,7 +89,19 @@ public class ClientGridNCD {
 		}
 		return sb.toString();
 	}
+	
 
+	public Date getCommentDate() {
+		Comment c = clientMed.setUnit(unit).getComment();
+		return c == null ? null : c.getDate();
+	}
+	
+	public String getComment() {
+		Comment c = clientMed.setUnit(unit).getComment();
+		return c == null ? "" : c.getText();
+	}
+
+	// TODO remove
 	public String getFirstContractDate() {
 		Date d = unit.getFirstContractDate();
 		if (d == null)
@@ -96,7 +117,8 @@ public class ClientGridNCD {
 	public String getContractInfo() {
 		StringBuilder sb = new StringBuilder();
 		Contract c = loopContract;
-		if (c.getContractTypeId() != 1)
+		sb.append(DateService.toString("dd.MM.YYYY\t",c.getDate()));
+		if (c.getContractTypeId() != ContractType.Standard)
 			sb.append(c.getContractType().getTitle() + ". ");
 
 		sb.append(c.getEventType().getTitle() + " (" + c.getTeacher().getName()
@@ -122,4 +144,29 @@ public class ClientGridNCD {
 	public String getState() {
 		return getClientMed().setUnit(unit).getState().toString();
 	}
+	
+
+	public JSONObject onAJpoll(@RequestParameter("timeStamp") long timestamp) {
+		JSONObject js = new JSONObject("{'status':'ok'}");
+		List<Comment> list = dao.findWithNamedQuery(Comment.CLIENT_AFTER_DATE,
+				QueryParameters.with("date", new Date(timestamp)).parameters());
+		if (list.size() > 0) {
+			JSONArray jr = new JSONArray();
+			for (Comment c : list)
+				jr.put(new JSONObject("id", c.getEntityId() + "", "comment", c
+						.getText(), "timeStamp", c.getDate().getTime() + ""));
+			js.put("updates", jr);
+		}
+		return js;
+	}
+
+	public JSONObject onAJ(@RequestParameter("id") int id,
+			@RequestParameter("comment") String text,
+			@RequestParameter("timeStamp") long timeStamp) {
+
+		clientMed.setUnitId(id).comment(text, timeStamp);
+		JSONObject js = new JSONObject("{'status':'ok'}");
+		return js;
+	}
+
 }
