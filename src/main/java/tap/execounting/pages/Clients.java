@@ -208,7 +208,7 @@ public class Clients {
 		// Payment filter
 		// Which also does intersection operation as contractmed
 		if(filterOnPaymentsDate){
-			paymentMed.filter(fcEarlyDate, fcLaterDate);
+			paymentMed.filter(pfEarlierDate, pfLaterDate);
 			// Transform these into contracts
 			contractMed.retain(paymentMed.getContracts());
 		}

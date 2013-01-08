@@ -127,18 +127,21 @@ public class PaymentMediator implements PaymentMed {
 	}
 
 	public PaymentMed filter(Date date1, Date date2) {
-		if (cache == null || appliedFilters == null
-				|| appliedFilters.size() == 0) {
-			// Query should not get null values
-			date1 = date1 == null ? new Date(0) : date1;
-			date2 = date2 == null ? new Date(Long.MAX_VALUE - Integer.MAX_VALUE)
-					: date2;
-			cache = getDao().findWithNamedQuery(
-					Payment.BY_DATES,
-					QueryParameters.with("earlierDate", date1)
-							.and("laterDate", date2).parameters());
-		} else
-			dateFilter.filter(cache, date1, date2);
+		getGroup();
+		// WARN -- commented code does not works properly, need testing
+		//
+		// if (cache == null && (appliedFilters == null
+		// || appliedFilters.size() == 0)) {
+		// // Query should not get null values
+		// date1 = date1 == null ? new Date(0) : date1;
+		// date2 = date2 == null ? new Date(Long.MAX_VALUE - Integer.MAX_VALUE)
+		// : date2;
+		// cache = getDao().findWithNamedQuery(
+		// Payment.BY_DATES,
+		// QueryParameters.with("earlierDate", date1)
+		// .and("laterDate", date2).parameters());
+		// } else
+		dateFilter.filter(cache, date1, date2);
 		getAppliedFilters().put("Date1", date1);
 		getAppliedFilters().put("Date2", date2);
 
