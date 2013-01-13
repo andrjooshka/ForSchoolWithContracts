@@ -375,9 +375,17 @@ public class Contract implements Comparable<Contract>, Dated {
 	}
 
 	public int getCompleteLessonsCost() {
-		int completeLessons = getCompleteLessonsNumber(true);
-		int completeLessonsCost = completeLessons * getSingleLessonCost();
-		return completeLessonsCost;
+		// OLDE CODE
+		// int completeLessons = getCompleteLessonsNumber(true);
+		// int completeLessonsCost = completeLessons * getSingleLessonCost();
+		// return completeLessonsCost;
+		// NUEAU CODE
+		int sum = 0;
+		for (Event e : getEvents())
+			if (e.getState() == EventState.complete
+					|| e.getState() == EventState.failedByClient)
+				sum += e.getEventType().getPrice();
+		return sum;
 	}
 
 	// Does not counts the writeoffs;

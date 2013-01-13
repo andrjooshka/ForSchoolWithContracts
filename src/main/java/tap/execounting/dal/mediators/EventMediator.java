@@ -458,7 +458,6 @@ public class EventMediator implements EventMed {
 		} else {
 			dateFilter.filter(getGroup(), date1, date2);
 		}
-
 		getAppliedFilters().put("Date1", date1);
 		getAppliedFilters().put("Date2", date2);
 

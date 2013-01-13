@@ -24,6 +24,18 @@ import tap.execounting.entities.EventTypeAddition;
 import tap.execounting.entities.TeacherAddition;
 import tap.execounting.services.DateService;
 
+
+/**
+ * @author truth sharp.maestro@gmail.com
+ * This class calculates month salary for employee
+ * Source of events and contracts is produced by getContracts.
+ * Sequence is following:
+ * 	1) getContracts() is called
+ * 		1. Events list is produced by calling raw()
+ * 		2. if filter option is on -- filter() is called, which removes unneeded events
+ * 		3. Then events are translated into contracts
+ * 	2) other calculations are performed
+ */
 @Import(stylesheet = "context:/css/payroll.css")
 public class Payroll {
 
@@ -208,9 +220,11 @@ public class Payroll {
 	private List<Event> raw() {
 		// step1
 		eM.reset();
-		List<Event> list1 = eM.filter(dateOne, dateTwo).filter(tM.getUnit())
+		List<Event> list1 = eM.filter(dateOne, dateTwo)
+				.filter(tM.getUnit())
 				.filter(EventState.complete).getGroup();
 		eM.reset();
+
 		// Include events failed by client
 		eM.filter(dateOne, dateTwo).filter(tM.getUnit())
 				.filter(EventState.failedByClient).getGroup().addAll(list1);

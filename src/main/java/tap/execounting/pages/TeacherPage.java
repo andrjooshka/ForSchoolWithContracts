@@ -1,6 +1,5 @@
 package tap.execounting.pages;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -380,13 +379,11 @@ public class TeacherPage {
 	}
 
 	public String getPayrollDateOneS() {
-		SimpleDateFormat t = new SimpleDateFormat("dd.MM.YYYY");
-		return t.format(payrollDateOne);
+		return DateService.toString("dd.MM.yyyy", payrollDateOne);
 	}
 
 	public String getPayrollDateTwoS() {
-		SimpleDateFormat t = new SimpleDateFormat("dd.MM.YYYY");
-		return t.format(payrollDateTwo);
+		return DateService.toString("dd.MM.yyyy", payrollDateTwo);
 	}
 
 	public boolean hasShiftedLessons() {

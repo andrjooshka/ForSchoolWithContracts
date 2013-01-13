@@ -48,9 +48,9 @@
 						<br />
 						(Период выполнения
 						услуг с
-						<t:output value="dateOne" format="literal: dd.MM.YYYY" />
+						<t:output value="dateOne" format="literal: dd.MM.y" />
 						по
-						<t:output value="dateTwo" format="literal: dd.MM.YYYY" />
+						<t:output value="dateTwo" format="literal: dd.MM.y" />
 						)
 					</div>
 				</div>
@@ -79,9 +79,9 @@
 				<div id="bodytexttwo">
 					<div class="li">
 						2. Общая стоимость оказанных услуг за период с
-						<t:output value="dateOne" format="literal: dd.MM.YYYY" />
+						<t:output value="dateOne" format="literal: dd.MM.y" />
 						по
-						<t:output value="dateTwo" format="literal: dd.MM.YYYY" />
+						<t:output value="dateTwo" format="literal: dd.MM.y" />
 						составляет: ${totalMoney} руб.
 					</div>
 					<div class="li">
@@ -126,9 +126,9 @@
 					<div id="toptext">${tM.name}</div>
 					<div id="lefttext">
 						Период выполнения услуг с
-						<t:output value="dateOne" format="literal: d.M.Y" />
+						<t:output value="dateOne" format="literal: d.M.y" />
 						по
-						<t:output value="dateTwo" format="literal: d.M.Y" />
+						<t:output value="dateTwo" format="literal: d.M.y" />
 					</div>
 				</div>
 				<!-- Standart contracts -->

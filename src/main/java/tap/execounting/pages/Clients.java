@@ -162,8 +162,6 @@ public class Clients {
 		boolean filterOnContractType = contractTypeId != null;
 		boolean filterOnPaymentsDate = pfEarlierDate != null
 				|| pfLaterDate != null;
-		boolean anyFilter = filterOnACDate || filterOnContractType || filterOnFCDate;
-		anyFilter |= filterOnNames || filterOnPaymentsDate || filterOnState;
 
 		// Client filters
 		// First Contract Date filtration

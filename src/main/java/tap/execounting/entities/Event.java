@@ -45,7 +45,7 @@ import tap.execounting.entities.interfaces.Dated;
 				+ "and date(e.date) = date(:date)"),
 		@NamedQuery(name = Event.BY_TYPE_ID, query = "Select e from Event e where e.typeId = :typeId"),
 		@NamedQuery(name = Event.BY_ROOM_ID, query = "from Event as e where e.roomId = :roomId"),
-		@NamedQuery(name = Event.BETWEEN_DATE1_AND_DATE2, query = "from Event as e where e.date <= :date2 and e.date >= :date1"),
+		@NamedQuery(name = Event.BETWEEN_DATE1_AND_DATE2, query = "from Event where date >= :date1 and date <= :date2"),
 		@NamedQuery(name = Event.BY_STATE, query = "from Event as e where e.state=:stateCode"),
 		@NamedQuery(name = Event.AFTER_DATE, query = "from Event as e where e.date >= :date"),
 		@NamedQuery(name = Event.BEFORE_DATE, query = "from Event as e where e.date <= :date"),
