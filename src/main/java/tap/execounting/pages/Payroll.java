@@ -24,17 +24,17 @@ import tap.execounting.entities.EventTypeAddition;
 import tap.execounting.entities.TeacherAddition;
 import tap.execounting.services.DateService;
 
-
 /**
- * @author truth sharp.maestro@gmail.com
- * This class calculates month salary for employee
+ * @author truth sharp.maestro@gmail.com 
+ * This class calculates month salary for employee 
  * Source of events and contracts is produced by getContracts.
- * Sequence is following:
- * 	1) getContracts() is called
- * 		1. Events list is produced by calling raw()
- * 		2. if filter option is on -- filter() is called, which removes unneeded events
- * 		3. Then events are translated into contracts
- * 	2) other calculations are performed
+ * Sequence is following: 
+ * 1) getContracts() is called
+ * 	1. Events list is produced by calling raw()
+ * 	2. if filter option is on -- filter() is called, which removes unneeded events 
+ * 	3. Then events are translated into contracts
+ * 2) other calculations are performed
+ * Also if filter is off -- we count events which are free from school
  */
 @Import(stylesheet = "context:/css/payroll.css")
 public class Payroll {
@@ -58,9 +58,11 @@ public class Payroll {
 	private int iteration;
 	private int specialIteration;
 	private int trialIteration;
+	private int freeFromSchoolIteration;
 	private int totalMoney;
 	private int trialMoney;
 	private int specialMoney;
+	private int freeFromSchoolMoney;
 
 	void onActivate(int teacherId) {
 		onActivate(teacherId, null, null, filtration);
@@ -119,6 +121,12 @@ public class Payroll {
 		specialMoney += getLessonPrice() * getLessonsNumber();
 		return ++specialIteration;
 	}
+	
+	public int getFreeFromSchoolIteration(){
+		cM.setUnitId(contract.getId());
+		freeFromSchoolMoney += getLessonPrice() * getLessonsNumber();
+		return ++freeFromSchoolIteration;		
+	}
 
 	public Date getToday() {
 		return new Date();
@@ -166,8 +174,8 @@ public class Payroll {
 
 	// From 28.11.12 -- this method actually also caches the contracts if
 	// cacheMode==true.
-	// StandartContracts makes cachemode true, SpecialContracts makes
-	// cachemode==false.
+	// StandartContracts makes cachemode true, FreeFromSchoolContracts
+	// makes cachemode==false.
 	private boolean cacheMode;
 	private List<Contract> cache = null;
 
@@ -189,6 +197,7 @@ public class Payroll {
 		cacheMode = true;
 		List<Contract> filtered = Contract.cleanList();
 		List<Contract> localCache = getContracts();
+
 		for (Contract c : localCache)
 			if (c.getContractTypeId() == ContractType.Standard)
 				filtered.add(c);
@@ -211,6 +220,16 @@ public class Payroll {
 			if (c.getContractTypeId() == ContractType.Special)
 				filtered.add(c);
 
+		return filtered;
+	}
+	
+	public List<Contract> getFreeFromSchoolContracts() {
+		List<Contract> filtered = Contract.cleanList();
+		List<Contract> localCache = getContracts();
+		for (Contract c : localCache)
+			if (c.getContractTypeId() == ContractType.FreeFromSchool)
+				filtered.add(c);
+
 		cacheMode = false;
 		cache = null;
 
@@ -220,8 +239,7 @@ public class Payroll {
 	private List<Event> raw() {
 		// step1
 		eM.reset();
-		List<Event> list1 = eM.filter(dateOne, dateTwo)
-				.filter(tM.getUnit())
+		List<Event> list1 = eM.filter(dateOne, dateTwo).filter(tM.getUnit())
 				.filter(EventState.complete).getGroup();
 		eM.reset();
 
@@ -232,6 +250,14 @@ public class Payroll {
 	}
 
 	private void filter(List<Event> events) {
+		/*
+		 * First do the event level filtration. If event is free, either from
+		 * school or from teacher -- it should be filtered
+		 */
+		for (int i = events.size() - 1; i >= 0; i--)
+			if (events.get(i).isFree())
+				events.remove(i);
+
 		/*
 		 * Logic of this algorithm is simple. For some teachers exist students
 		 * that study with them for free. Such students are stored in the
@@ -439,7 +465,7 @@ public class Payroll {
 	}
 
 	public int getTotalMoney() {
-		return totalMoney + trialMoney + specialMoney;
+		return totalMoney + trialMoney + specialMoney + freeFromSchoolMoney;
 	}
 
 	public int getTrialMoney() {
@@ -448,6 +474,10 @@ public class Payroll {
 
 	public int getSpecialMoney() {
 		return specialMoney;
+	}
+	
+	public int getFreeFromSchoolMoney(){
+		return freeFromSchoolMoney;
 	}
 
 	// Total money -- is the only thing that gets taxed.

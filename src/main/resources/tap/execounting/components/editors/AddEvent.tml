@@ -62,8 +62,6 @@
 			<t:label for="clientfield"/>
 			<div t:type="tag/tagselect" style="width: 300px; margin-left: 35%; z-index: 0;" t:id="clientfield" t:value="clientnames"/>
 		</p:clients>
-		
-		
 	</t:beaneditform>
 	</div>
 </t:container>

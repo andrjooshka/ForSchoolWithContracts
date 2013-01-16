@@ -199,9 +199,13 @@ public class ContractMediator implements ContractMed {
 		return dao.find(EventType.class, id);
 	}
 
-	// This method does all the planning activity for single contract. It plans
-	// all available events, corresponding to the contract event schedule, which
-	// corresponds to the teacher schedule.
+	/**
+	 * This method does all the planning activity for single contract. It plans
+	 * all available events, corresponding to the contract event schedule, which
+	 * corresponds to the teacher schedule.
+	 * Today (16 jan 2013) I have added contract type check.
+	 * If contract is free from teacher or it is free from school.
+	 */
 	public void doPlanEvents(Date dateOfFirstEvent) {
 		CRUDServiceDAO dao = getDao();
 		unit = dao.find(Contract.class, unit.getId());
@@ -220,6 +224,7 @@ public class ContractMediator implements ContractMed {
 
 		int remain1 = remain;
 		int count = 0;
+		byte contractTypeId = (byte) unit.getContractType().getId();
 		while (remain > 0) {
 			if (count == 9 && remain1 == remain)
 				break;
@@ -234,8 +239,11 @@ public class ContractMediator implements ContractMed {
 				e.setState(EventState.planned);
 				e.setTypeId(unit.getTypeId());
 				e.setDate(date.getTime());
-				if(unit.isFreeFromSchool())
+				
+				if(contractTypeId == ContractType.FreeFromSchool)
 					e.setFree(Event.FREE_FROM_SCHOOL);
+				else if(contractTypeId == ContractType.FreeFromTeacher)
+					e.setFree(Event.FREE_FROM_TEACHER);
 				dao.create(e);
 				remain--;
 			}

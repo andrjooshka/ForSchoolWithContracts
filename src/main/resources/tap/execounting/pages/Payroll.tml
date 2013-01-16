@@ -219,8 +219,33 @@
 						</tbody>
 					</table>
 				</div>
+				
+				<!-- Free from Contracts -->
+				<div id="tablecontainer3">
+					Специальные
+					<table>
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Ученик</th>
+								<th>Предмет</th>
+								<th>Число занятий</th>
+								<th>Стоимость</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr t:type="loop" source="freeFromSchoolContracts" value="contract">
+								<td class="num">${freeFromSchoolIteration}</td>
+								<td>${name}</td>
+								<td>${type}</td>
+								<td class="num">${lessonsNumber}</td>
+								<td class="num">${lessonPrice}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 				<div id="bodytextfour">
-					Итого: ${specialMoney}
+					Итого: ${freeFromSchoolMoney}
 				</div>
 				<div id="final">
 					Итого выплатить: ${taxed}.&nbsp;&nbsp;&nbsp;Итого вся зарплата: ${totalMoney}. 

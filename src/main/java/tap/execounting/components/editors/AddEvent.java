@@ -106,7 +106,6 @@ public class AddEvent {
 		event = new Event();
 		event.setHostId(t.getId());
 		event.setDate(new Date());
-
 	}
 
 	public void setup(Facility f) {
@@ -205,6 +204,7 @@ public class AddEvent {
 			event.setFree(Event.FREE_FROM_SCHOOL);
 		else if(freeFromTeacher)
 			event.setFree(Event.FREE_FROM_TEACHER);
+		else event.setFree(Event.NOT_FREE);
 
 		if (updateMode) {
 			dao.update(event);

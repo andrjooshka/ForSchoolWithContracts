@@ -68,6 +68,7 @@ public class Event implements Comparable<Event>, Dated {
 
 	public static final byte FREE_FROM_SCHOOL = 1;
 	public static final byte FREE_FROM_TEACHER = 2;
+	public static final byte NOT_FREE = 0;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -283,9 +284,8 @@ public class Event implements Comparable<Event>, Dated {
 		// so it would be with minus
 		switch (free) {
 		case FREE_FROM_TEACHER:
-			return 0;
 		case FREE_FROM_SCHOOL:
-			return getEventType().getShareTeacher() * (-1);
+			return 0;
 		default:
 			// FIXME not for groups
 			return getEventType().getSchoolMoney();
@@ -343,7 +343,7 @@ public class Event implements Comparable<Event>, Dated {
 		// return false;
 		// return comment.contains(Const.EVENT_isFree);
 		// NEW CODE
-		return free != 0;
+		return free != NOT_FREE;
 	}
 
 	@NonVisual
@@ -364,15 +364,23 @@ public class Event implements Comparable<Event>, Dated {
 	}
 
 	public void setFree(byte freeVal) {
+		String freeFromSchool = "бесплатно от школы";
+		String freeFromTeacher = "бесплатно от учителя";
 		this.free = freeVal;
 		// If event is free either from school, or from teacher -- put that in
 		// comments
-		if (freeVal == 1 || freeVal == 2) {
-			if (comment == null)
-				comment = "";
+		// initialize
+		if (comment == null)
+			comment = "";
+
+		// clean up
+		if (comment.indexOf(freeFromSchool) != -1)
+			comment = comment.replace(freeFromSchool, "");
+		if (comment.indexOf(freeFromTeacher) != -1)
+			comment = comment.replace(freeFromTeacher, "");
+
+		if (freeVal != NOT_FREE)
 			comment = comment
-					+ (freeVal == 1 ? "бесплатно от школы"
-							: "бесплатно от учителя");
-		}
+					+ (freeVal == 1 ? freeFromSchool : freeFromTeacher);
 	}
 }

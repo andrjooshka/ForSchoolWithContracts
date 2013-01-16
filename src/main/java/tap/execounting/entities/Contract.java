@@ -36,6 +36,14 @@ import tap.execounting.services.SuperCalendar;
  * some contracts certainly should be removed, and it is not an accounting item,
  * but accounting unit.
  * 
+ * Contract represents physical contract between client and the school. Its role
+ * - to group the events, and set the rules, how to calculate money. Contract
+ * could have one of six types, each type set the rules how to calculate money.
+ * For more info about ContractType, look ContractType.java Also if contract is
+ * free for client -- then all planned events will be free. Free events will be
+ * written off, from the free contracts, but for other types of contracts they
+ * won't.
+ * 
  * @author truth0
  * 
  */
@@ -80,11 +88,6 @@ public class Contract implements Comparable<Contract>, Dated {
 	private boolean gift;
 
 	private int giftMoney;
-
-	/**
-	 * True if contract is a free from school
-	 */
-	private boolean freeFromSchool;
 
 	private String comment;
 
@@ -375,20 +378,25 @@ public class Contract implements Comparable<Contract>, Dated {
 	}
 
 	public int getCompleteLessonsCost() {
-		// OLDE CODE
-		// int completeLessons = getCompleteLessonsNumber(true);
-		// int completeLessonsCost = completeLessons * getSingleLessonCost();
-		// return completeLessonsCost;
-		// NUEAU CODE
+		if (!notFree())
+			return 0;
 		int sum = 0;
 		for (Event e : getEvents())
-			if (e.getState() == EventState.complete
-					|| e.getState() == EventState.failedByClient)
+			// Count event only if it is either complete, or failed by client,
+			// and it is not marked as free.
+			if ((!e.isFree())
+					&& (e.getState() == EventState.complete || e.getState() == EventState.failedByClient))
 				sum += e.getEventType().getPrice();
 		return sum;
 	}
-
-	// Does not counts the writeoffs;
+	/**
+	 * Does not counts the writeoffs;
+	 * Also if contract is free for client -- then all planned events will be free.
+	 * Free events will be written off, from the free contracts, but for other types
+	 * of contracts they won't.
+	 * @param countFailedByClientAsComplete
+	 * @return
+	 */
 	public int getCompleteLessonsNumber(boolean countFailedByClientAsComplete) {
 		int count = 0;
 
@@ -401,10 +409,17 @@ public class Contract implements Comparable<Contract>, Dated {
 			for (Event e : getEvents())
 				if (e.getState() == EventState.complete)
 					count++;
+
 		for (Event e : getEvents())
-			if (e.isWriteOff() || e.isFree())
+			if (e.isWriteOff() || (notFree() && e.isFree()))
 				count--;
 		return count;
+	}
+
+	private boolean notFree() {
+		byte contractTypeId = (byte) getContractType().getId();
+		return contractTypeId != ContractType.FreeFromSchool
+				&& contractTypeId != ContractType.FreeFromTeacher;
 	}
 
 	public int getLessonsRemain() {
@@ -464,10 +479,6 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	public boolean isPaid() {
 		return getMoneyPaid() >= getMoney();
-	}
-
-	public boolean isTrialLesson() {
-		return lessonsNumber < 3;
 	}
 
 	public int getBalance() {
@@ -558,13 +569,5 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	public void setGiftMoney(int giftMoney) {
 		this.giftMoney = giftMoney;
-	}
-
-	public boolean isFreeFromSchool() {
-		return freeFromSchool;
-	}
-
-	public void setFreeFromSchool(boolean freeFromSchool) {
-		this.freeFromSchool = freeFromSchool;
 	}
 }
