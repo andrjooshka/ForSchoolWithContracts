@@ -384,7 +384,7 @@ public class Contract implements Comparable<Contract>, Dated {
 		for (Event e : getEvents())
 			// Count event only if it is either complete, or failed by client,
 			// and it is not marked as free.
-			if ((!e.isFree())
+			if ((!e.isFree() && !e.isWriteOff())
 					&& (e.getState() == EventState.complete || e.getState() == EventState.failedByClient))
 				sum += e.getEventType().getPrice();
 		return sum;

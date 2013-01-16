@@ -114,10 +114,11 @@ public class ShowContract {
 	}
 
 	Object onWriteOff(int contractId) {
+		refreshUnit(contractId);
 		contractMed.setUnitId(contractId);
 		contractMed.doWriteOff();
 		this.contract = contractMed.getUnit();
-		return bodyZone.getBody();
+		return bodyZone;
 	}
 
 	Object onAddEvent(int contractId) {
