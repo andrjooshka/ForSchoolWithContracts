@@ -570,4 +570,8 @@ public class Contract implements Comparable<Contract>, Dated {
 	public void setGiftMoney(int giftMoney) {
 		this.giftMoney = giftMoney;
 	}
+
+	public boolean hasComment() {
+		return comment != null && !comment.isEmpty();
+	}
 }

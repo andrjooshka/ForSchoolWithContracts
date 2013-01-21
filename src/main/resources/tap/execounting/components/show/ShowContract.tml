@@ -24,7 +24,16 @@
 								alt="cписать остаток" class="icons" />
 						</t:eventlink>
 					</li>
-
+					
+					<li>
+						<t:eventlink t:id="moneyback" context="contract.id"
+							t:mixins="confirm" confirmEnabled="literal:true"
+							confirmMessage="message:moneyback-confirm-message">
+							<img src="${context:/icons/moneyback.gif}" title="вернуть деньги"
+								alt="вернуть деньги" class="icons" />
+						</t:eventlink>
+					</li>
+					
 					<li>
 						<t:eventlink event="edit" zone="contractBody${contract.id}"
 							context="contract.id">

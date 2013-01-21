@@ -142,6 +142,7 @@
 								<th>Предмет</th>
 								<th>Число занятий</th>
 								<th>Стоимость</th>
+								<th>Комментарий</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -151,6 +152,7 @@
 								<td>${type}</td>
 								<td class="num">${lessonsNumber}</td>
 								<td class="num">${lessonPrice}</td>
+								<td>${comment}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -178,6 +180,7 @@
 								<th>Предмет</th>
 								<th>Число занятий</th>
 								<th>Стоимость</th>
+								<th>Комментарий</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -187,6 +190,7 @@
 								<td>${type}</td>
 								<td class="num">${lessonsNumber}</td>
 								<td class="num">${lessonPrice}</td>
+								<td>${comment}</td>
 							</tr>
 						</tbody>
 					</table>
@@ -206,6 +210,7 @@
 								<th>Предмет</th>
 								<th>Число занятий</th>
 								<th>Стоимость</th>
+								<th>Комментарий</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -215,12 +220,13 @@
 								<td>${type}</td>
 								<td class="num">${lessonsNumber}</td>
 								<td class="num">${lessonPrice}</td>
+								<td>${comment}</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 				
-				<!-- Free from Contracts -->
+				<!-- Free from school Contracts -->
 				<div id="tablecontainer3">
 					Специальные
 					<table>
@@ -231,6 +237,7 @@
 								<th>Предмет</th>
 								<th>Число занятий</th>
 								<th>Стоимость</th>
+								<th>Комментарий</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -240,6 +247,7 @@
 								<td>${type}</td>
 								<td class="num">${lessonsNumber}</td>
 								<td class="num">${lessonPrice}</td>
+								<td>${comment}</td>
 							</tr>
 						</tbody>
 					</table>

@@ -209,9 +209,7 @@ public class ContractMediator implements ContractMed {
 	public void doPlanEvents(Date dateOfFirstEvent) {
 		CRUDServiceDAO dao = getDao();
 		unit = dao.find(Contract.class, unit.getId());
-		for (Event e : unit.getEvents())
-			if (e.getState() == EventState.planned)
-				dao.delete(Event.class, e.getId());
+		doRemovePlannedEvents();
 
 		int remain = getRemainingLessons();
 		Calendar date = DateService.getMoscowCalendar();
@@ -264,20 +262,7 @@ public class ContractMediator implements ContractMed {
 
 		// TODO WRITEOFF
 		// Delete all planned events
-		List<Event> events = unit.getEvents();
-		for (int i = events.size() - 1; i >= 0; i--)
-			if (events.get(i).getState() == EventState.planned
-					|| events.get(i).isWriteOff()) {
-				List<Contract> eventContracts = events.get(i).getContracts();
-				for (int j = eventContracts.size() - 1; j >= 0; j--)
-					if (eventContracts.get(j).getId() == unit.getId())
-						eventContracts.remove(j);
-				dao.update(events.get(i));
-				if (events.get(i).getContracts().size() == 0)
-					dao.delete(Event.class, events.get(i).getId());
-				unit.getEvents().remove(i);
-			}
-		dao.update(unit);
+		doRemovePlannedEvents();
 
 		// 'Writeoff' events
 		EventType writeOffEventType = loadWriteOffType();
@@ -318,6 +303,95 @@ public class ContractMediator implements ContractMed {
 		}
 
 		return writeOff;
+	}
+	
+	// Goal of this is to return all the remaining money - (complete cost of the contract) * 0.15
+	// To the client
+	// This is done through the special event which sends money to the
+	// nonexisting teacher, and sends remaining to the school.
+	public void doMoneyback() throws Exception {
+		String exceptionMessage = "Баланс на договоре клиента, меньше 15% от стоимости договора. Операция возврата невозможна, попробуйте списание.";
+		// Amount which school will receive is 15%, so check, that it exists.
+		int completeCost = unit.getMoney();
+		int schoolShare = (completeCost * 15) / 100;
+		int balance = unit.getBalance();
+		if(balance < schoolShare)
+			throw new Exception(exceptionMessage);
+		// Remove all planned events
+		doRemovePlannedEvents();
+		int clientShare = balance - schoolShare;
+		EventType type = loadMoneybackType(schoolShare, clientShare);
+		Event e = new Event();
+		e.setTypeId(type.getId());
+		e.setHostId(Const.WriteOffTeacherId);
+		e.setState(EventState.complete);
+		e.setComment("[" + type.getTitle() + "]");
+		e.setFacilityId(Const.WriteOffFacilityId);
+		e.setRoomId(Const.WriteOffRoomId);
+		dao.create(e);
+		e.getContracts().add(unit);
+		dao.update(e);
+		unit.setCanceled(true);
+		unit.getEvents().add(e);
+
+		// Comment
+		String comment = "Школе: " + type.getSchoolMoney() + " р." + "\n" +
+		"Клиенту: " + type.getShareTeacher() + " р.";
+
+		if (unit.hasComment())
+			comment = unit.getComment().concat(comment);
+		unit.setComment(comment);
+		dao.update(unit);
+	}
+	
+	private EventType loadMoneybackType(int schoolShare, int clientShare) {
+		String title = Const.MoneybackPrefix + " : " + clientShare + "|" + schoolShare;
+		EventType moneyback = dao.findUniqueWithNamedQuery(EventType.WITH_TITLE,
+				QueryParameters.with("title", title).parameters());
+		if (moneyback == null) {
+			moneyback = new EventType();
+			moneyback.setPrice(unit.getBalance());
+			moneyback.setShareTeacher(clientShare);
+			moneyback.setTitle(title);
+			moneyback.setDeleted(true);
+			dao.create(moneyback);
+		}
+
+		return moneyback;
+	}
+
+	private void doRemovePlannedEvents() {
+		// Delete all planned events
+		List<Event> events = unit.getEvents();
+		for (int i = events.size() - 1; i >= 0; i--)
+			if (events.get(i).getState() == EventState.planned)
+				removeEvent(events.get(i));
+	}
+	/**
+	 * Removes element from contract with care.
+	 * First removes contract from event.
+	 * Updates event.
+	 * Then removes event from contract.
+	 * Then deletes events, if there is no other contracts.
+	 * Updates contract.
+	 * @param e -- event to remove
+	 */
+	private void removeEvent(Event e){
+		List<Contract> eventContracts = e.getContracts();
+		for (int j = eventContracts.size() - 1; j >= 0; j--)
+			if (eventContracts.get(j).getId() == unit.getId())
+				eventContracts.remove(j);
+		dao.update(e);
+		for(int i = unit.getEvents().size() - 1; i >= 0; i--)
+			if(e.getId() == unit.getEvents().get(i).getId()) {
+				unit.getEvents().remove(i);
+				break;
+			}
+		
+		if (e.getContracts().size() == 0)
+			dao.delete(Event.class, e.getId());
+		
+		dao.update(unit);
 	}
 
 	// group methods

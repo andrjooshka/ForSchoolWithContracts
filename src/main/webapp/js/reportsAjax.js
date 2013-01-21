@@ -30,6 +30,7 @@ var xns = {
 	pullData : function(timeStamp) {
 		return {
 			url : xns.pullUrl,
+            type : "POST",
 			data : {
 				timeStamp : timeStamp
 			}
@@ -66,9 +67,9 @@ function go() {
 	function initModel() {
 		// Iterate through all elements
 		model.GregReg.get2 = function(idx) {
-			for (var i in model.GregReg)
-			if (model.GregReg[i].id == idx)
-				return model.GregReg[i];
+            for(var i = 0; i < model.GregReg.length ; i++)
+                if (model.GregReg[i].id == idx)
+                    return model.GregReg[i];
 			throw "Index not found";
 		};
 		xns.all().each(function() {
@@ -85,11 +86,11 @@ function go() {
 	}
 
 	function initHandlers() {
-		myTimeouts = [];
+		var myTimeouts = [];
 		// TODO check the caching
 		myTimeouts.get2 = function(idx) {
-			for (var i in myTimeouts) {
-				if (myTimeouts[i].id == idx)
+			for (var i = 0; i < myTimeouts.length; i++) {
+				if (myTimeouts[i] !== undefined && myTimeouts[i].id == idx)
 					return myTimeouts[i];
 			}
 			return undefined;
@@ -100,7 +101,7 @@ function go() {
 			if (e.type === "keypress" || (e.type === "keydown" && (kc === 8 || kc === 32 || kc === 13 || kc === 46))) {
 				// this code now runs with the timeout of 200 milliseconds.
 				// changes should be applied to the textarea first, then we could retrieve its value
-				var elem = m(e.srcElement);
+				var elem = m(e.target);
 				var elementId = elem.attr(xns.attrName);
 				if (myTimeouts.get2(elementId))
 					clearTimeout(myTimeouts.get2(elementId).timeoutId);
@@ -109,8 +110,8 @@ function go() {
 					id : elementId,
 					timeoutId : setTimeout(function() {
 						// delete the key from the array
-						for (var j in myTimeouts) {
-							if (myTimeouts[j].id == elementId)
+						for (var j = 0; j < myTimeouts.length; j++) {
+							if (myTimeouts[j] && myTimeouts[j].id == elementId)
 								delete myTimeouts[j];
 						}
 
@@ -120,7 +121,7 @@ function go() {
 							temp.onUpdate({
 								id : elementId,
 								comment : elem.val(),
-								timeStamp : e.timeStamp
+								timeStamp : new Date().getTime()
 							});
 
 					}, 200)
@@ -248,7 +249,7 @@ function go() {
 			pull : function() {
 				m.ajax(xns.pullData(new Date().getTime() - 7000)).done(function(data) {
 					if (data.updates) {
-						for (var idx in data.updates) {
+						for (var idx = 0; idx <  data.updates.length; idx++ ) {
 							var up = data.updates[idx];
 							// Deliver to the right Greg. This code is candidate for refactor
 							var temp = model.GregReg.get2(up.id);

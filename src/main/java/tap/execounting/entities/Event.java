@@ -383,4 +383,8 @@ public class Event implements Comparable<Event>, Dated {
 			comment = comment
 					+ (freeVal == 1 ? freeFromSchool : freeFromTeacher);
 	}
+
+	public boolean hasComment() {
+		return comment != null && !comment.isEmpty();
+	}
 }

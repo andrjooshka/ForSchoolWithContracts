@@ -38,6 +38,7 @@ public class ShowContract {
 	@Property
 	private Contract contract;
 
+	// Useful bits
 	@Inject
 	private CRUDServiceDAO dao;
 	@Inject
@@ -50,9 +51,23 @@ public class ShowContract {
 	@Inject
 	private ContractMed contractMed;
 
+	// Screen fields
 	@InjectComponent
 	private Zone bodyZone;
+	@Property
+	private Event loopEvent;
+	@Component
+	private AddEvent eventEditor;
+	@Component
+	private AddPayment paymentEditor;
+	@Component
+	private Zone paymentZone;
+	@Property
+	private Payment loopPayment;
+	@Component
+	private AddContract editor;
 
+	// Behavior fields
 	@Property
 	private boolean updateMode;
 	@Property
@@ -60,22 +75,7 @@ public class ShowContract {
 	@Property
 	private Event newEvent;
 	@Component
-	private AddEvent eventEditor;
-	@Component
 	private Zone eventZone;
-	@Property
-	private Event loopEvent;
-
-	@Component
-	private AddPayment paymentEditor;
-	@Component
-	private Zone paymentZone;
-	@Property
-	private Payment loopPayment;
-
-	@Component
-	private AddContract editor;
-
 	@Property
 	private boolean addingPayment;
 
@@ -117,6 +117,14 @@ public class ShowContract {
 		refreshUnit(contractId);
 		contractMed.setUnitId(contractId);
 		contractMed.doWriteOff();
+		this.contract = contractMed.getUnit();
+		return bodyZone;
+	}
+	
+	Object onMoneyback(int contractId) throws Exception {
+		refreshUnit(contractId);
+		contractMed.setUnitId(contractId);
+		contractMed.doMoneyback();
 		this.contract = contractMed.getUnit();
 		return bodyZone;
 	}

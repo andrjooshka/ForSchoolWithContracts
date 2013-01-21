@@ -347,6 +347,7 @@ public class Payroll {
 			// Set up new contract which will be added to the result
 			c.setId(t.getId());
 			c.setContractTypeId(t.getContractTypeId());
+			
 			// Look ma, no hands. That is the bitchy place. Here I change the
 			// order of everything. If school did event with type that differ
 			// from what they have in contract -- the type here is taken from
@@ -355,6 +356,14 @@ public class Payroll {
 			// and now we got:
 			c.setTypeId(init.getTypeId());
 			c.getEvents().add(init);
+			
+			// Comment is another crutch in the school cruthed business logic.
+			// If event has comment about substution ("замена") --> we should show this in PayRoll
+			if(eventHasSubstitutionComment(init)){
+				c.setComment(init.getComment());
+				continue;
+			}
+			
 
 			for (int i = source.size() - 1; i >= 0; i--) {
 				// Take the next contracts group
@@ -411,6 +420,13 @@ public class Payroll {
 
 		return contracts;
 	}
+	
+	private boolean eventHasSubstitutionComment(Event event){
+		String substitutionComment = "замен";
+		if(event.hasComment())
+			return event.getComment().contains(substitutionComment);
+		return false;
+	}
 
 	/**
 	 * Adds probation prices and title to the returned contract
@@ -454,6 +470,10 @@ public class Payroll {
 
 	public String getType() {
 		return contract.getEventType().getTypeTitle();
+	}
+	
+	public String getComment(){
+		return contract.getComment();
 	}
 
 	public int getLessonPrice() {

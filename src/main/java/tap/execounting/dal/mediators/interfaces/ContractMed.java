@@ -65,6 +65,8 @@ public interface ContractMed {
 	// Write off all remaining events, to transfer all the money to the school
 	// account.
 	public void doWriteOff();
+	
+	public void doMoneyback() throws Exception;
 
 	// Event planner method
 	public void doPlanEvents(Date eventsStartDate);
