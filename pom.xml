@@ -61,35 +61,6 @@
 			<version>${tapestry-release-version}</version>
 		</dependency>
 
-		<!-- Uncomment this to add support for file uploads: <dependency> <groupId>org.apache.tapestry</groupId> 
-			<artifactId>tapestry-upload</artifactId> <version>${tapestry-release-version}</version> 
-			</dependency> -->
-
-		<!-- A dependency on either JUnit or TestNG is required, or the surefire 
-			plugin (which runs the tests) will fail, preventing Maven from packaging 
-			the WAR. Tapestry includes a large number of testing facilities designed 
-			for use with TestNG (http://testng.org/), so it's recommended. -->
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>${testng-release-version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.easymock</groupId>
-			<artifactId>easymock</artifactId>
-			<version>${easymock-release-version}</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.tapestry</groupId>
-			<artifactId>tapestry-test</artifactId>
-			<version>${tapestry-release-version}</version>
-			<scope>test</scope>
-		</dependency>
-
 		<!-- Provided by the servlet container, but sometimes referenced in the 
 			application code. -->
 		<dependency>
@@ -144,17 +115,6 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.12</version>
-				<configuration>
-					<systemPropertyVariables>
-						<tapestry.execution-mode>Qa</tapestry.execution-mode>
-					</systemPropertyVariables>
-				</configuration>
-			</plugin>
-
 			<!-- Run the application using "mvn jetty:run" -->
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
@@ -181,15 +141,12 @@
 	<reporting />
 
 	<repositories>
-
 		<!-- This repository is only needed when the Tapestry version is a preview 
 			release, rather than a final release. -->
 		<repository>
 			<id>apache-staging</id>
 			<url>https://repository.apache.org/content/groups/staging/</url>
 		</repository>
-
-
 	</repositories>
 
 	<properties>
@@ -203,5 +160,5 @@
 		<maven-compiler-source>1.7</maven-compiler-source>
 		<maven-compiler-target>1.7</maven-compiler-target>
 	</properties>
-	<version>4.5-beta</version>
+	<version>4.7</version>
 </project>

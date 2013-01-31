@@ -2,6 +2,7 @@ package tap.execounting.dal.mediators;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -648,6 +649,14 @@ public class ContractMediator implements ContractMed {
 
 	public Integer countMoneyPaid() {
 		return unit.getMoneyPaid();
+	}
+	
+	// Sorting
+	public ContractMed sortByDate(boolean asc){
+		Collections.sort(getGroup());
+		if(asc)
+			Collections.reverse(getGroup());
+		return this;
 	}
 
 }

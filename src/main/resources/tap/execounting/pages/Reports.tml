@@ -43,20 +43,23 @@
 	<!-- Report tables -->
 	<!-- Contract is ending -->
 	<div id="ending" style="margin-top:60px;" class="datatable">
-		<h3>Осталось не более 2 занятий</h3>
-		<t:grid source="endingLessons" model="modelOfEnding" row="client"
+		<h3>Осталось одно занятие</h3>
+		<t:grid source="endingContracts" model="modelOfEnding" row="contract"
 			pagerPosition="${pagerPosition}" rowsPerPage="${rows}">
 			<p:nameCell>
-				<t:eventlink event="details" context="client">${client.name}
+				<t:eventlink event="details" context="contract.clientid">${contract.client.name}
 				</t:eventlink>
 			</p:nameCell>
 			<p:endingInfoCell>
 				${endingInfo}
 			</p:endingInfoCell>
+			<p:lastEventDateCell>
+				<t:output value="lastEventDate" format="literal:dd.MM.YYYY" />
+			</p:lastEventDateCell>
 			<p:commentCell>
-				<div class="commentDate"><t:outputraw value="commentDate" /></div>
-				<textarea model-id="${client.id}" class="cool">
-					${comment}
+				<div class="commentDate"><t:outputraw value="commentDateFromContract" /></div>
+				<textarea model-id="${contract.client.id}" class="cool">
+					${commentFromContract}
 				</textarea>
 			</p:commentCell>
 		</t:grid>

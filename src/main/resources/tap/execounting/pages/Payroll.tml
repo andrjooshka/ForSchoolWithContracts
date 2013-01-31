@@ -40,8 +40,7 @@
 						Исполнителем
 						договора
 						${field3}
-						возмездного оказания услуг «11» января
-						2011 года
+						возмездного оказания услуг ${fromField} года
 						Исполнитель
 						выполнил
 						следующие услуги:
@@ -225,10 +224,13 @@
 						</tbody>
 					</table>
 				</div>
+				<div id="bodytextfour">
+					Итого: ${specialMoney}
+				</div>
 				
 				<!-- Free from school Contracts -->
 				<div id="tablecontainer3">
-					Специальные
+					Бесплатные от школы
 					<table>
 						<thead>
 							<tr>
@@ -252,7 +254,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div id="bodytextfour">
+				<div id="bodytextfive">
 					Итого: ${freeFromSchoolMoney}
 				</div>
 				<div id="final">

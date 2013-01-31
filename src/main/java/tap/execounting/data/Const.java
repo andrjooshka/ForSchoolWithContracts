@@ -8,4 +8,5 @@ public class Const {
 	public static final int WriteOffRoomId = 11;
 	public static final String EVENT_EventMoved = "EventMoved";
 	public static final String EVENT_isFree = "[бесплатн";
+	public static final String NO_DATA = "нет данных для отображения";
 }

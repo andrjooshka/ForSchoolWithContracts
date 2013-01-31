@@ -4,17 +4,15 @@ apply plugin: "war"
 apply plugin: "java"
 apply plugin: "jetty"
 
-sourceCompatibility = "1.5"
-targetCompatibility = "1.5"
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
 
 group = "tap"
-version = "2.0"
+version = "4.7"
+
 
 repositories {
     mavenCentral()
-
-	//T5JQuery
-	url "http://nexus.devlab722.net/nexus/content/repositories/releases"
 
     // All things JBoss/Hibernate
     mavenRepo name: "JBoss", url: "http://repository.jboss.org/nexus/content/groups/public/"
@@ -47,16 +45,31 @@ sourceSets {
 }
 
 dependencies {
-	//t5-jQuery
-	compile group: 'org.got5', name: 'tapestry5-jquery', version: '3.0.0'
 
-    compile "org.apache.tapestry:tapestry-core:5.3.2"
-
+	// Tapestry things
+	// Tapestry release version 5.3.6
+    compile "org.apache.tapestry:tapestry-core:5.3.6"
+	compile "org.apache.tapestry:tapestry-beanvalidator:5.3.6"
     // This adds automatic compression of JavaScript and CSS in production mode:
-    compile "org.apache.tapestry:tapestry-yuicompressor:5.3.2"
+    compile "org.apache.tapestry:tapestry-yuicompressor:5.3.6"
+	
+	// Hibernate things
+	compile "org.apache.tapestry:tapestry-hibernate:5.3.6"
+	compile "org.hibernate:hibernate-validator:4.3.0.Final"
+	// C3P0
+    compile "org.hibernate:hibernate-c3p0:3.6.0.Final"
+    compile "c3p0:c3p0:0.9.1"
+    
+    // MYSQL
+    compile "mysql:mysql-connector-java:5.1.21"
+    
+    // Tagselect ( multiple names for event visitors )
+    compile "se.unbound:tapestry-tagselect:1.4.1"
+    // Exanpe components ( project uses accordeons from that library )
+    compile "fr.exanpe:exanpe-t5-lib:1.2.1"
 
-    // Uncomment this to add support for file uploads:
-    // compile "org.apache.tapestry:tapestry-upload:5.3.2"
+	// MD5 function provider
+	compile "commons-codec:commons-codec:1.7"
 
     provided "javax.servlet:servlet-api:2.5"
 }

@@ -84,11 +84,11 @@ td.num {
 	margin-top: 1em;
 }
 
-#bodytextthree {
+#bodytextthree, #bodytextfour {
 	font-size: 11pt;
 }
 
-#bodytextfour {
+#bodytextfive {
 	padding-bottom: 9px;
 	width: 65%;
 	border-bottom: 1px solid black;

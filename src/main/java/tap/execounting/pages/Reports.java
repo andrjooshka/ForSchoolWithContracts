@@ -30,6 +30,7 @@ import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.dal.mediators.interfaces.EventMed;
 import tap.execounting.data.ClientState;
+import tap.execounting.data.EventState;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Comment;
 import tap.execounting.entities.Contract;
@@ -70,7 +71,7 @@ public class Reports {
 	@Inject
 	private BeanModelSource beanModelSource;
 	@Property
-	private BeanModel<Client> modelOfEnding;
+	private BeanModel<Contract> modelOfEnding;
 	@Property
 	private BeanModel<Client> modelOfEnded;
 	@Property
@@ -92,6 +93,8 @@ public class Reports {
 	// Page stuff
 	@Property
 	private Client client;
+	@Property
+	private Contract contract;
 	@InjectPage
 	private ClientPage clientPage;
 
@@ -101,13 +104,17 @@ public class Reports {
 	void setupRender() {
 		// end of subscription
 		if (modelOfEnding == null) {
-			modelOfEnding = beanModelSource.createDisplayModel(Client.class,
+			modelOfEnding = beanModelSource.createDisplayModel(Contract.class,
 					componentResources.getMessages());
+			modelOfEnding.add("name", null);
 			modelOfEnding.add("endingInfo", null);
-			modelOfEnding.add("comment", null);
-			modelOfEnding.exclude("return", "date", "id", "balance",
-					"studentInfo", "firstContractDate", "state",
-					"firstPlannedPaymentDate");
+			modelOfEnding.add("lastEventDate", null);
+			modelOfEnding.exclude("id", "balance", "gift", "discount", "false",
+					"lessonsNumber", "active", "state", "clientId", "typeId",
+					"teacherId", "freeze", "canceled", "contractTypeId",
+					"money", "moneyPaid", "complete","paid","giftMoney", "completelessonsCost",
+					"completeLessonsCost", "singleLessonCost", "date", "lessonsRemain");
+			modelOfEnding.reorder("name", "endingInfo", "lastEventDate");
 		}
 
 		// subscription ended
@@ -203,8 +210,8 @@ public class Reports {
 	// //// getters
 	// TODO check if SQL will work better
 	// Question is: should we remember about frozen contracts?
-	public List<Client> getEndingLessons() {
-
+	public List<Contract> getEndingContracts() {
+		int minLessonsRemaining = 1;
 		List<Contract> list = getAllContracts();
 		// complete filter
 		for (int i = list.size() - 1; i >= 0; i--)
@@ -212,17 +219,13 @@ public class Reports {
 				list.remove(i);
 		// remaining lessons
 		for (int i = list.size() - 1; i >= 0; i--)
-			if (list.get(i).getLessonsRemain() > 2 || list.get(i).isCanceled())
+			if (list.get(i).getLessonsRemain() > minLessonsRemaining || list.get(i).isCanceled())
 				list.remove(i);
 
-		Set<Client> clients = new HashSet<Client>(list.size());
-		for (Contract c : list)
-			clients.add(c.getClient());
-
-		List<Client> clientslist = new ArrayList<Client>(clients);
 		// Sort
-		nameSort(clientslist);
-		return clientslist;
+		contractMed.setGroup(list).sortByDate(false);
+		list = contractMed.getGroup();
+		return list;
 	}
 
 	public List<Client> getEndedContracts() {
@@ -257,21 +260,33 @@ public class Reports {
 
 	public String getEndingInfo() {
 		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < client.getContracts().size(); i++) {
-			Contract c = client.getContracts().get(i);
-			if (!c.isComplete() && c.getLessonsRemain() < 3) {
-				builder.append(c.getEventType().getTitle() + ": ");
-				builder.append(c.getLessonsRemain());
-				if (c.getScheduledLessons().size() > 0)
-					builder.append(" и " + c.getScheduledLessons().size()
-							+ " уже запланировано");
-				if (i < client.getContracts().size() - 1)
-					builder.append(", ");
-			}
+		
+		if (!contract.isComplete() && contract.getLessonsRemain() < 3) {
+			builder.append(contract.getEventType().getTitle() + ": ");
+			builder.append(contract.getLessonsRemain());
+			if (contract.getScheduledLessons().size() > 0)
+				builder.append(" и " + contract.getScheduledLessons().size()
+						+ " уже запланировано");
 		}
 		if (builder.substring(builder.length() - 2).equals(", "))
 			builder.replace(builder.length() - 2, builder.length(), "");
 		return builder.toString();
+	}
+	
+	public Date getLastEventDate(){
+		for(Event e : contract.getEvents())
+			if(e.getState()==EventState.planned)
+				return e.getDate();
+		return null;
+	}
+	
+	public Date getCommentDateFromContract(){
+		Comment c = clientMed.setUnit(contract.getClient()).getComment();
+		return c == null ? null : c.getDate();
+	}
+	public String getCommentFromContract(){
+		Comment c = clientMed.setUnit(contract.getClient()).getComment();
+		return c == null ? "" : c.getText();
 	}
 
 	public List<Client> getFrozenClients() {

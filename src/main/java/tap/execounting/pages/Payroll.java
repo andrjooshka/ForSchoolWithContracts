@@ -15,6 +15,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.dal.mediators.interfaces.EventMed;
 import tap.execounting.dal.mediators.interfaces.TeacherMed;
+import tap.execounting.data.Const;
 import tap.execounting.data.EventState;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.ContractType;
@@ -25,16 +26,13 @@ import tap.execounting.entities.TeacherAddition;
 import tap.execounting.services.DateService;
 
 /**
- * @author truth sharp.maestro@gmail.com 
- * This class calculates month salary for employee 
- * Source of events and contracts is produced by getContracts.
- * Sequence is following: 
- * 1) getContracts() is called
- * 	1. Events list is produced by calling raw()
- * 	2. if filter option is on -- filter() is called, which removes unneeded events 
- * 	3. Then events are translated into contracts
- * 2) other calculations are performed
- * Also if filter is off -- we count events which are free from school
+ * @author truth sharp.maestro@gmail.com This class calculates month salary for
+ *         employee Source of events and contracts is produced by getContracts.
+ *         Sequence is following: 1) getContracts() is called 1. Events list is
+ *         produced by calling raw() 2. if filter option is on -- filter() is
+ *         called, which removes unneeded events 3. Then events are translated
+ *         into contracts 2) other calculations are performed Also if filter is
+ *         off -- we count events which are free from school
  */
 @Import(stylesheet = "context:/css/payroll.css")
 public class Payroll {
@@ -121,11 +119,11 @@ public class Payroll {
 		specialMoney += getLessonPrice() * getLessonsNumber();
 		return ++specialIteration;
 	}
-	
-	public int getFreeFromSchoolIteration(){
+
+	public int getFreeFromSchoolIteration() {
 		cM.setUnitId(contract.getId());
 		freeFromSchoolMoney += getLessonPrice() * getLessonsNumber();
-		return ++freeFromSchoolIteration;		
+		return ++freeFromSchoolIteration;
 	}
 
 	public Date getToday() {
@@ -136,7 +134,7 @@ public class Payroll {
 		try {
 			return addition.getField_1();
 		} catch (NullPointerException e) {
-			return "нет данных для отображения";
+			return Const.NO_DATA;
 		}
 	}
 
@@ -144,7 +142,7 @@ public class Payroll {
 		try {
 			return addition.getField_2();
 		} catch (NullPointerException e) {
-			return "нет данных для отображения";
+			return Const.NO_DATA;
 		}
 	}
 
@@ -152,7 +150,7 @@ public class Payroll {
 		try {
 			return addition.getField_3();
 		} catch (NullPointerException e) {
-			return "нет данных для отображения";
+			return Const.NO_DATA;
 		}
 	}
 
@@ -160,7 +158,7 @@ public class Payroll {
 		try {
 			return addition.getField_4();
 		} catch (NullPointerException e) {
-			return "нет данных для отображения";
+			return Const.NO_DATA;
 		}
 	}
 
@@ -168,7 +166,17 @@ public class Payroll {
 		try {
 			return addition.getField_5();
 		} catch (NullPointerException e) {
-			return "нет данных для отображения";
+			return Const.NO_DATA;
+		}
+	}
+
+	public String getFromField() {
+		try {
+			String pre = addition.getField_4();
+			pre = pre.substring(pre.indexOf(" от "));
+			return pre;
+		} catch (NullPointerException e) {
+			return Const.NO_DATA;
 		}
 	}
 
@@ -222,7 +230,7 @@ public class Payroll {
 
 		return filtered;
 	}
-	
+
 	public List<Contract> getFreeFromSchoolContracts() {
 		List<Contract> filtered = Contract.cleanList();
 		List<Contract> localCache = getContracts();
@@ -347,7 +355,7 @@ public class Payroll {
 			// Set up new contract which will be added to the result
 			c.setId(t.getId());
 			c.setContractTypeId(t.getContractTypeId());
-			
+
 			// Look ma, no hands. That is the bitchy place. Here I change the
 			// order of everything. If school did event with type that differ
 			// from what they have in contract -- the type here is taken from
@@ -356,16 +364,18 @@ public class Payroll {
 			// and now we got:
 			c.setTypeId(init.getTypeId());
 			c.getEvents().add(init);
-			
+
 			// Comment is another crutch in the school cruthed business logic.
-			// If event has comment about substution ("замена") --> we should show this in PayRoll
-			if(eventHasSubstitutionComment(init)){
+			// If event has comment about substution ("замена") --> we should
+			// show this in PayRoll
+			if (eventHasSubstitutionComment(init)) {
 				c.setComment(init.getComment());
 				continue;
 			}
-			
 
 			for (int i = source.size() - 1; i >= 0; i--) {
+				if (eventHasSubstitutionComment(source.get(i)))
+					continue;
 				// Take the next contracts group
 				cts = source.get(i).getContracts();
 				// For each contract in that group
@@ -420,11 +430,15 @@ public class Payroll {
 
 		return contracts;
 	}
-	
-	private boolean eventHasSubstitutionComment(Event event){
+
+	private boolean eventHasSubstitutionComment(Event event) {
 		String substitutionComment = "замен";
-		if(event.hasComment())
-			return event.getComment().contains(substitutionComment);
+
+		if (event.hasComment()) {
+			String lowercase = event.getComment().toLowerCase();
+			boolean contains = lowercase.contains(substitutionComment);
+			return contains;
+		}
 		return false;
 	}
 
@@ -471,8 +485,8 @@ public class Payroll {
 	public String getType() {
 		return contract.getEventType().getTypeTitle();
 	}
-	
-	public String getComment(){
+
+	public String getComment() {
 		return contract.getComment();
 	}
 
@@ -495,8 +509,8 @@ public class Payroll {
 	public int getSpecialMoney() {
 		return specialMoney;
 	}
-	
-	public int getFreeFromSchoolMoney(){
+
+	public int getFreeFromSchoolMoney() {
 		return freeFromSchoolMoney;
 	}
 

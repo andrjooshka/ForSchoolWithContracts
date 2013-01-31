@@ -138,4 +138,6 @@ public interface ContractMed {
 
 	// Intersection operation
 	public ContractMed retain(List<Contract> contracts);
+
+	public ContractMed sortByDate(boolean asc);
 }
