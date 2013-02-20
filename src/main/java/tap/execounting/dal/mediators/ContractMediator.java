@@ -207,6 +207,8 @@ public class ContractMediator implements ContractMed {
 	 * Today (16 jan 2013) I have added contract type check.
 	 * If contract is free from teacher or it is free from school.
 	 */
+	
+	// TODO include freeze period
 	public void doPlanEvents(Date dateOfFirstEvent) {
 		CRUDServiceDAO dao = getDao();
 		unit = dao.find(Contract.class, unit.getId());
@@ -359,6 +361,13 @@ public class ContractMediator implements ContractMed {
 		}
 
 		return moneyback;
+	}
+	
+	public void doFreeze(int contractId, Date freeze, Date unfreeze){
+		setUnitId(contractId);
+		doRemovePlannedEvents();
+		unit.setDateFreezed(freeze);
+		unit.setDateUnfreezed(unfreeze);
 	}
 
 	private void doRemovePlannedEvents() {

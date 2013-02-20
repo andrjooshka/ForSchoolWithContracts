@@ -78,7 +78,9 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	private int discount;
 
-	private boolean freeze;
+	private Date dateFreeze;
+
+	private Date dateUnfreeze;
 
 	private boolean canceled;
 
@@ -224,12 +226,10 @@ public class Contract implements Comparable<Contract>, Dated {
 		this.discount = dicount;
 	}
 
-	public boolean isFreeze() {
-		return freeze;
-	}
-
-	public void setFreeze(boolean freeze) {
-		this.freeze = freeze;
+	public boolean isFrozen() {
+		Date d = new Date();
+		return dateUnfreeze != null && dateFreeze != null
+				&& d.before(dateUnfreeze) && d.after(dateFreeze);
 	}
 
 	public boolean isCanceled() {
@@ -288,7 +288,7 @@ public class Contract implements Comparable<Contract>, Dated {
 	}
 
 	public boolean isActive() {
-		boolean active = !isComplete() && !isFreeze() && !isCanceled();
+		boolean active = !isComplete() && !isFrozen() && !isCanceled();
 		return active;
 	}
 
@@ -299,7 +299,7 @@ public class Contract implements Comparable<Contract>, Dated {
 		ContractState state = null;
 		if (isCanceled())
 			state = ContractState.canceled;
-		else if (isFreeze())
+		else if (isFrozen())
 			state = ContractState.frozen;
 		else if (isComplete())
 			state = ContractState.complete;
@@ -389,11 +389,12 @@ public class Contract implements Comparable<Contract>, Dated {
 				sum += e.getEventType().getPrice();
 		return sum;
 	}
+
 	/**
-	 * Does not counts the writeoffs;
-	 * Also if contract is free for client -- then all planned events will be free.
-	 * Free events will be written off, from the free contracts, but for other types
-	 * of contracts they won't.
+	 * Does not counts the writeoffs; Also if contract is free for client --
+	 * then all planned events will be free. Free events will be written off,
+	 * from the free contracts, but for other types of contracts they won't.
+	 * 
 	 * @param countFailedByClientAsComplete
 	 * @return
 	 */
@@ -573,5 +574,13 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	public boolean hasComment() {
 		return comment != null && !comment.isEmpty();
+	}
+
+	public void setDateFreezed(Date freeze) {
+		dateFreeze = freeze;
+	}
+
+	public void setDateUnfreezed(Date unfreezed) {
+		dateUnfreeze = unfreezed;
 	}
 }

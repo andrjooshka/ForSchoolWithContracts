@@ -105,7 +105,7 @@
 									style="min-height: 45px; min-width: 100px; 
 							margin-top: 5px; max-width: 300px; padding: 5px; margin: 5px;">
 									${paymentInfo}
-									<t:if test="loopPayment.contract.freeze">
+									<t:if test="loopPayment.contract.frozen">
 										<br />
 										По замороженному договору.
 									</t:if>

@@ -485,7 +485,7 @@ big {
   width: 200px;
 }
 input[type=submit] {
-  padding: .35em;
+  padding: .35em .6em;
 }
 select {
   height: 23px;

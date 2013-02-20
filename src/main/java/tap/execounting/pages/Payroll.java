@@ -23,16 +23,20 @@ import tap.execounting.entities.Event;
 import tap.execounting.entities.EventType;
 import tap.execounting.entities.EventTypeAddition;
 import tap.execounting.entities.TeacherAddition;
+import tap.execounting.services.Authenticator;
 import tap.execounting.services.DateService;
 
 /**
- * @author truth sharp.maestro@gmail.com This class calculates month salary for
+ * @author sharp.maestro@gmail.com 
+ * This class calculates month salary for
  *         employee Source of events and contracts is produced by getContracts.
  *         Sequence is following: 1) getContracts() is called 1. Events list is
  *         produced by calling raw() 2. if filter option is on -- filter() is
  *         called, which removes unneeded events 3. Then events are translated
  *         into contracts 2) other calculations are performed Also if filter is
  *         off -- we count events which are free from school
+ * 08.02.2013 Artem asked me to prevent administrators from viewing payrolls of teachers
+ * ok, I will throw an exception for them
  */
 @Import(stylesheet = "context:/css/payroll.css")
 public class Payroll {
@@ -44,6 +48,8 @@ public class Payroll {
 	private EventMed eM;
 	@Inject
 	private ContractMed cM;
+	@Inject
+	private Authenticator auth;
 
 	private TeacherAddition addition;
 	@Property
@@ -77,7 +83,25 @@ public class Payroll {
 		return new Object[] { tM.getId(), dateOne, dateTwo, filtration };
 	}
 
+	// CRUTCH alert. Simplified authorization.	
+	void authCheck(){
+		// If user is not artem, or vanya, or zhenia -- throw an exception
+		// User ids that is ok = [1,2,6,7]
+		int userId = auth.getLoggedUser().getId();
+		switch(userId){
+		case 1:
+		case 2:
+		case 6:
+		case 7:
+			return;
+		default:
+			throw new IllegalAccessError("Please go back");
+		}
+	}
+	
 	void setupRender() {
+		authCheck();
+		
 		iteration = 0;
 		addition = tM.getAddition();
 	}
@@ -263,7 +287,7 @@ public class Payroll {
 		 * school or from teacher -- it should be filtered
 		 */
 		for (int i = events.size() - 1; i >= 0; i--)
-			if (events.get(i).isFree())
+			if (events.get(i).isFreeFromTeacher())
 				events.remove(i);
 
 		/*

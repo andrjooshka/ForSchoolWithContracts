@@ -22,7 +22,7 @@
 		</table>
 
 		<div class="form-submit">
-			<input type="submit" value="Войти" />
+			<input type="submit" value="Войти" class="btn"/>
 		</div>
 	</form>
 

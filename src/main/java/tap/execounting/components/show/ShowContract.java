@@ -16,7 +16,9 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 
+import tap.execounting.components.Freezer;
 import tap.execounting.components.editors.AddContract;
 import tap.execounting.components.editors.AddEvent;
 import tap.execounting.components.editors.AddPayment;
@@ -50,6 +52,8 @@ public class ShowContract {
 	private AuthorizationDispatcher dispatcher;
 	@Inject
 	private ContractMed contractMed;
+	@Inject
+	private AjaxResponseRenderer renderer;
 
 	// Screen fields
 	@InjectComponent
@@ -66,6 +70,8 @@ public class ShowContract {
 	private Payment loopPayment;
 	@Component
 	private AddContract editor;
+	@Component
+	private Freezer freezr;
 
 	// Behavior fields
 	@Property
@@ -108,9 +114,16 @@ public class ShowContract {
 		// AUTHORIZATION MOUNT POINT EDIT CONTRACT FREEZE
 		refreshUnit(contractId);
 		if (dispatcher.canEditContracts()) {
-			contract.setFreeze(!contract.isFreeze());
-			dao.update(contract);
+			freezr.activate();
+			renderer.addRender(freezr.getZone().getClientId(), freezr.getZone());
 		}
+	}
+	
+	Object onSuccessfullFreeze(int contractId) {
+		System.out.println("\n\non successful freeze");
+		refreshUnit(contractId);
+		renderer.addRender(bodyZone.getClientId(), bodyZone);
+		return null;
 	}
 
 	Object onWriteOff(int contractId) {
@@ -285,7 +298,7 @@ public class ShowContract {
 	}
 
 	public String getFreezeLabel() {
-		String response = contract.isFreeze() ? "разморозить" : "заморозить";
+		String response = contract.isFrozen() ? "разморозить" : "заморозить";
 		return response;
 	}
 
@@ -297,7 +310,7 @@ public class ShowContract {
 	private Asset unlocked;
 
 	public Asset getLockImg() {
-		return contract.isFreeze() ? locked : unlocked;
+		return contract.isFrozen() ? locked : unlocked;
 	}
 
 	Object onExperiment(Contract con) {

@@ -70,6 +70,9 @@ public interface ContractMed {
 
 	// Event planner method
 	public void doPlanEvents(Date eventsStartDate);
+	
+	// Freezes the contract, also replanning the events after unfreeze date
+	public void doFreeze(int contractId, Date dateFreeze, Date dateUnfreeze);
 
 	// group methods
 	// group
