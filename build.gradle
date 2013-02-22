@@ -3,13 +3,13 @@ description = "execounting application"
 apply plugin: "war"
 apply plugin: "java"
 apply plugin: "jetty"
-apply plugin: "eclipse"
+apply plugin: "idea"
 
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
 
 group = "tap"
-version = "4.7"
+version = "4.8.1"
 
 
 repositories {
@@ -90,4 +90,13 @@ test {
     enableAssertions = true
 }
 
-// TODO: Configure execution mode for jettyRun task
+idea {
+    module {
+        inheritOutputDirs = false
+        outputDir = file("build/classes/main")
+        testOutputDir = file('build/classes/test')
+
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}

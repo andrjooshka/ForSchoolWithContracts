@@ -5,6 +5,7 @@ import java.util.Date;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Parameter;
+import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.internal.util.CaptureResultCallback;
@@ -34,7 +35,6 @@ public class Freezer {
 	// Behavior fields
 	@Property
 	private boolean active;
-	@Parameter(required=true)
 	@Property
 	private int contractId;
 	
@@ -43,7 +43,8 @@ public class Freezer {
 		dateUnfreeze = DateService.datePlusMonths(dateFreeze, 6);
 	}
 	
-	public void activate(){
+	public void activate( int contractId){
+        this.contractId = contractId;
 		active = true;
 	}
 	
@@ -51,13 +52,13 @@ public class Freezer {
 		return zona;
 	}
 	
-	void onAction(int contractId){
+	void onSubmit(){
 		System.out.println("\n\nsubmitn\n\n");
 		CaptureResultCallback<Object> callback = new CaptureResultCallback<Object>(); 
 		resources.triggerEvent("SuccessfullFreeze", new Object[]{new Integer(contractId)}, callback);
 	}
-	void onSuccess(int contractId){
-		contractMed.doFreeze(contractId, dateFreeze, dateUnfreeze);
+	void onSuccess(){
+		contractMed.doFreeze(dateFreeze, dateUnfreeze);
 		active = false;
 		renderer.addRender(getZoneID(), zona);
 		CaptureResultCallback<Object> callback = new CaptureResultCallback<Object>(); 

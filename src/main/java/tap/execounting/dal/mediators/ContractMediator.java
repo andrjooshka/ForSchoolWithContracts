@@ -363,12 +363,25 @@ public class ContractMediator implements ContractMed {
 		return moneyback;
 	}
 	
-	public void doFreeze(int contractId, Date freeze, Date unfreeze){
-		setUnitId(contractId);
+	public ContractMed doFreeze(Date freeze, Date unfreeze){
 		doRemovePlannedEvents();
-		unit.setDateFreezed(freeze);
-		unit.setDateUnfreezed(unfreeze);
+		unit.setDateFreeze(freeze);
+		unit.setDateUnfreeze(unfreeze);
+        dao.update(unit);
+        return this;
 	}
+
+    public ContractMed doUnfreeze(){
+        unit.setDateFreeze(null);
+        unit.setDateUnfreeze(null);
+        update();
+        doPlanEvents(new Date());
+        update();
+        return this;
+    }
+    private void update(){
+        dao.update(unit);
+    }
 
 	private void doRemovePlannedEvents() {
 		// Delete all planned events

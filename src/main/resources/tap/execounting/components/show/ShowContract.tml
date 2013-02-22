@@ -9,7 +9,7 @@
 		<t:unless test="updateMode">
 			<ul class="sider panel">
 				<li>
-					<t:eventlink t:id="freeze" context="contract" zone="freezr${contract.id}">
+					<t:eventlink t:id="freeze" context="contract" zone="freezer${contract.id}">
 						<img src="${lockImg}" title="${freezeLabel}" alt="${freezeLabel}"
 							class="icons" style="padding: 4px 8px; width: 23px;" />
 					</t:eventlink>
@@ -51,7 +51,24 @@
 					</t:eventlink>
 				</li>
 			</ul>
-			<t:freezer t:id="freezr" contractId="contract.id"/>
+
+			<t:zone t:id="freezerZone" id="freezer${contractId}" update="show">
+                <t:if test="freezerActive">
+                    <t:form t:id="freezeForm" context="contractId">
+                        <t:hidden value="contractId" />
+                        <div class="t-beaneditor-row">
+                            <t:label for="dateFreeze" />
+                            <t:datefield t:id="dateFreeze"/>
+                        </div>
+                        <div class="t-beaneditor-row">
+                            <t:label for="dateUnfreeze" />
+                            <t:datefield t:id="dateUnfreeze" />
+                        </div>
+                        <t:submit value="message:submitLabel" t:event="success" t:context="contractId"/>
+                    </t:form>
+                </t:if>
+            </t:zone>
+
 			<table class="showcontract">
 				<t:if test="completeNotPaid">
 					<tr style="background: #F43; color: black;">

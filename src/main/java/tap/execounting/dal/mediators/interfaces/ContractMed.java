@@ -72,7 +72,10 @@ public interface ContractMed {
 	public void doPlanEvents(Date eventsStartDate);
 	
 	// Freezes the contract, also replanning the events after unfreeze date
-	public void doFreeze(int contractId, Date dateFreeze, Date dateUnfreeze);
+	public ContractMed doFreeze(Date dateFreeze, Date dateUnfreeze);
+
+    // Unfreezes the contract, by removing freeze dates
+    public ContractMed doUnfreeze();
 
 	// group methods
 	// group
@@ -143,4 +146,5 @@ public interface ContractMed {
 	public ContractMed retain(List<Contract> contracts);
 
 	public ContractMed sortByDate(boolean asc);
+
 }

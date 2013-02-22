@@ -208,7 +208,7 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	public void setComment(String comment) {
 		this.comment = comment;
-	}
+    }
 
 	public boolean isGift() {
 		return gift;
@@ -576,11 +576,19 @@ public class Contract implements Comparable<Contract>, Dated {
 		return comment != null && !comment.isEmpty();
 	}
 
-	public void setDateFreezed(Date freeze) {
+    public Date getDateFreeze(){
+        return dateFreeze;
+    }
+
+	public void setDateFreeze(Date freeze) {
 		dateFreeze = freeze;
 	}
 
-	public void setDateUnfreezed(Date unfreezed) {
+    public Date getDateUnfreeze(){
+        return dateUnfreeze;
+    }
+
+	public void setDateUnfreeze(Date unfreezed) {
 		dateUnfreeze = unfreezed;
 	}
 }

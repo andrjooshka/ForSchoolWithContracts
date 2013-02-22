@@ -1,18 +1,15 @@
 package tap.execounting.components.show;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.tapestry5.annotations.*;
 import tap.execounting.security.AuthorizationDispatcher;
+import tap.execounting.services.DateService;
 import tap.execounting.services.SuperCalendar;
 
 import org.apache.tapestry5.Asset;
-import org.apache.tapestry5.annotations.Component;
-import org.apache.tapestry5.annotations.Import;
-import org.apache.tapestry5.annotations.InjectComponent;
-import org.apache.tapestry5.annotations.Parameter;
-import org.apache.tapestry5.annotations.Path;
-import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
@@ -70,8 +67,12 @@ public class ShowContract {
 	private Payment loopPayment;
 	@Component
 	private AddContract editor;
-	@Component
-	private Freezer freezr;
+    @Component
+    private Zone freezerZone;
+    @Property
+    private Date dateFreeze;
+    @Property
+    private Date dateUnfreeze;
 
 	// Behavior fields
 	@Property
@@ -84,6 +85,13 @@ public class ShowContract {
 	private Zone eventZone;
 	@Property
 	private boolean addingPayment;
+    @Property
+    private  boolean freezerActive;
+
+    @BeginRender
+    void init(){
+        this.contractId = this.contract.getId();
+    }
 
 	Object onEdit(int contractId) {
 		// AUTHORIZATION MOUNT POINT EDIT CONTRACT
@@ -97,6 +105,7 @@ public class ShowContract {
 
 	private void refreshUnit(int conId) {
 		contract = dao.find(Contract.class, conId);
+        contractMed.setUnit(contract);
 	}
 
 	void onDelete(Contract con) {
@@ -114,17 +123,26 @@ public class ShowContract {
 		// AUTHORIZATION MOUNT POINT EDIT CONTRACT FREEZE
 		refreshUnit(contractId);
 		if (dispatcher.canEditContracts()) {
-			freezr.activate();
-			renderer.addRender(freezr.getZone().getClientId(), freezr.getZone());
+            if(contract.isFrozen())
+                contractMed.doUnfreeze();
+            else {
+                this.contractId = contractId;
+                freezerActive = true;
+                renderer.addRender(freezerZone.getClientId(), freezerZone);
+            }
 		}
 	}
-	
-	Object onSuccessfullFreeze(int contractId) {
-		System.out.println("\n\non successful freeze");
-		refreshUnit(contractId);
-		renderer.addRender(bodyZone.getClientId(), bodyZone);
-		return null;
-	}
+
+    void onPrepareFromFreezeForm(){
+        dateFreeze = new Date();
+        dateUnfreeze = DateService.datePlusMonths(dateFreeze,6);
+    }
+
+    void onSuccessFromFreezeForm(int contractId){
+        refreshUnit(contractId);
+        contractMed.doFreeze(dateFreeze,  dateUnfreeze);
+        freezerActive = false;
+    }
 
 	Object onWriteOff(int contractId) {
 		refreshUnit(contractId);
@@ -209,6 +227,8 @@ public class ShowContract {
 		}
 	}
 
+    @Property
+    @Persist
 	private Integer contractId;
 	@Inject
 	private EventMed eventMed;

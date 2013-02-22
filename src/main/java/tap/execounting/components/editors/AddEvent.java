@@ -228,7 +228,7 @@ public class AddEvent {
 
 	// Event handlers community
 	Object onTheCancel() {
-		CaptureResultCallback<Object> capturer = new CaptureResultCallback<>();
+		CaptureResultCallback<Object> capturer = new CaptureResultCallback<Object>();
 		resources.triggerEvent("InnerUpdate", new Object[] { event }, capturer);
 		return capturer.getResult();
 	}
