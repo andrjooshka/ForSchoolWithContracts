@@ -12,4 +12,5 @@ The most or least profitable teacher, client, school, event type.
 
 Archictecture is in trasit from bad MVC to good MVC.
 I'm also working on documentation and adding comments.
-
+At start it was very simple application and controller logic had been hosted inside the pages. Now all new logic is hosted inside Mediators (tap.execounting.dal.mediators) and their interfaces. Pages should only fire actions on this mediators. However the view logic of the pages is frequently not hosted inside mediators.
+Do this -- and this will be clean MVC application.
