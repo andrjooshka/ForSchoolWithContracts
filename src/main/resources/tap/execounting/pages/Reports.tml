@@ -152,6 +152,7 @@
 				<t:eventlink event="details" context="client">${client.name}
 				</t:eventlink>
 			</p:nameCell>
+
 			<p:commentCell>
 				<div class="commentDate"><t:outputraw value="commentDate" /></div>
 				<textarea model-id="${client.id}" class="cool">

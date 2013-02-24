@@ -22,43 +22,45 @@ public interface ContractMed {
 	public ContractMed setUnitId(int id);
 
 	// getters:
-	// Teacher name
-	public String getTeacherName();
 
-	// Client name
+    /**
+     * Teacher name
+     * @return name of the teacher responsible for the contract
+     */
+    public String getTeacherName();
+
+    /**
+     * Client name
+     * @return name of the client written in contract
+     */
 	public String getClientName();
 
-	// discipline
+    /**
+     * Discipline, or subject type, or event type.
+     * @return
+     */
 	public EventType getEventType();
 
-	// contract type
-	public ContractType getContractType();
-
-	// state
+    /**
+     * State of the contract
+     * @return
+     */
 	public ContractState getContractState();
+
+    /**
+     * String representation of contract state
+     * @return
+     */
+    public String getContractStateString(boolean shrt);
 
 	// date
 	public Date getDate();
-
-	// lessons number
-	public int getLessonsNumber();
 
 	// remaining events
 	public int getRemainingLessons();
 
 	// price
 	public int getPrice();
-
-	// balance
-	public int getBalance();
-
-	// events
-	public List<Event> getEvents();
-
-	// payments
-	public List<Payment> getPayments();
-
-	public EventType loadEventType(int id);
 
 	// Unit action methods
 
@@ -93,7 +95,6 @@ public interface ContractMed {
 
 	public void reset();
 
-	public String getFilterState();
 
 	// //filters:
 
@@ -112,9 +113,6 @@ public interface ContractMed {
 	// date
 	public ContractMed filter(Date date1, Date date2);
 
-	// planned payments date
-	public ContractMed filterByPlannedPaymentsDate(Date date1, Date date2);
-
 	// contract type
 	public ContractMed filterByContractType(int type);
 
@@ -132,12 +130,6 @@ public interface ContractMed {
 
 	// state
 	public Integer count(ContractState state);
-
-	// money for complete events
-	public Integer countCompleteLessonsMoney();
-
-	// money paid on contract
-	public Integer countMoneyPaid();
 	
 	// money paid for the certificate if contract has so
 	public int countCertificateMoney();
@@ -146,5 +138,4 @@ public interface ContractMed {
 	public ContractMed retain(List<Contract> contracts);
 
 	public ContractMed sortByDate(boolean asc);
-
 }

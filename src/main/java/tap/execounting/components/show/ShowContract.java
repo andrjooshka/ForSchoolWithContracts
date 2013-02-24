@@ -91,6 +91,7 @@ public class ShowContract {
     @BeginRender
     void init(){
         this.contractId = this.contract.getId();
+        contractMed.setUnitId(contractId);
     }
 
 	Object onEdit(int contractId) {
@@ -123,8 +124,10 @@ public class ShowContract {
 		// AUTHORIZATION MOUNT POINT EDIT CONTRACT FREEZE
 		refreshUnit(contractId);
 		if (dispatcher.canEditContracts()) {
-            if(contract.isFrozen())
+            if(contract.isFrozen()) {
                 contractMed.doUnfreeze();
+                renderer.addRender(bodyZone.getClientId(), bodyZone);
+            }
             else {
                 this.contractId = contractId;
                 freezerActive = true;
@@ -256,14 +259,8 @@ public class ShowContract {
 		return dao.find(EventType.class, contract.getTypeId()).getTitle();
 	}
 
-	public String getTeacher() {
-		String s;
-		if (contract.getTeacherId() == 0)
-			s = "не указан";
-		else
-			s = dao.find(Teacher.class, contract.getTeacherId()).getName();
-
-		return s;
+	public String getTeacherName() {
+		return contractMed.getTeacherName();
 	}
 
 	public List<Payment> getPayments() {
@@ -271,6 +268,10 @@ public class ShowContract {
 		params.put("contractId", contract.getId());
 		return dao.findWithNamedQuery(Payment.BY_CONTRACT_ID, params);
 	}
+
+    public String getContractState(){
+        return contractMed.getContractStateString(false);
+    }
 
 	public List<Event> getEvents() {
 		return contract.getEvents(true);

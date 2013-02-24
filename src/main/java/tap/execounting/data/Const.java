@@ -9,4 +9,6 @@ public class Const {
 	public static final String EVENT_EventMoved = "EventMoved";
 	public static final String EVENT_isFree = "[бесплатн";
 	public static final String NO_DATA = "нет данных для отображения";
+    public static final String CONTRACT_frozen_string_with_dates = "заморожен с %s по %s";
+    public static final String CONTRACT_TEACHER_NOT_DEFINED = "не указан";
 }

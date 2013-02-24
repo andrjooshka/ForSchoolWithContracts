@@ -1,5 +1,6 @@
 package tap.execounting.dal.mediators;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -10,7 +11,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
-
 import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.QueryParameters;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
@@ -30,6 +30,8 @@ import tap.execounting.entities.Facility;
 import tap.execounting.entities.Payment;
 import tap.execounting.entities.Teacher;
 import tap.execounting.services.DateService;
+
+import static tap.execounting.data.ContractState.*;
 
 public class ContractMediator implements ContractMed {
 
@@ -77,20 +79,8 @@ public class ContractMediator implements ContractMed {
 	}
 
 	public String getTeacherName() {
-		try {
-			String name;
-			// way1
-			name = unit.getTeacher().getName();
-			// way2
-			// name = dao.find(Teacher.class, unit.getTeacherId()).getName();
-			return name;
-		} catch (NullPointerException npe) {
-			npe.printStackTrace();
-			return null;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+		String name = unit.getTeacher().getName();
+        return name == null ? Const.CONTRACT_TEACHER_NOT_DEFINED : name;
 	}
 
 	public String getClientName() {
@@ -162,6 +152,36 @@ public class ContractMediator implements ContractMed {
 	public ContractState getContractState() {
 		return unit.getState();
 	}
+    /**
+     * Returns string representation of contract state.
+     * All this is done to reduce the logic inside contract, and pages.
+     * FURTHER candidate for internationalization
+     * @param shrt if short is false -- then for the frozen string you will receive full info.
+     * @return
+     */
+    public String getContractStateString(boolean shrt){
+        ContractState cs = unit.getState();
+
+        switch (cs) {
+            case frozen:
+                if(shrt)
+                    return frozen.toString();
+                SimpleDateFormat sdf = new SimpleDateFormat("dd MMM YY");
+                String freeze = sdf.format(unit.getDateFreeze()),
+                        unfreeze = sdf.format(unit.getDateUnfreeze());
+                return String.format(Const.CONTRACT_frozen_string_with_dates, freeze, unfreeze);
+            case active:
+                return active.toString();
+            case canceled:
+                return canceled.toString();
+            case complete:
+                return complete.toString();
+            case undefined:
+                return undefined.toString();
+            default:
+                return "";
+        }
+    }
 
 	public int getBalance() {
 		try {
@@ -171,6 +191,7 @@ public class ContractMediator implements ContractMed {
 			return 0;
 		}
 	}
+
 
 	public List<Event> getEvents() {
 		try {

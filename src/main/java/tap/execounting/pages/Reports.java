@@ -100,7 +100,10 @@ public class Reports {
 
 	// The code
 
-	// // Render setup
+    /**
+     * Code setup before render.
+     * Initializes all beanmodels.
+     */
 	void setupRender() {
 		// end of subscription
 		if (modelOfEnding == null) {
@@ -143,6 +146,7 @@ public class Reports {
 			modelOfFrozen = beanModelSource.createDisplayModel(Client.class,
 					componentResources.getMessages());
 			modelOfFrozen.add("comment", null);
+
 			modelOfFrozen.exclude("return", "date", "id", "balance",
 					"studentInfo", "firstContractDate", "state",
 					"firstPlannedPaymentDate");

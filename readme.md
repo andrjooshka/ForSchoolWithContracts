@@ -9,3 +9,7 @@ Nice visual calendar to see teacher's schedule.
 
 Quickly calculate statistics to know:
 The most or least profitable teacher, client, school, event type.
+
+Archictecture is in trasit from bad MVC to good MVC.
+I'm also working on documentation and adding comments.
+

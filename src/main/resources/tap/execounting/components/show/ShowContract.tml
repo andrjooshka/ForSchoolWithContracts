@@ -96,7 +96,7 @@
 				</t:if>
 				<tr>
 					<th>${message:teacher-label}</th>
-					<td colspan="2">${teacher}</td>
+					<td colspan="2">${teacherName}</td>
 				</tr>
 				<tr>
 					<th>${message:etype-label}</th>
@@ -108,8 +108,8 @@
 					<td colspan="2">${contract.contractType.title}</td>
 				</tr>
 				<tr>
-					<th>${message:status-label}</th>
-					<td colspan="2">${contract.state}</td>
+					<th>${message:state-label}</th>
+					<td colspan="2">${contractState}</td>
 				</tr>
 				<tr>
 					<th>${message:date-label}</th>
