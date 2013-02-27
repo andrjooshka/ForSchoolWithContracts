@@ -217,7 +217,7 @@ public class TeacherPage {
 	public List<Contract> getActiveContracts() {
 		cMed.reset();
 		Collections.sort(
-				cMed.filter(tMed.getUnit()).filter(ContractState.active)
+				cMed.filter(tMed.getUnit()).retainByState(ContractState.active)
 						.removeComlete().getGroup(),
 				new ContractByClientComparator());
 		return cMed.getGroup();

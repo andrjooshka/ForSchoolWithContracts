@@ -31,9 +31,9 @@ import tap.execounting.services.DateService;
  * This class calculates month salary for
  *         employee Source of events and contracts is produced by getContracts.
  *         Sequence is following: 1) getContracts() is called 1. Events list is
- *         produced by calling raw() 2. if filter option is on -- filter() is
+ *         produced by calling raw() 2. if retainByState option is on -- retainByState() is
  *         called, which removes unneeded events 3. Then events are translated
- *         into contracts 2) other calculations are performed Also if filter is
+ *         into contracts 2) other calculations are performed Also if retainByState is
  *         off -- we count events which are free from school
  * 08.02.2013 Artem asked me to prevent administrators from viewing payrolls of teachers
  * ok, I will throw an exception for them
@@ -324,7 +324,7 @@ public class Payroll {
 			}
 
 		/*
-		 * In this part of the filter we will remove all events of trial
+		 * In this part of the retainByState we will remove all events of trial
 		 * contracts and where type contains "раз"
 		 */
 		Contract c;

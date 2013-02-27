@@ -169,7 +169,7 @@ public class ClientMediator implements ClientMed {
 	public boolean hasActiveContracts() {
 		ContractMed contractMed = getContractMed();
 		boolean response = contractMed.setGroup(getContracts())
-				.filter(ContractState.active).countGroupSize() > 0;
+				.retainByState(ContractState.active).countGroupSize() > 0;
 		contractMed.reset();
 		return response;
 	}
@@ -178,7 +178,7 @@ public class ClientMediator implements ClientMed {
 		try {
 			ContractMed contractMed = getContractMed();
 			return contractMed.setGroup(getContracts())
-					.filter(ContractState.active).getGroup();
+					.retainByState(ContractState.active).getGroup();
 		} catch (NullPointerException npe) {
 			npe.printStackTrace();
 			return null;
@@ -188,7 +188,7 @@ public class ClientMediator implements ClientMed {
 	public boolean hasFrozenContracts() {
 		ContractMed contractMed = getContractMed();
 		boolean response = contractMed.setGroup(getContracts())
-				.filter(ContractState.frozen).countGroupSize() > 0;
+				.retainByState(ContractState.frozen).countGroupSize() > 0;
 		contractMed.reset();
 		return response;
 	}
@@ -312,7 +312,7 @@ public class ClientMediator implements ClientMed {
 		try {
 			ContractMed contractMed = getContractMed();
 			return contractMed.setGroup(getContracts())
-					.filter(ContractState.frozen).getGroup();
+					.retainByState(ContractState.frozen).getGroup();
 		} catch (NullPointerException npe) {
 			npe.printStackTrace();
 			return null;
@@ -322,7 +322,7 @@ public class ClientMediator implements ClientMed {
 	public boolean hasCanceledContracts() {
 		ContractMed contractMed = getContractMed();
 		boolean response = contractMed.setGroup(getContracts())
-				.filter(ContractState.canceled).countGroupSize() > 0;
+				.retainByState(ContractState.canceled).countGroupSize() > 0;
 		contractMed.reset();
 		return response;
 	}
@@ -331,7 +331,7 @@ public class ClientMediator implements ClientMed {
 		try {
 			ContractMed contractMed = getContractMed();
 			return contractMed.setGroup(getContracts())
-					.filter(ContractState.canceled).getGroup();
+					.retainByState(ContractState.canceled).getGroup();
 		} catch (NullPointerException npe) {
 			npe.printStackTrace();
 			return null;
@@ -354,7 +354,7 @@ public class ClientMediator implements ClientMed {
 	public boolean hasFinishedContracts() {
 		ContractMed contractMed = getContractMed();
 		boolean response = contractMed.setGroup(getContracts())
-				.filter(ContractState.complete).countGroupSize() > 0;
+				.retainByState(ContractState.complete).countGroupSize() > 0;
 		contractMed.reset();
 		return response;
 	}
@@ -363,7 +363,7 @@ public class ClientMediator implements ClientMed {
 		try {
 			ContractMed contractMed = getContractMed();
 			return contractMed.setGroup(getContracts())
-					.filter(ContractState.complete).getGroup();
+					.retainByState(ContractState.complete).getGroup();
 		} catch (NullPointerException npe) {
 			npe.printStackTrace();
 			return null;
@@ -386,45 +386,9 @@ public class ClientMediator implements ClientMed {
 			return ClientState.canceled;
 		if (hasFrozenContracts())
 			return ClientState.frozen;
-		// OBSOLETE
-		// check if client is active
-		// // check if client has active contracts
-		// List<Contract> activeContracts = getActiveContracts();
-		// if (activeContracts.size() > 0) {
-		// // if he is active, he is one of three:
-		// // trial | beginner | continuer
-		//
-		// // Check if he has not trial contracts
-		// // TODO check both times that he has previous contracts
-		// boolean notOnlyTrial = false;
-		// for (Contract c : activeContracts)
-		// if (c.getContractTypeId() != ContractType.Trial) {
-		// notOnlyTrial = true;
-		// break;
-		// }
-		// // Check trial status
-		// if (!notOnlyTrial)
-		// return ClientState.trial;
-		//
-		// // check if client has finished contracts
-		// List<Contract> finishedContracts = getFinishedContracts();
-		// if (finishedContracts.size() > 0) {
-		// notOnlyTrial = false;
-		// for (Contract c : finishedContracts)
-		// if (c.getContractTypeId() != ContractType.Trial) {
-		// notOnlyTrial = true;
-		// break;
-		// }
-		// return notOnlyTrial ? ClientState.continuer
-		// : ClientState.beginner;
-		// }
-		// return ClientState.beginner;
-		// }
-		// Well if client has no active contracts -- he could still be beginner,
-		// or trial, and so on.
-		// If he has recent trial or free contracts -- and nothing else -- he is
-		// a
-		// beginner.
+        if(doesNotHaveActiveContracts())
+            return ClientState.undefined;
+
 		int notTrialCounter = 0;
 		for (Contract c : unit.getContracts())
 			if (c.notTrial())
@@ -437,10 +401,13 @@ public class ClientMediator implements ClientMed {
 		default:
 			return ClientState.continuer;
 		}
-		// return ClientState.undefined;
 	}
 
-	public void cancelClient() {
+    private boolean doesNotHaveActiveContracts() {
+        return unit.getActiveContracts().size() == 0;
+    }
+
+    public void cancelClient() {
 		unit.setCanceled(true);
 	}
 
@@ -489,9 +456,10 @@ public class ClientMediator implements ClientMed {
 		appliedFilters = new HashMap<String, Object>();
 	}
 
-	public void reset() {
+	public ClientMed reset() {
 		cache = null;
 		appliedFilters = null;
+        return this;
 	}
 
 	public List<Client> getGroup() {
@@ -524,14 +492,14 @@ public class ClientMediator implements ClientMed {
 		return sb.toString();
 	}
 
-	public ClientMed filter(ClientState state) {
+	public ClientMed retainByState(ClientState state) {
 		getAppliedFilters().put("ClientState", state);
 		List<Client> cache = getGroup();
 
 		// save current unit
 		Client unit = getUnit();
 
-		// filter
+		// retainByState
 		if (state != ClientState.active)
 			for (int i = cache.size() - 1; i >= 0; i--) {
 				setUnit(cache.get(i));
@@ -558,7 +526,7 @@ public class ClientMediator implements ClientMed {
 		getAppliedFilters().put("Active teacher", teacher);
 
 		List<Contract> contractsCache = getContractMed().filter(teacher)
-				.filter(ContractState.active).getGroup();
+				.retainByState(ContractState.active).getGroup();
 		getContractMed().reset();
 		cache = contractsToClients(contractsCache);
 		return this;
@@ -632,24 +600,15 @@ public class ClientMediator implements ClientMed {
 		return this;
 	}
 
-	public List<Client> getDebtors() {
-		List<Client> cache = getAllClient();
+	public ClientMed retainDebtors() {
 		Client c;
+        List<Client> cache = getGroup();
 		for (int i = cache.size() - 1; i >= 0; i--) {
 			c = cache.get(i);
 			if (c.getBalance() >= 0 || c.isCanceled())
 				cache.remove(i);
 		}
-		return cache;
-	}
-
-	public List<Client> getClientsWithExpiringContracts() {
-		ContractMed contractMed = getContractMed();
-		List<Contract> contracts = contractMed.filter(2).getGroup();
-		Set<Client> clients = new HashSet<Client>();
-		for (Contract c : contracts)
-			clients.add(c.getClient());
-		return new ArrayList<Client>(clients);
+		return this;
 	}
 
 	public Integer countGroupSize() {
@@ -657,13 +616,8 @@ public class ClientMediator implements ClientMed {
 	}
 
 	// TODO REDO
-	public Integer count(ClientState state) {
-		return filter(state).countGroupSize();
-	}
-
-	// TODO REDO
 	public Integer count(ClientState state, Date date1, Date date2) {
-		return filterDateOfFirstContract(date1, date2).filter(state)
+		return filterDateOfFirstContract(date1, date2).retainByState(state)
 				.countGroupSize();
 	}
 
@@ -691,4 +645,25 @@ public class ClientMediator implements ClientMed {
 		return count(ClientState.frozen, date1, date2);
 	}
 
+    public ClientMed sortByName(){
+        Client t;
+        List<Client> cache = getGroup();
+        int i = 0, j,
+                len = cache.size(),
+                last = len - 1;
+        for (i = 0; i < len; i++)
+            for (j = last; j > i; j--)
+                if (cache.get(i).getName()
+                        .compareTo(cache.get(j).getName()) > 0) {
+                    t = cache.get(i);
+                    cache.set(i, cache.get(j));
+                    cache.set(j, t);
+                }
+        return this;
+    }
+
+    // retains only unique clients in the group
+    private void unique(){
+        cache = new ArrayList<Client>(new HashSet<Client>(cache));
+    }
 }

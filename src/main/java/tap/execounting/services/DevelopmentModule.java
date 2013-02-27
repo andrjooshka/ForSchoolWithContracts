@@ -40,7 +40,7 @@ public class DevelopmentModule {
 		// Each contribution to an ordered configuration has a name, When
 		// necessary, you may
 		// set constraints to precisely control the invocation order of the
-		// contributed filter
+		// contributed retainByState
 		// within the pipeline.
 
 		configuration.add("Timing", filter);

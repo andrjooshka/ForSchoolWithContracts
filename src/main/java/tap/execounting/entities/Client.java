@@ -55,6 +55,8 @@ public class Client implements Dated, Deletable {
 	@Column(unique = true)
 	private String name;
 
+    private String phoneNumber;
+
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "client_id")
 	private List<Contract> contracts = new ArrayList<Contract>();
@@ -89,6 +91,14 @@ public class Client implements Dated, Deletable {
 		this.name = name;
 	}
 
+    public String getPhoneNumber(){
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String number){
+        phoneNumber = number;
+    }
+
 	public List<Contract> getContracts() {
 		return contracts;
 	}
@@ -101,6 +111,10 @@ public class Client implements Dated, Deletable {
 		return list;
 	}
 
+    /**
+     * Will return Contracts where state == active
+     * @return list of active contracts
+     */
 	public List<Contract> getActiveContracts() {
 		List<Contract> contracts = new ArrayList<Contract>();
 		for (Contract c : getContracts()) {
@@ -190,7 +204,7 @@ public class Client implements Dated, Deletable {
 
 	public Date getDate() {
 		// CRUTCH
-		// Fix added to not brake the date filter
+		// Fix added to not brake the date retainByState
 		Date d = getFirstContractDate();
 		return d == null ? new Date() : d;
 	}

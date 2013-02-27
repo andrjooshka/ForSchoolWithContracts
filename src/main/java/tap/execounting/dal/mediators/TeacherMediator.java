@@ -111,7 +111,7 @@ public class TeacherMediator implements TeacherMed {
 
 	public List<Client> getAllClients() {
 		return null;
-		// return clientMed.filter(unit);
+		// return clientMed.retainByState(unit);
 	}
 
 	public List<Client> getActiveClients() {
@@ -140,25 +140,25 @@ public class TeacherMediator implements TeacherMed {
 	// frozen
 	public List<Contract> getFrozenContracts() {
 		return getContractMed().setGroup(getAllContracts())
-				.filter(ContractState.frozen).getGroup();
+				.retainByState(ContractState.frozen).getGroup();
 	}
 
 	// inactive
 	public List<Contract> getInactiveContracts() {
 		return getContractMed().setGroup(getAllContracts())
-				.filter(ContractState.undefined).getGroup();
+				.retainByState(ContractState.undefined).getGroup();
 	}
 
 	// canceled
 	public List<Contract> getCanceledContracts() {
 		return getContractMed().setGroup(getAllContracts())
-				.filter(ContractState.canceled).getGroup();
+				.retainByState(ContractState.canceled).getGroup();
 	}
 
 	// complete
 	public List<Contract> getCompleteContracts() {
 		return getContractMed().setGroup(getAllContracts())
-				.filter(ContractState.complete).getGroup();
+				.retainByState(ContractState.complete).getGroup();
 	}
 
 	public String worksOn(String day) {

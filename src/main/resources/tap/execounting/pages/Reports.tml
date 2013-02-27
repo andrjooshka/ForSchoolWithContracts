@@ -67,24 +67,9 @@
 
 	<!-- Clients which contract is ended -->
 	<div id="ended" style="margin-top:60px;" class="datatable">
-		<h3>Закончился абонемент</h3>
-		<t:grid source="endedContracts" model="modelOfEnded" row="client"
-			pagerPosition="${pagerPosition}" rowsPerPage="${rows}">
-			<p:nameCell>
-				<t:eventlink event="details" context="client">${client.name}
-				</t:eventlink>
-			</p:nameCell>
-			<p:endedInfoCell>
-				${endedInfo}
-			</p:endedInfoCell>
-			<p:commentCell>
-				<div class="commentDate"><t:outputraw value="commentDate" /></div>
-				<textarea model-id="${client.id}" class="cool">
-					${comment}
-				</textarea>
-			</p:commentCell>
-		</t:grid>
+
 	</div>
+	<t:Reports.ClientsStateUndefined />
 
 	<!-- Who should pay in next two weeks -->
 	<div id="payment" style="margin-top:30px;" class="datatable">

@@ -146,6 +146,7 @@ public class AddEvent {
 		return c;
 	}
 
+    //TODO here is some logic to update and move to onValidate method
 	Object onSuccess() {
 		EventType eventType = checkType();
 

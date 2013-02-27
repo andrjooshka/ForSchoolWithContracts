@@ -3,6 +3,7 @@
 	xmlns:p="tapestry:parameter">
 	
 	<h3>${client.name}</h3>
+	<h4 class="phone">${client.phoneNumber}</h4>
 
 	<span style="position: absolute; top: 60px; right: 60px;">
 		<t:form>

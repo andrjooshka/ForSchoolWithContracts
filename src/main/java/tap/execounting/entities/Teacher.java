@@ -42,6 +42,11 @@ public class Teacher implements Deletable {
 	@Size(min = 3, max = 50)
 	@Column(nullable = false, unique = true)
 	private String name;
+
+    private Date dateHired;
+
+    private int contractNumber;
+
 	@NotNull
 	private boolean active;
 	@NonVisual
@@ -70,6 +75,14 @@ public class Teacher implements Deletable {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+    public Date getDateHired(){
+        return this.dateHired;
+    }
+
+    public void setDateHired(Date date){
+        dateHired = date;
+    }
 
 	public boolean isActive() {
 		return active;

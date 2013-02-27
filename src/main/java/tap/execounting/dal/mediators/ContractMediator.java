@@ -489,9 +489,10 @@ public class ContractMediator implements ContractMed {
 		return getDao().findWithNamedQuery(Contract.ALL);
 	}
 
-	public void reset() {
+	public ContractMed reset() {
 		cache = null;
 		appliedFilters = null;
+        return this;
 	}
 
 	// intersection operation
@@ -563,7 +564,7 @@ public class ContractMediator implements ContractMed {
 		return this;
 	}
 
-	public ContractMed filter(ContractState state) {
+	public ContractMed retainByState(ContractState state) {
 		getAppliedFilters().put("ContractState", state);
 		List<Contract> cache = getGroup();
 
@@ -584,20 +585,25 @@ public class ContractMediator implements ContractMed {
 		setUnit(tempUnit);
 		return this;
 	}
+    public ContractMed filterByState(ContractState state) {
+        getAppliedFilters().put("ContractState", state);
+        List<Contract> cache = getGroup();
 
-	public ContractMed filter(int remainingLessons) {
-		getAppliedFilters().put("RemainingLessons", remainingLessons);
-		List<Contract> cache = getGroup();
-		Contract con;
+        // save current unit;
+        Contract tempUnit = getUnit();
 
-		for (int i = cache.size() - 1; i >= 0; i--) {
-			con = cache.get(i);
-			if (con.getLessonsRemain() <= remainingLessons)
-				continue;
-			cache.remove(i);
-		}
-		return this;
-	}
+        Contract con;
+        for (int i = cache.size() - 1; i >= 0; i--) {
+            con = cache.get(i);
+            setUnit(con);
+            if (getContractState() == state)
+                cache.remove(i);
+        }
+
+        // restore unit
+        setUnit(tempUnit);
+        return this;
+    }
 
 	public ContractMed filter(Date date1, Date date2) {
 		getAppliedFilters().put("Date1", date1);
@@ -608,6 +614,8 @@ public class ContractMediator implements ContractMed {
 		return this;
 	}
 
+
+    // TODO remove candidate
 	public ContractMed filterByPlannedPaymentsDate(Date date1, Date date2) {
 		getAppliedFilters().put("PlannedPaymentsDate1", date1);
 		getAppliedFilters().put("PlannedPaymentsDate2", date2);
@@ -645,6 +653,29 @@ public class ContractMediator implements ContractMed {
 		return this;
 	}
 
+    /**
+     * Removes completed, canceled and frozen contracts
+     * Retains only those contracts which have less or equal remaining lessons.
+     * @param remainingLessons upper bound to remain in the group
+     * @return
+     */
+    public ContractMed retainExpiring(int remainingLessons) {
+        filterByState(ContractState.complete);
+        filterByState(ContractState.frozen);
+        filterByState(ContractState.canceled);
+        getAppliedFilters().put("RemainingLessons", remainingLessons);
+        List<Contract> cache = getGroup();
+        Contract con;
+
+        for (int i = cache.size() - 1; i >= 0; i--) {
+            con = cache.get(i);
+            if (con.getLessonsRemain() <= remainingLessons)
+                continue;
+            cache.remove(i);
+        }
+        return this;
+    }
+
 	public ContractMed removeComlete() {
 		getAppliedFilters().put("Complete", false);
 		List<Contract> cache = getGroup();
@@ -677,7 +708,7 @@ public class ContractMediator implements ContractMed {
 		return summ;
 	}
 
-	// Now it this does not filter anything
+	// Now it this does not retainByState anything
 	public Integer count(ContractState state) {
 		int count = 0;
 		for (Contract c : getGroup())

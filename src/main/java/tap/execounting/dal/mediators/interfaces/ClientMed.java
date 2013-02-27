@@ -68,7 +68,7 @@ public interface ClientMed {
 	public List<Client> getGroup(boolean reset);
 	public ClientMed setGroup(List<Client> group);
 	public List<Client> getAllClient();
-	public void reset();
+	public ClientMed reset();
 	public String getFilterState();
 	
 	//filters
@@ -77,9 +77,13 @@ public interface ClientMed {
 	public ClientMed becameContinuers(Date date1, Date date2);
 	public ClientMed becameNovices(Date date1, Date date2);
 	public ClientMed becameTrials(Date sa1, Date sa2);
-	
-	//state
-	public ClientMed filter(ClientState state);
+
+    /**
+     * Should retain only those clients who match the state.
+     * @param state
+     * @return
+     */
+	public ClientMed retainByState(ClientState state);
 	
 	//Teacher
 	public ClientMed filterByActiveTeacher(Teacher teacher);
@@ -90,42 +94,41 @@ public interface ClientMed {
 	//Date of planned payments
 	public ClientMed filterDateOfPlannedPayments(Date date1, Date date2);
 	
-	//Name filter
+	//Name retainByState
 	public ClientMed filterName(String name);
 	
 	//debtors
-	public List<Client> getDebtors();
-	
-	//contract expiring
-	public List<Client> getClientsWithExpiringContracts();
-	
+	public ClientMed retainDebtors();
+
 	//counters:
 	public Integer countGroupSize();
-	
+
 	//state
-	public Integer count(ClientState state);
+
 	public Integer count(ClientState state, Date date1, Date date2);
-	
+
 		//continuers
 	public Integer countContinuers(Date date1, Date date2);
-	
+
 		//newbies
 	public Integer countNewbies(Date date1, Date date2);
-	
+
 		//trials
 	public Integer countTrial(Date date1, Date date2);
-	
+
 		//canceled
 	public Integer countCanceled(Date date1, Date date2);
-	
+
 		//undefined
 	public Integer countUndefined(Date date1, Date date2);
-	
+
 		//frozen
 	public Integer countFrozen(Date date1, Date date2);
-	
+
 	// Translates given contracts to clients
 	public List<Client> contractsToClients(List<Contract> contract);
+
+    public ClientMed sortByName();
 }
 
 

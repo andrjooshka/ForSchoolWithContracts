@@ -81,7 +81,10 @@ public interface ContractMed {
 
 	// group methods
 	// group
-	public List<Contract> getGroup();
+    public List<Contract> getGroup();
+
+    // resets group after returning of the contracts
+	public List<Contract> getGroup(boolean reset);
 
 	public ContractMed setGroup(List<Contract> group);
 	
@@ -93,7 +96,7 @@ public interface ContractMed {
 
 	public List<Contract> getAllContracts();
 
-	public void reset();
+	public ContractMed reset();
 
 
 	// //filters:
@@ -105,16 +108,16 @@ public interface ContractMed {
 	public ContractMed filter(Teacher t);
 
 	// state
-	public ContractMed filter(ContractState state);
-
-	// remaining lessons
-	public ContractMed filter(int remainingLessons);
+	public ContractMed retainByState(ContractState state);
 
 	// date
 	public ContractMed filter(Date date1, Date date2);
 
 	// contract type
 	public ContractMed filterByContractType(int type);
+
+    // remaining lessons
+    public ContractMed retainExpiring(int remainingLessons);
 
 	// this removes finished contracts from group. added as Tema asked, to
 	// remove finished trials from TeacherPage

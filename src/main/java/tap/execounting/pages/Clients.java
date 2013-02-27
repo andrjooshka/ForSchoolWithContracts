@@ -149,7 +149,7 @@ public class Clients {
 		contractMed.reset();
 		paymentMed.reset();
 
-		// Boolean flags processing for filter status
+		// Boolean flags processing for retainByState status
 		// Filter on date of first contract
 		boolean filterOnFCDate = fcEarlyDate != null || fcLaterDate != null;
 		// Filter on date of any contract
@@ -174,7 +174,7 @@ public class Clients {
 
 		// Stud status
 		if (filterOnState) { // OLDE CODE
-								// clientMed.filter(state);
+								// clientMed.retainByState(state);
 								// new code calculates also when client has
 								// acquired this status
 			// Continuer status acquisition
@@ -185,7 +185,7 @@ public class Clients {
 				clientMed.becameContinuers(sa1, sa2);
 			else if (state == ClientState.trial)
 				clientMed.becameTrials(sa1, sa2);
-			else clientMed.filter(state);
+			else clientMed.retainByState(state);
 		}
 		// Now Clients are fresh filtered and actual
 		// Setup 2. We could set up contracts
@@ -194,7 +194,7 @@ public class Clients {
 		contractMed.setGroupFromClients(clients);
 
 		// Contract filters
-		// Any contract Date filter
+		// Any contract Date retainByState
 		if (filterOnACDate || filterOnContractType) {
 			if (filterOnACDate)
 				contractMed.filter(acDate1, acDate2);
@@ -207,7 +207,7 @@ public class Clients {
 		// Setup 3
 		paymentMed.setGroupFromContracts(contractMed.getGroup());
 		
-		// Payment filter
+		// Payment retainByState
 		// Which also does intersection operation as contractmed
 		if(filterOnPaymentsDate){
 			paymentMed.filter(pfEarlierDate, pfLaterDate);
@@ -240,7 +240,7 @@ public class Clients {
 	// TODO remove candidate
 	public int getTotalContracts() {
 		// NEW VERSION count all contracts of selected clients
-		// with contract date filter applied
+		// with contract date retainByState applied
 		return contractsCache.size();
 	}
 

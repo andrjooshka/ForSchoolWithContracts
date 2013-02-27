@@ -25,6 +25,8 @@ a div.buttondiv { /* Gradient */
 	padding-left: 30px;
 	padding-right: 20px;
 	padding-top: 20px;
+    color: #333;
+    text-shadow: 0 0 0.03em #333;
 }
 
 a div.buttondiv:hover { /* Gradient */
@@ -91,6 +93,8 @@ a div.buttondiv:active { /* Gradient */
 
 div.buttondiv h2 {
 	margin-bottom: 15px;
+	font-family: serif;
+	color: #333;
 }
 
 div.buttondiv div {
