@@ -82,31 +82,31 @@ public interface EventMed {
 
 	// filters
 	// Client
-	public EventMed filter(Client client);
+	public EventMed retainByClient(Client client);
 	
 	// Teacher
-	public EventMed filter(Teacher unit);
+	public EventMed retainByTeacher(Teacher unit);
 
 	// Contract
-	public EventMed filter(Contract unit);
+	public EventMed retainByContract(Contract unit);
 
 	// State
-	public EventMed filter(EventState state);
+	public EventMed retainByState(EventState state);
 
 	// Facility
-	public EventMed filter(Facility unit);
+	public EventMed retainByFacility(Facility unit);
 
 	// Room
-	public EventMed filter(Room unit);
+	public EventMed retainByRoom(Room unit);
 
 	// Discipline
-	public EventMed filter(EventType type);
+	public EventMed retainByRoom(EventType type);
 
 	// Date
-	public EventMed filter(Date date1, Date date2);
+	public EventMed retainByDatesEntry(Date date1, Date date2);
 
 	// Filter paid events, which is complete and failed by client
-	public EventMed filterPaidEvents();
+	public EventMed retainPaidEvents();
 
 	// counters
 	// group length
@@ -150,4 +150,10 @@ public interface EventMed {
 	// and event type title.
 	public List<Event> getByDateClientIdTeacherIdAndEventTypeTitle(Date d,
 			int clientId, int teacherId, String typeTitle);
+
+    /**
+     * Will return the most recent event from the group
+     * @return
+     */
+    public Event lastByDate();
 }

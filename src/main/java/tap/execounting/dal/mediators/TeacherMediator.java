@@ -120,20 +120,10 @@ public class TeacherMediator implements TeacherMed {
 		// for (Contract c : getActualContracts())
 		// clients.add(c.getClient());
 		// return new ArrayList<Client>(clients);
-		List<Client> res = getClientMed().filterByActiveTeacher(unit)
+		List<Client> res = getClientMed().retainByActiveTeacher(unit)
 				.getGroup();
 		getClientMed().reset();
 		return res;
-	}
-
-	public List<Client> getFrozenClients() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<Client> getUndefinedClients() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	// contracts
@@ -246,57 +236,57 @@ public class TeacherMediator implements TeacherMed {
 	}
 
 	public int getLessonsComplete(Date date1, Date date2) {
-		int res = getEventMed().filter(unit).filter(date1, date2)
+		int res = getEventMed().retainByTeacher(unit).retainByDatesEntry(date1, date2)
 				.countEventsComplete();
 		getEventMed().reset();
 		return res;
 	}
 
 	public int getLessonsFired(Date date1, Date date2) {
-		int res = getEventMed().filter(unit).filter(date1, date2)
+		int res = getEventMed().retainByTeacher(unit).retainByDatesEntry(date1, date2)
 				.countEventsFired();
 		getEventMed().reset();
 		return res;
 	}
 
 	public int getLessonsMovedByTeacher(Date date1, Date date2) {
-		int res = getEventMed().filter(unit).filter(date1, date2)
+		int res = getEventMed().retainByTeacher(unit).retainByDatesEntry(date1, date2)
 				.countEventsMovedByTeacher();
 		getEventMed().reset();
 		return res;
 	}
 
 	public int getLessonsMovedByClient(Date date1, Date date2) {
-		int res = getEventMed().filter(unit).filter(date1, date2)
+		int res = getEventMed().retainByTeacher(unit).retainByDatesEntry(date1, date2)
 				.countEventsMovedByClient();
 		getEventMed().reset();
 		return res;
 	}
 
 	public int getDaysWorked(Date date1, Date date2) {
-		int res = getEventMed().filter(unit).filter(date1, date2)
-				.filter(EventState.complete).countDaysInEventsGroup();
+		int res = getEventMed().retainByTeacher(unit).retainByDatesEntry(date1, date2)
+				.retainByState(EventState.complete).countDaysInEventsGroup();
 		getEventMed().reset();
 		return res;
 	}
 
 	public int getMoneyEarned(Date date1, Date date2) {
-		int res = getEventMed().filter(unit).filter(date1, date2)
+		int res = getEventMed().retainByTeacher(unit).retainByDatesEntry(date1, date2)
 				.countMoneyOfCompleteEvents();
 		getEventMed().reset();
 		return res;
 	}
 
 	public int getMoneyEarnedForSchool(Date date1, Date date2) {
-		int res = getEventMed().filter(unit).filter(date1, date2)
-				.filter(EventState.complete).countSchoolMoney();
+		int res = getEventMed().retainByTeacher(unit).retainByDatesEntry(date1, date2)
+				.retainByState(EventState.complete).countSchoolMoney();
 		getEventMed().reset();
 		return res;
 	}
 
 	public int getMoneyEarnedForSelf(Date date1, Date date2) {
-		int res = getEventMed().filter(unit).filter(date1, date2)
-				.filter(EventState.complete).countTeacherMoney();
+		int res = getEventMed().retainByTeacher(unit).retainByDatesEntry(date1, date2)
+				.retainByState(EventState.complete).countTeacherMoney();
 		getEventMed().reset();
 		return res;
 	}

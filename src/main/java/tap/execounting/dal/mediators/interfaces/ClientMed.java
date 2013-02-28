@@ -86,16 +86,23 @@ public interface ClientMed {
 	public ClientMed retainByState(ClientState state);
 	
 	//Teacher
-	public ClientMed filterByActiveTeacher(Teacher teacher);
-	
+	public ClientMed retainByActiveTeacher(Teacher teacher);
+
 	//Date of first contract (duration of relations)
-	public ClientMed filterDateOfFirstContract(Date date1, Date date2);
+	public ClientMed retainByDateOfFirstContract(Date date1, Date date2);
 	
 	//Date of planned payments
-	public ClientMed filterDateOfPlannedPayments(Date date1, Date date2);
+	public ClientMed retainByScheduledPayments(Date date1, Date date2);
+
+    /**
+     * Retains only those clients who are planning to pay in N days, or before.
+     * @param days
+     * @return
+     */
+    public ClientMed retainBySoonPayments(int days);
 	
 	//Name retainByState
-	public ClientMed filterName(String name);
+	public ClientMed retainByName(String name);
 	
 	//debtors
 	public ClientMed retainDebtors();

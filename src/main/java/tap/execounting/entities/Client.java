@@ -64,6 +64,28 @@ public class Client implements Dated, Deletable {
 	@NonVisual
 	private boolean canceled;
 
+    @NonVisual
+    private String comment;
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public Date getCommentDate() {
+        return commentDate;
+    }
+
+    public void setCommentDate(Date commentDate) {
+        this.commentDate = commentDate;
+    }
+
+    @NonVisual
+    private Date commentDate;
+
 	@NonVisual
 	private boolean deleted;
 

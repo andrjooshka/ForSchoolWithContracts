@@ -37,13 +37,13 @@ public interface PaymentMed {
 
 	//filters
 	//contract
-	public PaymentMed filter(Contract unit);
+	public PaymentMed retainByContract(Contract unit);
 	
 	//Date
-	public PaymentMed filter(Date date1, Date date2);
+	public PaymentMed retainByDatesEntry(Date date1, Date date2);
 
 	//Planned (state)
-	public PaymentMed filter(boolean state);
+	public PaymentMed retainByState(boolean state);
 
 	//counters
 	public Integer countGroupSize();

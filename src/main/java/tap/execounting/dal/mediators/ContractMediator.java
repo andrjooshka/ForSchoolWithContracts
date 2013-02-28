@@ -29,6 +29,7 @@ import tap.execounting.entities.EventType;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Payment;
 import tap.execounting.entities.Teacher;
+import tap.execounting.services.ContractByClientNameComparator;
 import tap.execounting.services.DateService;
 
 import static tap.execounting.data.ContractState.*;
@@ -527,7 +528,7 @@ public class ContractMediator implements ContractMed {
 		return sb.toString();
 	}
 
-	public ContractMed filter(Client c) {
+	public ContractMed retainByClient(Client c) {
 		getAppliedFilters().put("Client", c);
 		if (cache == null)
 			cache = getDao().findWithNamedQuery(Contract.WITH_CLIENT,
@@ -546,7 +547,7 @@ public class ContractMediator implements ContractMed {
 		return this;
 	}
 
-	public ContractMed filter(Teacher t) {
+	public ContractMed retainByTeacher(Teacher t) {
 		getAppliedFilters().put("Teacher", t);
 		if (cache == null)
 			cache = getDao().findWithNamedQuery(Contract.WITH_TEACHER,
@@ -605,18 +606,18 @@ public class ContractMediator implements ContractMed {
         return this;
     }
 
-	public ContractMed filter(Date date1, Date date2) {
+	public ContractMed retainByDates(Date date1, Date date2) {
 		getAppliedFilters().put("Date1", date1);
 		getAppliedFilters().put("Date2", date2);
 
 		List<Contract> cache = getGroup();
-		dateFilter.filter(cache, date1, date2);
+		dateFilter.retainByDatesEntry(cache, date1, date2);
 		return this;
 	}
 
 
     // TODO remove candidate
-	public ContractMed filterByPlannedPaymentsDate(Date date1, Date date2) {
+	public ContractMed retainByPlannedPaymentsDate(Date date1, Date date2) {
 		getAppliedFilters().put("PlannedPaymentsDate1", date1);
 		getAppliedFilters().put("PlannedPaymentsDate2", date2);
 		List<Contract> cache = getGroup();
@@ -633,13 +634,13 @@ public class ContractMediator implements ContractMed {
 
 	private boolean plannedPaymentsTest(Contract con, Date date1, Date date2) {
 		PaymentMed paymentMed = getPaymentMed();
-		boolean result = paymentMed.filter(con).filter(true)
-				.filter(date1, date2).getGroup().size() > 0;
+		boolean result = paymentMed.retainByContract(con).retainByState(true)
+				.retainByDatesEntry(date1, date2).getGroup().size() > 0;
 		paymentMed.reset();
 		return result;
 	}
 
-	public ContractMed filterByContractType(int type) {
+	public ContractMed retainByContractType(int type) {
 		getAppliedFilters().put("ContractTypeId", type);
 		List<Contract> cache = getGroup();
 		Contract con;
@@ -733,4 +734,8 @@ public class ContractMediator implements ContractMed {
 		return this;
 	}
 
+    public ContractMed sortByClientName(){
+        Collections.sort(getGroup(), new ContractByClientNameComparator());
+        return this;
+    }
 }

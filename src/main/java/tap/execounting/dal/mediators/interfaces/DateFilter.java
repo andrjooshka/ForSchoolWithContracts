@@ -6,8 +6,8 @@ import java.util.List;
 import tap.execounting.entities.interfaces.Dated;
 
 public interface DateFilter {
-	public List<? extends Dated> filterWithReturn(List<? extends Dated> items,
-			Date date1, Date date2);
+	public List<? extends Dated> reatinByDatesEntryWithReturn(List<? extends Dated> items,
+                                                              Date date1, Date date2);
 
-	public void filter(List<? extends Dated> items, Date date1, Date date2);
+	public void retainByDatesEntry(List<? extends Dated> items, Date date1, Date date2);
 }

@@ -166,11 +166,11 @@ public class Clients {
 		// Client filters
 		// First Contract Date filtration
 		if (filterOnFCDate)
-			clientMed.filterDateOfFirstContract(fcEarlyDate, fcLaterDate);
+			clientMed.retainByDateOfFirstContract(fcEarlyDate, fcLaterDate);
 
 		// Name Filtration
 		if (filterOnNames)
-			clientMed.filterName(name);
+			clientMed.retainByName(name);
 
 		// Stud status
 		if (filterOnState) { // OLDE CODE
@@ -197,10 +197,10 @@ public class Clients {
 		// Any contract Date retainByState
 		if (filterOnACDate || filterOnContractType) {
 			if (filterOnACDate)
-				contractMed.filter(acDate1, acDate2);
+				contractMed.retainByDates(acDate1, acDate2);
 			// Contract Type
 			if (filterOnContractType)
-				contractMed.filterByContractType(contractTypeId);
+				contractMed.retainByContractType(contractTypeId);
 			// UPDATE CLIENTS
 			clients = contractMed.getClients();
 		}
@@ -210,7 +210,7 @@ public class Clients {
 		// Payment retainByState
 		// Which also does intersection operation as contractmed
 		if(filterOnPaymentsDate){
-			paymentMed.filter(pfEarlierDate, pfLaterDate);
+			paymentMed.retainByDatesEntry(pfEarlierDate, pfLaterDate);
 			// Transform these into contracts
 			contractMed.retain(paymentMed.getContracts());
 			// update clients

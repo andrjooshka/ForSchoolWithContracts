@@ -28,6 +28,7 @@ import tap.execounting.entities.Teacher;
 import tap.execounting.entities.interfaces.Dated;
 import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.Authenticator;
+import tap.execounting.services.DateService;
 
 public class ClientMediator implements ClientMed {
 
@@ -224,12 +225,12 @@ public class ClientMediator implements ClientMed {
 	}
 
 	public boolean becameTrial(Date date1, Date date2) {
-		contractMed.setGroup(getContracts()).filter(null, date2);
+		contractMed.setGroup(getContracts()).retainByDates(null, date2);
 		int countBeforeDate2 = contractMed.countGroupSize();
 		// That means that he did not have contracts in that period at all
 		if (countBeforeDate2 < 1)
 			return false;
-		contractMed.filter(null, date1);
+		contractMed.retainByDates(null, date1);
 		int countBeforeDate1 = contractMed.countGroupSize();
 		// If he already has contracts before date1 -- he already tried
 		// something
@@ -251,11 +252,11 @@ public class ClientMediator implements ClientMed {
 	 * @return true if client (unit) became novice between this two dates
 	 */
 	public boolean becameNovice(Date date1, Date date2) {
-		contractMed.setGroup(getContracts()).filter(null, date2);
+		contractMed.setGroup(getContracts()).retainByDates(null, date2);
 		int countBeforeDate2 = contractMed.countNotTrial();
 		if (countBeforeDate2 != 1) // he is not novice at all
 			return false;
-		contractMed.filter(null, date1);
+		contractMed.retainByDates(null, date1);
 		int countBeforeDate1 = contractMed.countNotTrial();
 		// If he was a novice before date1 -- he is not interesting for us
 		if (countBeforeDate1 > 0)
@@ -281,7 +282,7 @@ public class ClientMediator implements ClientMed {
 		// Else return false;
 
 		// So -- take contracts before the second date
-		contractMed.setGroup(getContracts()).filter(null, date2);
+		contractMed.setGroup(getContracts()).retainByDates(null, date2);
 		List<Contract> list = contractMed.getGroup();
 		int countBeforeDate2 = 0;
 		for (int i = 0; i < list.size(); i++)
@@ -294,7 +295,7 @@ public class ClientMediator implements ClientMed {
 		// OK -- he is a continuer.
 		// Lets look if he was a continuer already
 		// Take only those contracts before the date1
-		contractMed.filter(null, date1);
+		contractMed.retainByDates(null, date1);
 		list = contractMed.getGroup();
 		int countBeforeDate1 = 0;
 		for (int i = 0; i < list.size(); i++)
@@ -348,7 +349,7 @@ public class ClientMediator implements ClientMed {
 	public List<Contract> getTrialContracts() {
 		ContractMed contractMed = getContractMed();
 		return contractMed.setGroup(getContracts())
-				.filterByContractType(ContractType.Trial).getGroup();
+				.retainByContractType(ContractType.Trial).getGroup();
 	}
 
 	public boolean hasFinishedContracts() {
@@ -522,10 +523,10 @@ public class ClientMediator implements ClientMed {
 		return this;
 	}
 
-	public ClientMed filterByActiveTeacher(Teacher teacher) {
+	public ClientMed retainByActiveTeacher(Teacher teacher) {
 		getAppliedFilters().put("Active teacher", teacher);
 
-		List<Contract> contractsCache = getContractMed().filter(teacher)
+		List<Contract> contractsCache = getContractMed().retainByTeacher(teacher)
 				.retainByState(ContractState.active).getGroup();
 		getContractMed().reset();
 		cache = contractsToClients(contractsCache);
@@ -539,55 +540,50 @@ public class ClientMediator implements ClientMed {
 		return new ArrayList<Client>(list);
 	}
 
-	public ClientMed filterDateOfFirstContract(Date date1, Date date2) {
+	public ClientMed retainByDateOfFirstContract(Date date1, Date date2) {
 		getAppliedFilters().put("Date of first contract 1", date1);
 		getAppliedFilters().put("Date of first contract 2", date2);
 		List<Client> cache = getGroup();
 		List<Client> cache2 = new ArrayList<Client>();
 		DateFilter dateFilter = new DateFilterImpl();
-		for (Dated item : dateFilter.filterWithReturn(cache, date1, date2))
+		for (Dated item : dateFilter.reatinByDatesEntryWithReturn(cache, date1, date2))
 			cache2.add((Client) item);
 		setGroup(cache2);
 		return this;
 	}
 
-	public ClientMed filterDateOfPlannedPayments(Date date1, Date date2) {
+	public ClientMed retainByScheduledPayments(Date date1, Date date2) {
 		getAppliedFilters().put("Date of planned payments 1", date1);
 		getAppliedFilters().put("Date of planned payments 2", date2);
-		List<Payment> payments;
-		PaymentMed paymentMed = getPaymentMed();
+		List<Payment> payments = new ArrayList<Payment>();
+		getGroup();
 
-		if (cache != null) {
-			List<Client> cache = getGroup();
+        for (Client c : cache)
+            for (Contract con : c.getContracts())
+                payments.addAll(con.getPayments());
 
-			// extract payments of current client group
-			payments = new ArrayList<Payment>();
-			for (Client c : cache)
-				for (Contract con : c.getContracts())
-					payments.addAll(con.getPayments());
-			paymentMed.setGroup(payments);
-		}
-
-		payments = paymentMed.filter(true).filter(date1, date2).getGroup();
+		payments = paymentMed.setGroup(payments).retainByState(true).retainByDatesEntry(date1, date2).getGroup();
 		Set<Client> clients = new HashSet<Client>();
 		for (Payment p : payments)
 			clients.add(p.getContract().getClient());
 		setGroup(new ArrayList<Client>(clients));
 		return this;
 	}
+    public ClientMed retainBySoonPayments(int days) {
+        return retainByScheduledPayments(new Date(), DateService.fromNowPlusDays(14));
+    }
 
-	public ClientMed filterName(String name) {
+	public ClientMed retainByName(String name) {
 		getAppliedFilters().put("Client name", name);
 		// Setup
 		name = name.toLowerCase();
 
 		// GO
 		if (cache == null) {
-			cache = getDao()
-					.findWithNamedQuery(
-							Client.BY_NAME,
-							QueryParameters.with("name", '%' + name + '%')
-									.parameters());
+			cache = dao.findWithNamedQuery(
+                    Client.BY_NAME,
+                    QueryParameters.with("name", '%' + name + '%')
+                            .parameters());
 			return this;
 		}
 		List<Client> cache = getGroup();
@@ -617,7 +613,7 @@ public class ClientMediator implements ClientMed {
 
 	// TODO REDO
 	public Integer count(ClientState state, Date date1, Date date2) {
-		return filterDateOfFirstContract(date1, date2).retainByState(state)
+		return retainByDateOfFirstContract(date1, date2).retainByState(state)
 				.countGroupSize();
 	}
 

@@ -125,7 +125,7 @@ public class Statistics {
 		}
 
 		if (state != null && state == 6)
-			eventMed.setGroup(events).filterPaidEvents();
+			eventMed.setGroup(events).retainPaidEvents();
 
 		eventsCache = events;
 

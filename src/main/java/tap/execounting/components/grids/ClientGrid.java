@@ -46,7 +46,7 @@ public class ClientGrid {
 
 	public List<Client> getSource() {
 		if (nameFilter != null && nameFilter.length() > 2)
-			clientMed.filterName(nameFilter);
+			clientMed.retainByName(nameFilter);
 		return clientMed.getGroup(true);
 	}
 

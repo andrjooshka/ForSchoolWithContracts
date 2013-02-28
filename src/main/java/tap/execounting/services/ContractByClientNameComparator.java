@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 import tap.execounting.entities.Contract;
 
-public class ContractByClientComparator implements Comparator<Contract> {
+public class ContractByClientNameComparator implements Comparator<Contract> {
 
 	@Override
 	public int compare(Contract c1, Contract c2) {

@@ -9,7 +9,7 @@ import tap.execounting.entities.interfaces.Dated;
 
 public class DateFilterImpl implements DateFilter {
 
-	public List<? extends Dated> filterWithReturn(List<? extends Dated> items, Date date1, Date date2) {
+	public List<? extends Dated> reatinByDatesEntryWithReturn(List<? extends Dated> items, Date date1, Date date2) {
 		List<Dated> filtered = new ArrayList<Dated>(500);
 		if (date1 != null && date2 != null) {
 			for(Dated item : items){
@@ -36,7 +36,7 @@ public class DateFilterImpl implements DateFilter {
 	/**
 	 * remove all items that do not fit in that date borders
 	 */
-	public void filter(List<? extends Dated> items, Date date1, Date date2) {
+	public void retainByDatesEntry(List<? extends Dated> items, Date date1, Date date2) {
 		Dated item;
 		if (date1 != null && date2 != null) {
 			for(int i=items.size()-1;i>=0;i--){

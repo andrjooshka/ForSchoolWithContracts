@@ -40,10 +40,6 @@ public interface TeacherMed {
 	public List<Client> getAllClients();
 		//active
 	public List<Client> getActiveClients();
-		//frozen
-	public List<Client> getFrozenClients();
-		//undefined
-	public List<Client> getUndefinedClients();
 	//contracts
 		//frozen
 	public List<Contract> getFrozenContracts();

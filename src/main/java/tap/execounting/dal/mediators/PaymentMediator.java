@@ -110,7 +110,7 @@ public class PaymentMediator implements PaymentMed {
 		return sb.toString();
 	}
 
-	public PaymentMed filter(Contract unit) {
+	public PaymentMed retainByContract(Contract unit) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
 			cache = getDao().findWithNamedQuery(
@@ -126,7 +126,7 @@ public class PaymentMediator implements PaymentMed {
 		return this;
 	}
 
-	public PaymentMed filter(Date date1, Date date2) {
+	public PaymentMed retainByDatesEntry(Date date1, Date date2) {
 		getGroup();
 		// WARN -- commented code does not works properly, need testing
 		//
@@ -141,14 +141,14 @@ public class PaymentMediator implements PaymentMed {
 		// QueryParameters.with("earlierDate", date1)
 		// .and("laterDate", date2).parameters());
 		// } else
-		dateFilter.filter(cache, date1, date2);
+		dateFilter.retainByDatesEntry(cache, date1, date2);
 		getAppliedFilters().put("Date1", date1);
 		getAppliedFilters().put("Date2", date2);
 
 		return this;
 	}
 
-	public PaymentMed filter(boolean state) {
+	public PaymentMed retainByState(boolean state) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0)
 			if (state)
@@ -212,7 +212,7 @@ public class PaymentMediator implements PaymentMed {
 
 	public Integer countReturn(Date date1, Date date2) {
 		PaymentMed pm = new PaymentMediator();
-		return pm.filter(date1, date2).filter(false).countAmount();
+		return pm.retainByDatesEntry(date1, date2).retainByState(false).countAmount();
 	}
 
 }

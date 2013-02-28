@@ -102,19 +102,19 @@ public interface ContractMed {
 	// //filters:
 
 	// client
-	public ContractMed filter(Client c);
+	public ContractMed retainByClient(Client c);
 
 	// teacher
-	public ContractMed filter(Teacher t);
+	public ContractMed retainByTeacher(Teacher t);
 
 	// state
 	public ContractMed retainByState(ContractState state);
 
 	// date
-	public ContractMed filter(Date date1, Date date2);
+	public ContractMed retainByDates(Date date1, Date date2);
 
 	// contract type
-	public ContractMed filterByContractType(int type);
+	public ContractMed retainByContractType(int type);
 
     // remaining lessons
     public ContractMed retainExpiring(int remainingLessons);
@@ -141,4 +141,6 @@ public interface ContractMed {
 	public ContractMed retain(List<Contract> contracts);
 
 	public ContractMed sortByDate(boolean asc);
+
+    public ContractMed sortByClientName();
 }

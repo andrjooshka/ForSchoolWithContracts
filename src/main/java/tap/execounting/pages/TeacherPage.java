@@ -34,7 +34,7 @@ import tap.execounting.entities.Event;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;
 import tap.execounting.security.AuthorizationDispatcher;
-import tap.execounting.services.ContractByClientComparator;
+import tap.execounting.services.ContractByClientNameComparator;
 import tap.execounting.services.DateService;
 
 @Import(library = { "context:js/updateEffects.js", "context:js/jquery-1.8.3.min.js",
@@ -210,16 +210,16 @@ public class TeacherPage {
 	}
 
 	public List<Event> getShiftedLessons() {
-		return eMed.filter(tMed.getUnit()).filter(EventState.movedByTeacher)
+		return eMed.retainByTeacher(tMed.getUnit()).retainByState(EventState.movedByTeacher)
 				.getGroup(true);
 	}
 
 	public List<Contract> getActiveContracts() {
 		cMed.reset();
 		Collections.sort(
-				cMed.filter(tMed.getUnit()).retainByState(ContractState.active)
+				cMed.retainByTeacher(tMed.getUnit()).retainByState(ContractState.active)
 						.removeComlete().getGroup(),
-				new ContractByClientComparator());
+				new ContractByClientNameComparator());
 		return cMed.getGroup();
 	}
 

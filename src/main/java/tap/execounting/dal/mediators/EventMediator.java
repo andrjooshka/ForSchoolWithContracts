@@ -254,7 +254,7 @@ public class EventMediator implements EventMed {
 		return sb.toString();
 	}
 
-	public EventMed filter(Client c) {
+	public EventMed retainByClient(Client c) {
 		List<Event> cache = getGroup();
 		for (int i = countGroupSize() - 1; i >= 0; i--) {
 			List<Contract> toCheck = cache.get(i).getContracts();
@@ -273,7 +273,7 @@ public class EventMediator implements EventMed {
 		return this;
 	}
 
-	public EventMed filter(Teacher unit) {
+	public EventMed retainByTeacher(Teacher unit) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
 			cache = getDao().findWithNamedQuery(
@@ -291,7 +291,7 @@ public class EventMediator implements EventMed {
 		return this;
 	}
 
-	public EventMed filter(Contract unit) {
+	public EventMed retainByContract(Contract unit) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
 			getAppliedFilters().put("Contract", unit);
@@ -312,7 +312,7 @@ public class EventMediator implements EventMed {
 		return this;
 	}
 
-	public EventMed filterPaidEvents() {
+	public EventMed retainPaidEvents() {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
 			cache = getDao().findWithNamedQuery(
@@ -336,7 +336,7 @@ public class EventMediator implements EventMed {
 		return this;
 	}
 
-	public EventMed filter(EventState state) {
+	public EventMed retainByState(EventState state) {
 		// Added new conditions to count events moved by teacher and client
 		if (state == EventState.movedByClient
 				|| state == EventState.movedByTeacher) {
@@ -387,7 +387,7 @@ public class EventMediator implements EventMed {
 		return this;
 	}
 
-	public EventMed filter(Facility unit) {
+	public EventMed retainByFacility(Facility unit) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
 			cache = getDao().findWithNamedQuery(
@@ -405,7 +405,7 @@ public class EventMediator implements EventMed {
 		return this;
 	}
 
-	public EventMed filter(Room unit) {
+	public EventMed retainByRoom(Room unit) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
 			cache = getDao().findWithNamedQuery(
@@ -423,7 +423,7 @@ public class EventMediator implements EventMed {
 		return this;
 	}
 
-	public EventMed filter(EventType type) {
+	public EventMed retainByRoom(EventType type) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
 			cache = getDao().findWithNamedQuery(Event.BY_TYPE_ID,
@@ -439,7 +439,7 @@ public class EventMediator implements EventMed {
 		return this;
 	}
 
-	public EventMed filter(Date date1, Date date2) {
+	public EventMed retainByDatesEntry(Date date1, Date date2) {
 		if (cache == null || appliedFilters == null
 				|| appliedFilters.size() == 0) {
 			if (date1 != null && date2 != null)
@@ -456,7 +456,7 @@ public class EventMediator implements EventMed {
 			else
 				cache = getGroup();
 		} else {
-			dateFilter.filter(getGroup(), date1, date2);
+			dateFilter.retainByDatesEntry(getGroup(), date1, date2);
 		}
 		getAppliedFilters().put("Date1", date1);
 		getAppliedFilters().put("Date2", date2);
@@ -474,7 +474,7 @@ public class EventMediator implements EventMed {
 	}
 
 	public Integer count(EventState state) {
-		return filter(state).countGroupSize();
+		return retainByState(state).countGroupSize();
 	}
 
 	public Integer countEventsComplete() {
@@ -503,7 +503,7 @@ public class EventMediator implements EventMed {
 	}
 
 	public Integer countMoneyOfCompleteEvents() {
-		return filter(EventState.complete).countMoney();
+		return retainByState(EventState.complete).countMoney();
 	}
 
 	public Integer countTeacherMoney() {
@@ -527,11 +527,11 @@ public class EventMediator implements EventMed {
 	}
 
 	public Integer countMoneyOfEventsFailedByClient() {
-		return filter(EventState.failedByClient).countMoney();
+		return retainByState(EventState.failedByClient).countMoney();
 	}
 
 	public Integer countMoneyOfEventsFailedByTeacher() {
-		return filter(EventState.movedByTeacher).countMoney();
+		return retainByState(EventState.movedByTeacher).countMoney();
 	}
 
 	public Integer countGivenPercentOfMoney(int percent) {
@@ -552,4 +552,10 @@ public class EventMediator implements EventMed {
 
 		return this;
 	}
+
+    public Event lastByDate(){
+        getGroup();
+        sortByDate(false);
+        return cache.get(0);
+    }
 }
