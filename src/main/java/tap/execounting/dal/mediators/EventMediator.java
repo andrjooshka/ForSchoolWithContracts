@@ -274,8 +274,7 @@ public class EventMediator implements EventMed {
 	}
 
 	public EventMed retainByTeacher(Teacher unit) {
-		if (cache == null || appliedFilters == null
-				|| appliedFilters.size() == 0) {
+		if (cacheIsClean()) {
 			cache = getDao().findWithNamedQuery(
 					Event.BY_TEACHER_ID,
 					QueryParameters.with("teacherId", unit.getId())
@@ -292,8 +291,7 @@ public class EventMediator implements EventMed {
 	}
 
 	public EventMed retainByContract(Contract unit) {
-		if (cache == null || appliedFilters == null
-				|| appliedFilters.size() == 0) {
+		if (cacheIsClean()) {
 			getAppliedFilters().put("Contract", unit);
 			setGroup(unit.getEventsCopied());
 			return this;
@@ -313,8 +311,7 @@ public class EventMediator implements EventMed {
 	}
 
 	public EventMed retainPaidEvents() {
-		if (cache == null || appliedFilters == null
-				|| appliedFilters.size() == 0) {
+		if (cacheIsClean()) {
 			cache = getDao().findWithNamedQuery(
 					Event.BY_STATE,
 					QueryParameters.with("stateCode",
@@ -369,8 +366,7 @@ public class EventMediator implements EventMed {
 				}
 			}
 
-		} else if (cache == null || appliedFilters == null
-				|| appliedFilters.size() == 0) {
+		} else if (cacheIsClean()) {
 			cache = getDao().findWithNamedQuery(
 					Event.BY_STATE,
 					QueryParameters.with("stateCode", state.getCode())
@@ -388,26 +384,11 @@ public class EventMediator implements EventMed {
 	}
 
 	public EventMed retainByFacility(Facility unit) {
-		if (cache == null || appliedFilters == null
-				|| appliedFilters.size() == 0) {
-			cache = getDao().findWithNamedQuery(
-					Event.BY_FACILITY_ID,
-					QueryParameters.with("facilityId", unit.getFacilityId())
-							.parameters());
-		} else {
-
-			List<Event> cache = getGroup();
-			for (int i = countGroupSize() - 1; i >= 0; i--)
-				if (cache.get(i).getFacilityId() != unit.getFacilityId())
-					cache.remove(i);
-		}
-		getAppliedFilters().put("Facility", unit);
-		return this;
+		return retainByFacilityId(unit.getFacilityId());
 	}
 
 	public EventMed retainByRoom(Room unit) {
-		if (cache == null || appliedFilters == null
-				|| appliedFilters.size() == 0) {
+		if (cacheIsClean()) {
 			cache = getDao().findWithNamedQuery(
 					Event.BY_ROOM_ID,
 					QueryParameters.with("roomId", unit.getRoomId())
@@ -424,8 +405,7 @@ public class EventMediator implements EventMed {
 	}
 
 	public EventMed retainByRoom(EventType type) {
-		if (cache == null || appliedFilters == null
-				|| appliedFilters.size() == 0) {
+		if (cacheIsClean()) {
 			cache = getDao().findWithNamedQuery(Event.BY_TYPE_ID,
 					QueryParameters.with("typeId", type.getId()).parameters());
 		} else {
@@ -440,8 +420,7 @@ public class EventMediator implements EventMed {
 	}
 
 	public EventMed retainByDatesEntry(Date date1, Date date2) {
-		if (cache == null || appliedFilters == null
-				|| appliedFilters.size() == 0) {
+		if (cacheIsClean()) {
 			if (date1 != null && date2 != null)
 				cache = getDao().findWithNamedQuery(
 						Event.BETWEEN_DATE1_AND_DATE2,
@@ -452,12 +431,8 @@ public class EventMediator implements EventMed {
 						QueryParameters.with("date", date1).parameters());
 			else if (date2 != null)
 				cache = getDao().findWithNamedQuery(Event.BEFORE_DATE,
-						QueryParameters.with("date", date2).parameters());
-			else
-				cache = getGroup();
-		} else {
-			dateFilter.retainByDatesEntry(getGroup(), date1, date2);
-		}
+                        QueryParameters.with("date", date2).parameters());
+		} else dateFilter.retainByDatesEntry(cache, date1, date2);
 		getAppliedFilters().put("Date1", date1);
 		getAppliedFilters().put("Date2", date2);
 
@@ -558,4 +533,58 @@ public class EventMediator implements EventMed {
         sortByDate(false);
         return cache.get(0);
     }
+
+    public EventMed retainByEventTitleContaining(String typeId) {
+        if(typeId == null) return this;
+        getGroup();
+        for (int i = cache.size() - 1; i >= 0; i--)
+            if (!cache.get(i).getEventType().getTitle().contains(typeId))
+                cache.remove(i);
+        return this;
+    }
+
+    public EventMed retainByTeacherId(Integer teacherId) {
+        if(teacherId == null) return this;
+        getGroup();
+        for (int i = cache.size() - 1; i >= 0; i--)
+            if (cache.get(i).getHostId() != (teacherId))
+                cache.remove(i);
+        return this;
+    }
+
+    public EventMed retainByRoomId(Integer roomId) {
+        if(roomId == null) return this;
+        getGroup();
+        for(int i = cache.size()-1;i>=0;i--)
+            if(cache.get(i).getRoomId()!=roomId)
+                cache.remove(i);
+        return this;
+    }
+
+    public EventMed retainByStateCode(Integer state) {
+        if(state == null) return this;
+        retainByState(EventState.fromCode(state));
+        return this;
+    }
+
+    public EventMed retainByFacilityId(Integer facilityId) {
+        if(facilityId == null) return this;
+        if (cacheIsClean()) {
+            cache = dao.findWithNamedQuery(Event.BY_FACILITY_ID,
+                    QueryParameters.with("facilityId", facilityId)
+                            .parameters());
+        } else {
+            for (int i = countGroupSize() - 1; i >= 0; i--)
+                if (cache.get(i).getFacilityId() != unit.getFacilityId())
+                    cache.remove(i);
+        }
+        getAppliedFilters().put("Facility", facilityId);
+        return this;
+    }
+
+    private boolean cacheIsClean() {
+        return cache == null || appliedFilters == null
+                || appliedFilters.size() == 0;
+    }
+
 }

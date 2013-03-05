@@ -116,30 +116,17 @@ public class ClientMediator implements ClientMed {
 	}
 
 	public Comment getComment() {
-		// CRUTCH alert.
-		// Function searches for the comment for the specific client.
-		// If more then two comments are found --> comment with smaller id is
-		// preferred.
-		// FIXME maybe we could roll out some logging here
-		// OBSOLETE
-		// List<Comment> list = dao.findWithNamedQuery(Comment.BY_CLIENT_ID,
-		// QueryParameters.with("id", unit.getId()).parameters());
-		// if (list != null && list.size() > 0)
-		// if (list.size() == 1)
-		// return list.get(0);
-		// else {
-		// int idx = 0;
-		// for (int i = 0; i < list.size(); i++)
-		// if (list.get(idx).getId() > list.get(i).getId())
-		// idx = i;
-		// return list.get(idx);
-		// }
-		// return null;
 		// NEW VERSION
 		Comment c = dao.findUniqueWithNamedQuery(Comment.BY_CLIENT_ID,
 				QueryParameters.with("id", unit.getId()).parameters());
 		return c;
 	}
+
+    public void setClientComment(String comment){
+        unit.setComment(comment);
+        unit.setCommentDate(new Date());
+        dao.update(unit);
+    }
 
 	public boolean hasContracts() {
 		try {

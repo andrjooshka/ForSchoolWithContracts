@@ -54,18 +54,21 @@ public class ContractsExpiring {
     public List<Contract> getSource(){
         return med.reset().retainExpiring(1).getGroup();
     }
+
+    /**
+     * This informative buddy should say how much events are left, and how much events has been already planned
+     * @return
+     */
     public String getInfo() {
         StringBuilder builder = new StringBuilder();
+        if(contract.isComplete())
+            throw new IllegalArgumentException("why is there completed contract");
 
-        if (!contract.isComplete() && contract.getLessonsRemain() < 3) {
-            builder.append(contract.getEventType().getTitle() + ": ");
-            builder.append(contract.getLessonsRemain());
-            if (contract.getScheduledLessons().size() > 0)
-                builder.append(" и " + contract.getScheduledLessons().size()
-                        + " уже запланировано");
-        }
-        if (builder.substring(builder.length() - 2).equals(", "))
-            builder.replace(builder.length() - 2, builder.length(), "");
+        builder.append(contract.getEventType().getTitle() + ": ");
+        builder.append(contract.getLessonsRemain());
+        if (contract.getScheduledLessons().size() > 0)
+            builder.append(" и " + contract.getScheduledLessons().size()
+                    + " уже запланировано");
         return builder.toString();
     }
 

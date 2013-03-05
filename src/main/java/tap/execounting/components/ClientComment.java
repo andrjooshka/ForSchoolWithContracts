@@ -6,6 +6,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.entities.Comment;
+
 import java.util.Date;
 
 /**
@@ -15,22 +16,29 @@ import java.util.Date;
  */
 @Import(stylesheet = "context:css/components/ClientComment.css")
 public class ClientComment {
-    @Parameter(required = true) @Property
+    @Parameter(required = true)
+    @Property
     private int clientId;
     @Inject
     private ClientMed clientMed;
 
-    void setupRender(){
+    void setupRender() {
         clientMed.setUnitId(clientId);
     }
-    public String getComment(){
-        Comment c = clientMed.getComment();
-         return c == null ? "" : c.getText();
+
+    public String getComment() {
+        String comment = clientMed.getUnit().getComment();
+        return comment == null ? "" : comment;
     }
-    public void setComment(String comment){
-        clientMed.comment(comment, new Date().getTime());
+
+    public void setComment(String comment) throws Exception {
+        clientMed.setUnitId(clientId);
+        if(clientMed.getUnit().getId() != clientId)
+            throw new Exception("позвоните Ивану и скажите про это сообщение на странице клиента");
+        clientMed.setClientComment(comment);
     }
-    public Date getCommentDate(){
-        return clientMed.getComment().getDate();
+
+    public Date getCommentDate() {
+        return clientMed.getUnit().getCommentDate();
     }
 }

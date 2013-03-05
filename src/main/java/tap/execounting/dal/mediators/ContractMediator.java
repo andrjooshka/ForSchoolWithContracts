@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.hibernate.LazyInitializationException;
 import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.QueryParameters;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
@@ -52,10 +53,6 @@ public class ContractMediator implements ContractMed {
 	private CRUDServiceDAO dao;
 
 	private Contract unit;
-
-	private CRUDServiceDAO getDao() {
-		return dao;
-	}
 
 	private PaymentMed getPaymentMed() {
 		return paymentMed;
@@ -150,8 +147,15 @@ public class ContractMediator implements ContractMed {
 
 	}
 
+    // #LAZYINITException from 5 March 2013
 	public ContractState getContractState() {
-		return unit.getState();
+        try {
+		    return unit.getState();
+        }
+        catch(LazyInitializationException lazy){
+            unit = dao.find(Contract.class,unit.getId());
+            return  unit.getState();
+        }
 	}
     /**
      * Returns string representation of contract state.
@@ -232,7 +236,6 @@ public class ContractMediator implements ContractMed {
 	
 	// TODO include freeze period
 	public void doPlanEvents(Date dateOfFirstEvent) {
-		CRUDServiceDAO dao = getDao();
 		unit = dao.find(Contract.class, unit.getId());
 		doRemovePlannedEvents();
 
@@ -390,6 +393,7 @@ public class ContractMediator implements ContractMed {
 		unit.setDateFreeze(freeze);
 		unit.setDateUnfreeze(unfreeze);
         dao.update(unit);
+        doPlanEvents(unfreeze);
         return this;
 	}
 
@@ -446,7 +450,7 @@ public class ContractMediator implements ContractMed {
 
 	private Map<String, Object> getAppliedFilters() {
 		if (appliedFilters == null)
-			appliedFilters = new HashMap<String, Object>(5);
+			appliedFilters = new HashMap<>(5);
 		return appliedFilters;
 	}
 
@@ -464,8 +468,8 @@ public class ContractMediator implements ContractMed {
 	}
 
 	private void load() {
-		cache = getDao().findWithNamedQuery(Contract.ALL);
-		appliedFilters = new HashMap<String, Object>();
+		cache = dao.findWithNamedQuery(Contract.ALL);
+		appliedFilters = new HashMap<>();
 	}
 
 	public ContractMed setGroup(List<Contract> group) {
@@ -474,7 +478,7 @@ public class ContractMediator implements ContractMed {
 	}
 
 	public ContractMed setGroupFromClients(List<Client> clients) {
-		this.cache = new ArrayList<Contract>();
+		this.cache = new ArrayList<>();
 
 		for (Client c : clients)
 			this.cache.addAll(c.getContracts());
@@ -487,7 +491,7 @@ public class ContractMediator implements ContractMed {
 	}
 
 	public List<Contract> getAllContracts() {
-		return getDao().findWithNamedQuery(Contract.ALL);
+		return dao.findWithNamedQuery(Contract.ALL);
 	}
 
 	public ContractMed reset() {
@@ -506,13 +510,12 @@ public class ContractMediator implements ContractMed {
 			// Get id of i-th element and start search in contracts
 			found = false;
 			ci = cache.get(i).getId();
-			for (int j = 0; j < contracts.size(); j++) {
-				if (ci == contracts.get(j).getId()) {
-					// If found -- break
-					found = true;
-					break;
-				}
-			}
+            for (Contract contract : contracts)
+                if (ci == contract.getId()) {
+                    // If found -- break
+                    found = true;
+                    break;
+                }
 			// Remove element with id ci from cache, if it is not found in contracts
 			if (!found)
 				cache.remove(i);
@@ -531,7 +534,7 @@ public class ContractMediator implements ContractMed {
 	public ContractMed retainByClient(Client c) {
 		getAppliedFilters().put("Client", c);
 		if (cache == null)
-			cache = getDao().findWithNamedQuery(Contract.WITH_CLIENT,
+			cache = dao.findWithNamedQuery(Contract.WITH_CLIENT,
 					QueryParameters.with("clientId", c.getId()).parameters());
 		else {
 			List<Contract> cache = getGroup();
@@ -550,17 +553,13 @@ public class ContractMediator implements ContractMed {
 	public ContractMed retainByTeacher(Teacher t) {
 		getAppliedFilters().put("Teacher", t);
 		if (cache == null)
-			cache = getDao().findWithNamedQuery(Contract.WITH_TEACHER,
+			cache = dao.findWithNamedQuery(Contract.WITH_TEACHER,
 					QueryParameters.with("teacherId", t.getId()).parameters());
 		else {
 			List<Contract> cache = getGroup();
-			Contract con;
-			for (int i = cache.size() - 1; i >= 0; i--) {
-				con = cache.get(i);
-				if (con.getTeacherId() == t.getId())
-					continue;
-				cache.remove(i);
-			}
+			for (int i = cache.size() - 1; i >= 0; i--)
+				if (cache.get(i).getTeacherId() != t.getId())
+					cache.remove(i);
 		}
 		return this;
 	}
@@ -572,15 +571,10 @@ public class ContractMediator implements ContractMed {
 		// save current unit;
 		Contract tempUnit = getUnit();
 
-		Contract con;
-		for (int i = cache.size() - 1; i >= 0; i--) {
-			con = cache.get(i);
-			setUnit(con);
-			if (getContractState() == state)
-				continue;
-			else
+		for (int i = cache.size() - 1; i >= 0; i--)
+			if (setUnit(cache.get(i)).
+                    getContractState() != state)
 				cache.remove(i);
-		}
 
 		// restore unit
 		setUnit(tempUnit);
@@ -592,14 +586,9 @@ public class ContractMediator implements ContractMed {
 
         // save current unit;
         Contract tempUnit = getUnit();
-
-        Contract con;
-        for (int i = cache.size() - 1; i >= 0; i--) {
-            con = cache.get(i);
-            setUnit(con);
-            if (getContractState() == state)
+        for (int i = cache.size() - 1; i >= 0; i--)
+            if (setUnit(cache.get(i)).getContractState() == state)
                 cache.remove(i);
-        }
 
         // restore unit
         setUnit(tempUnit);
@@ -615,29 +604,13 @@ public class ContractMediator implements ContractMed {
 		return this;
 	}
 
-
-    // TODO remove candidate
 	public ContractMed retainByPlannedPaymentsDate(Date date1, Date date2) {
 		getAppliedFilters().put("PlannedPaymentsDate1", date1);
 		getAppliedFilters().put("PlannedPaymentsDate2", date2);
-		List<Contract> cache = getGroup();
-		Contract con;
+		getGroup();
+        cache = paymentMed.setGroupFromContracts(cache).retainByState(true).retainByDatesEntry(date1, date2).getContracts();
 
-		for (int i = cache.size() - 1; i >= 0; i--) {
-			con = cache.get(i);
-			if (plannedPaymentsTest(con, date1, date2))
-				continue;
-			cache.remove(i);
-		}
 		return this;
-	}
-
-	private boolean plannedPaymentsTest(Contract con, Date date1, Date date2) {
-		PaymentMed paymentMed = getPaymentMed();
-		boolean result = paymentMed.retainByContract(con).retainByState(true)
-				.retainByDatesEntry(date1, date2).getGroup().size() > 0;
-		paymentMed.reset();
-		return result;
 	}
 
 	public ContractMed retainByContractType(int type) {
@@ -696,17 +669,17 @@ public class ContractMediator implements ContractMed {
 
 	public int countNotTrial() {
 		int count = 0;
-		for (int i = 0; i < cache.size(); i++)
-			if (cache.get(i).notTrial())
-				count++;
+        for (Contract con : cache)
+            if (con.notTrial())
+                count++;
 		return count;
 	}
 	
 	public int countCertificateMoney() {
-		int summ =0 ;
+		int sum = 0 ;
 		for(Contract c : getGroup())
-			summ+=c.getGiftMoney();
-		return summ;
+			sum+=c.getGiftMoney();
+		return sum;
 	}
 
 	// Now it this does not retainByState anything

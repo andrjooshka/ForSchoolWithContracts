@@ -2,7 +2,7 @@
 	xmlns:p="tapestry:parameter">
     <h3>Договор заморожен</h3>
     <t:grid source="source" model="model" row="contract"
-            pagerPosition="${pagerPosition}" rowsPerPage="prop:rows">
+            pagerPosition="${pagerPosition}" rowsPerPage="${rows}">
         <p:nameCell>
             <t:eventlink event="details" context="contract.client.id">${contract.client.name}
             </t:eventlink>

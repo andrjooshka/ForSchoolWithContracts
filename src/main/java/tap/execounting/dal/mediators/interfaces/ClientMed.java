@@ -136,6 +136,12 @@ public interface ClientMed {
 	public List<Client> contractsToClients(List<Contract> contract);
 
     public ClientMed sortByName();
+
+    /**
+     * Sets client.comment.
+     * @param comment
+     */
+    public void setClientComment(String comment);
 }
 
 

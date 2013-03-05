@@ -20,11 +20,10 @@ import java.util.Date;
 import java.util.List;
 
 public class ContractsFrozen {
-    @Parameter
-    @Property
-    private String pagerPosition = "BOTH";
     @Parameter @Property
-    private int rows = 1000;
+    private GridPagerPosition pagerPosition = GridPagerPosition.BOTH;
+    @Parameter("1000") @Property
+    private int rows;
     // Useful bits
     @Inject
     private ComponentResources resources;
@@ -57,7 +56,10 @@ public class ContractsFrozen {
     }
 
     public List<Contract> getSource() {
-        return med.reset().retainByState(ContractState.frozen).sortByClientName().getGroup(true);
+        med.reset();
+        med.retainByState(ContractState.frozen);
+        med.sortByClientName();
+        return med.getGroup(true);
     }
 
     public String getComment() {

@@ -26,9 +26,7 @@ public class ContractTypeIdSelectModel extends AbstractSelectModel {
 
 	public List<OptionModel> getOptions() {
 		List<OptionModel> options = new ArrayList<OptionModel>();
-		for(ContractType type : types){
-			options.add(new OptionModelImpl(type.getTitle(), type.getId()));
-		}
+		for(ContractType type : types) options.add(new OptionModelImpl(type.getTitle(), type.getId()));
 		
 		return options;
 	}

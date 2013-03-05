@@ -156,4 +156,14 @@ public interface EventMed {
      * @return
      */
     public Event lastByDate();
+
+    public EventMed retainByEventTitleContaining(String typeId);
+
+    public EventMed retainByTeacherId(Integer teacherId);
+
+    public EventMed retainByRoomId(Integer roomId);
+
+    public EventMed retainByStateCode(Integer state);
+
+    public EventMed retainByFacilityId(Integer facilityId);
 }

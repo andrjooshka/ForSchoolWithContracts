@@ -30,7 +30,7 @@ public enum EventState {
 		case 5:
 			return movedByClient;
 		default:
-			return planned;
+			throw new IllegalArgumentException("unknown state code");
 		}
 	}
 

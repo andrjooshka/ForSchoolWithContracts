@@ -74,6 +74,7 @@ public class Statistics {
 	private Integer roomId;
 	@Property
 	@Persist
+    // IF Event type equals 6 - than it is paid
 	private Integer state;
 	@Property
 	@Persist
@@ -85,86 +86,43 @@ public class Statistics {
 	@Persist
 	private Integer percent;
 
-	private EventMed getEventMed() {
-		return eventMed;
-	}
-
 	private List<Event> eventsCache;
 
 	@SuppressWarnings("unchecked")
 	public List<Event> getEvents() {
 		if (eventsCache != null)
 			return eventsCache.subList(0, eventsCache.size());
-		List<Event> events;
-		Criteria criteria = session.createCriteria(Event.class);
+        eventMed.reset();
 
-		if (facilityId != null) {
-			criteria.add(Restrictions.eq("facilityId", facilityId));
-			if (roomId != null)
-				criteria.add(Restrictions.eq("roomId", roomId));
-		}
-		if (teacherId != null)
-			criteria.add(Restrictions.eq("hostId", teacherId));
-		if (date1 != null)
-			criteria.add(Restrictions.ge("date", date1));
+        if(date2!=null)date2 = DateService.maxOutDayTime(date2);
+        eventMed.retainByDatesEntry(date1, date2);
+        eventMed.retainByTeacherId(teacherId);
+        if(state != null && state == 6) eventMed.retainPaidEvents();
+        else eventMed.retainByStateCode(state);
+        eventMed.retainByFacilityId(facilityId);
+        eventMed.retainByRoomId(roomId);
+        eventMed.retainByEventTitleContaining(typeId);
+        eventsCache = eventMed.getGroup();
 
-		if (date2 != null) {
-			date2 = DateService.maxOutDayTime(date2);
-			criteria.add(Restrictions.le("date", date2));
-		}
-		// IF Event type equals 6 - than it is paid
-		if (state != null && state != 6)
-			criteria.add(Restrictions.eq("state", state));
-
-		events = criteria.list();
-
-		if (typeId != null) {
-			for (int i = events.size() - 1; i >= 0; i--)
-				if (!events.get(i).getEventType().getTitle().contains(typeId))
-					events.remove(i);
-		}
-
-		if (state != null && state == 6)
-			eventMed.setGroup(events).retainPaidEvents();
-
-		eventsCache = events;
-
-		return events;
+		return getEvents();
 	}
 
 	public int getMoney() {
-		// Olde code
-		// List<Event> events = getEvents();
-		// int summ = 0;
-		// for (Event e : events) {
-		// int typeId = e.getTypeId();
-		// EventType et = dao.find(EventType.class, typeId);
-		// if (e.getClients().size() > 0)
-		// summ += et.getPrice() * e.getClients().size();
-		// else
-		// summ += et.getPrice();
-		// }
-		//
-		// return summ;
-		// New code
-		return getEventMed().setGroup(getEvents()).countMoney();
+		return eventMed.setGroup(getEvents()).countMoney();
 	}
 
 	public int getPercentedMoney() {
-		if (percent != null) {
-			return getMoney() * percent / 100;
-		}
-		return 0;
+		return percent != null ? (getMoney() * percent / 100) : 0;
 	}
 
 	// school share
 	public int getShare() {
-		return getEventMed().setGroup(getEvents()).countSchoolMoney();
+		return eventMed.setGroup(getEvents()).countSchoolMoney();
 	}
 
 	
 	public int getTeacherShare() {
-		return getEventMed().setGroup(getEvents()).countTeacherMoney();
+		return eventMed.setGroup(getEvents()).countTeacherMoney();
 	}
 
 	Object onValueChangedFromFacilityId(Integer facId) {
