@@ -542,22 +542,13 @@ public class ClientMediator implements ClientMed {
 	public ClientMed retainByScheduledPayments(Date date1, Date date2) {
 		getAppliedFilters().put("Date of planned payments 1", date1);
 		getAppliedFilters().put("Date of planned payments 2", date2);
-		List<Payment> payments = new ArrayList<Payment>();
 		getGroup();
 
-        for (Client c : cache)
-            for (Contract con : c.getContracts())
-                payments.addAll(con.getPayments());
-
-		payments = paymentMed.setGroup(payments).retainByState(true).retainByDatesEntry(date1, date2).getGroup();
-		Set<Client> clients = new HashSet<Client>();
-		for (Payment p : payments)
-			clients.add(p.getContract().getClient());
-		setGroup(new ArrayList<Client>(clients));
+		setGroup(paymentMed.setGroupFromClients(cache).retainByState(true).retainByDatesEntry(date1, date2).toClients());
 		return this;
 	}
     public ClientMed retainBySoonPayments(int days) {
-        return retainByScheduledPayments(new Date(), DateService.fromNowPlusDays(14));
+        return retainByScheduledPayments(null, DateService.fromNowPlusDays(14));
     }
 
 	public ClientMed retainByName(String name) {

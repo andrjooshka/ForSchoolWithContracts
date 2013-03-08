@@ -15,6 +15,7 @@ import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.QueryParameters;
 import tap.execounting.dal.mediators.interfaces.DateFilter;
 import tap.execounting.dal.mediators.interfaces.PaymentMed;
+import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Payment;
 
@@ -86,6 +87,21 @@ public class PaymentMediator implements PaymentMed {
 		cache = payments;
 		return this;
 	}
+
+    public PaymentMed setGroupFromContracts(List<Contract> contracts) {
+        cache = new ArrayList<Payment>();
+        for (Contract c : contracts)
+            cache.addAll(c.getPayments());
+        return this;
+    }
+
+    public PaymentMed setGroupFromClients(List<Client> clients){
+        cache = new ArrayList<>();
+        for(Client c : clients)
+            for(Contract con : c.getContracts())
+                cache.addAll(con.getPayments());
+        return this;
+    }
 
 	public List<Payment> getAllPayments() {
 		return getDao().findWithNamedQuery(Payment.ALL);
@@ -203,12 +219,12 @@ public class PaymentMediator implements PaymentMed {
 		return new ArrayList<Contract>(contractSet);
 	}
 
-	public PaymentMed setGroupFromContracts(List<Contract> contracts) {
-		cache = new ArrayList<Payment>();
-		for (Contract c : contracts)
-			cache.addAll(c.getPayments());
-		return this;
-	}
+    public List<Client> toClients() {
+        Set<Client> set = new HashSet<>();
+        for(Payment p : cache)
+            set.add(p.getContract().getClient());
+        return new ArrayList<>(set);
+    }
 
 	public Integer countReturn(Date date1, Date date2) {
 		PaymentMed pm = new PaymentMediator();

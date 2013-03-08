@@ -1,9 +1,12 @@
 package tap.execounting.components.editors;
 
 import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.ValidationException;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.internal.services.MessagesSource;
 import org.apache.tapestry5.internal.util.CaptureResultCallback;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CRUDServiceDAO;
@@ -19,6 +22,8 @@ public class AddPayment {
 	private CRUDServiceDAO dao;
 	@Inject
 	private ComponentResources resources;
+    @Inject
+    private Messages messages;
 
 	@Property
 	@Persist
@@ -33,6 +38,11 @@ public class AddPayment {
 		payment = new Payment();
 		updateMode = false;
 	}
+
+    void onValidate() throws ValidationException {
+        if(payment.getContractId() == 0)
+            throw new ValidationException(messages.get("unsuccessful"));
+    }
 
 	Object onSuccess() {
 		if (updateMode)

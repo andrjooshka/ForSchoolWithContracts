@@ -142,6 +142,8 @@ public class Clients {
 	// Then function retains all the clients from first group, which are listed
 	// in the second;
 	// Intersection operation it is actually.
+
+    // TODO retain only state dataes on c contract fileters to show only rlevantinfo about contracts and money
 	public void dataInit() {
 		// Little set up
 		List<Client> clients;

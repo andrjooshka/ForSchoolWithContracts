@@ -3,6 +3,7 @@ package tap.execounting.dal.mediators.interfaces;
 import java.util.Date;
 import java.util.List;
 
+import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Payment;
 
@@ -31,7 +32,9 @@ public interface PaymentMed {
 	public List<Payment> getGroup();
 	public PaymentMed setGroup(List<Payment> payments);
 	public PaymentMed setGroupFromContracts(List<Contract> contracts);
-	public List<Payment> getAllPayments();
+    public PaymentMed setGroupFromClients(List<Client> clients);
+
+    public List<Payment> getAllPayments();
 	public void reset();
 	public String getFilterState();
 
@@ -55,4 +58,5 @@ public interface PaymentMed {
 	public int countScheduledPaymentsAmount();
 	// Maps payments into contracts
 	public List<Contract> getContracts();
+    public List<Client> toClients();
 }

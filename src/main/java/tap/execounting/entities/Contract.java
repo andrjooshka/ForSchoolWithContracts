@@ -78,8 +78,10 @@ public class Contract implements Comparable<Contract>, Dated {
 
 	private int discount;
 
+    @NonVisual
 	private Date dateFreeze;
 
+    @NonVisual
 	private Date dateUnfreeze;
 
 	private boolean canceled;

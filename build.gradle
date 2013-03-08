@@ -2,6 +2,7 @@ description = "execounting application"
 
 apply plugin: "war"
 apply plugin: "java"
+apply plugin: "groovy"
 apply plugin: "jetty"
 apply plugin: "idea"
 
@@ -73,6 +74,10 @@ dependencies {
 	compile "commons-codec:commons-codec:1.7"
 
     provided "javax.servlet:servlet-api:2.5"
+    groovy "org.codehaus.groovy:groovy-all:2.1.1"
+    testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
+    testCompile 'org.spockframework:spock-tapestry:0.7-groovy-2.0'
+
 }
 
 test {
