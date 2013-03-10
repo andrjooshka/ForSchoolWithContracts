@@ -1,21 +1,25 @@
+import org.apache.tapestry5.beanvalidator.BeanValidatorModule
+import org.apache.tapestry5.hibernate.HibernateCoreModule
 import org.apache.tapestry5.ioc.annotations.Inject
 import org.apache.tapestry5.ioc.annotations.SubModule
+import org.apache.tapestry5.services.TapestryModule
 import spock.lang.Specification
 import tap.execounting.dal.HibernateModule
-import tap.execounting.dal.mediators.MediatorModule
 import tap.execounting.dal.mediators.interfaces.ClientMed
 import tap.execounting.entities.Client
 import tap.execounting.entities.Contract
 import tap.execounting.entities.Payment
+import tap.execounting.services.AppModule
 import tap.execounting.services.DateService
 
+@SubModule([TapestryModule, BeanValidatorModule, HibernateCoreModule, HibernateModule, AppModule])
 class ClientFunctionsTest extends Specification {
 
     @Inject
-    ClientMed clientMed;
+    private ClientMed clientMed;
 
     def setup() {
-        clientMed.setGroup(clients());
+        clientMed.setGroup(clients())
     }
 
     def "retain by scheduled payments" () {

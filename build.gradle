@@ -80,21 +80,6 @@ dependencies {
 
 }
 
-test {
-    useTestNG()
-
-    options.suites("src/test/conf/testng.xml")
-
-    systemProperties["tapestry.service-reloading-enabled"] = "false"
-    systemProperties["tapestry.execution-mode"] = "development"
-
-    maxHeapSize = "600M"
-
-    jvmArgs("-XX:MaxPermSize=256M")
-
-    enableAssertions = true
-}
-
 idea {
     module {
         inheritOutputDirs = false
