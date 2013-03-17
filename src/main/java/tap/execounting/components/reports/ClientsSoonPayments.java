@@ -75,7 +75,7 @@ public class ClientsSoonPayments {
     }
 
     public List<Client> getSource() {
-        return clientMed.reset().retainBySoonPayments(14).sortByName().getGroup(true);
+        return clientMed.reset().retainBySoonPayments(14).getGroup(true);
     }
 
     public String getComment() {

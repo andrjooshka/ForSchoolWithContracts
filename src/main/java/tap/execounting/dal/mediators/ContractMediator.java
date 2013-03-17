@@ -700,11 +700,9 @@ public class ContractMediator implements ContractMed {
 	}
 	
 	// Sorting
-	public ContractMed sortByDate(boolean asc){
-		Collections.sort(getGroup());
-		if(asc)
-			Collections.reverse(getGroup());
-		return this;
+	public ContractMed sortByDate(boolean ascending){
+		DateService.sort(getGroup(),!ascending);
+        return this;
 	}
 
     public ContractMed sortByClientName(){

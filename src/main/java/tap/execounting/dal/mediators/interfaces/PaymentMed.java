@@ -59,4 +59,6 @@ public interface PaymentMed {
 	// Maps payments into contracts
 	public List<Contract> getContracts();
     public List<Client> toClients();
+
+    public PaymentMed sortByDate(boolean descending);
 }

@@ -23,10 +23,10 @@ public class RoomSelectModel extends AbstractSelectModel {
 			Room[] rs = new Room[f.getRoomsNumber()];
 			f.getRooms().toArray(rs);
 			Arrays.sort(rs, new Comparator<Room>() {
-				public int compare(Room o1, Room o2) {
-					return o1.getName().compareToIgnoreCase(o2.getName());
-				}
-			});
+                public int compare(Room o1, Room o2) {
+                    return o1.getName().compareToIgnoreCase(o2.getName());
+                }
+            });
 			for (Room r : rs) {
 				options.add(new OptionModelImpl(r.getName(), r.getRoomId()));
 			}

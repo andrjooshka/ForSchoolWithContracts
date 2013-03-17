@@ -18,6 +18,7 @@ import tap.execounting.dal.mediators.interfaces.PaymentMed;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Payment;
+import tap.execounting.services.DateService;
 
 public class PaymentMediator implements PaymentMed {
 
@@ -127,8 +128,7 @@ public class PaymentMediator implements PaymentMed {
 	}
 
 	public PaymentMed retainByContract(Contract unit) {
-		if (cache == null || appliedFilters == null
-				|| appliedFilters.size() == 0) {
+		if (cacheIsClean()) {
 			cache = getDao().findWithNamedQuery(
 					Payment.BY_CONTRACT_ID,
 					QueryParameters.with("contractId", unit.getId())
@@ -165,8 +165,7 @@ public class PaymentMediator implements PaymentMed {
 	}
 
 	public PaymentMed retainByState(boolean state) {
-		if (cache == null || appliedFilters == null
-				|| appliedFilters.size() == 0)
+		if (cacheIsClean())
 			if (state)
 				cache = getDao().findWithNamedQuery(Payment.SCHEDULED);
 			else
@@ -226,9 +225,18 @@ public class PaymentMediator implements PaymentMed {
         return new ArrayList<>(set);
     }
 
-	public Integer countReturn(Date date1, Date date2) {
+    public PaymentMed sortByDate(boolean descending) {
+        DateService.sort(getGroup(), descending);
+        return this;
+    }
+
+    public Integer countReturn(Date date1, Date date2) {
 		PaymentMed pm = new PaymentMediator();
 		return pm.retainByDatesEntry(date1, date2).retainByState(false).countAmount();
 	}
+
+    private boolean cacheIsClean(){
+        return cache == null;
+    }
 
 }

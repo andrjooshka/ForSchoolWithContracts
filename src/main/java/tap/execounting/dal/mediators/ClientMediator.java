@@ -128,7 +128,7 @@ public class ClientMediator implements ClientMed {
         dao.update(unit);
     }
 
-	public boolean hasContracts() {
+    public boolean hasContracts() {
 		try {
 			return getContracts().size() > 0;
 		} catch (NullPointerException npe) {

@@ -1,14 +1,10 @@
 package tap.execounting.services;
 
+import tap.execounting.entities.Payment;
+import tap.execounting.entities.interfaces.Dated;
+
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.util.*;
 
 public class DateService {
 
@@ -231,7 +227,7 @@ public class DateService {
 	}
 
 	/**
-	 * @param date from which to calculate this day of week
+	 * @param d from which to calculate this day of week
 	 * @return integer for day of week from 1 to 7
 	 */
 	public static int dayOfWeekRus(Date d) {
@@ -260,4 +256,16 @@ public class DateService {
 	public static String formatDayMonthNameYear(Date date) {
 		return toString("d M y", date);
 	}
+
+    public static void sort(List<? extends Dated> list, boolean descending) {
+        Collections.sort(list, new DateComparator());
+        if(descending)
+            Collections.reverse(list);
+    }
+}
+class DateComparator implements Comparator<Dated> {
+
+    public int compare(Dated first, Dated second) {
+        return first.getDate().compareTo(second.getDate());
+    }
 }
