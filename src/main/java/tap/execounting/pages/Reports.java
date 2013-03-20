@@ -1,45 +1,21 @@
 package tap.execounting.pages;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import org.apache.tapestry5.Block;
-import org.apache.tapestry5.ComponentResources;
-import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.RequestParameter;
-import org.apache.tapestry5.beaneditor.BeanModel;
-import org.apache.tapestry5.corelib.components.Zone;
-import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONObject;
-import org.apache.tapestry5.services.BeanModelSource;
-import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
-import org.hibernate.Session;
 
 import tap.execounting.dal.CRUDServiceDAO;
-import tap.execounting.dal.QueryParameters;
+import tap.execounting.dal.ChainMap;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
-import tap.execounting.dal.mediators.interfaces.ContractMed;
-import tap.execounting.dal.mediators.interfaces.EventMed;
-import tap.execounting.data.ClientState;
-import tap.execounting.data.ContractState;
-import tap.execounting.data.EventState;
-import tap.execounting.entities.Client;
 import tap.execounting.entities.Comment;
-import tap.execounting.entities.Contract;
-import tap.execounting.entities.Event;
-import tap.execounting.entities.Payment;
-import tap.execounting.security.AuthorizationDispatcher;
-import tap.execounting.services.DateService;
-import tap.execounting.services.SuperCalendar;
 
 @Import(library = { "context:js/jquery-1.8.3.min.js",
         "context:js/reportsAjax.js" }, stylesheet = {
@@ -62,7 +38,7 @@ public class Reports {
     public JSONObject onAJpoll(@RequestParameter("timeStamp") long timestamp) {
         JSONObject js = new JSONObject("{'status':'ok'}");
         List<Comment> list = dao.findWithNamedQuery(Comment.CLIENT_AFTER_DATE,
-                QueryParameters.with("date", new Date(timestamp)).parameters());
+                ChainMap.with("date", new Date(timestamp)).yo());
         if (list.size() > 0) {
             JSONArray jr = new JSONArray();
             for (Comment c : list)
@@ -77,14 +53,14 @@ public class Reports {
                            @RequestParameter("comment") String text,
                            @RequestParameter("timeStamp") long timeStamp) {
 
-        clientMed.setUnitId(id).comment(text, timeStamp);
+        clientMed.setUnitById(id).comment(text, timeStamp);
         JSONObject js = new JSONObject("{'status':'ok'}");
         return js;
     }
 
     // getters
     ClientPage onDetails(int clientId) {
-        clientPage.setup(clientMed.setUnitId(clientId).getUnit());
+        clientPage.setup(clientMed.setUnitById(clientId).getUnit());
         return clientPage;
     }
 

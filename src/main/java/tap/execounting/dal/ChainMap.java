@@ -8,29 +8,29 @@ import java.util.Map;
  * 
  * @author karesti
  */
-public class QueryParameters
+public class ChainMap
 {
 
     private Map<String, Object> parameters = null;
 
-    private QueryParameters(String name, Object value)
+    private ChainMap(String name, Object value)
     {
         this.parameters = new HashMap<String, Object>();
         this.parameters.put(name, value);
     }
 
-    public static QueryParameters with(String name, Object value)
+    public static ChainMap with(String name, Object value)
     {
-        return new QueryParameters(name, value);
+        return new ChainMap(name, value);
     }
 
-    public QueryParameters and(String name, Object value)
+    public ChainMap n(String name, Object value)
     {
         this.parameters.put(name, value);
         return this;
     }
 
-    public Map<String, Object> parameters()
+    public Map<String, Object> yo()
     {
         return this.parameters;
     }

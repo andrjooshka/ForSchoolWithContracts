@@ -11,8 +11,7 @@ import java.util.Set;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import tap.execounting.dal.CRUDServiceDAO;
-import tap.execounting.dal.QueryParameters;
+import tap.execounting.dal.ChainMap;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.dal.mediators.interfaces.DateFilter;
@@ -30,26 +29,19 @@ import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.Authenticator;
 import tap.execounting.services.DateService;
 
-public class ClientMediator implements ClientMed {
-
-	@Inject
-	private CRUDServiceDAO dao;
+public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
 	@Inject
 	private ContractMed contractMed;
 	@Inject
 	private PaymentMed paymentMed;
 	@Inject
-	private DateFilter dateFilter;
-	@Inject
 	private Authenticator authenticator;
 	@Inject
 	private AuthorizationDispatcher dispatcher;
 
-	private Client unit;
-
-	private CRUDServiceDAO getDao() {
-		return dao;
-	}
+    public ClientMediator(){
+        clazz = Client.class;
+    }
 
 	private ContractMed getContractMed() {
 		return contractMed;
@@ -59,20 +51,12 @@ public class ClientMediator implements ClientMed {
 		return paymentMed;
 	}
 
-	public Client getUnit() {
-		try {
-			return unit;
-		} catch (NullPointerException npe) {
-			return null;
-		}
-	}
-
 	public ClientMed setUnit(Client unit) {
 		this.unit = unit;
 		return this;
 	}
 
-	public ClientMed setUnitId(int id) {
+	public ClientMed setUnitById(int id) {
 		this.unit = dao.find(Client.class, id);
 		return this;
 	}
@@ -118,7 +102,7 @@ public class ClientMediator implements ClientMed {
 	public Comment getComment() {
 		// NEW VERSION
 		Comment c = dao.findUniqueWithNamedQuery(Comment.BY_CLIENT_ID,
-				QueryParameters.with("id", unit.getId()).parameters());
+				ChainMap.with("id", unit.getId()).yo());
 		return c;
 	}
 
@@ -138,20 +122,13 @@ public class ClientMediator implements ClientMed {
 	}
 
 	public List<Contract> getContracts() {
-		// Crutched version
 		try {
-			int l = unit.getContracts().size();
-			List<Contract> contracts = new ArrayList<Contract>();
-			for (int i = 0; i < l; i++)
-				contracts.add(unit.getContracts().get(i));
-			return contracts;
+			return unit.getContracts();
 		} catch (Exception e) {
 			e.printStackTrace();
-			unit = dao.find(Client.class, unit.getId());
+			setUnitById(unit.getId());
 			return unit.getContracts();
 		}
-		// unit = dao.find(Client.class, unit.getId());
-		// return unit.getContracts();
 	}
 
 	public boolean hasActiveContracts() {
@@ -162,19 +139,23 @@ public class ClientMediator implements ClientMed {
 		return response;
 	}
 
-	public List<Contract> getActiveContracts() {
+    /**
+     * @return list of active contracts of the current unit
+     */
+    public List<Contract> getActiveContracts() {
 		try {
-			ContractMed contractMed = getContractMed();
 			return contractMed.setGroup(getContracts())
-					.retainByState(ContractState.active).getGroup();
+					.retainByState(ContractState.active).getGroup(true);
 		} catch (NullPointerException npe) {
 			npe.printStackTrace();
 			return null;
 		}
 	}
 
+    /**
+     * @return true if client has frozen contracts
+     */
 	public boolean hasFrozenContracts() {
-		ContractMed contractMed = getContractMed();
 		boolean response = contractMed.setGroup(getContracts())
 				.retainByState(ContractState.frozen).countGroupSize() > 0;
 		contractMed.reset();
@@ -374,7 +355,7 @@ public class ClientMediator implements ClientMed {
 			return ClientState.canceled;
 		if (hasFrozenContracts())
 			return ClientState.frozen;
-        if(doesNotHaveActiveContracts())
+        if(!hasContracts() || !hasActiveContracts())
             return ClientState.undefined;
 
 		int notTrialCounter = 0;
@@ -392,7 +373,7 @@ public class ClientMediator implements ClientMed {
 	}
 
     private boolean doesNotHaveActiveContracts() {
-        return unit.getActiveContracts().size() == 0;
+        return getActiveContracts().size() == 0;
     }
 
     public void cancelClient() {
@@ -440,7 +421,7 @@ public class ClientMediator implements ClientMed {
 	}
 
 	private void load() {
-		cache = getDao().findWithNamedQuery(Client.ALL);
+		cache = dao.findWithNamedQuery(Client.ALL);
 		appliedFilters = new HashMap<String, Object>();
 	}
 
@@ -450,6 +431,7 @@ public class ClientMediator implements ClientMed {
         return this;
 	}
 
+    @Override
 	public List<Client> getGroup() {
 		if (cache == null)
 			load();
@@ -469,7 +451,7 @@ public class ClientMediator implements ClientMed {
 	}
 
 	public List<Client> getAllClient() {
-		return getDao().findWithNamedQuery(Client.ALL);
+		return dao.findWithNamedQuery(Client.ALL);
 	}
 
 	public String getFilterState() {
@@ -482,25 +464,21 @@ public class ClientMediator implements ClientMed {
 
 	public ClientMed retainByState(ClientState state) {
 		getAppliedFilters().put("ClientState", state);
-		List<Client> cache = getGroup();
+        // Canceled is persisted property -> optimized method is call
+        if(state == ClientState.canceled)
+            return retainCanceled();
 
-		// save current unit
+        List<Client> cache = getGroup();
+        // save current unit
 		Client unit = getUnit();
 
 		// retainByState
-		if (state != ClientState.active)
+		if (state == ClientState.active)
+            retainActive();
+        else
 			for (int i = cache.size() - 1; i >= 0; i--) {
 				setUnit(cache.get(i));
 				if (getState() == state)
-					continue;
-				cache.remove(i);
-			}
-		else
-			for (int i = cache.size() - 1; i >= 0; i--) {
-				setUnit(cache.get(i));
-				ClientState cs = getState();
-				if (cs == ClientState.beginner || cs == ClientState.continuer
-						|| cs == ClientState.trial)
 					continue;
 				cache.remove(i);
 			}
@@ -510,7 +488,30 @@ public class ClientMediator implements ClientMed {
 		return this;
 	}
 
-	public ClientMed retainByActiveTeacher(Teacher teacher) {
+    private ClientMed retainCanceled(){
+        if(cacheIsNull())
+            cache = dao.findWithNamedQuery(Client.CANCELED);
+        else
+            for(int i = cache.size()-1;i>=0;i--)
+                if(!cache.get(i).isCanceled())
+                    cache.remove(i);
+        return this;
+    }
+
+    private ClientMed retainActive() {
+        getGroup();
+        for (int i = cache.size() - 1; i >= 0; i--) {
+            setUnit(cache.get(i));
+            ClientState cs = getState();
+            if (cs == ClientState.beginner || cs == ClientState.continuer
+                    || cs == ClientState.trial)
+                continue;
+            cache.remove(i);
+        }
+        return this;
+    }
+
+    public ClientMed retainByActiveTeacher(Teacher teacher) {
 		getAppliedFilters().put("Active teacher", teacher);
 
 		List<Contract> contractsCache = getContractMed().retainByTeacher(teacher)
@@ -560,8 +561,8 @@ public class ClientMediator implements ClientMed {
 		if (cache == null) {
 			cache = dao.findWithNamedQuery(
                     Client.BY_NAME,
-                    QueryParameters.with("name", '%' + name + '%')
-                            .parameters());
+                    ChainMap.with("name", '%' + name + '%')
+                            .yo());
 			return this;
 		}
 		List<Client> cache = getGroup();

@@ -11,7 +11,7 @@ import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CRUDServiceDAO;
-import tap.execounting.dal.QueryParameters;
+import tap.execounting.dal.ChainMap;
 import tap.execounting.entities.Client;
 import tap.execounting.pages.CRUD;
 
@@ -54,7 +54,7 @@ public class AddClient {
 		
 		// First -- check if for name duplication
 		List<Client> clients = dao.findWithNamedQuery(Client.BY_NAME,
-				QueryParameters.with("name", client.getName()).parameters());
+				ChainMap.with("name", client.getName()).yo());
 		
 		// If there is no clients with such name -- it is good.
 		if (clients.size() != 0) {

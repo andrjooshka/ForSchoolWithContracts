@@ -40,14 +40,16 @@ import tap.execounting.services.DateService;
 @NamedQueries({
 		@NamedQuery(name = Client.ALL, query = "from Client"),
 		@NamedQuery(name = Client.ALL_NAMES, query = "select c.name from Client c"),
-		@NamedQuery(name = Client.BY_NAME, query = "from Client c where lower(c.name) like :name") })
+		@NamedQuery(name = Client.BY_NAME, query = "from Client c where lower(c.name) like :name"),
+        @NamedQuery(name = Client.CANCELED, query = "from Client where canceled = true")})
 public class Client implements Dated, Deletable {
 
 	public static final String ALL = "Client.all";
 	public static final String ALL_NAMES = "Client.allNames";
 	public static final String BY_NAME = "Client.byName";
+    public static final String CANCELED = "Client.canceled";
 
-	@Id
+    @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "client_id")
 	private int id;

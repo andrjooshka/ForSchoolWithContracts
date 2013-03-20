@@ -6,7 +6,7 @@ import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.Session;
 
 import tap.execounting.dal.CRUDServiceDAO;
-import tap.execounting.dal.QueryParameters;
+import tap.execounting.dal.ChainMap;
 import tap.execounting.entities.User;
 import tap.execounting.security.AuthenticationException;
 
@@ -25,8 +25,8 @@ public class BasicAuthenticator implements Authenticator {
 		password = DigestUtils.md5Hex(password);
 		User user = crudService.findUniqueWithNamedQuery(
 				User.BY_CREDENTIALS,
-				QueryParameters.with("username", username)
-						.and("password", password).parameters());
+				ChainMap.with("username", username)
+						.n("password", password).yo());
 
 		if (user == null) {
 			throw new AuthenticationException("The user doesn't exist");

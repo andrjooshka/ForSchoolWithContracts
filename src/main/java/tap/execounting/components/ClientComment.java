@@ -5,7 +5,6 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
-import tap.execounting.entities.Comment;
 
 import java.util.Date;
 
@@ -23,7 +22,7 @@ public class ClientComment {
     private ClientMed clientMed;
 
     void setupRender() {
-        clientMed.setUnitId(clientId);
+        clientMed.setUnitById(clientId);
     }
 
     public String getComment() {
@@ -32,7 +31,7 @@ public class ClientComment {
     }
 
     public void setComment(String comment) throws Exception {
-        clientMed.setUnitId(clientId);
+        clientMed.setUnitById(clientId);
         if(clientMed.getUnit().getId() != clientId)
             throw new Exception("позвоните Ивану и скажите про это сообщение на странице клиента");
         clientMed.setClientComment(comment);

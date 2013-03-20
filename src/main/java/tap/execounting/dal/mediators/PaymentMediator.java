@@ -12,7 +12,7 @@ import java.util.Set;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CRUDServiceDAO;
-import tap.execounting.dal.QueryParameters;
+import tap.execounting.dal.ChainMap;
 import tap.execounting.dal.mediators.interfaces.DateFilter;
 import tap.execounting.dal.mediators.interfaces.PaymentMed;
 import tap.execounting.entities.Client;
@@ -131,8 +131,8 @@ public class PaymentMediator implements PaymentMed {
 		if (cacheIsClean()) {
 			cache = getDao().findWithNamedQuery(
 					Payment.BY_CONTRACT_ID,
-					QueryParameters.with("contractId", unit.getId())
-							.parameters());
+					ChainMap.with("contractId", unit.getId())
+							.yo());
 		} else {
 			for (int i = cache.size() - 1; i >= 0; i--)
 				if (cache.get(i).getContractId() != unit.getId())
@@ -154,8 +154,8 @@ public class PaymentMediator implements PaymentMed {
 		// : date2;
 		// cache = getDao().findWithNamedQuery(
 		// Payment.BY_DATES,
-		// QueryParameters.with("earlierDate", date1)
-		// .and("laterDate", date2).parameters());
+		// ChainMap.with("earlierDate", date1)
+		// .and("laterDate", date2).yo());
 		// } else
 		dateFilter.retainByDatesEntry(cache, date1, date2);
 		getAppliedFilters().put("Date1", date1);

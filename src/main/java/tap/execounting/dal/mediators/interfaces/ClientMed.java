@@ -14,7 +14,7 @@ public interface ClientMed {
 	public Client getUnit();
 	public ClientMed setUnit(Client c);
 
-	public ClientMed setUnitId(int id);
+	public ClientMed setUnitById(int id);
 	
 	// Operations
 	

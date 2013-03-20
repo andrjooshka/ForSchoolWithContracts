@@ -54,15 +54,19 @@ import tap.execounting.services.SuperCalendar;
 		@NamedQuery(name = Contract.BY_DATES, query = "from Contract where date between "
 				+ ":earlierDate and :laterDate"),
 		@NamedQuery(name = Contract.WITH_TEACHER, query = "from Contract where teacherId = :teacherId"),
-		@NamedQuery(name = Contract.WITH_CLIENT, query = "from Contract where clientId = :clientId") })
+		@NamedQuery(name = Contract.WITH_CLIENT, query = "from Contract where clientId = :clientId"),
+        @NamedQuery(name = Contract.FROZEN, query = "from Contract where dateFreeze < :now and dateUnfreeze > :now"),
+        @NamedQuery(name = Contract.CANCELED, query = "from Contract where canceled = true")})
 public class Contract implements Comparable<Contract>, Dated {
 
 	public static final String ALL = "Contract.all";
 	public static final String BY_DATES = "Contract.byDates";
 	public static final String WITH_TEACHER = "Contract.withTeacher";
 	public static final String WITH_CLIENT = "Contract.withClient";
+    public static final String FROZEN = "Contract.frozen";
+    public static final String CANCELED = "Contract.canceled";
 
-	@Id
+    @Id
 	@Column(name = "contract_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -303,9 +307,9 @@ public class Contract implements Comparable<Contract>, Dated {
 			state = ContractState.frozen;
 		else if (isComplete())
 			state = ContractState.complete;
-		else if (undefinedStateTest()) {
+		else if (undefinedStateTest())
 			state = ContractState.undefined;
-		} else
+		else
 			state = ContractState.active;
 
 		return state;

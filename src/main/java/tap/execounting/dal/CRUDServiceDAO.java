@@ -67,7 +67,7 @@ public interface CRUDServiceDAO
     <T> List<T> findWithNamedQuery(String queryName);
 
     /**
-     * Find a query with parameters
+     * Find a query with yo
      * 
      * @param <T>
      * @param queryName
@@ -77,7 +77,7 @@ public interface CRUDServiceDAO
     <T> List<T> findWithNamedQuery(String queryName, Map<String, Object> params);
 
     /**
-     * Returns one result, query without parameters
+     * Returns one result, query without yo
      * 
      * @param <T>
      * @param queryName
@@ -86,7 +86,7 @@ public interface CRUDServiceDAO
     <T> T findUniqueWithNamedQuery(String queryName);
 
     /**
-     * Returns just one result with a named query and parameters
+     * Returns just one result with a named query and yo
      * 
      * @param <T>
      * @param queryName

@@ -12,7 +12,7 @@ import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CRUDServiceDAO;
-import tap.execounting.dal.QueryParameters;
+import tap.execounting.dal.ChainMap;
 import tap.execounting.data.selectmodels.FacilitySelectModel;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;
@@ -58,7 +58,7 @@ public class AddTeacher {
 
 		// First -- check if for name duplication
 		List<Teacher> teachers = dao.findWithNamedQuery(Teacher.BY_NAME,
-				QueryParameters.with("name", teacher.getName()).parameters());
+				ChainMap.with("name", teacher.getName()).yo());
 
 		// If there is no teachers with such name -- it is good.
 		if (teachers.size() != 0) {

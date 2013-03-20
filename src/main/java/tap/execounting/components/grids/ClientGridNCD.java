@@ -16,7 +16,7 @@ import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.BeanModelSource;
 
 import tap.execounting.dal.CRUDServiceDAO;
-import tap.execounting.dal.QueryParameters;
+import tap.execounting.dal.ChainMap;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Comment;
@@ -149,7 +149,7 @@ public class ClientGridNCD {
 	public JSONObject onAJpoll(@RequestParameter("timeStamp") long timestamp) {
 		JSONObject js = new JSONObject("{'status':'ok'}");
 		List<Comment> list = dao.findWithNamedQuery(Comment.CLIENT_AFTER_DATE,
-				QueryParameters.with("date", new Date(timestamp)).parameters());
+				ChainMap.with("date", new Date(timestamp)).yo());
 		if (list.size() > 0) {
 			JSONArray jr = new JSONArray();
 			for (Comment c : list)
@@ -164,7 +164,7 @@ public class ClientGridNCD {
 			@RequestParameter("comment") String text,
 			@RequestParameter("timeStamp") long timeStamp) {
 
-		clientMed.setUnitId(id).comment(text, timeStamp);
+		clientMed.setUnitById(id).comment(text, timeStamp);
 		JSONObject js = new JSONObject("{'status':'ok'}");
 		return js;
 	}

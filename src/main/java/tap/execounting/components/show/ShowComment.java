@@ -5,7 +5,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CRUDServiceDAO;
-import tap.execounting.dal.QueryParameters;
+import tap.execounting.dal.ChainMap;
 import tap.execounting.entities.Comment;
 import tap.execounting.entities.User;
 
@@ -27,8 +27,8 @@ public class ShowComment {
 
 	public String getUsername() {
 		User u = dao.findUniqueWithNamedQuery(User.BY_ID,
-				QueryParameters.with("userId", comment.getUserId())
-						.parameters());
+				ChainMap.with("userId", comment.getUserId())
+						.yo());
 		return u.getUsername();
 	}
 }

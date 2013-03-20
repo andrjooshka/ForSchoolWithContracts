@@ -77,7 +77,8 @@ dependencies {
     groovy "org.codehaus.groovy:groovy-all:2.1.1"
     testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
     testCompile 'org.spockframework:spock-tapestry:0.7-groovy-2.0'
-
+    testCompile 'org.seleniumhq.selenium:selenium-java:2.31.0'
+    testCompile 'junit:junit:4.11'
 }
 
 idea {
@@ -90,3 +91,21 @@ idea {
         downloadSources = true
     }
 }
+def stopPort = 8081
+def safeWord = 'banana'
+task webStart(dependsOn: 'war') << {
+    def jettyRun = tasks.getByPath('jettyRun')
+    jettyRun.daemon = true
+    jettyRun.stopPort = stopPort
+    jettyRun.stopKey = safeWord
+    jettyRun.execute()
+}
+
+task webStop << {
+    def jettyStop = tasks.getByPath('jettyStop')
+    jettyStop.stopPort = stopPort
+    jettyStop.stopKey = safeWord
+    jettyStop.execute()
+}
+
+test.dependsOn webStart

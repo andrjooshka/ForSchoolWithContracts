@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CRUDServiceDAO;
-import tap.execounting.dal.QueryParameters;
+import tap.execounting.dal.ChainMap;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
 import tap.execounting.dal.mediators.interfaces.EventMed;
@@ -84,7 +84,7 @@ public class TeacherMediator implements TeacherMed {
 
 	public List<Comment> getComments() {
 		return getDao().findWithNamedQuery(Comment.BY_TEACHER_ID,
-				QueryParameters.with("teacherId", unit.getId()).parameters());
+				ChainMap.with("teacherId", unit.getId()).yo());
 	}
 
 	private List<Contract> allContractsCache;
@@ -93,8 +93,8 @@ public class TeacherMediator implements TeacherMed {
 		if (allContractsCache == null)
 			allContractsCache = getDao().findWithNamedQuery(
 					Contract.WITH_TEACHER,
-					QueryParameters.with("teacherId", unit.getId())
-							.parameters());
+					ChainMap.with("teacherId", unit.getId())
+							.yo());
 		List<Contract> lst = new ArrayList<Contract>(allContractsCache.size());
 		for (Contract c : allContractsCache)
 			lst.add(c);
@@ -293,7 +293,7 @@ public class TeacherMediator implements TeacherMed {
 
 	public TeacherAddition getAddition() {
 		return dao.findUniqueWithNamedQuery(TeacherAddition.BY_TEACHER_ID,
-				QueryParameters.with("id", getId()).parameters());
+				ChainMap.with("id", getId()).yo());
 	}
 
 	private List<Teacher> teachersCache;

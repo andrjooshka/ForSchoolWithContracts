@@ -5,7 +5,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.CRUDServiceDAO;
-import tap.execounting.dal.QueryParameters;
+import tap.execounting.dal.ChainMap;
 import tap.execounting.entities.EventType;
 import tap.execounting.entities.EventTypeAddition;
 
@@ -56,8 +56,8 @@ public class AddEventType {
 
 	void onPrepare() {
 		probationAddition = dao.findUniqueWithNamedQuery(
-				EventTypeAddition.PROBATION_BY_EVENT_TYPE_ID, QueryParameters
-						.with("eventTypeId", etype.getId()).parameters());
+				EventTypeAddition.PROBATION_BY_EVENT_TYPE_ID, ChainMap
+						.with("eventTypeId", etype.getId()).yo());
 
 		if (probationAddition == null) {
 			probationAddition = new EventTypeAddition();

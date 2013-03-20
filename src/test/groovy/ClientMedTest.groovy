@@ -13,14 +13,13 @@ import tap.execounting.services.AppModule
 import tap.execounting.services.DateService
 
 @SubModule([TapestryModule, BeanValidatorModule, HibernateCoreModule, HibernateModule, AppModule])
-class ClientFunctionsTest extends Specification {
+class ClientMedTest extends Specification {
 
     @Inject
     private ClientMed clientMed;
 
     def setup() {
-        // Client #1
-        Client glen = new Client(name: "Glen");
+        Client glen = new Client(name: 'Glen');
         glen.contracts = [new Contract(client: glen)]
         glen.contracts[0].payments = [new Payment(
                                         amount: 10,
@@ -29,8 +28,7 @@ class ClientFunctionsTest extends Specification {
                                         scheduled: true
                                 )]
 
-        // Client #2
-        Client mark = new Client(name: "Mark")
+        Client mark = new Client(name: 'Mark')
         mark.contracts = [new Contract(client: mark)]
         mark.contracts[0].payments = [
                 new Payment(
@@ -39,15 +37,40 @@ class ClientFunctionsTest extends Specification {
                         date: DateService.fromNowPlusDays(15),
                         scheduled: true
                 )]
-        clientMed.setGroup([glen,mark])
+
+        Client greg = new Client(name: 'Greg');
+        greg.contracts = [new Contract(client: greg)]
+        greg.contracts[0].payments = [
+                new Payment(
+                        amount: 2000,
+                        contract: greg.contracts[0],
+                        date: DateService.fromNowPlusDays(10),
+                        scheduled: true
+                )
+        ]
+
+        Client jack = new Client(name: 'Jack')
+        jack.contracts = [new Contract(client: jack)]
+        jack.contracts[0].payments = [
+                new Payment(
+                        amount: 2000,
+                        contract: jack.contracts[0],
+                        date: DateService.fromNowPlusDays(-3),
+                        scheduled: false
+                )
+        ]
+
+        clientMed.setGroup([glen, mark, greg, jack])
     }
 
-    def "retain by scheduled payments"() {
+    def "retain clients who have scheduled payments within 14 days"() {
         when:
         clientMed.retainBySoonPayments(14)
 
         then:
-        clientMed.getGroup().get(0).name == "Glen"
-        clientMed.getGroup().size() == 1
+        clientMed.group.size() == 2
+        clientMed.group.any {man -> man.name == 'Glen'}
+        clientMed.group.any {man -> man.name == 'Greg'}
     }
+
 }
