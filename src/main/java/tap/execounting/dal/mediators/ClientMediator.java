@@ -29,6 +29,9 @@ import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.Authenticator;
 import tap.execounting.services.DateService;
 
+import static tap.execounting.data.ContractState.active;
+import static tap.execounting.data.ContractState.frozen;
+
 public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
 	@Inject
 	private ContractMed contractMed;
@@ -132,9 +135,7 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
 	}
 
 	public boolean hasActiveContracts() {
-		ContractMed contractMed = getContractMed();
-		boolean response = contractMed.setGroup(getContracts())
-				.retainByState(ContractState.active).countGroupSize() > 0;
+		boolean response = contractMed.setGroup(getContracts()).count(active) > 0;
 		contractMed.reset();
 		return response;
 	}
@@ -144,7 +145,7 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
      */
     public List<Contract> getActiveContracts() {
 		try {
-			return contractMed.setGroup(getContracts())
+			return contractMed.setGroup(new ArrayList(getContracts()))
 					.retainByState(ContractState.active).getGroup(true);
 		} catch (NullPointerException npe) {
 			npe.printStackTrace();
@@ -156,8 +157,7 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
      * @return true if client has frozen contracts
      */
 	public boolean hasFrozenContracts() {
-		boolean response = contractMed.setGroup(getContracts())
-				.retainByState(ContractState.frozen).countGroupSize() > 0;
+		boolean response = contractMed.setGroup(getContracts()).count(frozen) > 0;
 		contractMed.reset();
 		return response;
 	}
@@ -281,7 +281,7 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
 		try {
 			ContractMed contractMed = getContractMed();
 			return contractMed.setGroup(getContracts())
-					.retainByState(ContractState.frozen).getGroup();
+					.retainByState(frozen).getGroup();
 		} catch (NullPointerException npe) {
 			npe.printStackTrace();
 			return null;
@@ -348,7 +348,7 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
 		// Only trial contracts -- trial
 		// Only one standard contract -- standard
 		// More than one standard contract -- continuer.
-		// No undefined state
+		// No inactive state
 
 		// if client is canceled - he have special mark
 		if (unit.isCanceled())
@@ -356,7 +356,7 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
 		if (hasFrozenContracts())
 			return ClientState.frozen;
         if(!hasContracts() || !hasActiveContracts())
-            return ClientState.undefined;
+            return ClientState.inactive;
 
 		int notTrialCounter = 0;
 		for (Contract c : unit.getContracts())
@@ -411,7 +411,6 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
 		return summ;
 	}
 
-	private List<Client> cache;
 	private Map<String, Object> appliedFilters;
 
 	private Map<String, Object> getAppliedFilters() {
@@ -613,7 +612,7 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
 	}
 
 	public Integer countUndefined(Date date1, Date date2) {
-		return count(ClientState.undefined, date1, date2);
+		return count(ClientState.inactive, date1, date2);
 	}
 
 	public Integer countFrozen(Date date1, Date date2) {

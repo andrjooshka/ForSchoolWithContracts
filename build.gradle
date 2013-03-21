@@ -10,7 +10,7 @@ sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
 
 group = "tap"
-version = "4.8.6"
+version = "4.8.7"
 
 
 repositories {

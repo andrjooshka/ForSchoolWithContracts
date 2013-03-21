@@ -5,9 +5,8 @@ public enum ContractState {
 	active("активен"),
 	frozen("заморожен"),
 	canceled("закрыт"),
-	complete("завершен"),
-	undefined("неопределено");
-	
+	complete("завершен");
+
 	private String translate;
 	
 	private ContractState(String translate){

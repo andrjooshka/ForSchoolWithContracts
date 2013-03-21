@@ -242,8 +242,7 @@ public class TeacherPage {
 	}
 
 	public List<Contract> getOtherTeacherContracts() {
-		List<Contract> list = tMed.getInactiveContracts();
-		list.addAll(tMed.getCanceledContracts());
+		List<Contract> list = tMed.getCanceledContracts();
 		list.addAll(tMed.getCompleteContracts());
 		return list;
 	}

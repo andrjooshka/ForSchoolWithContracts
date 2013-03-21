@@ -6,7 +6,7 @@ public enum ClientState {
 	continuer("Продливший"),
 	canceled("Ушел"),
 	frozen("Заморожен"),
-	undefined("Не активен"),
+	inactive("Не активен"),
 	active("Активен"); 	//aggregation for trial, beginner, continuer
 
 	private String translation;

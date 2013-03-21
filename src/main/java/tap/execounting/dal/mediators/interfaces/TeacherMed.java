@@ -43,8 +43,6 @@ public interface TeacherMed {
 	//contracts
 		//frozen
 	public List<Contract> getFrozenContracts();
-		//Inactive
-	public List<Contract> getInactiveContracts();
 		//Canceled
 	public List<Contract> getCanceledContracts();
 		//Complete

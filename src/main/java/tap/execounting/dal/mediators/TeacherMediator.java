@@ -21,20 +21,14 @@ import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;
 import tap.execounting.entities.TeacherAddition;
 
-public class TeacherMediator implements TeacherMed {
+public class TeacherMediator extends ProtoMediator<Teacher> implements TeacherMed {
 
-	@Inject
-	private CRUDServiceDAO dao;
 	@Inject
 	private EventMed eventMed;
 	@Inject
 	private ClientMed clientMed;
 	@Inject
 	private ContractMed contractMed;
-
-	private CRUDServiceDAO getDao() {
-		return dao;
-	}
 
 	private ClientMed getClientMed() {
 		return clientMed;
@@ -48,10 +42,8 @@ public class TeacherMediator implements TeacherMed {
 		return eventMed;
 	}
 
-	public Teacher unit;
-
 	public List<Teacher> getAllTeachers() {
-		return getDao().findWithNamedQuery(Teacher.ALL);
+		return dao.findWithNamedQuery(Teacher.ALL);
 	}
 
 	public List<Teacher> getWorkingTeachers() {
@@ -83,7 +75,7 @@ public class TeacherMediator implements TeacherMed {
 	}
 
 	public List<Comment> getComments() {
-		return getDao().findWithNamedQuery(Comment.BY_TEACHER_ID,
+		return dao.findWithNamedQuery(Comment.BY_TEACHER_ID,
 				ChainMap.with("teacherId", unit.getId()).yo());
 	}
 
@@ -91,7 +83,7 @@ public class TeacherMediator implements TeacherMed {
 
 	public List<Contract> getAllContracts() {
 		if (allContractsCache == null)
-			allContractsCache = getDao().findWithNamedQuery(
+			allContractsCache = dao.findWithNamedQuery(
 					Contract.WITH_TEACHER,
 					ChainMap.with("teacherId", unit.getId())
 							.yo());
@@ -131,12 +123,6 @@ public class TeacherMediator implements TeacherMed {
 	public List<Contract> getFrozenContracts() {
 		return getContractMed().setGroup(getAllContracts())
 				.retainByState(ContractState.frozen).getGroup();
-	}
-
-	// inactive
-	public List<Contract> getInactiveContracts() {
-		return getContractMed().setGroup(getAllContracts())
-				.retainByState(ContractState.undefined).getGroup();
 	}
 
 	// canceled
@@ -200,25 +186,25 @@ public class TeacherMediator implements TeacherMed {
 			Integer[] sched = getSchedule();
 			day = day.toLowerCase();
 			if (day.equals("пн"))
-				return sched[0] == null ? null : getDao().find(Facility.class,
+				return sched[0] == null ? null : dao.find(Facility.class,
 						sched[0]).getName();
 			if (day.equals("вт"))
-				return sched[1] == null ? null : getDao().find(Facility.class,
+				return sched[1] == null ? null : dao.find(Facility.class,
 						sched[1]).getName();
 			if (day.equals("ср"))
-				return sched[2] == null ? null : getDao().find(Facility.class,
+				return sched[2] == null ? null : dao.find(Facility.class,
 						sched[2]).getName();
 			if (day.equals("чт"))
-				return sched[3] == null ? null : getDao().find(Facility.class,
+				return sched[3] == null ? null : dao.find(Facility.class,
 						sched[3]).getName();
 			if (day.equals("пт"))
-				return sched[4] == null ? null : getDao().find(Facility.class,
+				return sched[4] == null ? null : dao.find(Facility.class,
 						sched[4]).getName();
 			if (day.equals("сб"))
-				return sched[5] == null ? null : getDao().find(Facility.class,
+				return sched[5] == null ? null : dao.find(Facility.class,
 						sched[5]).getName();
 			if (day.equals("вс"))
-				return sched[6] == null ? null : getDao().find(Facility.class,
+				return sched[6] == null ? null : dao.find(Facility.class,
 						sched[6]).getName();
 			return null;
 		} catch (NullPointerException npe) {

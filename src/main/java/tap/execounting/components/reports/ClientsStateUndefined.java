@@ -53,13 +53,13 @@ public class ClientsStateUndefined {
             model.add("comment", null);
             model.exclude("return", "date", "id", "balance",
                     "studentInfo", "firstContractDate", "state",
-                    "firstPlannedPaymentDate","phoneNumber");
+                    "firstPlannedPaymentDate","phoneNumber", "canceled");
         }
     }
 
 
     public List<Client> getUndefinedClients() {
-        List<Client> list = med.reset().retainByState(ClientState.undefined).sortByName().getGroup(true);
+        List<Client> list = med.reset().retainByState(ClientState.inactive).sortByName().getGroup(true);
         return list;
     }
       // Used to display the date of the latest event

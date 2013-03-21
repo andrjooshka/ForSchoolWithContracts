@@ -28,7 +28,7 @@ import tap.execounting.entities.interfaces.Deletable;
 import tap.execounting.services.DateService;
 
 /**
- * This class does support interface entities.interfaces.Deletable, since it is
+ * This class does support interface tap.execounting.util.entities.interfaces.Deletable, since it is
  * an accounting unit and it should not be deleted in any case, to not break the
  * data
  * 
@@ -149,23 +149,11 @@ public class Client implements Dated, Deletable {
 		return contracts;
 	}
 
-	public List<Contract> getOpenContracts() {
-		List<Contract> contracts = new ArrayList<Contract>();
-		for (Contract c : getContracts()) {
-			ContractState state = c.getState();
-			if (state == ContractState.undefined
-					|| state == ContractState.active)
-				contracts.add(c);
-		}
-		return contracts;
-	}
-
 	public List<Contract> getUnfinishedContracts() {
 		List<Contract> contracts = new ArrayList<Contract>();
 		for (Contract c : getContracts()) {
 			ContractState state = c.getState();
-			if (state == ContractState.undefined
-					|| state == ContractState.active
+			if (state == ContractState.active
 					|| state == ContractState.frozen)
 				contracts.add(c);
 		}

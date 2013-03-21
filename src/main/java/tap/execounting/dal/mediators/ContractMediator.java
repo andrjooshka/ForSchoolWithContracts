@@ -12,7 +12,6 @@ import java.util.Map.Entry;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.hibernate.LazyInitializationException;
-import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.ChainMap;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
@@ -48,11 +47,6 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
 
     @Inject
     private ClientMed clientMed;
-
-    @Inject
-    private CRUDServiceDAO dao;
-
-    private Contract unit;
 
     private PaymentMed getPaymentMed() {
         return paymentMed;
@@ -183,10 +177,8 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
                 return canceled.toString();
             case complete:
                 return complete.toString();
-            case undefined:
-                return undefined.toString();
             default:
-                return "";
+                throw new UnsupportedOperationException("such state is not supported " + cs.toString());
         }
     }
 
@@ -449,8 +441,6 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
     }
 
     // group methods
-
-    private List<Contract> cache;
     private Map<String, Object> appliedFilters;
 
     private Map<String, Object> getAppliedFilters() {

@@ -55,6 +55,7 @@ class IntegrationTest extends Specification{
         go reports
         then:
         thereIsNoException()
+        !drv.findElement(By.tagName('body')).getText().contains('There is no data')
 
         when:
         go teachers

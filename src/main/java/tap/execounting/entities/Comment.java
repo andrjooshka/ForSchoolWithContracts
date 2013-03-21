@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import org.apache.tapestry5.beaneditor.NonVisual;
 
 /**
- * This class does not support interface entities.interfaces.Deletable, since
+ * This class does not support interface tap.execounting.util.entities.interfaces.Deletable, since
  * some comments certainly should be removed.
  * 
  * @author truth0

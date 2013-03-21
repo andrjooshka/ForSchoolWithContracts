@@ -176,7 +176,6 @@ public class EventMediator extends ProtoMediator<Event> implements EventMed {
 	}
 
 	private Map<String, Object> appliedFilters;
-	private List<Event> cache;
 
 	private Map<String, Object> getAppliedFilters() {
 		if (appliedFilters == null)

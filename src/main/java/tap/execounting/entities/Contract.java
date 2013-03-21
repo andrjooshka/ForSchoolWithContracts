@@ -32,7 +32,7 @@ import tap.execounting.services.RusCalendar;
 import tap.execounting.services.SuperCalendar;
 
 /**
- * This class does not support interface entities.interfaces.Deletable, since
+ * This class does not support interface tap.execounting.util.entities.interfaces.Deletable, since
  * some contracts certainly should be removed, and it is not an accounting item,
  * but accounting unit.
  * 
@@ -297,9 +297,6 @@ public class Contract implements Comparable<Contract>, Dated {
 	}
 
 	public ContractState getState() {
-		// TODO hotfix alert
-		// if (ContractType.Trial == contractTypeId)
-		// return ContractState.active;
 		ContractState state = null;
 		if (isCanceled())
 			state = ContractState.canceled;
@@ -307,34 +304,10 @@ public class Contract implements Comparable<Contract>, Dated {
 			state = ContractState.frozen;
 		else if (isComplete())
 			state = ContractState.complete;
-		else if (undefinedStateTest())
-			state = ContractState.undefined;
 		else
 			state = ContractState.active;
 
 		return state;
-	}
-
-	private boolean undefinedStateTest() {
-		try {
-			// Check if contract is new
-			Date neww = DateService.fromNowPlusDays(-30);
-			if (neww.before(date))
-				return false;
-
-			boolean result = true;
-			Date former = DateService.fromNowPlusDays(-360);
-			for (Event e : getEvents())
-				if (e.getDate().after(former)) {
-					result = false;
-					break;
-				}
-			return result;
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("\n\nContract:" + id + "\n\n");
-			return false;
-		}
 	}
 
 	/**
@@ -422,7 +395,6 @@ public class Contract implements Comparable<Contract>, Dated {
 	}
 
 	private boolean notFree() {
-		byte contractTypeId = (byte) getContractType().getId();
 		return contractTypeId != ContractType.FreeFromSchool
 				&& contractTypeId != ContractType.FreeFromTeacher;
 	}

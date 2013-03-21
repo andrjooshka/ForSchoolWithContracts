@@ -126,7 +126,7 @@ public interface ClientMed {
 		//canceled
 	public Integer countCanceled(Date date1, Date date2);
 
-		//undefined
+		//inactive
 	public Integer countUndefined(Date date1, Date date2);
 
 		//frozen

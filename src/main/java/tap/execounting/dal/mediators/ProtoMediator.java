@@ -27,7 +27,7 @@ public class ProtoMediator<T> {
         return dao.find(clazz, id);
     }
 
-    private List<T> cache;
+    protected List<T> cache;
 
     public List<T> getGroup(){
         return cache;

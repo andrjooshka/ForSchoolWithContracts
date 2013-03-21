@@ -131,7 +131,7 @@ public interface ContractMed {
 	// Trial / Not trial dichotomy is in wide use.
 	public int countNotTrial();
 
-	// state
+    // state
 	public Integer count(ContractState state);
 	
 	// money paid for the certificate if contract has so
@@ -143,4 +143,5 @@ public interface ContractMed {
 	public ContractMed sortByDate(boolean asc);
 
     public ContractMed sortByClientName();
+
 }

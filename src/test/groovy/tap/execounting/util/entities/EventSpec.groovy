@@ -1,4 +1,4 @@
-package entities
+package tap.execounting.util.entities
 
 import org.apache.tapestry5.beanvalidator.BeanValidatorModule
 import org.apache.tapestry5.hibernate.HibernateCoreModule
@@ -16,7 +16,7 @@ import tap.execounting.services.AppModule
  * Time: 3:30 PM
  */
 @SubModule([TapestryModule, BeanValidatorModule, HibernateCoreModule, HibernateModule, AppModule])
-class EventTest extends Specification{
+class EventSpec extends Specification{
 
     EventType type = new EventType(
             price: 2000,

@@ -20,19 +20,10 @@ import tap.execounting.entities.Contract;
 import tap.execounting.entities.Payment;
 import tap.execounting.services.DateService;
 
-public class PaymentMediator implements PaymentMed {
-
-	@Inject
-	private CRUDServiceDAO dao;
+public class PaymentMediator extends ProtoMediator<Payment> implements PaymentMed {
 
 	@Inject
 	private DateFilter dateFilter;
-
-	private Payment unit;
-
-	private CRUDServiceDAO getDao() {
-		return dao;
-	}
 
 	public Payment getUnit() {
 		return this.unit;
@@ -68,7 +59,6 @@ public class PaymentMediator implements PaymentMed {
 		return unit.getDate();
 	}
 
-	private List<Payment> cache;
 	private Map<String, Object> appliedFilters;
 
 	public List<Payment> getGroup() {
@@ -105,7 +95,7 @@ public class PaymentMediator implements PaymentMed {
     }
 
 	public List<Payment> getAllPayments() {
-		return getDao().findWithNamedQuery(Payment.ALL);
+		return dao.findWithNamedQuery(Payment.ALL);
 	}
 
 	public void reset() {
@@ -128,8 +118,8 @@ public class PaymentMediator implements PaymentMed {
 	}
 
 	public PaymentMed retainByContract(Contract unit) {
-		if (cacheIsClean()) {
-			cache = getDao().findWithNamedQuery(
+		if (cacheIsNull()) {
+			cache = dao.findWithNamedQuery(
 					Payment.BY_CONTRACT_ID,
 					ChainMap.with("contractId", unit.getId())
 							.yo());
@@ -165,11 +155,11 @@ public class PaymentMediator implements PaymentMed {
 	}
 
 	public PaymentMed retainByState(boolean state) {
-		if (cacheIsClean())
+		if (cacheIsNull())
 			if (state)
-				cache = getDao().findWithNamedQuery(Payment.SCHEDULED);
+				cache = dao.findWithNamedQuery(Payment.SCHEDULED);
 			else
-				cache = getDao().findWithNamedQuery(Payment.NOT_SCHEDULED);
+				cache = dao.findWithNamedQuery(Payment.NOT_SCHEDULED);
 		else {
 			for (int i = cache.size() - 1; i >= 0; i--)
 				if (cache.get(i).isScheduled() != state)
@@ -233,10 +223,6 @@ public class PaymentMediator implements PaymentMed {
     public Integer countReturn(Date date1, Date date2) {
 		PaymentMed pm = new PaymentMediator();
 		return pm.retainByDatesEntry(date1, date2).retainByState(false).countAmount();
-	}
-
-    private boolean cacheIsClean(){
-        return cache == null;
     }
 
 }

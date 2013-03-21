@@ -26,7 +26,7 @@ import tap.execounting.data.EventState;
 import tap.execounting.entities.interfaces.Dated;
 
 /**
- * This class does not support interface entities.interfaces.Deletable, since
+ * This class does not support interface tap.execounting.util.entities.interfaces.Deletable, since
  * some events certainly should be removed, and it is not an accounting item,
  * but accounting unit.
  * 
