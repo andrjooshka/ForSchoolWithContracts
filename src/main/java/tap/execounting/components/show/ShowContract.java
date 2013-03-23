@@ -41,8 +41,6 @@ public class ShowContract {
 	@Inject
 	private CRUDServiceDAO dao;
 	@Inject
-	private SuperCalendar calendar;
-	@Inject
 	private Request request;
 	@Inject
 	@Property
@@ -279,9 +277,8 @@ public class ShowContract {
 
 	public String getPaymentInfo() {
 		StringBuilder sb = new StringBuilder();
-		calendar.setTime(loopPayment.getDate());
 		sb.append("От: ");
-		sb.append(calendar.stringByTuple("day", "month", "year"));
+		sb.append(DateService.toString("dd MMM YYYY", loopPayment.getDate()));
 		sb.append(", Сумма: ");
 		sb.append(loopPayment.getAmount());
 		if (loopPayment.isScheduled())
@@ -296,8 +293,7 @@ public class ShowContract {
 		StringBuilder sb = new StringBuilder();
 		// sb.append("#" + loopEvent.getId() + " от: ");
 		try {
-			sb.append(calendar.setTime(loopEvent.getDate()).stringByTuple(
-					"day", "month", "year"));
+			sb.append(DateService.toString("dd MMM YYYY", loopEvent.getDate()));
 		} catch (NullPointerException npe) {
 			sb.append("нет информации о дате");
 		}
@@ -314,8 +310,7 @@ public class ShowContract {
 	}
 
 	public String getContractDate() {
-		calendar.setTime(contract.getDate());
-		return calendar.stringByTuple("day", "month", "year");
+		return DateService.toString("dd MMM YYYY", contract.getDate());
 	}
 
 	public String getFreezeLabel() {

@@ -14,10 +14,12 @@ import org.apache.tapestry5.services.BeanModelSource;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
+import tap.execounting.dal.mediators.interfaces.PaymentMed;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Comment;
 import tap.execounting.entities.Payment;
 import tap.execounting.security.AuthorizationDispatcher;
+import tap.execounting.services.DateService;
 import tap.execounting.services.SuperCalendar;
 
 import java.util.*;
@@ -31,7 +33,8 @@ public class ClientsSoonPayments {
     @Parameter
     @Property
     private GridPagerPosition pagerPosition = GridPagerPosition.BOTH;
-    @Parameter("1000") @Property
+    @Parameter("1000")
+    @Property
     private int rows;
     // Useful bits
     @Inject
@@ -61,9 +64,10 @@ public class ClientsSoonPayments {
     private AjaxResponseRenderer renderer;
     @Inject
     private AuthorizationDispatcher dispatcher;
+    @Inject
+    private PaymentMed paymentMed;
 
-
-    void setupRender(){
+    void setupRender() {
         if (model == null) {
             model = beanModelSource.createDisplayModel(Client.class,
                     resources.getMessages());
@@ -90,24 +94,10 @@ public class ClientsSoonPayments {
 
     @Property
     private boolean editing;
-    @Inject
-    private SuperCalendar calendar;
-
-    public int getLoopPaymentId() {
-        int lpi;
-        try {
-            lpi = loopPayment.getId();
-        } catch (NullPointerException e) {
-            lpi = loopPaymentId;
-        }
-        return lpi;
-    }
 
     public String getPaymentInfo() {
         StringBuilder builder = new StringBuilder();
-        builder.append(calendar.setTime(loopPayment.getDate()).stringByTuple(
-                "day", "month")
-                + ": ");
+        builder.append(DateService.toString("dd MMM", loopPayment.getDate()) + ": ");
         builder.append(loopPayment.getAmount());
         builder.append(" р. за '"
                 + loopPayment.getContract().getEventType().getTitle() + "'.");
@@ -123,11 +113,11 @@ public class ClientsSoonPayments {
         return authBlock;
     }
 
-    void onEdit(Payment p) {
+    void onEdit(int paymentId) {
         if (dispatcher.canEditPayments())
             editing = true;
-        loopPayment = p;
-        renderer.addRender("paymentBody" + p.getId(), paymentZone);
+        loopPayment = paymentMed.getUnitById(paymentId);
+        renderer.addRender("paymentBody" + loopPayment.getId(), paymentZone);
     }
 
     void onDelete(int paymentId) {

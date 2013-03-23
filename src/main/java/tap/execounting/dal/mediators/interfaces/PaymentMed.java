@@ -12,7 +12,7 @@ public interface PaymentMed {
 	//unit
 	public Payment getUnit();
 	public PaymentMed setUnit(Payment unit);
-	public Payment getUnitById(int paymentId);
+    public Payment getUnitById(int paymentId);
 
 	//getters
 	//planned
@@ -35,8 +35,7 @@ public interface PaymentMed {
     public PaymentMed setGroupFromClients(List<Client> clients);
 
     public List<Payment> getAllPayments();
-	public void reset();
-	public String getFilterState();
+	public PaymentMed reset();
 
 	//filters
 	//contract
@@ -53,7 +52,6 @@ public interface PaymentMed {
 	
 	//amount
 	public Integer countAmount();
-	public Integer countReturn(Date date1, Date date2);
 	public int countRealPaymentsAmount();
 	public int countScheduledPaymentsAmount();
 	// Maps payments into contracts

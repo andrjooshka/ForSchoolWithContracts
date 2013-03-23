@@ -42,9 +42,7 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
 	@Inject
 	private AuthorizationDispatcher dispatcher;
 
-    public ClientMediator(){
-        clazz = Client.class;
-    }
+    public ClientMediator(){clazz = Client.class;}
 
 	private ContractMed getContractMed() {
 		return contractMed;

@@ -25,7 +25,6 @@ import tap.execounting.entities.ContractType;
 import tap.execounting.entities.Teacher;
 import tap.execounting.pages.ClientPage;
 import tap.execounting.services.DateService;
-import tap.execounting.services.SuperCalendar;
 
 @Import(stylesheet = {"context:css/datatable.css", "context:css/comments.css"}, library = { "context:js/jquery-1.8.3.min.js",
 "context:js/comments.js" })
@@ -34,8 +33,6 @@ public class ClientGridNCD {
 	private BeanModelSource beanModelSource;
 	@Inject
 	private ComponentResources componentResources;
-	@Inject
-	private SuperCalendar calendar;
 	@Inject
 	private ClientMed clientMed;
 	@Inject
@@ -106,8 +103,7 @@ public class ClientGridNCD {
 		Date d = unit.getFirstContractDate();
 		if (d == null)
 			return "договоров по данному клиенту нет в базе";
-		calendar.setTime(d);
-		return calendar.stringByTuple("dayOfMonth", "month", "year");
+		return DateService.toString("dd MMM YYYY", d);
 	}
 
 	public List<Contract> getContracts() {

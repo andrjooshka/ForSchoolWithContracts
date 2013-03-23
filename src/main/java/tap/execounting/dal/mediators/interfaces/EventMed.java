@@ -20,7 +20,7 @@ public interface EventMed {
 
 	public EventMed setUnit(Event unit);
 	
-	public Event getUnitById(long eventId);
+	public Event getUnitById(int eventId);
 
 	// getters:
 	// Date

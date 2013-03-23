@@ -307,9 +307,4 @@ public class RusCalendar implements SuperCalendar {
 			return getDayOfMonth() + ""; 
 		else return "";
 	}
-
-	public String dateString(boolean shorthand) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

@@ -25,6 +25,7 @@ import tap.execounting.entities.Contract;
 import tap.execounting.entities.ContractType;
 import tap.execounting.entities.EventType;
 import tap.execounting.entities.Teacher;
+import tap.execounting.services.DateService;
 import tap.execounting.services.SuperCalendar;
 
 @Import(stylesheet = "context:css/addContract.css")
@@ -32,8 +33,6 @@ public class AddContract {
 
 	@Inject
 	private CRUDServiceDAO dao;
-	@Inject
-	private SuperCalendar calendar;
 	@Inject
 	private ContractMed contractMed;
 	@Inject
@@ -149,8 +148,7 @@ public class AddContract {
 	}
 
 	public String getConDate() {
-		return calendar.setTime(con.getDate()).stringByTuple("day", "month",
-				"year");
+		return DateService.toString("dd MMM YYYY", con.getDate());
 	}
 
 	void onValidateFromEditor() throws ValidationException {

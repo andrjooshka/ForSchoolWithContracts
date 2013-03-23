@@ -10,7 +10,7 @@
         </p:nameCell>
         <p:paymentsInfoCell>
             <t:loop source="client.plannedPayments" value="loopPayment">
-                <t:zone t:id="paymentZone" id="paymentBody${loopPaymentId}"
+                <t:zone t:id="paymentZone" id="paymentBody${loopPayment.id}"
                         update="show">
                     <t:if test="loopPayment">
                         <t:if test="!editing">
@@ -30,7 +30,7 @@
                                 (
                                 <t:delegate to="DeleteBlock"/>
                                 |
-                                <t:eventlink event="edit" context="loopPayment"
+                                <t:eventlink event="edit" context="loopPayment.id"
                                              t:zone="paymentBody${loopPayment.id}">изменить
                                 </t:eventlink>
                                 )

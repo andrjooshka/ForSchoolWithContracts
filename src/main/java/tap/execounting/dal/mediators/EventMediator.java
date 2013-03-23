@@ -31,9 +31,7 @@ public class EventMediator extends ProtoMediator<Event> implements EventMed {
 	@Inject
 	private DateFilter dateFilter;
 
-    public EventMediator(){
-        clazz = Event.class;
-    }
+    public EventMediator(){clazz = Event.class;}
 
     public EventMed setUnit(Event unit) {
 		this.unit = unit;

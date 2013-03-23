@@ -30,17 +30,7 @@ public class TeacherMediator extends ProtoMediator<Teacher> implements TeacherMe
 	@Inject
 	private ContractMed contractMed;
 
-	private ClientMed getClientMed() {
-		return clientMed;
-	}
-
-	private ContractMed getContractMed() {
-		return contractMed;
-	}
-
-	private EventMed getEventMed() {
-		return eventMed;
-	}
+    public TeacherMediator(){clazz=Teacher.class;}
 
 	public List<Teacher> getAllTeachers() {
 		return dao.findWithNamedQuery(Teacher.ALL);
@@ -112,28 +102,28 @@ public class TeacherMediator extends ProtoMediator<Teacher> implements TeacherMe
 		// for (Contract c : getActualContracts())
 		// clients.add(c.getClient());
 		// return new ArrayList<Client>(clients);
-		List<Client> res = getClientMed().retainByActiveTeacher(unit)
+		List<Client> res = clientMed.retainByActiveTeacher(unit)
 				.getGroup();
-		getClientMed().reset();
+		clientMed.reset();
 		return res;
 	}
 
 	// contracts
 	// frozen
 	public List<Contract> getFrozenContracts() {
-		return getContractMed().setGroup(getAllContracts())
+		return contractMed.setGroup(getAllContracts())
 				.retainByState(ContractState.frozen).getGroup();
 	}
 
 	// canceled
 	public List<Contract> getCanceledContracts() {
-		return getContractMed().setGroup(getAllContracts())
+		return contractMed.setGroup(getAllContracts())
 				.retainByState(ContractState.canceled).getGroup();
 	}
 
 	// complete
 	public List<Contract> getCompleteContracts() {
-		return getContractMed().setGroup(getAllContracts())
+		return contractMed.setGroup(getAllContracts())
 				.retainByState(ContractState.complete).getGroup();
 	}
 
@@ -222,58 +212,58 @@ public class TeacherMediator extends ProtoMediator<Teacher> implements TeacherMe
 	}
 
 	public int getLessonsComplete(Date date1, Date date2) {
-		int res = getEventMed().retainByTeacher(unit).retainByDatesEntry(date1, date2)
+		int res = eventMed.retainByTeacher(unit).retainByDatesEntry(date1, date2)
 				.countEventsComplete();
-		getEventMed().reset();
+		eventMed.reset();
 		return res;
 	}
 
 	public int getLessonsFired(Date date1, Date date2) {
-		int res = getEventMed().retainByTeacher(unit).retainByDatesEntry(date1, date2)
+		int res = eventMed.retainByTeacher(unit).retainByDatesEntry(date1, date2)
 				.countEventsFired();
-		getEventMed().reset();
+		eventMed.reset();
 		return res;
 	}
 
 	public int getLessonsMovedByTeacher(Date date1, Date date2) {
-		int res = getEventMed().retainByTeacher(unit).retainByDatesEntry(date1, date2)
+		int res = eventMed.retainByTeacher(unit).retainByDatesEntry(date1, date2)
 				.countEventsMovedByTeacher();
-		getEventMed().reset();
+		eventMed.reset();
 		return res;
 	}
 
 	public int getLessonsMovedByClient(Date date1, Date date2) {
-		int res = getEventMed().retainByTeacher(unit).retainByDatesEntry(date1, date2)
+		int res = eventMed.retainByTeacher(unit).retainByDatesEntry(date1, date2)
 				.countEventsMovedByClient();
-		getEventMed().reset();
+		eventMed.reset();
 		return res;
 	}
 
 	public int getDaysWorked(Date date1, Date date2) {
-		int res = getEventMed().retainByTeacher(unit).retainByDatesEntry(date1, date2)
+		int res = eventMed.retainByTeacher(unit).retainByDatesEntry(date1, date2)
 				.retainByState(EventState.complete).countDaysInEventsGroup();
-		getEventMed().reset();
+		eventMed.reset();
 		return res;
 	}
 
 	public int getMoneyEarned(Date date1, Date date2) {
-		int res = getEventMed().retainByTeacher(unit).retainByDatesEntry(date1, date2)
+		int res = eventMed.retainByTeacher(unit).retainByDatesEntry(date1, date2)
 				.countMoneyOfCompleteEvents();
-		getEventMed().reset();
+		eventMed.reset();
 		return res;
 	}
 
 	public int getMoneyEarnedForSchool(Date date1, Date date2) {
-		int res = getEventMed().retainByTeacher(unit).retainByDatesEntry(date1, date2)
+		int res = eventMed.retainByTeacher(unit).retainByDatesEntry(date1, date2)
 				.retainByState(EventState.complete).countSchoolMoney();
-		getEventMed().reset();
+		eventMed.reset();
 		return res;
 	}
 
 	public int getMoneyEarnedForSelf(Date date1, Date date2) {
-		int res = getEventMed().retainByTeacher(unit).retainByDatesEntry(date1, date2)
+		int res = eventMed.retainByTeacher(unit).retainByDatesEntry(date1, date2)
 				.retainByState(EventState.complete).countTeacherMoney();
-		getEventMed().reset();
+		eventMed.reset();
 		return res;
 	}
 

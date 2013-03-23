@@ -4,6 +4,7 @@ import tap.execounting.entities.Client
 import tap.execounting.entities.Contract
 import tap.execounting.entities.Event
 import tap.execounting.entities.EventType
+import tap.execounting.entities.Payment
 
 import static tap.execounting.entities.ContractType.Standard
 import static tap.execounting.data.EventState.complete
@@ -54,5 +55,20 @@ class Helper {
         completed.times { t.add genContract(5,5) }
         (total - completed).times { t.add genContract(5, 2) }
         return t
+    }
+
+    static List<Payment> genPayments(int total, int completed = total/2){
+        def res = []
+        completed.times { res.add genPayment(true) }
+        (total - completed).times { res.add genPayment(false) }
+        res
+    }
+
+    static Payment genPayment(boolean completed, Date date = new Date(), int amount = 1000){
+        new Payment(
+                amount: amount,
+                date: date,
+                scheduled: !completed
+        )
     }
 }

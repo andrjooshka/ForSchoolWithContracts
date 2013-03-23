@@ -16,7 +16,7 @@ import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.security.AuthorizationDispatcher;
-import tap.execounting.services.SuperCalendar;
+import tap.execounting.services.DateService;
 
 @Import(stylesheet="context:css/stattable.css")
 public class ClientPage {
@@ -44,8 +44,6 @@ public class ClientPage {
 	private Contract contract;
 	@Property
 	private boolean mode;
-	@Inject
-	private SuperCalendar calendar;
 
 	// page events
 	void onActivate(int clientId) {
@@ -97,8 +95,7 @@ public class ClientPage {
 			if (c.getDate().compareTo(d) < 0)
 				d = c.getDate();
 		}
-		calendar.setTime(d);
-		return calendar.stringByTuple("dayOfMonth", "month", "year");
+		return DateService.toString("dd MMM YY",d);
 	}
 
 	public String getCurrentTeachersInfo() {

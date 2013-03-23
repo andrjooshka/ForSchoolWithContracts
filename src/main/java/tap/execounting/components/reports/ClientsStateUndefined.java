@@ -49,6 +49,7 @@ public class ClientsStateUndefined {
         if (model == null) {
             model = beanModelSource.createDisplayModel(Client.class,
                     resources.getMessages());
+            model.add("lastEventDate", null);
             model.add("info", null);
             model.add("comment", null);
             model.exclude("return", "date", "id", "balance",
@@ -62,16 +63,28 @@ public class ClientsStateUndefined {
         List<Client> list = med.reset().retainByState(ClientState.inactive).sortByName().getGroup(true);
         return list;
     }
-      // Used to display the date of the latest event
+    public String getLastEventDate(){
+        if (client.getContracts().size() == 0)
+            return messages.get("no-contracts");
+        Event lastEvent = null;
+        eventMed.retainByDatesEntry(DateService.fromNowPlusDays(-31),
+                DateService.fromNowPlusDays(1)).retainByClient(client);
+        try {
+            lastEvent = eventMed.lastByDate();
+        } catch (IndexOutOfBoundsException e) {
+            return messages.get("no-events");
+        }
+        return DateService.toString("dd.MM.YY", lastEvent.getDate());
+    }
+
+    // Used to display the date of the latest event
     public String getInfo() {
         // TODO optimize that by caching recent events
         if (client.getContracts().size() == 0)
             return messages.get("no-contracts");
         Event lastEvent = null;
-        List<Event> cache = eventMed.retainByDatesEntry(DateService.fromNowPlusDays(-31),
-                DateService.fromNowPlusDays(1)).getGroup();
         try {
-            lastEvent = eventMed.retainByClient(client).lastByDate();
+            lastEvent = eventMed.lastByDate();
         } catch (IndexOutOfBoundsException e) {
             return messages.get("no-events");
         } finally {

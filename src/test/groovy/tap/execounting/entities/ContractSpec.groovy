@@ -1,4 +1,4 @@
-package tap.execounting.util.entities
+package tap.execounting.entities
 
 import org.apache.tapestry5.beanvalidator.BeanValidatorModule
 import org.apache.tapestry5.hibernate.HibernateCoreModule
@@ -6,7 +6,6 @@ import org.apache.tapestry5.ioc.annotations.SubModule
 import org.apache.tapestry5.services.TapestryModule
 import spock.lang.Specification
 import tap.execounting.dal.HibernateModule
-import tap.execounting.entities.Contract
 import tap.execounting.services.AppModule
 import tap.execounting.services.DateService
 

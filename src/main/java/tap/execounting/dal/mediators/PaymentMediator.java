@@ -25,6 +25,8 @@ public class PaymentMediator extends ProtoMediator<Payment> implements PaymentMe
 	@Inject
 	private DateFilter dateFilter;
 
+    public PaymentMediator(){clazz=Payment.class;}
+
 	public Payment getUnit() {
 		return this.unit;
 	}
@@ -59,7 +61,11 @@ public class PaymentMediator extends ProtoMediator<Payment> implements PaymentMe
 		return unit.getDate();
 	}
 
-	private Map<String, Object> appliedFilters;
+    public PaymentMed reset(){
+        criterias = null;
+        cache = null;
+        return this;
+    }
 
 	public List<Payment> getGroup() {
 		if (cache == null)
@@ -98,63 +104,44 @@ public class PaymentMediator extends ProtoMediator<Payment> implements PaymentMe
 		return dao.findWithNamedQuery(Payment.ALL);
 	}
 
-	public void reset() {
-		this.appliedFilters = null;
-		this.cache = null;
-	}
-
-	private Map<String, Object> getAppliedFilters() {
-		if (appliedFilters == null)
-			appliedFilters = new HashMap<String, Object>(5);
-		return appliedFilters;
-	}
-
-	public String getFilterState() {
-		StringBuilder sb = new StringBuilder();
-		for (Entry<String, Object> entry : getAppliedFilters().entrySet())
-			sb.append(entry.getKey() + ": " + entry.getValue().toString()
-					+ "\n");
-		return sb.toString();
-	}
-
 	public PaymentMed retainByContract(Contract unit) {
 		if (cacheIsNull()) {
-			cache = dao.findWithNamedQuery(
-					Payment.BY_CONTRACT_ID,
-					ChainMap.with("contractId", unit.getId())
-							.yo());
+			loadByContractId(unit.getId());
 		} else {
 			for (int i = cache.size() - 1; i >= 0; i--)
 				if (cache.get(i).getContractId() != unit.getId())
 					cache.remove(i);
 		}
-		getAppliedFilters().put("Contract", unit);
+        pushCriteria("Contract", unit);
 		return this;
 	}
 
-	public PaymentMed retainByDatesEntry(Date date1, Date date2) {
-		getGroup();
-		// WARN -- commented code does not works properly, need testing
-		//
-		// if (cache == null && (appliedFilters == null
-		// || appliedFilters.size() == 0)) {
-		// // Query should not get null values
-		// date1 = date1 == null ? new Date(0) : date1;
-		// date2 = date2 == null ? new Date(Long.MAX_VALUE - Integer.MAX_VALUE)
-		// : date2;
-		// cache = getDao().findWithNamedQuery(
-		// Payment.BY_DATES,
-		// ChainMap.with("earlierDate", date1)
-		// .and("laterDate", date2).yo());
-		// } else
-		dateFilter.retainByDatesEntry(cache, date1, date2);
-		getAppliedFilters().put("Date1", date1);
-		getAppliedFilters().put("Date2", date2);
+    private void loadByContractId(int id) {
+        cache = dao.findWithNamedQuery(Payment.BY_CONTRACT_ID,
+                ChainMap.with("contractId", id).yo());
+    }
 
+    public PaymentMed retainByDatesEntry(Date date1, Date date2) {
+		if (cacheIsNull())
+            loadByDatesEntry(date1, date2);
+        else {
+            dateFilter.retainByDatesEntry(cache, date1, date2);
+            pushCriteria("Date1", date1);
+            pushCriteria("Date2", date2);
+        }
 		return this;
 	}
 
-	public PaymentMed retainByState(boolean state) {
+    private void loadByDatesEntry(Date date1, Date date2) {
+        // Query should not get null values
+        date1 = date1 == null ? new Date(0) : date1;
+        date2 = date2 == null ? new Date(Long.MAX_VALUE) : date2;
+        cache = dao.findWithNamedQuery(Payment.BY_DATES,
+                ChainMap.with("earlierDate", date1).n("laterDate", date2).yo());
+    }
+
+
+    public PaymentMed retainByState(boolean state) {
 		if (cacheIsNull())
 			if (state)
 				cache = dao.findWithNamedQuery(Payment.SCHEDULED);
@@ -165,7 +152,7 @@ public class PaymentMediator extends ProtoMediator<Payment> implements PaymentMe
 				if (cache.get(i).isScheduled() != state)
 					cache.remove(i);
 		}
-		getAppliedFilters().put("StatePlanned", state);
+		pushCriteria("StatePlanned", state);
 		return this;
 	}
 
@@ -222,7 +209,8 @@ public class PaymentMediator extends ProtoMediator<Payment> implements PaymentMe
 
     public Integer countReturn(Date date1, Date date2) {
 		PaymentMed pm = new PaymentMediator();
-		return pm.retainByDatesEntry(date1, date2).retainByState(false).countAmount();
+		return pm.setGroup(getGroup()).retainByDatesEntry(date1, date2)
+                .retainByState(false).countAmount();
     }
 
 }

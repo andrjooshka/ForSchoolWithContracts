@@ -63,7 +63,6 @@ public interface SuperCalendar {
 
 	SuperCalendar clone();
 	String dateString();
-	String dateString(boolean shorthand);
 	String stringByTuple(String ... tuple);
 	String toString();
 }

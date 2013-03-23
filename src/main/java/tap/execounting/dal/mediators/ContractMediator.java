@@ -48,9 +48,7 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
     @Inject
     private ClientMed clientMed;
 
-    private PaymentMed getPaymentMed() {
-        return paymentMed;
-    }
+    public ContractMediator(){clazz=Contract.class;}
 
     public Contract getUnit() {
         try {
