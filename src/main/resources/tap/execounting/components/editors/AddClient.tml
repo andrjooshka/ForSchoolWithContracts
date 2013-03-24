@@ -9,11 +9,7 @@
 	<div>
 		<t:zone t:id="formaZone">
 			<t:beaneditform zone="^" t:id="form" object="client"
-				submitlabel="message:submit-label" exclude="id" add="canceled">
-				<p:canceled>
-					<t:label for="canceledbox" />
-					<t:checkbox t:id="canceledbox" value="client.canceled" />
-				</p:canceled>
+				submitlabel="message:submit-label" exclude="id">
 			</t:beaneditform>
 		</t:zone>
 	</div>

@@ -99,7 +99,12 @@ public class Payment implements Dated {
 		return date;
 	}
 
-	public void setDate(Date date) {
+    @Override
+    public boolean isBetweenDates(Date one, Date two) {
+        return !getDate().before(one) && getDate().before(two);
+    }
+
+    public void setDate(Date date) {
 		this.date = date;
 	}
 
@@ -126,4 +131,8 @@ public class Payment implements Dated {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
+
+    public boolean isComplete() {
+        return !isScheduled();
+    }
 }

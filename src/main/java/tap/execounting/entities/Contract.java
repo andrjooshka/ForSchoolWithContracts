@@ -172,7 +172,11 @@ public class Contract implements Comparable<Contract>, Dated {
 		return date;
 	}
 
-	public void setDate(Date date) {
+    public boolean isBetweenDates(Date one, Date two) {
+        return !getDate().before(one) && getDate().before(two);
+    }
+
+    public void setDate(Date date) {
 		this.date = date;
 	}
 

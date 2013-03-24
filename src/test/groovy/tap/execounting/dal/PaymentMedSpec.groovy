@@ -47,7 +47,7 @@ class PaymentMedSpec extends Specification {
         paymentMed.group.size() == 0
 
         when: "you count return from 10 payments with amount 1000"
-        paymentMed.group = genPayments(10)
+        paymentMed.group = genPayments(10,10)
         then: "you get 10k return"
         paymentMed.countReturn(DateService.fromNowPlusDays(-1), DateService.fromNowPlusDays(1)) == 10000
     }

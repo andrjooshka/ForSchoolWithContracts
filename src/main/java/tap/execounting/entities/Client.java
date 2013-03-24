@@ -221,7 +221,12 @@ public class Client implements Dated, Deletable {
 		return d == null ? new Date() : d;
 	}
 
-	public Date getFirstContractDate() {
+    @Override
+    public boolean isBetweenDates(Date one, Date two) {
+        return !getDate().before(one) && getDate().before(two);
+    }
+
+    public Date getFirstContractDate() {
 		try {
 			return getContracts(true).get(0).getDate();
 		} catch (NullPointerException npe) {

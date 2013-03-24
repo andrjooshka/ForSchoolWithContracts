@@ -1,125 +1,143 @@
 package tap.execounting
+
+import geb.spock.GebSpec
+import org.openqa.selenium.firefox.FirefoxDriver
+import spock.lang.Ignore
+import tap.execounting.gebpages.ClientPage
+import tap.execounting.gebpages.Clients
+import tap.execounting.gebpages.Home
+import tap.execounting.gebpages.Payroll
+import tap.execounting.gebpages.Reports
+import tap.execounting.gebpages.Settings
+import tap.execounting.gebpages.Signin
+import tap.execounting.gebpages.Statistics
+import tap.execounting.gebpages.TeacherPage
+import tap.execounting.gebpages.Teachers
+
+class IntegrationTest extends GebSpec{
+
+    @Ignore
+    def "simple navigation using links"(){
+        when: "user goes to signin page"
+        to Signin
+        then: "page loaded and everything is fine"
+        at Signin
+
+        when: "user signs in"
+        username << 'ivan'
+        password << 'DraGmar91'
+        loginButton.click()
+        then: "user is on the Home page"
+        at Home
+
+        when: "user goes to teachers"
+        to Teachers
+        then: "he is at teachers"
+        at Teachers
+
+        when: "user goes to the page of specific teacher"
+        to TeacherPage
+        then: "it loads"
+        at TeacherPage
+
+        when: "user tries to access payroll"
+        to Payroll
+        then: "it loads"
+        at Payroll
+
+        when: "user loads reports"
+        to Reports
+        then: "they're loaded"
+        at Reports
+
+        when: "user goes to the clients page"
+        to Clients
+        then: "it is loaded"
+        at Clients
+
+        when: 'user goes to the page of specific client'
+        to ClientPage
+        then: "it loads"
+        at ClientPage
+
+        when: "user goes to statistics"
+        to Statistics
+        then: "it loads"
+        at Statistics
+
+        when: "user goes to settings"
+        to Settings
+        then: "it loads"
+        at Settings
+    }
+
+    @Ignore
+    def "every page is accessible and navigation is ok"() {
+        when: "user goes to signin page"
+        to Signin
+        then: "page loaded and everything is fine"
+        at Signin
+
+        when: "user signs in"
+        username << 'ivan'
+        password << 'DraGmar91'
+        loginButton.click()
+        then: "user is on the Home page"
+        at Home
+
+        when: "user goes to the 'Teachers' page via navigation bar button"
+        nav.navTeachers.click()
+        then: "he is on 'Teachers' page"
+        at Teachers
+
+        when: "user goes to Clients page"
+        to nav.navClients.click()
+        then: "it opens like a boss"
+        at Clients
+
+        when: "user clicks on reports button"
+        btnReports.click()
+        report "Reports at ${new Date().format("dd.MM.YY")}"
+        then: "he is on reports page"
+        at Reports
+    }
+
+    def "every teacher page is accessible"(){
+        when: "user goes to signin page"
+        to Signin
+        then: "page loaded and everything is fine"
+        at Signin
+
+        when: "user signs in"
+        username << 'ivan'
+        password << 'DraGmar91'
+        loginButton.click()
+        then: "user is on the Home page"
+        at Home
+
+        when: "user goes to the 'Teachers' page via navigation bar button"
+        nav.navTeachers.click()
+        then: "he is on 'Teachers' page"
+        at Teachers
+
+        teacherLinks.size().times { i ->
+            to Teachers
+            when: "user clicks on some link"
+            teacherLinks[i].click()
+            then: "it loads"
+            at TeacherPage
+
+            when: "user tries to access the payroll"
+            payrollDateOne << '01.01.2013'
+            payrollDateTwo << '30.03.2013'
+            payrollSubmit.click()
+            then: "he will get it"
+            at Payroll
+        }
+    }
+
+//    def "statistics page could be clicked and updated"(){
 //
-//import org.openqa.selenium.By
-//import org.openqa.selenium.WebElement
-//import org.openqa.selenium.firefox.FirefoxDriver
-import spock.lang.Specification
-//import org.openqa.selenium.WebDriver
-//
-//import static java.util.concurrent.TimeUnit.SECONDS
-//
-///**
-// * User: truth0
-// * Date: 3/17/13
-// * Time: 6:19 PM
-// */
-class IntegrationTest extends Specification{
-//    WebDriver drv
-//
-//    def clients = 'clients'
-//    def clientPage = 'clientpage/2'
-//    def login = 'http://localhost:8080/bureau/'
-//    def reports = 'reports'
-//    def statistics = 'statistics'
-//    def CRUD = 'CRUD'
-//    def teachers = 'teachers'
-//    def schedules = 'schedules'
-//    def payroll = 'payroll/6/01.03.2013/31.03.2013/false'
-//    def teacherPage = 'teacherpage/6'
-//
-//    def setup(){
-//        drv = new FirefoxDriver()
-//        drv.manage().timeouts().implicitlyWait 120, SECONDS
 //    }
-//
-//    def cleanup(){
-//        drv.quit()
-//    }
-//
-//    def "a user is greeted with login page"(){
-//        when: "page is loaded"
-//        drv.get login
-//
-//        then: "its title is ok"
-//        drv.title == 'Вход'
-//    }
-//
-//    def "a user can login"(){
-//        when: 'user logs in'
-//        login()
-//        then: 'page title is ok'
-//        drv.title == 'Бюро'
-//    }
-//
-//    def "every page is accessable"(){
-//        when:
-//        login()
-//        go reports
-//        then:
-//        thereIsNoException()
-//        !drv.findElement(By.tagName('body')).getText().contains('There is no data')
-//
-//        when:
-//        go teachers
-//        then: "page does not throw an exception"
-//        thereIsNoException()
-//
-//        when:
-//        go teacherPage
-//        then:
-//        thereIsNoException()
-//
-//        when:
-//        go payroll
-//        then:
-//        thereIsNoException()
-//
-//        when:
-//        go clients
-//        then:
-//        thereIsNoException()
-//
-//        when:
-//        go clientPage
-//        then:
-//        thereIsNoException()
-//
-//        when:
-//        go statistics
-//        then:
-//        thereIsNoException()
-//
-//        when:
-//        go schedules
-//        then:
-//        thereIsNoException()
-//
-//        when:
-//        go CRUD
-//        then:
-//        thereIsNoException()
-//    }
-//
-//    def type(WebElement field, String text){
-//        field.clear()
-//        field.sendKeys text
-//    }
-//    def go(address) {
-//        drv.get(login + address)
-//    }
-//    def thereIsNoException(){
-//        def body = drv.findElement(By.tagName('body'))
-//        !body.text.contains('Exception')
-//    }
-//
-//    def login(){
-//        drv.get login
-//        WebElement username = drv.findElement(By.id('username'))
-//        type username, 'ivan'
-//        WebElement pwd = drv.findElement(By.id('password'))
-//        type pwd, 'DraGmar91'
-//        WebElement submit = drv.findElement(By.cssSelector('input.btn'))
-//        submit.click()
-//    }
-//
+    // Assert that payroll is working for everybody
 }

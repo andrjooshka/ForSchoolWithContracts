@@ -238,6 +238,7 @@ public class EventMediator extends ProtoMediator<Event> implements EventMed {
 	}
 
 	public EventMed retainByClient(Client c) {
+        c = dao.find(Client.class,c.getId());
 		List<Event> cache = getGroup();
 		for (int i = countGroupSize() - 1; i >= 0; i--) {
 			List<Contract> toCheck = cache.get(i).getContracts();

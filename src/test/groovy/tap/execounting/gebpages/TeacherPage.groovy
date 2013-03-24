@@ -15,5 +15,9 @@ class TeacherPage extends Page {
     }
     static content = {
         nav { module NavigationModule }
+        payrollController { $('#payrollController') }
+        payrollDateOne { payrollController.find('input#datefield') }
+        payrollDateTwo { payrollController.find('input#datefield_0') }
+        payrollSubmit {  payrollController.find('input#submit_0')}
     }
 }

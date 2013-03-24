@@ -207,10 +207,18 @@ public class PaymentMediator extends ProtoMediator<Payment> implements PaymentMe
         return this;
     }
 
+    /**
+     * Will count return for completed payments, that match the date
+     * @param date1
+     * @param date2
+     * @return
+     */
     public Integer countReturn(Date date1, Date date2) {
-		PaymentMed pm = new PaymentMediator();
-		return pm.setGroup(getGroup()).retainByDatesEntry(date1, date2)
-                .retainByState(false).countAmount();
+		int sum = 0;
+        for(Payment p : cache)
+            if(p.isBetweenDates(date1, date2) && p.isComplete())
+                sum += p.getAmount();
+        return sum;
     }
 
 }
