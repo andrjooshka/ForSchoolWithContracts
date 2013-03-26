@@ -16,7 +16,6 @@ import tap.execounting.gebpages.Teachers
 
 class IntegrationTest extends GebSpec{
 
-    @Ignore
     def "simple navigation using links"(){
         when: "user goes to signin page"
         to Signin
@@ -70,8 +69,6 @@ class IntegrationTest extends GebSpec{
         then: "it loads"
         at Settings
     }
-
-    @Ignore
     def "every page is accessible and navigation is ok"() {
         when: "user goes to signin page"
         to Signin
@@ -91,17 +88,16 @@ class IntegrationTest extends GebSpec{
         at Teachers
 
         when: "user goes to Clients page"
-        to nav.navClients.click()
+        nav.navClients.click()
         then: "it opens like a boss"
         at Clients
 
         when: "user clicks on reports button"
-        btnReports.click()
+        nav.navReports.click()
         report "Reports at ${new Date().format("dd.MM.YY")}"
         then: "he is on reports page"
         at Reports
     }
-
     def "every teacher page is accessible"(){
         when: "user goes to signin page"
         to Signin
@@ -120,15 +116,17 @@ class IntegrationTest extends GebSpec{
         then: "he is on 'Teachers' page"
         at Teachers
 
-        teacherLinks.size().times { i ->
+        (teacherLinks.size()/5).times { i ->
             to Teachers
             when: "user clicks on some link"
-            teacherLinks[i].click()
+            teacherLinks[i*4].click()
             then: "it loads"
             at TeacherPage
 
             when: "user tries to access the payroll"
+            payrollDateOne.clear()
             payrollDateOne << '01.01.2013'
+            payrollDateTwo.clear()
             payrollDateTwo << '30.03.2013'
             payrollSubmit.click()
             then: "he will get it"

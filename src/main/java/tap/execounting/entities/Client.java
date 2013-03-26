@@ -1,23 +1,8 @@
 package tap.execounting.entities;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import org.apache.tapestry5.beaneditor.NonVisual;
@@ -41,13 +26,15 @@ import tap.execounting.services.DateService;
 		@NamedQuery(name = Client.ALL, query = "from Client"),
 		@NamedQuery(name = Client.ALL_NAMES, query = "select c.name from Client c"),
 		@NamedQuery(name = Client.BY_NAME, query = "from Client c where lower(c.name) like :name"),
-        @NamedQuery(name = Client.CANCELED, query = "from Client where canceled = true")})
+        @NamedQuery(name = Client.CANCELED, query = "from Client where canceled = true"),
+        @NamedQuery(name = Client.BY_MANAGER_ID, query = "from Client where managerId = :managerId")})
 public class Client implements Dated, Deletable {
 
 	public static final String ALL = "Client.all";
 	public static final String ALL_NAMES = "Client.allNames";
 	public static final String BY_NAME = "Client.byName";
     public static final String CANCELED = "Client.canceled";
+    public static final String BY_MANAGER_ID = "Client.byManagerId";
 
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,6 +45,13 @@ public class Client implements Dated, Deletable {
 	private String name;
 
     private String phoneNumber;
+
+    @NonVisual
+    private Integer managerId;
+
+    @ManyToOne
+    @JoinColumn(name = "manager_id", updatable = false, insertable = false)
+    private User manager;
 
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "client_id")
@@ -121,6 +115,18 @@ public class Client implements Dated, Deletable {
 
     public void setPhoneNumber(String number){
         phoneNumber = number;
+    }
+
+    public Integer getManagerId() {
+        return managerId;
+    }
+
+    public void setManagerId(Integer managerId) {
+        this.managerId = managerId;
+    }
+
+    public String getManagerName() {
+        return manager == null ? "" : manager.getFullname();
     }
 
 	public List<Contract> getContracts() {
@@ -243,4 +249,12 @@ public class Client implements Dated, Deletable {
 	public void setCanceled(boolean inactive) {
 		this.canceled = inactive;
 	}
+
+    public static Comparator NameComparator = new NameComparator();
+    static class NameComparator implements Comparator<Client>{
+
+        public int compare(Client c1, Client c2) {
+            return c1.name.compareTo(c2.name);
+        }
+    }
 }

@@ -46,8 +46,8 @@ public class ClientsDebtors {
             model.add("debt", null);
             model.add("comment", null);
             model.exclude("return", "date", "id", "balance",
-                    "studentInfo", "firstContractDate", "state",
-                    "firstPlannedPaymentDate","phoneNumber");
+                    "studentInfo", "firstContractDate", "state", "managerName",
+                    "firstPlannedPaymentDate","phoneNumber", "canceled");
         }
     }
 

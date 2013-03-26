@@ -38,7 +38,7 @@ public class Reports {
     public JSONObject onAJpoll(@RequestParameter("timeStamp") long timestamp) {
         JSONObject js = new JSONObject("{'status':'ok'}");
         List<Comment> list = dao.findWithNamedQuery(Comment.CLIENT_AFTER_DATE,
-                ChainMap.with("date", new Date(timestamp)).yo());
+                ChainMap.with("date", new Date(timestamp)));
         if (list.size() > 0) {
             JSONArray jr = new JSONArray();
             for (Comment c : list)

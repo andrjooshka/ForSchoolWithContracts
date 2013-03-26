@@ -15,11 +15,11 @@ public class ChainMap
 
     private ChainMap(String name, Object value)
     {
-        this.parameters = new HashMap<String, Object>();
+        this.parameters = new HashMap();
         this.parameters.put(name, value);
     }
 
-    public static ChainMap with(String name, Object value)
+    public static ChainMap w(String name, Object value)
     {
         return new ChainMap(name, value);
     }
@@ -30,8 +30,13 @@ public class ChainMap
         return this;
     }
 
-    public Map<String, Object> yo()
+    public Map<String, Object> and(String name, Object value)
     {
+        this.parameters.put(name, value);
         return this.parameters;
+    }
+
+    public static Map<String, Object> with(String fullname, Object value) {
+        return new ChainMap(fullname, value).parameters;
     }
 }

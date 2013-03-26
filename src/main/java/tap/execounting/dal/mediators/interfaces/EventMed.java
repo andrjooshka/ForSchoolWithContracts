@@ -82,7 +82,7 @@ public interface EventMed {
 
 	// filters
 	// Client
-	public EventMed retainByClient(Client client);
+	public EventMed retainByClientId(int clientId);
 	
 	// Teacher
 	public EventMed retainByTeacher(Teacher unit);

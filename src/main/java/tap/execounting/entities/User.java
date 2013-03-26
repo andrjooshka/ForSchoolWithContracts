@@ -20,22 +20,22 @@ import org.hibernate.validator.constraints.Email;
 		@NamedQuery(name = User.ALL, query = "from User"),
 		@NamedQuery(name = User.BY_USERNAME_OR_EMAIL, query = "Select u from User u where u.username = :username or u.email = :email"),
 		@NamedQuery(name = User.BY_CREDENTIALS, query = "Select u from User u where u.username = :username and u.password = :password"),
-		@NamedQuery(name = User.BY_ID, query = "from User where id=:userId") })
+		@NamedQuery(name = User.BY_ID, query = "from User where id=:userId"),
+        @NamedQuery(name = User.BY_FULLNAME, query = "from User where fullname=:fullname")})
 @Table(name = "users")
 public class User {
 
 	public static final String ALL = "User.all";
-
 	public static final String BY_USERNAME_OR_EMAIL = "User.byUserNameOrEmail";
-
 	public static final String BY_CREDENTIALS = "User.byCredentials";
-
-	public static final String BY_ID = "User.byId";
+    public static final String BY_FULLNAME = "User.byFullname";
+    public static final String BY_ID = "User.byId";
 
 	public static final String ADMIN = "admin";
 	public static final String MANAGER = "manager";
+    public static final String TOP = "top";
 
-	@Id
+    @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
@@ -63,8 +63,7 @@ public class User {
 	@NotNull
 	private String password;
 
-	public User() {
-	}
+	public User() {}
 
 	public User(final String fullname, final String username, final String email) {
 		this.fullname = fullname;
@@ -87,17 +86,6 @@ public class User {
 		this.email = email;
 		this.group=group;
 		this.password = password;
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("id ");
-		builder.append(id);
-		builder.append(",");
-		builder.append("username ");
-		builder.append(username);
-		return builder.toString();
 	}
 
 	public int getId() {
@@ -147,4 +135,19 @@ public class User {
 	public void setGroup(String group) {
 		this.group = group;
 	}
+
+    @Override
+    public String toString(){
+        return fullname;
+    }
+
+    public boolean isAdmin(){
+        return group==User.ADMIN;
+    }
+    public boolean isManager(){
+        return group==User.MANAGER;
+    }
+    public boolean isTop(){
+        return group==User.TOP;
+    }
 }

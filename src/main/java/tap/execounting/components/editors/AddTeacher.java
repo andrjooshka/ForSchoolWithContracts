@@ -58,7 +58,7 @@ public class AddTeacher {
 
 		// First -- check if for name duplication
 		List<Teacher> teachers = dao.findWithNamedQuery(Teacher.BY_NAME,
-				ChainMap.with("name", teacher.getName()).yo());
+				ChainMap.with("name", teacher.getName()));
 
 		// If there is no teachers with such name -- it is good.
 		if (teachers.size() != 0) {

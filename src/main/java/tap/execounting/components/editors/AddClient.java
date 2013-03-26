@@ -2,18 +2,25 @@ package tap.execounting.components.editors;
 
 import java.util.List;
 
+import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValidationException;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.beaneditor.BeanModel;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import org.apache.tapestry5.services.BeanModelSource;
+import org.apache.tapestry5.services.SelectModelFactory;
 import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.ChainMap;
 import tap.execounting.entities.Client;
+import tap.execounting.entities.User;
 import tap.execounting.pages.CRUD;
+import tap.execounting.services.Authenticator;
 
 /**
  * @author truth0
@@ -36,6 +43,19 @@ public class AddClient {
 	private Messages messages;
 	@Inject
 	private CRUDServiceDAO dao;
+    @Inject
+    private Authenticator authenticator;
+    @Inject
+    private BeanModelSource source;
+    @Inject
+    private ComponentResources resources;
+    @Property
+    private SelectModel selectModel;
+    @Inject
+    SelectModelFactory selectModelFactory;
+
+    @Property
+    private BeanModel model;
 
 	public void setup(Client c) {
 		updateMode = true;
@@ -47,6 +67,15 @@ public class AddClient {
 		updateMode = false;
 	}
 
+    public void setupRender(){
+        List<User> users = dao.findWithNamedQuery(User.ALL);
+        selectModel = selectModelFactory.create(users,"fullname");
+        model = source.createDisplayModel(Client.class, resources.getMessages());
+        model.exclude("id", "return","balance","date","firstPlannedPaymentDate","firstContractDate","managerName");
+        if(authenticator.getLoggedUser().isTop())
+            model.include("manager");
+    }
+
 	// Submit handling
 	void onValidateFromForm() throws ValidationException {
 		String duplicateExceptionMessageName = "addclient.error.duplicate";
@@ -54,7 +83,7 @@ public class AddClient {
 		
 		// First -- check if for name duplication
 		List<Client> clients = dao.findWithNamedQuery(Client.BY_NAME,
-				ChainMap.with("name", client.getName()).yo());
+				ChainMap.with("name", client.getName()));
 		
 		// If there is no clients with such name -- it is good.
 		if (clients.size() != 0) {

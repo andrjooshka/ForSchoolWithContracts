@@ -25,8 +25,8 @@ public class BasicAuthenticator implements Authenticator {
 		password = DigestUtils.md5Hex(password);
 		User user = crudService.findUniqueWithNamedQuery(
 				User.BY_CREDENTIALS,
-				ChainMap.with("username", username)
-						.n("password", password).yo());
+				ChainMap.w("username", username)
+						.and("password", password));
 
 		if (user == null) {
 			throw new AuthenticationException("The user doesn't exist");

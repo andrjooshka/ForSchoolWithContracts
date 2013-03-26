@@ -40,5 +40,4 @@ public class RoomSelectModel extends AbstractSelectModel {
 	public List<OptionModel> getOptions() {
 		return options;
 	}
-
 }

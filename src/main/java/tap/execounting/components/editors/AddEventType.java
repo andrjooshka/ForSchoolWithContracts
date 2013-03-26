@@ -57,7 +57,7 @@ public class AddEventType {
 	void onPrepare() {
 		probationAddition = dao.findUniqueWithNamedQuery(
 				EventTypeAddition.PROBATION_BY_EVENT_TYPE_ID, ChainMap
-						.with("eventTypeId", etype.getId()).yo());
+						.with("eventTypeId", etype.getId()));
 
 		if (probationAddition == null) {
 			probationAddition = new EventTypeAddition();

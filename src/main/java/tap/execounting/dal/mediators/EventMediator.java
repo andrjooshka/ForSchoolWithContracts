@@ -127,8 +127,7 @@ public class EventMediator extends ProtoMediator<Event> implements EventMed {
 
 	public EventTypeAddition loadProbation(int id) {
 		return dao.findUniqueWithNamedQuery(
-				EventTypeAddition.PROBATION_BY_EVENT_TYPE_ID, ChainMap
-						.with("eventTypeId", id).yo());
+				EventTypeAddition.PROBATION_BY_EVENT_TYPE_ID, ChainMap.with("eventTypeId", id));
 	}
 
 	public void save(Event event) {
@@ -212,8 +211,7 @@ public class EventMediator extends ProtoMediator<Event> implements EventMed {
 			int clientId, int teacherId, String typeTitle) {
 		Map<String, Object> params;
 		List<Event> preliminary;
-		params = ChainMap.with("date", d).n("teacherId", teacherId)
-				.yo(); // cut .and("title", '%'+typeTitle+'%')
+		params = ChainMap.w("date", d).and("teacherId", teacherId); // cut .and("title", '%'+typeTitle+'%')
 		preliminary = dao.findWithNamedQuery(Event.BY_DATE_TEACHERID_TITLE,
 				params);
 
@@ -237,14 +235,13 @@ public class EventMediator extends ProtoMediator<Event> implements EventMed {
 		return sb.toString();
 	}
 
-	public EventMed retainByClient(Client c) {
-        c = dao.find(Client.class,c.getId());
-		List<Event> cache = getGroup();
+	public EventMed retainByClientId(int clientId) {
+		getGroup();
 		for (int i = countGroupSize() - 1; i >= 0; i--) {
 			List<Contract> toCheck = cache.get(i).getContracts();
 			boolean thereIsNoSuchClient = true;
 			for (Contract con : toCheck) {
-				if (con.getClientId() == c.getId()) {
+				if (con.getClientId() == clientId) {
 					thereIsNoSuchClient = false;
 					break;
 				}
@@ -261,8 +258,7 @@ public class EventMediator extends ProtoMediator<Event> implements EventMed {
 		if (cacheIsClean()) {
 			cache = dao.findWithNamedQuery(
 					Event.BY_TEACHER_ID,
-					ChainMap.with("teacherId", unit.getId())
-							.yo());
+					ChainMap.with("teacherId", unit.getId()));
 
 		} else {
 			List<Event> cache = getGroup();
@@ -299,11 +295,11 @@ public class EventMediator extends ProtoMediator<Event> implements EventMed {
 			cache = dao.findWithNamedQuery(
 					Event.BY_STATE,
 					ChainMap.with("stateCode",
-                            EventState.complete.getCode()).yo());
+                            EventState.complete.getCode()));
 			List<Event> addition = dao.findWithNamedQuery(
 					Event.BY_STATE,
 					ChainMap.with("stateCode",
-                            EventState.failedByClient.getCode()).yo());
+                            EventState.failedByClient.getCode()));
 			cache.addAll(addition);
 
 		} else {
@@ -353,8 +349,7 @@ public class EventMediator extends ProtoMediator<Event> implements EventMed {
 		} else if (cacheIsClean()) {
 			cache = dao.findWithNamedQuery(
 					Event.BY_STATE,
-					ChainMap.with("stateCode", state.getCode())
-							.yo());
+					ChainMap.with("stateCode", state.getCode()));
 		} else {
 
 			List<Event> cache = getGroup();
@@ -375,8 +370,7 @@ public class EventMediator extends ProtoMediator<Event> implements EventMed {
 		if (cacheIsClean()) {
 			cache = dao.findWithNamedQuery(
 					Event.BY_ROOM_ID,
-					ChainMap.with("roomId", unit.getRoomId())
-							.yo());
+					ChainMap.with("roomId", unit.getRoomId()));
 		} else {
 
 			List<Event> cache = getGroup();
@@ -391,7 +385,7 @@ public class EventMediator extends ProtoMediator<Event> implements EventMed {
 	public EventMed retainByRoom(EventType type) {
 		if (cacheIsClean()) {
 			cache = dao.findWithNamedQuery(Event.BY_TYPE_ID,
-					ChainMap.with("typeId", type.getId()).yo());
+					ChainMap.with("typeId", type.getId()));
 		} else {
 
 			List<Event> cache = getGroup();
@@ -408,14 +402,13 @@ public class EventMediator extends ProtoMediator<Event> implements EventMed {
 			if (date1 != null && date2 != null)
 				cache = dao.findWithNamedQuery(
 						Event.BETWEEN_DATE1_AND_DATE2,
-						ChainMap.with("date1", date1)
-								.n("date2", date2).yo());
+						ChainMap.w("date1", date1).and("date2", date2));
 			else if (date1 != null)
 				cache = dao.findWithNamedQuery(Event.AFTER_DATE,
-						ChainMap.with("date", date1).yo());
+						ChainMap.with("date", date1));
 			else if (date2 != null)
 				cache = dao.findWithNamedQuery(Event.BEFORE_DATE,
-                        ChainMap.with("date", date2).yo());
+                        ChainMap.with("date", date2));
 		} else dateFilter.retainByDatesEntry(cache, date1, date2);
 		getAppliedFilters().put("Date1", date1);
 		getAppliedFilters().put("Date2", date2);
@@ -555,8 +548,7 @@ public class EventMediator extends ProtoMediator<Event> implements EventMed {
         if(facilityId == null) return this;
         if (cacheIsClean()) {
             cache = dao.findWithNamedQuery(Event.BY_FACILITY_ID,
-                    ChainMap.with("facilityId", facilityId)
-                            .yo());
+                    ChainMap.with("facilityId", facilityId));
         } else {
             for (int i = countGroupSize() - 1; i >= 0; i--)
                 if (cache.get(i).getFacilityId() != unit.getFacilityId())

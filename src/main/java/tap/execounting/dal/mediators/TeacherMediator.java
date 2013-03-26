@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.ChainMap;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
@@ -66,7 +65,7 @@ public class TeacherMediator extends ProtoMediator<Teacher> implements TeacherMe
 
 	public List<Comment> getComments() {
 		return dao.findWithNamedQuery(Comment.BY_TEACHER_ID,
-				ChainMap.with("teacherId", unit.getId()).yo());
+				ChainMap.with("teacherId", unit.getId()));
 	}
 
 	private List<Contract> allContractsCache;
@@ -75,8 +74,7 @@ public class TeacherMediator extends ProtoMediator<Teacher> implements TeacherMe
 		if (allContractsCache == null)
 			allContractsCache = dao.findWithNamedQuery(
 					Contract.WITH_TEACHER,
-					ChainMap.with("teacherId", unit.getId())
-							.yo());
+					ChainMap.with("teacherId", unit.getId()));
 		List<Contract> lst = new ArrayList<Contract>(allContractsCache.size());
 		for (Contract c : allContractsCache)
 			lst.add(c);
@@ -269,7 +267,7 @@ public class TeacherMediator extends ProtoMediator<Teacher> implements TeacherMe
 
 	public TeacherAddition getAddition() {
 		return dao.findUniqueWithNamedQuery(TeacherAddition.BY_TEACHER_ID,
-				ChainMap.with("id", getId()).yo());
+				ChainMap.with("id", getId()));
 	}
 
 	private List<Teacher> teachersCache;

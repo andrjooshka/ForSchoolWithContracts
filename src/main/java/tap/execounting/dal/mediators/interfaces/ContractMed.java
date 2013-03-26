@@ -144,4 +144,5 @@ public interface ContractMed {
 
     public ContractMed sortByClientName();
 
+    public List<ContractType> loadContractTypes();
 }

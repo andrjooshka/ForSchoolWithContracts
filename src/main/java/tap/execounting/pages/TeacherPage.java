@@ -225,8 +225,7 @@ public class TeacherPage {
 
 	public List<Contract> getOtherContracts() {
 		List<Contract> other = dao.findWithNamedQuery(Contract.WITH_CLIENT,
-				ChainMap.with("clientId", contract.getClientId())
-						.yo());
+				ChainMap.with("clientId", contract.getClientId()));
 		for (int i = other.size() - 1; i >= 0; i--)
 			if (other.get(i).getId() == contract.getId())
 				other.remove(i);
@@ -313,9 +312,8 @@ public class TeacherPage {
 				List<Event> evs = dao.findWithNamedQuery(
 						Event.BY_TEACHER_ID_AND_DATE,
 						ChainMap
-								.with("teacherId", tMed.getUnit().getId())
-								.n("earlierDate", d).n("laterDate", d)
-								.yo());
+								.w("teacherId", tMed.getUnit().getId())
+								.n("earlierDate", d).and("laterDate", d));
 				if (evs.size() > 0) {
 					// If you did find some, then mark the day as planned
 					e.setState(EventState.planned);

@@ -73,7 +73,14 @@ public interface ClientMed {
 	
 	//filters
 	
-	// who acquired such state in this date period
+    /**
+     * These are the people who have acquired queried status in given period
+     * Following filters, also tune their contracts, to remove those contracts
+     * that are not relevant to their state.
+     * @param date1
+     * @param date2
+     * @return
+     */
 	public ClientMed becameContinuers(Date date1, Date date2);
 	public ClientMed becameNovices(Date date1, Date date2);
 	public ClientMed becameTrials(Date sa1, Date sa2);
@@ -137,11 +144,15 @@ public interface ClientMed {
 
     public ClientMed sortByName();
 
+    public ClientMed sortByLastEventDate();
+
     /**
      * Sets client.comment.
      * @param comment
      */
     public void setClientComment(String comment);
+
+    public ClientMed retainByManagerId(int managerId);
 }
 
 

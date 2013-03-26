@@ -37,6 +37,9 @@
 				<th>
 					Тип договора
 				</th>
+                <th>
+                    Менеджер
+                </th>
 			</tr>
 			<tr class="bb">
 				<td>
@@ -55,6 +58,9 @@
 					<t:select t:id="contractType" model="contractTypeIdsModel"
 						value="contractTypeId" />
 				</td>
+                <td>
+                    <t:select value="managerId" model="selectManager"/>
+                </td>
 			</tr>
 
 			<tr>

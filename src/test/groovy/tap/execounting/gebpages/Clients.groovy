@@ -10,4 +10,7 @@ import geb.Page
 class Clients extends Page {
     static url = "http://localhost:8080/bureau/clients"
     static at = { title.equals "Клиенты" }
+    static content = {
+        module NavigationModule
+    }
 }

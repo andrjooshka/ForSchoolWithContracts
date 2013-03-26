@@ -73,8 +73,8 @@ public class ClientsSoonPayments {
                     resources.getMessages());
             model.add("paymentsInfo", null);
             model.add("comment", null);
-            model.exclude("return", "date", "id", "balance",
-                    "studentInfo", "firstContractDate", "state", "phoneNumber");
+            model.exclude("return", "date", "id", "balance", "managerName",
+                    "studentInfo", "firstContractDate", "state", "phoneNumber", "canceled");
         }
     }
 

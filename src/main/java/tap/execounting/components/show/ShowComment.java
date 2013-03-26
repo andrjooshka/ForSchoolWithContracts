@@ -26,9 +26,7 @@ public class ShowComment {
 	}
 
 	public String getUsername() {
-		User u = dao.findUniqueWithNamedQuery(User.BY_ID,
-				ChainMap.with("userId", comment.getUserId())
-						.yo());
+		User u = dao.findUniqueWithNamedQuery(User.BY_ID, ChainMap.with("userId", comment.getUserId()));
 		return u.getUsername();
 	}
 }

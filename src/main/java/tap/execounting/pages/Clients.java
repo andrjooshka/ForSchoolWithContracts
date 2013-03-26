@@ -3,7 +3,6 @@ package tap.execounting.pages;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.tapestry5.Block;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Import;
@@ -12,6 +11,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.hibernate.Session;
 
@@ -22,6 +22,9 @@ import tap.execounting.dal.mediators.interfaces.PaymentMed;
 import tap.execounting.data.ClientState;
 import tap.execounting.data.ContractState;
 import tap.execounting.data.selectmodels.ContractTypeIdSelectModel;
+import tap.execounting.data.selectmodels.UserSelectModel;
+import tap.execounting.encoders.UserEncoder;
+import tap.execounting.entities.User;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.ContractType;
@@ -29,9 +32,9 @@ import tap.execounting.services.SuperCalendar;
 
 @Import(stylesheet = "context:css/filtertable.css")
 public class Clients {
-
-	@Inject
-	private Session session;
+    // Useful bits
+    @Inject
+    SelectModelFactory selectFactory;
 	@Component
 	private Zone gridZone;
 	@Component
@@ -48,8 +51,6 @@ public class Clients {
 	@Property
 	private SelectModel contractTypeIdsModel;
 
-	@Inject
-	private Block plannedPayments;
 
 	// Mediators
 	@Inject
@@ -88,6 +89,12 @@ public class Clients {
 	@Property
 	@Persist
 	private Integer contractTypeId;
+
+    @Property
+    @Persist
+    private Integer managerId;
+    @Property
+    private UserSelectModel selectManager;
 
 	// misc
 	// Client name
@@ -164,6 +171,7 @@ public class Clients {
 		boolean filterOnContractType = contractTypeId != null;
 		boolean filterOnPaymentsDate = pfEarlierDate != null
 				|| pfLaterDate != null;
+        boolean filterOnManager = managerId != null;
 
 		// Client filters
 		// First Contract Date filtration
@@ -173,6 +181,9 @@ public class Clients {
 		// Name Filtration
 		if (filterOnNames)
 			clientMed.retainByName(name);
+
+        if(filterOnManager)
+            clientMed.retainByManagerId(managerId);
 
 		// Stud status
 		if (filterOnState) { // OLDE CODE
@@ -224,10 +235,6 @@ public class Clients {
 		clientsCache = clients;
 		contractsCache = contractMed.getGroup();
 		clientMed.setGroup(clients);
-	}
-
-	public Block getFilter() {
-		return plannedPayments;
 	}
 
 	// aggregate fields
@@ -295,9 +302,9 @@ public class Clients {
 	void setupRender() {
 		// Call it to set up the cache.
 		dataInit();
-		@SuppressWarnings("unchecked")
-		List<ContractType> types = session.createCriteria(ContractType.class)
-				.list();
+		List<ContractType> types = contractMed.loadContractTypes();
 		contractTypeIdsModel = new ContractTypeIdSelectModel(types);
+        List<User> managers = dao.findWithNamedQuery(User.ALL);
+        selectManager = new UserSelectModel(managers);
 	}
 }

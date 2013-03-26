@@ -2,16 +2,12 @@ package tap.execounting.dal.mediators;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.ChainMap;
 import tap.execounting.dal.mediators.interfaces.DateFilter;
 import tap.execounting.dal.mediators.interfaces.PaymentMed;
@@ -118,7 +114,7 @@ public class PaymentMediator extends ProtoMediator<Payment> implements PaymentMe
 
     private void loadByContractId(int id) {
         cache = dao.findWithNamedQuery(Payment.BY_CONTRACT_ID,
-                ChainMap.with("contractId", id).yo());
+                ChainMap.with("contractId", id));
     }
 
     public PaymentMed retainByDatesEntry(Date date1, Date date2) {
@@ -137,7 +133,7 @@ public class PaymentMediator extends ProtoMediator<Payment> implements PaymentMe
         date1 = date1 == null ? new Date(0) : date1;
         date2 = date2 == null ? new Date(Long.MAX_VALUE) : date2;
         cache = dao.findWithNamedQuery(Payment.BY_DATES,
-                ChainMap.with("earlierDate", date1).n("laterDate", date2).yo());
+                ChainMap.w("earlierDate", date1).and("laterDate", date2));
     }
 
 

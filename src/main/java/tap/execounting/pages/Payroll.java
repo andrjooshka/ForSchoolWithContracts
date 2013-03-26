@@ -83,39 +83,13 @@ public class Payroll {
         return new Object[]{tM.getId(), dateOne, dateTwo, filtration};
     }
 
-    // CRUTCH alert. Simplified authorization.
     void authCheck() {
-        // If user is not artem, or vanya, or zhenia -- throw an exception
-        // User ids that is ok = [1,2,6,7]
-        int userId = auth.getLoggedUser().getId();
-
-        if (filtration)
-            switch (userId) {
-                case 1:
-                case 3:
-                case 2:
-                case 6:
-                case 7:
-                    return;
-                default:
-                    throw new IllegalAccessError("Please go back");
-            }
+        if (filtration && !auth.getLoggedUser().isTop())
+            throw new IllegalAccessError("Please go back");
     }
 
     boolean userIsAllowedToSeeEventsPrices() {
-        // If user is not artem, or vanya, or zhenia -- return false
-        // User ids that is ok = [1,2,6,7]
-        int userId = auth.getLoggedUser().getId();
-        switch (userId) {
-            case 1:
-            case 3:
-            case 2:
-            case 6:
-            case 7:
-                return true;
-            default:
-                return false;
-        }
+        return auth.getLoggedUser().isTop();
     }
 
     void setupRender() {

@@ -8,10 +8,13 @@ import org.apache.tapestry5.ioc.annotations.Contribute;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.services.ComponentRequestFilter;
 import org.apache.tapestry5.services.ComponentRequestHandler;
+import org.apache.tapestry5.services.ValueEncoderFactory;
 import org.apache.tapestry5.validator.ValidatorMacro;
 
 import tap.execounting.dal.HibernateModule;
 import tap.execounting.dal.mediators.MediatorModule;
+import tap.execounting.encoders.UserEncoder;
+import tap.execounting.entities.User;
 import tap.execounting.security.AuthenticationFilter;
 import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.security.DispatcherOne;
@@ -32,35 +35,39 @@ public class AppModule {
 		binder.bind(AuthorizationDispatcher.class, DispatcherOne.class);
 	}
 
+    public static void contributeApplicationDefaults(
+            MappedConfiguration<String, Object> configuration) {
+        configuration.add(SymbolConstants.SUPPORTED_LOCALES, "ru");
+        configuration.add(SymbolConstants.PRODUCTION_MODE, "false");
+        configuration.add(SymbolConstants.HMAC_PASSPHRASE, "fjads;lfkja;flkjqf;qlfkjqe;flkwjefw;lefkj");
+    }
+
+    public static void contributeClasspathAssetAliasManager(
+            MappedConfiguration<String, String> configuration) {
+        configuration.add("css", "assets/css");
+        configuration.add("js", "assets/js");
+    }
+
+    @Contribute(ComponentRequestHandler.class)
+    public static void contributeComponentRequestHandler(
+            OrderedConfiguration<ComponentRequestFilter> configuration) {
+        configuration.addInstance("RequiresLogin", AuthenticationFilter.class);
+    }
+
 	public static void contributeFactoryDefaults(
 			MappedConfiguration<String, Object> configuration) {
 		// configuration.override(SymbolConstants.APPLICATION_VERSION, "3.6");
 		configuration.override(SymbolConstants.DATEPICKER, "assets/");
 	}
 
-	public static void contributeApplicationDefaults(
-			MappedConfiguration<String, Object> configuration) {
-		configuration.add(SymbolConstants.SUPPORTED_LOCALES, "ru");
-		configuration.add(SymbolConstants.PRODUCTION_MODE, "false");
-		configuration.add(SymbolConstants.HMAC_PASSPHRASE, "fjads;lfkja;flkjqf;qlfkjqe;flkwjefw;lefkj");
-	}
-
-	public static void contributeClasspathAssetAliasManager(
-			MappedConfiguration<String, String> configuration) {
-		configuration.add("css", "assets/css");
-		configuration.add("js", "assets/js");
-	}
+    public static void contributeValueEncoderSource(MappedConfiguration<Class, ValueEncoderFactory> configuration){
+        configuration.overrideInstance(User.class, UserEncoder.class);
+    }
 
 	@Contribute(ValidatorMacro.class)
 	public static void combineValidators(
 			MappedConfiguration<String, String> configuration) {
 		configuration.add("username", "required, minlength=4, maxlength=15");
 		configuration.add("password", "required, minlength=8, maxlength=12");
-	}
-
-	@Contribute(ComponentRequestHandler.class)
-	public static void contributeComponentRequestHandler(
-			OrderedConfiguration<ComponentRequestFilter> configuration) {
-		configuration.addInstance("RequiresLogin", AuthenticationFilter.class);
 	}
 }

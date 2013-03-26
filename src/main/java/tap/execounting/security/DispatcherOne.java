@@ -27,9 +27,10 @@ public class DispatcherOne implements AuthorizationDispatcher {
 			Operation operation) {
 		String admin = User.ADMIN;
 		String manager = User.MANAGER;
+        String top = User.TOP;
 		String target = targetEntityType.getSimpleName();
 
-		if (group.equals(admin)) {
+		if (group.equals(admin) || group.equals(top)) {
 			return true;
 		}
 		if (group.equals(manager)) {

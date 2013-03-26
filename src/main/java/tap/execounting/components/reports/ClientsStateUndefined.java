@@ -60,21 +60,22 @@ public class ClientsStateUndefined {
 
 
     public List<Client> getUndefinedClients() {
-        List<Client> list = med.reset().retainByState(ClientState.inactive).sortByName().getGroup(true);
+        List<Client> list = med.reset().retainByState(ClientState.inactive).sortByLastEventDate().getGroup(true);
         return list;
     }
     public String getLastEventDate(){
         if (client.getContracts().size() == 0)
             return messages.get("no-contracts");
         Event lastEvent = null;
-        eventMed.retainByDatesEntry(DateService.fromNowPlusDays(-31),
-                DateService.fromNowPlusDays(1)).retainByClient(client);
         try {
-            lastEvent = eventMed.lastByDate();
+
+            lastEvent = eventMed.retainByDatesEntry(DateService.fromNowPlusDays(-31),
+                    DateService.fromNowPlusDays(1)).retainByClientId(client.getId()).lastByDate();
+            return DateService.toString("dd.MM.YY", lastEvent.getDate());
+
         } catch (IndexOutOfBoundsException e) {
-            return messages.get("no-events");
+            return messages.format("no-events", DateService.toString("d M Y",DateService.fromNowPlusDays(-31)));
         }
-        return DateService.toString("dd.MM.YY", lastEvent.getDate());
     }
 
     // Used to display the date of the latest event
@@ -86,13 +87,11 @@ public class ClientsStateUndefined {
         try {
             lastEvent = eventMed.lastByDate();
         } catch (IndexOutOfBoundsException e) {
-            return messages.get("no-events");
+            return messages.format("no-events", DateService.toString("d M Y",DateService.fromNowPlusDays(-31)));
         } finally {
             eventMed.reset();
         }
-        String result = DateService.formatDayMonthNameYear(lastEvent.getDate());
-        result += "\t" + lastEvent.getEventType().getTitle();
-        return result;
+        return lastEvent.getEventType().getTitle();
     }
 
     public String getComment() {

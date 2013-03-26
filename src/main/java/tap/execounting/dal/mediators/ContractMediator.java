@@ -312,7 +312,7 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
     private EventType loadWriteOffType() {
         String title = Const.WriteOffPrefix + " : " + unit.getBalance();
         EventType writeOff = dao.findUniqueWithNamedQuery(EventType.WITH_TITLE,
-                ChainMap.with("title", title).yo());
+                ChainMap.with("title", title));
         if (writeOff == null) {
             writeOff = new EventType();
             writeOff.setPrice(unit.getBalance());
@@ -367,7 +367,7 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
     private EventType loadMoneybackType(int schoolShare, int clientShare) {
         String title = Const.MoneybackPrefix + " : " + clientShare + "|" + schoolShare;
         EventType moneyback = dao.findUniqueWithNamedQuery(EventType.WITH_TITLE,
-                ChainMap.with("title", title).yo());
+                ChainMap.with("title", title));
         if (moneyback == null) {
             moneyback = new EventType();
             moneyback.setPrice(unit.getBalance());
@@ -528,7 +528,7 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
         getAppliedFilters().put("Client", c);
         if (cache == null)
             cache = dao.findWithNamedQuery(Contract.WITH_CLIENT,
-                    ChainMap.with("clientId", c.getId()).yo());
+                    ChainMap.with("clientId", c.getId()));
         else {
             List<Contract> cache = getGroup();
             Contract con;
@@ -547,7 +547,7 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
         getAppliedFilters().put("Teacher", t);
         if (cache == null)
             cache = dao.findWithNamedQuery(Contract.WITH_TEACHER,
-                    ChainMap.with("teacherId", t.getId()).yo());
+                    ChainMap.with("teacherId", t.getId()));
         else {
             List<Contract> cache = getGroup();
             for (int i = cache.size() - 1; i >= 0; i--)
@@ -617,7 +617,7 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
     }
 
     private void loadFrozen() {
-        cache = dao.findWithNamedQuery(Contract.FROZEN, ChainMap.with("now", new Date()).yo());
+        cache = dao.findWithNamedQuery(Contract.FROZEN, ChainMap.with("now", new Date()));
     }
 
     public ContractMed filterByState(ContractState state) {
@@ -626,9 +626,11 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
 
         // save current unit;
         Contract tempUnit = getUnit();
-        for (int i = cache.size() - 1; i >= 0; i--)
-            if (setUnit(cache.get(i)).getContractState() == state)
+        for (int i = cache.size() - 1; i >= 0; i--){
+            setUnit(cache.get(i));
+            if (getContractState() == state)
                 cache.remove(i);
+        }
 
         // restore unit
         setUnit(tempUnit);
@@ -749,5 +751,9 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
     public ContractMed sortByClientName() {
         Collections.sort(getGroup(), new ContractByClientNameComparator());
         return this;
+    }
+
+    public List<ContractType> loadContractTypes() {
+        return dao.findWithNamedQuery(ContractType.ALL);
     }
 }

@@ -1,29 +1,15 @@
 package tap.execounting.dal.mediators;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import tap.execounting.dal.ChainMap;
-import tap.execounting.dal.mediators.interfaces.ClientMed;
-import tap.execounting.dal.mediators.interfaces.ContractMed;
-import tap.execounting.dal.mediators.interfaces.DateFilter;
-import tap.execounting.dal.mediators.interfaces.PaymentMed;
+import tap.execounting.dal.mediators.interfaces.*;
 import tap.execounting.data.ClientState;
 import tap.execounting.data.ContractState;
-import tap.execounting.entities.Client;
-import tap.execounting.entities.Comment;
-import tap.execounting.entities.Contract;
-import tap.execounting.entities.ContractType;
-import tap.execounting.entities.Payment;
-import tap.execounting.entities.Teacher;
+import tap.execounting.entities.*;
 import tap.execounting.entities.interfaces.Dated;
 import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.Authenticator;
@@ -37,6 +23,8 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
 	private ContractMed contractMed;
 	@Inject
 	private PaymentMed paymentMed;
+    @Inject
+    private EventMed eventMed;
 	@Inject
 	private Authenticator authenticator;
 	@Inject
@@ -103,7 +91,7 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
 	public Comment getComment() {
 		// NEW VERSION
 		Comment c = dao.findUniqueWithNamedQuery(Comment.BY_CLIENT_ID,
-				ChainMap.with("id", unit.getId()).yo());
+				ChainMap.with("id", unit.getId()));
 		return c;
 	}
 
@@ -111,6 +99,19 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
         unit.setComment(comment);
         unit.setCommentDate(new Date());
         dao.update(unit);
+    }
+
+    public ClientMed retainByManagerId(int managerId) {
+        if(cacheIsNull())
+            loadByManagerId(managerId);
+        else for(int i = cache.size()-1;i>=0;i--)
+            if(cache.get(i).getManagerId()!=managerId)
+                cache.remove(i);
+        return this;
+    }
+
+    private void loadByManagerId(int managerId) {
+        cache = dao.findWithNamedQuery(Client.BY_MANAGER_ID, ChainMap.with("managerId",managerId));
     }
 
     public boolean hasContracts() {
@@ -556,10 +557,8 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
 
 		// GO
 		if (cache == null) {
-			cache = dao.findWithNamedQuery(
-                    Client.BY_NAME,
-                    ChainMap.with("name", '%' + name + '%')
-                            .yo());
+			cache = dao.findWithNamedQuery(Client.BY_NAME,
+                    ChainMap.with("name", '%' + name + '%'));
 			return this;
 		}
 		List<Client> cache = getGroup();
@@ -618,24 +617,28 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
 	}
 
     public ClientMed sortByName(){
-        Client t;
-        List<Client> cache = getGroup();
-        int i = 0, j,
-                len = cache.size(),
-                last = len - 1;
-        for (i = 0; i < len; i++)
-            for (j = last; j > i; j--)
-                if (cache.get(i).getName()
-                        .compareTo(cache.get(j).getName()) > 0) {
-                    t = cache.get(i);
-                    cache.set(i, cache.get(j));
-                    cache.set(j, t);
-                }
+        Collections.sort(cache, Client.NameComparator);
         return this;
     }
 
-    // retains only unique clients in the group
-    private void unique(){
-        cache = new ArrayList<Client>(new HashSet<Client>(cache));
+    public ClientMed sortByLastEventDate() {
+        List<Entry<Date, Client>> dateMap = new ArrayList();
+        List<Event> ecache = eventMed.retainByDatesEntry(DateService.fromNowPlusDays(-31),
+                DateService.fromNowPlusDays(1)).getGroup();
+        Date d;
+        for(Client c : cache){
+            try {
+                d = eventMed.setGroup(new ArrayList(ecache)).retainByClientId(c.getId()).lastByDate().getDate();
+                dateMap.add(new AbstractMap.SimpleEntry(d, c));
+            } catch (IndexOutOfBoundsException e) {
+                e.printStackTrace();
+                dateMap.add(new AbstractMap.SimpleEntry(new Date(0), c));
+            }}
+        Collections.sort(dateMap, new Comparator<Entry<Date, Client>>() {
+            public int compare(Entry<Date, Client> o1, Entry<Date, Client> o2) {return o2.getKey().compareTo(o1.getKey());}});
+        cache.clear();
+        for(Entry<Date,Client> entry : dateMap)
+            cache.add(entry.getValue());
+        return this;
     }
 }
