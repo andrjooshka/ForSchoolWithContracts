@@ -10,4 +10,7 @@ import geb.Page
 class CRUD extends Page {
     static url = "http://localhost:8080/bureau/crud"
     static at = { title.equals "Работа с БД" }
+    static content = {
+        nav { module NavigationModule }
+    }
 }

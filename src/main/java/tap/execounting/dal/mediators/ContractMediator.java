@@ -15,7 +15,6 @@ import org.hibernate.LazyInitializationException;
 import tap.execounting.dal.ChainMap;
 import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
-import tap.execounting.dal.mediators.interfaces.DateFilter;
 import tap.execounting.dal.mediators.interfaces.EventMed;
 import tap.execounting.dal.mediators.interfaces.PaymentMed;
 import tap.execounting.data.Const;
@@ -30,14 +29,14 @@ import tap.execounting.entities.Facility;
 import tap.execounting.entities.Payment;
 import tap.execounting.entities.Teacher;
 import tap.execounting.services.ContractByClientNameComparator;
-import tap.execounting.services.DateService;
+import tap.execounting.util.DateUtil;
 
+import static tap.execounting.util.DateUtil.floor;
+import static tap.execounting.util.DateUtil.retainByDatesEntry;
+import static tap.execounting.util.Trans.*;
 import static tap.execounting.data.ContractState.*;
 
 public class ContractMediator extends ProtoMediator<Contract> implements ContractMed {
-
-    @Inject
-    private DateFilter dateFilter;
 
     @Inject
     private EventMed eventMed;
@@ -232,13 +231,13 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
         doRemovePlannedEvents();
 
         int remain = getRemainingLessons();
-        Calendar date = DateService.getMoscowCalendar();
+        Calendar date = DateUtil.getMoscowCalendar();
 
         // From 18.12.12 we have date of first event for planning
         if (dateOfFirstEvent != null)
             date.setTime(dateOfFirstEvent);
         else
-            date.setTime(DateService.trimToDate(new Date()));
+            date.setTime(floor());
 
         int remain1 = remain;
         int count = 0;
@@ -246,7 +245,7 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
         while (remain > 0) {
             if (count == 9 && remain1 == remain)
                 break;
-            int dow = DateService.dayOfWeekRus(date.getTime());
+            int dow = DateUtil.dayOfWeekRus(date.getTime());
             if (unit.getSchedule().get(dow)) {
                 Event e = new Event();
                 e.getContracts().add(unit);
@@ -480,7 +479,7 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
     }
 
     public List<Client> getClients() {
-        return clientMed.contractsToClients(getGroup());
+        return contractsToClients(getGroup());
     }
 
     public List<Contract> getAllContracts() {
@@ -545,9 +544,8 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
 
     public ContractMed retainByTeacher(Teacher t) {
         getAppliedFilters().put("Teacher", t);
-        if (cache == null)
-            cache = dao.findWithNamedQuery(Contract.WITH_TEACHER,
-                    ChainMap.with("teacherId", t.getId()));
+        if (cacheIsNull())
+            loadByTeacherId(t.getId());
         else {
             List<Contract> cache = getGroup();
             for (int i = cache.size() - 1; i >= 0; i--)
@@ -555,6 +553,10 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
                     cache.remove(i);
         }
         return this;
+    }
+
+    private void loadByTeacherId(int id) {
+        cache = dao.findWithNamedQuery(Contract.WITH_TEACHER,ChainMap.with("teacherId", id));
     }
 
     /**
@@ -641,8 +643,7 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
         getAppliedFilters().put("Date1", date1);
         getAppliedFilters().put("Date2", date2);
 
-        List<Contract> cache = getGroup();
-        dateFilter.retainByDatesEntry(cache, date1, date2);
+        retainByDatesEntry(cache, date1, date2);
         return this;
     }
 
@@ -660,7 +661,7 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
         List<Contract> cache = getGroup();
         Contract con;
 
-        for (int i = cache.size() - 1; i >= 0; i--) {
+        for (int i = cache.size(); --i >= 0;) {
             con = cache.get(i);
             if (con.getContractTypeId() == type)
                 continue;
@@ -680,23 +681,19 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
         filterByState(ContractState.complete);
         filterByState(ContractState.frozen);
         filterByState(ContractState.canceled);
-        getAppliedFilters().put("RemainingLessons", remainingLessons);
+        pushCriteria("RemainingLessons", remainingLessons);
         List<Contract> cache = getGroup();
-        Contract con;
 
-        for (int i = cache.size() - 1; i >= 0; i--) {
-            con = cache.get(i);
-            if (con.getLessonsRemain() <= remainingLessons)
-                continue;
-            cache.remove(i);
-        }
+        for (int i = cache.size(); --i >= 0;)
+            if (cache.get(i).getLessonsRemain() > remainingLessons)
+                cache.remove(i);
         return this;
     }
 
     public ContractMed removeComlete() {
         getAppliedFilters().put("Complete", false);
         List<Contract> cache = getGroup();
-        for (int i = cache.size() - 1; i >= 0; i--)
+        for (int i = cache.size(); --i >= 0;)
             if (cache.get(i).isComplete())
                 cache.remove(i);
         return this;
@@ -744,7 +741,7 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
 
     // Sorting
     public ContractMed sortByDate(boolean ascending) {
-        DateService.sort(getGroup(), !ascending);
+        DateUtil.sort(getGroup(), !ascending);
         return this;
     }
 

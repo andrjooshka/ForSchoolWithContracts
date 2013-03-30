@@ -35,7 +35,7 @@ import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;
 import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.services.ContractByClientNameComparator;
-import tap.execounting.services.DateService;
+import tap.execounting.util.DateUtil;
 
 @Import(library = { "context:js/updateEffects.js", "context:js/jquery-1.8.3.min.js",
 		"context:js/magicalResizer.js" }, stylesheet = {
@@ -125,7 +125,7 @@ public class TeacherPage {
 	void onActivate(int teacherId) {
 		tMed.setUnit(dao.find(Teacher.class, teacherId));
 		if (date1 == null)
-			date1 = DateService.trimToMonth(new Date());
+			date1 = DateUtil.trimToMonth(new Date());
 	}
 
 	int onPassivate() {
@@ -134,7 +134,7 @@ public class TeacherPage {
 
 	void setup(Teacher context) {
 		tMed.setUnit(context);
-		date1 = DateService.trimToMonth(new Date());
+		date1 = DateUtil.trimToMonth(new Date());
 	}
 
 	void onActionFromScheduleEditLink() {
@@ -169,12 +169,12 @@ public class TeacherPage {
 	}
 
 	Object onActionFromEventsDateBackwardLink() {
-		setEventsDate(DateService.datePlusMonths(getEventsDate(), -1));
+		setEventsDate(DateUtil.datePlusMonths(getEventsDate(), -1));
 		return clientsZone;
 	}
 
 	Object onActionFromEventsDateForwardLink() {
-		setEventsDate(DateService.datePlusMonths(getEventsDate(), 1));
+		setEventsDate(DateUtil.datePlusMonths(getEventsDate(), 1));
 		return clientsZone;
 	}
 
@@ -193,7 +193,7 @@ public class TeacherPage {
 	// requests from page
 	public Date getEventsDate() {
 		if (eventsDate == null)
-			eventsDate = DateService.trimToMonth(new Date());
+			eventsDate = DateUtil.trimToMonth(new Date());
 		return eventsDate;
 	}
 
@@ -206,7 +206,7 @@ public class TeacherPage {
 	}
 
 	public String getMonthName() {
-		return DateService.monthName(getEventsDate());
+		return DateUtil.monthName(getEventsDate());
 	}
 
 	public List<Event> getShiftedLessons() {
@@ -259,8 +259,8 @@ public class TeacherPage {
 	public List<EventRowElement> getElements() {
 		List<EventRowElement> list = new ArrayList<EventRowElement>();
 
-		for (Date d : DateService.generateDaySet(getEventsDate(),
-				getRenderDays())) {
+		for (Date d : DateUtil.generateDaySet(getEventsDate(),
+                getRenderDays())) {
 			List<Event> events;
 			// Old version
 			// events = contract.getEvents(d);
@@ -282,7 +282,7 @@ public class TeacherPage {
 	}
 
 	private int getRenderDays() {
-		Calendar c = DateService.getMoscowCalendar();
+		Calendar c = DateUtil.getMoscowCalendar();
 		c.setTime(getEventsDate());
 		return c.getActualMaximum(Calendar.DAY_OF_MONTH);
 	}
@@ -290,14 +290,14 @@ public class TeacherPage {
 	// Get dates for calendar
 	public List<EventRowElement> getDates() {
 		List<EventRowElement> list = new ArrayList<EventRowElement>();
-		Date now = DateService.trimToDate(new Date());
+		Date now = DateUtil.floor();
 
 		// Generating date set. Magically.
-		for (Date d : DateService.generateDaySet(getEventsDate(),
-				getRenderDays())) {
+		for (Date d : DateUtil.generateDaySet(getEventsDate(),
+                getRenderDays())) {
 			Event e = new Event();
 			e.setDate(d);
-			int dow = DateService.dayOfWeekRus(d);
+			int dow = DateUtil.dayOfWeekRus(d);
 
 			// First do something with days that are today or later.
 			if (!d.before(now)) {
@@ -376,11 +376,11 @@ public class TeacherPage {
 	}
 
 	public String getPayrollDateOneS() {
-		return DateService.toString("dd.MM.yyyy", payrollDateOne);
+		return DateUtil.toString("dd.MM.yyyy", payrollDateOne);
 	}
 
 	public String getPayrollDateTwoS() {
-		return DateService.toString("dd.MM.yyyy", payrollDateTwo);
+		return DateUtil.toString("dd.MM.yyyy", payrollDateTwo);
 	}
 
 	public boolean hasShiftedLessons() {

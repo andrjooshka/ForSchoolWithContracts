@@ -1,8 +1,8 @@
 description = "execounting application"
 
 apply plugin: "war"
-apply plugin: "java"
 apply plugin: "groovy"
+apply plugin: "java"
 apply plugin: "jetty"
 apply plugin: "idea"
 
@@ -10,7 +10,7 @@ sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
 
 group = "tap"
-version = "4.8.8"
+version = "4.8.10"
 
 
 repositories {

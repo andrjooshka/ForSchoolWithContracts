@@ -24,7 +24,7 @@ import tap.execounting.entities.Contract;
 import tap.execounting.entities.ContractType;
 import tap.execounting.entities.Teacher;
 import tap.execounting.pages.ClientPage;
-import tap.execounting.services.DateService;
+import tap.execounting.util.DateUtil;
 
 @Import(stylesheet = {"context:css/datatable.css", "context:css/comments.css"}, library = { "context:js/jquery-1.8.3.min.js",
 "context:js/comments.js" })
@@ -103,7 +103,7 @@ public class ClientGridNCD {
 		Date d = unit.getFirstContractDate();
 		if (d == null)
 			return "договоров по данному клиенту нет в базе";
-		return DateService.toString("dd MMM YYYY", d);
+		return DateUtil.toString("dd MMM YYYY", d);
 	}
 
 	public List<Contract> getContracts() {
@@ -113,7 +113,7 @@ public class ClientGridNCD {
 	public String getContractInfo() {
 		StringBuilder sb = new StringBuilder();
 		Contract c = loopContract;
-		sb.append(DateService.toString("dd.MM.YYYY\t",c.getDate()));
+		sb.append(DateUtil.toString("dd.MM.YYYY\t", c.getDate()));
 		if (c.getContractTypeId() != ContractType.Standard)
 			sb.append(c.getContractType().getTitle() + ". ");
 

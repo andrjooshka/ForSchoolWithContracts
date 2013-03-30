@@ -4,6 +4,7 @@ import org.apache.tapestry5.beanvalidator.BeanValidatorModule
 import org.apache.tapestry5.hibernate.HibernateCoreModule
 import org.apache.tapestry5.ioc.annotations.SubModule
 import org.apache.tapestry5.services.TapestryModule
+import spock.lang.Specification
 import tap.execounting.services.AppModule
 
 /**
@@ -12,5 +13,5 @@ import tap.execounting.services.AppModule
  * Time: 2:43 PM
  */
 @SubModule([TapestryModule, BeanValidatorModule, HibernateCoreModule, HibernateModule, AppModule])
-class ContractMedSpec {
+class ContractMedSpec extends Specification {
 }

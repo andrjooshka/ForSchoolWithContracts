@@ -8,11 +8,11 @@ import spock.lang.Specification
 import tap.execounting.dal.mediators.PaymentMediator
 import tap.execounting.dal.mediators.interfaces.PaymentMed
 import tap.execounting.services.AppModule
-import tap.execounting.services.DateService
+import tap.execounting.util.DateUtil
 
 import javax.inject.Inject
 
-import static tap.execounting.util.Helper.*
+import static tap.execounting.testutil.Helper.*
 
 /**
  * User: truth0
@@ -49,6 +49,6 @@ class PaymentMedSpec extends Specification {
         when: "you count return from 10 payments with amount 1000"
         paymentMed.group = genPayments(10,10)
         then: "you get 10k return"
-        paymentMed.countReturn(DateService.fromNowPlusDays(-1), DateService.fromNowPlusDays(1)) == 10000
+        paymentMed.countReturn(DateUtil.fromNowPlusDays(-1), DateUtil.fromNowPlusDays(1)) == 10000
     }
 }

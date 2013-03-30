@@ -6,20 +6,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.tapestry5.ioc.annotations.Inject;
-
 import tap.execounting.dal.ChainMap;
-import tap.execounting.dal.mediators.interfaces.DateFilter;
 import tap.execounting.dal.mediators.interfaces.PaymentMed;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.entities.Payment;
-import tap.execounting.services.DateService;
+import tap.execounting.util.DateUtil;
+import tap.execounting.util.Trans;
+
+import static tap.execounting.util.Trans.clientsToPayments;
+import static tap.execounting.util.Trans.contractsToClients;
+import static tap.execounting.util.Trans.contractsToPayments;
 
 public class PaymentMediator extends ProtoMediator<Payment> implements PaymentMed {
-
-	@Inject
-	private DateFilter dateFilter;
 
     public PaymentMediator(){clazz=Payment.class;}
 
@@ -82,17 +81,12 @@ public class PaymentMediator extends ProtoMediator<Payment> implements PaymentMe
 	}
 
     public PaymentMed setGroupFromContracts(List<Contract> contracts) {
-        cache = new ArrayList<Payment>();
-        for (Contract c : contracts)
-            cache.addAll(c.getPayments());
+        cache = contractsToPayments(contracts);
         return this;
     }
 
     public PaymentMed setGroupFromClients(List<Client> clients){
-        cache = new ArrayList<>();
-        for(Client c : clients)
-            for(Contract con : c.getContracts())
-                cache.addAll(con.getPayments());
+        cache = clientsToPayments(clients);
         return this;
     }
 
@@ -121,7 +115,7 @@ public class PaymentMediator extends ProtoMediator<Payment> implements PaymentMe
 		if (cacheIsNull())
             loadByDatesEntry(date1, date2);
         else {
-            dateFilter.retainByDatesEntry(cache, date1, date2);
+            DateUtil.retainByDatesEntry(cache, date1, date2);
             pushCriteria("Date1", date1);
             pushCriteria("Date2", date2);
         }
@@ -161,45 +155,42 @@ public class PaymentMediator extends ProtoMediator<Payment> implements PaymentMe
 	}
 
 	public Integer countAmount() {
-		int summ = 0;
+		int sum = 0;
 		List<Payment> cache = getGroup();
 		for (Payment p : cache)
-			summ += p.getAmount();
-		return summ;
+			sum += p.getAmount();
+		return sum;
 	}
 
 	public int countRealPaymentsAmount() {
-		int summ = 0;
+		int sum = 0;
 		for (Payment p : getGroup())
 			if (!p.isScheduled())
-				summ += p.getAmount();
-		return summ;
+				sum += p.getAmount();
+		return sum;
 	}
 
 	public int countScheduledPaymentsAmount() {
-		int summ = 0;
+		int sum = 0;
 		for (Payment p : getGroup())
 			if (p.isScheduled())
-				summ += p.getAmount();
-		return summ;
+				sum += p.getAmount();
+		return sum;
 	}
 
 	public List<Contract> getContracts() {
 		Set<Contract> contractSet = new HashSet<Contract>();
 		for (Payment p : getGroup())
 			contractSet.add(p.getContract());
-		return new ArrayList<Contract>(contractSet);
+		return new ArrayList<>(contractSet);
 	}
 
     public List<Client> toClients() {
-        Set<Client> set = new HashSet<>();
-        for(Payment p : cache)
-            set.add(p.getContract().getClient());
-        return new ArrayList<>(set);
+        return Trans.paymentsToClients(cache);
     }
 
     public PaymentMed sortByDate(boolean descending) {
-        DateService.sort(getGroup(), descending);
+        DateUtil.sort(getGroup(), descending);
         return this;
     }
 

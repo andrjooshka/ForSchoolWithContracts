@@ -13,4 +13,11 @@ class Statistics extends Page {
         title.equals "Занятия"
         !$('body').text().contains('exception')
     }
+    static content = {
+        nav { module NavigationModule }
+        filterForm { $('#FilterForm') }
+        dateField1 { filterForm.find('#datefield') }
+        dateField2 { filterForm.find('#datefield_0')}
+        submit { filterForm.find('#submit_0') }
+    }
 }

@@ -46,9 +46,11 @@
 		<t:reports.ContractsExpiring pagerPosition="pagerPosition" rows="rows"/>
 	</div>
 
-	<!-- Clients which contract is ended -->
+	<!-- Clients whose contracts are ended -->
 	<div id="ended" style="margin-top:60px;" class="datatable">
-        <t:reports.ClientsStateUndefined pagerPosition="pagerPosition" rows="rows" />
+        <t:progressivedisplay>
+            <t:reports.ClientsStateUndefined pagerPosition="pagerPosition" rows="rows" />
+        </t:progressivedisplay>
 	</div>
 
 

@@ -49,7 +49,27 @@ import tap.execounting.entities.interfaces.Dated;
 		@NamedQuery(name = Event.BY_STATE, query = "from Event as e where e.state=:stateCode"),
 		@NamedQuery(name = Event.AFTER_DATE, query = "from Event as e where e.date >= :date"),
 		@NamedQuery(name = Event.BEFORE_DATE, query = "from Event as e where e.date <= :date"),
-		@NamedQuery(name = Event.BY_DATE_TEACHERID_TITLE, query = "from Event where date = :date and hostId = :teacherId") })
+		@NamedQuery(name = Event.BY_DATE_TEACHERID_TITLE, query = "from Event where date = :date and hostId = :teacherId"),
+        @NamedQuery(name = Event.BY_CLIENT_ID,
+                query = "SELECT e" +
+                        " FROM Event as e" +
+                        " INNER JOIN e.contracts as con" +
+                        " INNER JOIN con.client as ivan" +
+                        " WHERE ivan.id = :clientId"),
+        @NamedQuery(name = Event.BY_ID_AND_CLIENT_ID,
+                query = "SELECT e" +
+                        " FROM Event as e" +
+                        " INNER JOIN e.contracts as con" +
+                        " INNER JOIN con.client as ivan" +
+                        " WHERE e.id = :id" +
+                        " AND ivan.id = :clientId"),
+        @NamedQuery(name = Event.BY_CLIENT_ID_AND_DATES, query = "SELECT e" +
+                " FROM Event as e" +
+                " INNER JOIN e.contracts as con" +
+                " INNER JOIN con.client as ivan" +
+                " WHERE ivan.id = :clientId" +
+                " AND e.date >= :date1" +
+                " AND e.date <= :date2")})
 @Table(name = "events")
 public class Event implements Comparable<Event>, Dated {
 
@@ -65,12 +85,15 @@ public class Event implements Comparable<Event>, Dated {
 	public static final String AFTER_DATE = "Event.AfterDate";
 	public static final String BEFORE_DATE = "Event.BeforeDate";
 	public static final String BY_DATE_TEACHERID_TITLE = "Event.byDateAndTeacherIdAndTitle";
+    public static final String BY_CLIENT_ID = "Event.byClientId";
+    public static final String BY_CLIENT_ID_AND_DATES = "Event.byClientIdAndDates";
+    public static final String BY_ID_AND_CLIENT_ID = "Event.byIdAndClientId";
 
 	public static final byte FREE_FROM_SCHOOL = 1;
 	public static final byte FREE_FROM_TEACHER = 2;
 	public static final byte NOT_FREE = 0;
 
-	@Id
+    @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "event_id")
 	private int id;

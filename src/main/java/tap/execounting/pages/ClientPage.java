@@ -16,7 +16,7 @@ import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Contract;
 import tap.execounting.security.AuthorizationDispatcher;
-import tap.execounting.services.DateService;
+import tap.execounting.util.DateUtil;
 
 @Import(stylesheet="context:css/stattable.css")
 public class ClientPage {
@@ -95,7 +95,7 @@ public class ClientPage {
 			if (c.getDate().compareTo(d) < 0)
 				d = c.getDate();
 		}
-		return DateService.toString("dd MMM YY",d);
+		return DateUtil.toString("dd MMM YY", d);
 	}
 
 	public String getCurrentTeachersInfo() {

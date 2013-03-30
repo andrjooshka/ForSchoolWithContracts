@@ -6,8 +6,7 @@ import java.util.List;
 
 import org.apache.tapestry5.annotations.*;
 import tap.execounting.security.AuthorizationDispatcher;
-import tap.execounting.services.DateService;
-import tap.execounting.services.SuperCalendar;
+import tap.execounting.util.DateUtil;
 
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.corelib.components.Zone;
@@ -15,7 +14,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 
-import tap.execounting.components.Freezer;
 import tap.execounting.components.editors.AddContract;
 import tap.execounting.components.editors.AddEvent;
 import tap.execounting.components.editors.AddPayment;
@@ -28,7 +26,6 @@ import tap.execounting.entities.Contract;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.EventType;
 import tap.execounting.entities.Payment;
-import tap.execounting.entities.Teacher;
 
 @Import(stylesheet = "context:css/contract.css")
 public class ShowContract {
@@ -136,7 +133,7 @@ public class ShowContract {
 
     void onPrepareFromFreezeForm(){
         dateFreeze = new Date();
-        dateUnfreeze = DateService.datePlusMonths(dateFreeze,6);
+        dateUnfreeze = DateUtil.datePlusMonths(dateFreeze, 6);
     }
 
     void onSuccessFromFreezeForm(int contractId){
@@ -278,7 +275,7 @@ public class ShowContract {
 	public String getPaymentInfo() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("От: ");
-		sb.append(DateService.toString("dd MMM YYYY", loopPayment.getDate()));
+		sb.append(DateUtil.toString("dd MMM YYYY", loopPayment.getDate()));
 		sb.append(", Сумма: ");
 		sb.append(loopPayment.getAmount());
 		if (loopPayment.isScheduled())
@@ -293,7 +290,7 @@ public class ShowContract {
 		StringBuilder sb = new StringBuilder();
 		// sb.append("#" + loopEvent.getId() + " от: ");
 		try {
-			sb.append(DateService.toString("dd MMM YYYY", loopEvent.getDate()));
+			sb.append(DateUtil.toString("dd MMM YYYY", loopEvent.getDate()));
 		} catch (NullPointerException npe) {
 			sb.append("нет информации о дате");
 		}
@@ -310,7 +307,7 @@ public class ShowContract {
 	}
 
 	public String getContractDate() {
-		return DateService.toString("dd MMM YYYY", contract.getDate());
+		return DateUtil.toString("dd MMM YYYY", contract.getDate());
 	}
 
 	public String getFreezeLabel() {

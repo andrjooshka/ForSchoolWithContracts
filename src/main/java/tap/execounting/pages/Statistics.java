@@ -11,9 +11,7 @@ import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 
 import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.mediators.interfaces.EventMed;
@@ -24,7 +22,7 @@ import tap.execounting.data.selectmodels.TypeTitleSelectModel;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;
-import tap.execounting.services.DateService;
+import tap.execounting.util.DateUtil;
 
 @Import(library = "context:/js/updateEffects.js", stylesheet = {
 		"context:css/datatable.css", "context:css/filtertable.css",
@@ -94,7 +92,7 @@ public class Statistics {
 			return eventsCache.subList(0, eventsCache.size());
         eventMed.reset();
 
-        if(date2!=null)date2 = DateService.maxOutDayTime(date2);
+        if(date2!=null)date2 = DateUtil.maxOutDayTime(date2);
         eventMed.retainByDatesEntry(date1, date2);
         eventMed.retainByTeacherId(teacherId);
         if(state != null && state == 6) eventMed.retainPaidEvents();

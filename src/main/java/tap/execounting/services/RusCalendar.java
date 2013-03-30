@@ -13,7 +13,6 @@ public class RusCalendar implements SuperCalendar {
 	private int day = Calendar.DAY_OF_YEAR;
 	private int month = Calendar.MONTH;
 	private int dom = Calendar.DAY_OF_MONTH;
-	private int week = Calendar.WEEK_OF_YEAR;
 	private int dow = Calendar.DAY_OF_WEEK;
 	private int hour = Calendar.HOUR;
 	private int minute = Calendar.MINUTE;
@@ -61,7 +60,7 @@ public class RusCalendar implements SuperCalendar {
 		monthes.put(Calendar.OCTOBER, "Октябрь");
 		monthes.put(Calendar.NOVEMBER, "Ноябрь");
 		monthes.put(Calendar.DECEMBER, "Декабрь");
-		// monthes shorthands init
+		// months shorthands init
 		monthesShorthands = new HashMap<Integer, String>(12);
 		monthesShorthands.put(Calendar.JANUARY, "Янв");
 		monthesShorthands.put(Calendar.FEBRUARY, "Фев");
@@ -78,11 +77,6 @@ public class RusCalendar implements SuperCalendar {
 
 	}
 
-	// public RusCalendar(Date d){
-	// this();
-	// cal.setTime(d);
-	// }
-
 	public Date getTime() {
 		return cal.getTime();
 	}
@@ -92,60 +86,28 @@ public class RusCalendar implements SuperCalendar {
 		return this;
 	}
 
-	public TimeZone getTimeZone() {
-		return cal.getTimeZone();
-	}
-
-	public void setTimeZone(TimeZone timeZone) {
-		cal.setTimeZone(timeZone);
-	}
-
 	public int getYear() {
 		return cal.get(year);
-	}
-
-	public void setYear(int value) {
-		cal.set(year, value);
 	}
 
 	public int getDay() {
 		return cal.get(day);
 	}
 
-	public void setDay(int value) {
-		cal.set(day, value);
-	}
-
 	public int getMonth() {
 		return cal.get(month);
-	}
-
-	public void setMonth(int value) {
-		cal.set(month, value);
 	}
 
 	public int getDayOfMonth() {
 		return cal.get(dom);
 	}
 
-	public int getWeek() {
-		return cal.get(week);
-	}
-
 	public int getDayOfWeek() {
 		return cal.get(dow);
 	}
 
-	public int getHour() {
-		return cal.get(hour);
-	}
-
 	public void setHour(int value) {
 		cal.set(hour, value);
-	}
-
-	public int getMinute() {
-		return cal.get(minute);
 	}
 
 	public void setMinute(int value) {
@@ -178,66 +140,16 @@ public class RusCalendar implements SuperCalendar {
 		return daysOfWeek.get(getDayOfWeek());
 	}
 
-	public String getDayOfWeekName(int dayOfWeek) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public String getMonthName() {
 		return monthes.get(getMonth());
-	}
-
-	public String getMonthName(int month) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void setMonthNames(String[] names) {
-		if (names.length != 12)
-			throw new IllegalArgumentException(
-					"Please provide names for 12 monthes");
-		monthes = new HashMap<Integer, String>(12);
-		for (int i = 0; i < 12; i++) {
-			monthes.put(i, names[i]);
-		}
-	}
-
-	public String[] getMonthNames() {
-		return monthes.values().toArray(new String[12]);
-	}
-
-	public void setDayOfWeekNames(String[] names) {
-		if (names.length != 7)
-			throw new IllegalArgumentException(
-					"Please provide names for all 7 days");
-		daysOfWeek = new HashMap<Integer, String>(7);
-		for (int i = 0; i < 7; i++) {
-			daysOfWeek.put(i, names[i]);
-		}
-	}
-
-	public String[] getDayOfWeekNames() {
-		return daysOfWeek.values().toArray(new String[7]);
 	}
 
 	public void addDays(int days) {
 		cal.add(day, days);
 	}
 
-	public void addHours(int hours) {
-		cal.add(hour, hours);
-	}
-
-	public void addMinutes(int minutes) {
-		cal.add(minute, minutes);
-	}
-
 	public void incrementDay() {
 		cal.add(day, 1);
-	}
-
-	public void decrementDay() {
-		cal.add(day, -1);
 	}
 
 	public void maxHoursMinutes() {
@@ -285,26 +197,4 @@ public class RusCalendar implements SuperCalendar {
 		return sb.toString();
 	}
 
-	public String stringByTuple(String ... tuple) {
-		StringBuilder res = new StringBuilder();
-		for(int i=0;i<tuple.length;i++){
-			res.append(map(tuple[i]));
-			if(i<tuple.length-1) res.append(" ");
-		}
-		return res.toString();
-	}
-	
-	private String map(String element){
-		if(element=="month")
-			return getMonthName();
-		else if(element == "dayOfWeek")
-			return getDayOfWeekName();
-		else if(element == "dayOfMonth")
-			return getDayOfMonth() + "";
-		else if(element == "year")
-			return getYear() + "";
-		else if(element == "day")
-			return getDayOfMonth() + ""; 
-		else return "";
-	}
 }

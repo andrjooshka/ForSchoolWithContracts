@@ -4,7 +4,6 @@ import org.apache.tapestry5.ioc.ServiceBinder;
 
 import tap.execounting.dal.mediators.interfaces.ClientMed;
 import tap.execounting.dal.mediators.interfaces.ContractMed;
-import tap.execounting.dal.mediators.interfaces.DateFilter;
 import tap.execounting.dal.mediators.interfaces.EventMed;
 import tap.execounting.dal.mediators.interfaces.PaymentMed;
 import tap.execounting.dal.mediators.interfaces.TeacherMed;
@@ -14,7 +13,6 @@ import tap.execounting.dal.mediators.interfaces.TeacherMed;
 
 public class MediatorModule {
 	public static void bind(ServiceBinder binder) {
-		binder.bind(DateFilter.class, DateFilterImpl.class);
 		binder.bind(ContractMed.class, ContractMediator.class);
 		binder.bind(ClientMed.class, ClientMediator.class);
 		binder.bind(PaymentMed.class, PaymentMediator.class);

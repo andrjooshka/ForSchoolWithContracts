@@ -166,4 +166,6 @@ public interface EventMed {
     public EventMed retainByStateCode(Integer state);
 
     public EventMed retainByFacilityId(Integer facilityId);
+
+    public EventMed retainByClientIdAndDates(int id, Date date1, Date date2);
 }

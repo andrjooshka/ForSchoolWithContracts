@@ -25,8 +25,7 @@ import tap.execounting.entities.Contract;
 import tap.execounting.entities.ContractType;
 import tap.execounting.entities.EventType;
 import tap.execounting.entities.Teacher;
-import tap.execounting.services.DateService;
-import tap.execounting.services.SuperCalendar;
+import tap.execounting.util.DateUtil;
 
 @Import(stylesheet = "context:css/addContract.css")
 public class AddContract {
@@ -148,7 +147,7 @@ public class AddContract {
 	}
 
 	public String getConDate() {
-		return DateService.toString("dd MMM YYYY", con.getDate());
+		return DateUtil.toString("dd MMM YYYY", con.getDate());
 	}
 
 	void onValidateFromEditor() throws ValidationException {

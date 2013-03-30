@@ -7,12 +7,12 @@ import org.apache.tapestry5.services.TapestryModule
 import spock.lang.Specification
 import tap.execounting.dal.HibernateModule
 import tap.execounting.services.AppModule
-import tap.execounting.services.DateService
+import tap.execounting.util.DateUtil
 
 import static tap.execounting.data.ContractState.active
 import static tap.execounting.data.ContractState.canceled
 import static tap.execounting.data.ContractState.complete
-import static tap.execounting.util.Helper.*
+import static tap.execounting.testutil.Helper.*
 
 /**
  * User: truth0
@@ -30,24 +30,24 @@ class ContractSpec extends Specification {
 
         when: "date of freeze and unfreeze are set up and now is between them"
         c = new Contract(
-                dateFreeze: DateService.fromNowPlusDays(-10),
-                dateUnfreeze: DateService.fromNowPlusDays(10)
+                dateFreeze: DateUtil.fromNowPlusDays(-10),
+                dateUnfreeze: DateUtil.fromNowPlusDays(10)
                 )
         then: "contract is frozen"
         c.isFrozen()
 
         when: "date of freeze and unfreeze are ahead from now"
         c = new Contract(
-                dateFreeze: DateService.fromNowPlusDays(10),
-                dateUnfreeze: DateService.fromNowPlusDays(20)
+                dateFreeze: DateUtil.fromNowPlusDays(10),
+                dateUnfreeze: DateUtil.fromNowPlusDays(20)
         )
         then: "contract is not frozen"
         !c.isFrozen()
 
         when: "date of freeze and unfreeze are gone"
         c = new Contract(
-                dateFreeze: DateService.fromNowPlusDays(-20),
-                dateUnfreeze: DateService.fromNowPlusDays(-5)
+                dateFreeze: DateUtil.fromNowPlusDays(-20),
+                dateUnfreeze: DateUtil.fromNowPlusDays(-5)
         )
         then: "contract is not frozen"
         !c.isFrozen()

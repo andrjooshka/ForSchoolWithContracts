@@ -1,5 +1,6 @@
 package tap.execounting.pages;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -24,7 +25,10 @@ import tap.execounting.entities.EventType;
 import tap.execounting.entities.EventTypeAddition;
 import tap.execounting.entities.TeacherAddition;
 import tap.execounting.services.Authenticator;
-import tap.execounting.services.DateService;
+import tap.execounting.util.DateUtil;
+
+import static tap.execounting.util.DateUtil.ceil;
+import static tap.execounting.util.DateUtil.floor;
 
 /**
  * @author sharp.maestro@gmail.com
@@ -99,20 +103,20 @@ public class Payroll {
         addition = tM.getAddition();
     }
 
-    private Date toDate(String s) {
-        int day = Integer.valueOf(s.substring(0, 2));
-        int month = Integer.valueOf(s.substring(3, 5));
-        int year = Integer.valueOf(s.substring(6, 10));
-        GregorianCalendar c = new GregorianCalendar();
-        c.set(year, month - 1, day);
-        return DateService.trimToDate(c.getTime());
+    private Date toDate(String s) throws ParseException {
+        return DateUtil.parse("dd.MM.yyyy", s);
     }
 
     private void setDates(String oneS, String twoS) {
-        Date one = toDate(oneS);
-        Date two = toDate(twoS);
-        dateOne = one == null ? new Date() : one;
-        dateTwo = two == null ? new Date() : two;
+        try {
+            Date one = toDate(oneS);
+            Date two = toDate(twoS);
+            dateOne = one == null ? floor() : floor(one);
+            dateTwo = two == null ? ceil() : ceil(two);
+        } catch (ParseException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            throw new IllegalArgumentException("incorrect date input");
+        }
     }
 
     public boolean getFiltration() {

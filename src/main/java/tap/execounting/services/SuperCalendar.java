@@ -8,28 +8,19 @@ public interface SuperCalendar {
 	Date getTime();
 	SuperCalendar setTime(Date time);
 	
-	TimeZone getTimeZone();
-	void setTimeZone(TimeZone timeZone);
-
 	int getYear();
-	void setYear(int year);
 
 	int getDay();
-	void setDay(int day);
 
 	int getMonth();
-	void setMonth(int month);
 
 	int getDayOfMonth();
 
-	int getWeek();
 
 	int getDayOfWeek();
 	
-	int getHour();
 	void setHour(int value);
 	
-	int getMinute();
 	void setMinute(int minute);
 	
 	int rangeInDays(SuperCalendar sc);
@@ -39,23 +30,12 @@ public interface SuperCalendar {
 	void minHoursMinutes();
 	
 	String getDayOfWeekName();
-	String getDayOfWeekName(int dayOfWeek);
-	
+
 	String getMonthName();
-	String getMonthName(int month);
-	
-	void setMonthNames(String[] names);
-	String[] getMonthNames();
-	
-	void setDayOfWeekNames(String[] names);
-	String[] getDayOfWeekNames();
-	
+
 	void addDays(int days);
-	void addHours(int hours);
-	void addMinutes(int minutes);
 	void incrementDay();
-	void decrementDay();
-	
+
 	boolean before(SuperCalendar sc);
 	boolean after(SuperCalendar sc);
 	boolean equals(SuperCalendar sc);
@@ -63,6 +43,5 @@ public interface SuperCalendar {
 
 	SuperCalendar clone();
 	String dateString();
-	String stringByTuple(String ... tuple);
 	String toString();
 }

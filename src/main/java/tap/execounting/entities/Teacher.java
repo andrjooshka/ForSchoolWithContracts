@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 import org.apache.tapestry5.beaneditor.NonVisual;
 
 import tap.execounting.entities.interfaces.Deletable;
-import tap.execounting.services.DateService;
+import tap.execounting.util.DateUtil;
 
 @Entity
 @NamedQueries({
@@ -188,6 +188,6 @@ public class Teacher implements Deletable {
 	public boolean onProbation() {
 		if (probationEndDate == null)
 			return true;
-		return !DateService.trimToDate(new Date()).after(probationEndDate);
+		return !DateUtil.floor().after(probationEndDate);
 	}
 }

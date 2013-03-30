@@ -4,8 +4,6 @@ import java.util.Date;
 
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.annotations.Component;
-import org.apache.tapestry5.annotations.Parameter;
-import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.internal.util.CaptureResultCallback;
@@ -13,7 +11,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 
 import tap.execounting.dal.mediators.interfaces.ContractMed;
-import tap.execounting.services.DateService;
+import tap.execounting.util.DateUtil;
 
 public class Freezer {
 	// Bits
@@ -40,7 +38,7 @@ public class Freezer {
 	
 	void onPrepare(){
 		dateFreeze = new Date();
-		dateUnfreeze = DateService.datePlusMonths(dateFreeze, 6);
+		dateUnfreeze = DateUtil.datePlusMonths(dateFreeze, 6);
 	}
 	
 	public void activate( int contractId){

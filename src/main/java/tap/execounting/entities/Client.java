@@ -10,7 +10,7 @@ import org.apache.tapestry5.beaneditor.NonVisual;
 import tap.execounting.data.ContractState;
 import tap.execounting.entities.interfaces.Dated;
 import tap.execounting.entities.interfaces.Deletable;
-import tap.execounting.services.DateService;
+import tap.execounting.util.DateUtil;
 
 /**
  * This class does support interface tap.execounting.util.entities.interfaces.Deletable, since it is
@@ -198,7 +198,7 @@ public class Client implements Dated, Deletable {
 		List<Payment> payments = new ArrayList<Payment>();
 		for (Contract c : getContracts())
 			for (Payment p : c.getPlannedPayments())
-				if (p.getDate().before(DateService.fromNowPlusDays(15)))
+				if (p.getDate().before(DateUtil.fromNowPlusDays(15)))
 					payments.add(p);
 		return payments;
 	}
@@ -227,7 +227,6 @@ public class Client implements Dated, Deletable {
 		return d == null ? new Date() : d;
 	}
 
-    @Override
     public boolean isBetweenDates(Date one, Date two) {
         return !getDate().before(one) && getDate().before(two);
     }

@@ -111,7 +111,7 @@ public class AddClient {
 		else
 			dao.create(client);
 		
-		// CRUTCH alert. I don't know, how to else I could perform a page reload.
+		// CRUTCH alert. I don't know, any other way I could perform a page reload.
 		// There should be a way, but not today.
 		return CRUD.class;
 	}

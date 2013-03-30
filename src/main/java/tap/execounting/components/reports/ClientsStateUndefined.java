@@ -14,7 +14,7 @@ import tap.execounting.data.ClientState;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Comment;
 import tap.execounting.entities.Event;
-import tap.execounting.services.DateService;
+import tap.execounting.util.DateUtil;
 
 import java.util.Date;
 import java.util.List;
@@ -69,12 +69,13 @@ public class ClientsStateUndefined {
         Event lastEvent = null;
         try {
 
-            lastEvent = eventMed.retainByDatesEntry(DateService.fromNowPlusDays(-31),
-                    DateService.fromNowPlusDays(1)).retainByClientId(client.getId()).lastByDate();
-            return DateService.toString("dd.MM.YY", lastEvent.getDate());
+            lastEvent = eventMed.retainByClientIdAndDates(client.getId(),
+                    DateUtil.fromNowPlusDays(-31),
+                    DateUtil.fromNowPlusDays(1)).lastByDate();
+            return DateUtil.toString("dd.MM.YY", lastEvent.getDate());
 
         } catch (IndexOutOfBoundsException e) {
-            return messages.format("no-events", DateService.toString("d M Y",DateService.fromNowPlusDays(-31)));
+            return messages.format("no-events", DateUtil.toString("d M Y", DateUtil.fromNowPlusDays(-31)));
         }
     }
 
@@ -87,7 +88,7 @@ public class ClientsStateUndefined {
         try {
             lastEvent = eventMed.lastByDate();
         } catch (IndexOutOfBoundsException e) {
-            return messages.format("no-events", DateService.toString("d M Y",DateService.fromNowPlusDays(-31)));
+            return messages.format("no-events", DateUtil.toString("d M Y", DateUtil.fromNowPlusDays(-31)));
         } finally {
             eventMed.reset();
         }

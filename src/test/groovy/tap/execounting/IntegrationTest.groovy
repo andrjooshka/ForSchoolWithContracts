@@ -15,7 +15,6 @@ import tap.execounting.gebpages.TeacherPage
 import tap.execounting.gebpages.Teachers
 
 class IntegrationTest extends GebSpec{
-
     def "simple navigation using links"(){
         when: "user goes to signin page"
         to Signin
@@ -69,6 +68,8 @@ class IntegrationTest extends GebSpec{
         then: "it loads"
         at Settings
     }
+
+    @Ignore
     def "every page is accessible and navigation is ok"() {
         when: "user goes to signin page"
         to Signin
@@ -98,6 +99,7 @@ class IntegrationTest extends GebSpec{
         then: "he is on reports page"
         at Reports
     }
+
     def "every teacher page is accessible"(){
         when: "user goes to signin page"
         to Signin
@@ -134,8 +136,19 @@ class IntegrationTest extends GebSpec{
         }
     }
 
-//    def "statistics page could be clicked and updated"(){
-//
-//    }
+    def "statistics page could be clicked and updated"(){
+        to Signin
+        username << 'ivan'
+        password << 'DraGmar91'
+        loginButton.click()
+        to Statistics
+
+        when: "user on statistics page"
+        dateField1 << '01.01.2013'
+        dateField2 << '30.03.2013'
+        submit.click()
+        then:
+        at Statistics
+    }
     // Assert that payroll is working for everybody
 }

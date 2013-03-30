@@ -27,9 +27,11 @@ import org.apache.tapestry5.beaneditor.NonVisual;
 import tap.execounting.data.ContractState;
 import tap.execounting.data.EventState;
 import tap.execounting.entities.interfaces.Dated;
-import tap.execounting.services.DateService;
+import tap.execounting.util.DateUtil;
 import tap.execounting.services.RusCalendar;
 import tap.execounting.services.SuperCalendar;
+
+import static tap.execounting.util.DateUtil.floor;
 
 /**
  * This class does not support interface tap.execounting.util.entities.interfaces.Deletable, since
@@ -136,7 +138,7 @@ public class Contract implements Comparable<Contract>, Dated {
 	private WeekSchedule schedule;
 
 	public Contract() {
-		setDate(DateService.trimToDate(new Date()));
+		setDate(floor(new Date()));
 		setContractTypeId(1);
 	}
 
@@ -416,15 +418,6 @@ public class Contract implements Comparable<Contract>, Dated {
 			if (e.getState() == EventState.planned)
 				events.add(e);
 		return events;
-	}
-
-	public List<Event> getEvents(Date d) {
-		List<Event> res = new ArrayList<Event>();
-		d = DateService.trimToDate(d);
-		for (Event e : getEvents())
-			if (DateService.trimToDate(e.getDate()).equals(d))
-				res.add(e);
-		return res;
 	}
 
 	// Money and Payments

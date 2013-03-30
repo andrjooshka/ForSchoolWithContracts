@@ -19,8 +19,7 @@ import tap.execounting.entities.Client;
 import tap.execounting.entities.Comment;
 import tap.execounting.entities.Payment;
 import tap.execounting.security.AuthorizationDispatcher;
-import tap.execounting.services.DateService;
-import tap.execounting.services.SuperCalendar;
+import tap.execounting.util.DateUtil;
 
 import java.util.*;
 
@@ -97,7 +96,7 @@ public class ClientsSoonPayments {
 
     public String getPaymentInfo() {
         StringBuilder builder = new StringBuilder();
-        builder.append(DateService.toString("dd MMM", loopPayment.getDate()) + ": ");
+        builder.append(DateUtil.toString("dd MMM", loopPayment.getDate()) + ": ");
         builder.append(loopPayment.getAmount());
         builder.append(" р. за '"
                 + loopPayment.getContract().getEventType().getTitle() + "'.");

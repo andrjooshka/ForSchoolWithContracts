@@ -10,4 +10,7 @@ import geb.Page
 class Schedules extends Page {
     static url = "http://localhost:8080/bureau/schedules"
     static at = { title.equals "Расписания" }
+    static content = {
+        nav { module NavigationModule }
+    }
 }
