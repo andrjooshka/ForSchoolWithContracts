@@ -185,13 +185,13 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
         return this;
     }
 
-    public boolean becameTrial(Date date1, Date date2) {
-        contractMed.setGroup(getContracts()).retainByDates(null, date2);
-        int countBeforeDate2 = contractMed.countGroupSize();
+    public boolean becameTrial(Date lowerBound, Date upperBound) {
+        contractMed.setGroup(getContracts()).retainByDates(null, upperBound);
+        int countBeforeDate2 = contractMed.countTrial();
         // That means that he did not have contracts in that period at all
         if (countBeforeDate2 < 1)
             return false;
-        contractMed.retainByDates(null, date1);
+        contractMed.retainByDates(null, lowerBound);
         int countBeforeDate1 = contractMed.countGroupSize();
         // If he already has contracts before date1 -- he already tried
         // something

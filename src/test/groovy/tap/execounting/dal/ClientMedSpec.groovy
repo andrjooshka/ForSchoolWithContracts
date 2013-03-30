@@ -39,6 +39,31 @@ class ClientMedSpec extends Specification {
         med.setGroup genGuys()
     }
 
+    def "became trials"(){
+        med.setGroup genTrialsNovicesContinuers()
+        Date date1, date2
+        when: 'user wants those clients who became trials from 60 to 35 days ago'
+        date1 = fromNowPlusDays(-60,false); date2 = fromNowPlusDays(-35, true);
+        med.becameTrials date1, date2
+        med.group.each {println it.name}
+        then: 'there will be only those folks who have TRIAL contract in that ' +
+                'date range. Those are: Lisa, Scott and Meg.'
+        med.group.size().equals 3
+        ['Lisa', 'Scott', 'Meg'].containsAll med.group.collect {it.name}
+    }
+
+    def 'became novices'(){
+        med.setGroup genTrialsNovicesContinuers()
+        Date date1, date2
+        when: 'user want to see only those clients who became novices from 40 to 10 days ago'
+        date1 = fromNowPlusDays(-40,false); date2 = fromNowPlusDays(-10,true);
+        med.becameNovices date1, date2
+        then: 'there will be only those who have FIRST STANDARD contract in that ' +
+                'period. Those are: Scott and Mike.'
+        med.group.collect {it.name}.containsAll(['Scott', 'Mike'])
+        med.group.size().equals 2
+    }
+
     def "retain clients who have scheduled payments within 14 days"() {
         when:
         med.retainBySoonPayments(14)

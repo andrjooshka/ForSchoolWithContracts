@@ -15,9 +15,11 @@ import tap.execounting.entities.TeacherAddition
 import tap.execounting.entities.User
 import tap.execounting.entities.WeekSchedule
 
+import static tap.execounting.entities.ContractType.*
 import static tap.execounting.entities.ContractType.Standard
 import static tap.execounting.data.EventState.complete
 import static tap.execounting.data.EventState.planned
+import static tap.execounting.entities.ContractType.Trial
 import static tap.execounting.util.DateUtil.*
 
 /**
@@ -190,5 +192,100 @@ class Helper {
                         scheduled: false)]
 
         [glen, mark, greg, jack]
+    }
+
+    static List<Client> genTrialsNovicesContinuers(){
+        // TRIAL clients
+        Client lisa = new Client(name: 'Lisa')
+        lisa.contracts << new Contract(
+                date: fromNowPlusDays(-60,false),
+                contractTypeId: Trial,
+                lessonsNumber: 1,
+                events: [genEvent(true)])
+        lisa.contracts << new Contract(
+                date: fromNowPlusDays(-40,false),
+                contractTypeId: Trial,
+                lessonsNumber: 1,
+                events: genEvents(1,1))
+
+        Client tyson = new Client(name: 'Tyson')
+        tyson.contracts << new Contract(
+                date: fromNowPlusDays(-30, false),
+                contractTypeId: Trial,
+                lessonsNumber: 1,
+                events: genEvents(1,1))
+        tyson.contracts << new Contract(
+                date: fromNowPlusDays(-10,false),
+                contractTypeId: Trial,
+                lessonsNumber: 1,
+                events: genEvents(1,1))
+
+        // NOVICE clients
+        Client scott = new Client(name: 'Scott')
+        scott.contracts << new Contract(
+                date: fromNowPlusDays(-40,false),
+                contractTypeId: Trial,
+                lessonsNumber: 2,
+                events: genEvents(2,2))
+        scott.contracts << new Contract(
+                date: fromNowPlusDays(-30,false),
+                contractTypeId: Standard,
+                lessonsNumber: 10,
+                events: genEvents(10,5))
+
+        Client mike = new Client(name: 'Mike')
+        mike.contracts << new Contract(
+                date: fromNowPlusDays(-20),
+                contractTypeId: Trial,
+                lessonsNumber: 1,
+                events: genEvents(1,1))
+        mike.contracts << new Contract(
+                date: fromNowPlusDays(-15),
+                contractTypeId: Standard,
+                lessonsNumber: 10,
+                events: genEvents(10,10))
+
+        // CONTINUER clients
+
+        Client meg = new Client(name: 'Meg')
+        meg.contracts << new Contract(
+                date: fromNowPlusDays(-40),
+                contractTypeId: Trial,
+                lessonsNumber: 2,
+                events: genEvents(2,2))
+        meg.contracts << new Contract(
+                date: fromNowPlusDays(-38),
+                contractTypeId: Standard,
+                lessonsNumber: 10,
+                events: genEvents(10,10))
+        meg.contracts << new Contract(
+                date: fromNowPlusDays(-20),
+                contractTypeId: Standard,
+                lessonsNumber: 10,
+                events: genEvents(10,10))
+        meg.contracts << new Contract(
+                date: fromNowPlusDays(-11),
+                contractTypeId: Standard,
+                lessonsNumber: 10,
+                events: genEvents(10,8))
+
+        Client mick = new Client(name: 'Mick')
+        mick.contracts << new Contract(
+                date: fromNowPlusDays(-50),
+                contractTypeId: Standard,
+                lessonsNumber: 5,
+                events: genEvents(5,5))
+        mick.contracts << new Contract(
+                date: fromNowPlusDays(-40),
+                contractTypeId: Standard,
+                lessonsNumber: 15,
+                events: genEvents(15,15))
+        mick.contracts << new Contract(
+                date: fromNowPlusDays(-20),
+                contractTypeId: Standard,
+                lessonsNumber: 8,
+                events: genEvents(8,7))
+
+        [lisa, tyson, scott, mike, meg, mick]
     }
 }

@@ -35,4 +35,12 @@ class EventMedSpec extends Specification{
         println "sort by date\namount of events: $len"
         (1..(len-1)).every { !med.group[it-1].date.before(med.group[it].date) }
     }
+
+    def 'count school money'(){
+
+    }
+
+    def 'count teacher money'(){
+
+    }
 }

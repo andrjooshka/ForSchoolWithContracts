@@ -77,12 +77,27 @@ public interface ClientMed {
      * These are the people who have acquired queried status in given period
      * Following filters, also tune their contracts, to remove those contracts
      * that are not relevant to their state.
+     * So continuers will have only second and further contracts, which also will be filtered by date.
      * @param date1
      * @param date2
      * @return
      */
 	public ClientMed becameContinuers(Date date1, Date date2);
+
+    /**
+     * Novices will have only first standard contract
+     * @param date1
+     * @param date2
+     * @return
+     */
 	public ClientMed becameNovices(Date date1, Date date2);
+
+    /**
+     * Trials will have only trial contracts
+     * @param sa1
+     * @param sa2
+     * @return
+     */
 	public ClientMed becameTrials(Date sa1, Date sa2);
 
     /**

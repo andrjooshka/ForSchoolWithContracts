@@ -753,4 +753,13 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
     public List<ContractType> loadContractTypes() {
         return dao.findWithNamedQuery(ContractType.ALL);
     }
+
+    public int countTrial() {
+        getGroup();
+        int sum = 0;
+        for(Contract c : cache)
+            if (c.isTrial())
+                sum++;
+        return sum;
+    }
 }

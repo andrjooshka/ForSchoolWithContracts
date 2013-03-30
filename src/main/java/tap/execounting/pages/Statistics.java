@@ -24,6 +24,8 @@ import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;
 import tap.execounting.util.DateUtil;
 
+import static tap.execounting.util.DateUtil.*;
+
 @Import(library = "context:/js/updateEffects.js", stylesheet = {
 		"context:css/datatable.css", "context:css/filtertable.css",
 		"context:css/stattable.css" })
@@ -32,8 +34,6 @@ public class Statistics {
 	// Code Helpers
 	@Inject
 	private CRUDServiceDAO dao;
-	@Inject
-	private Session session;
 	@Inject
 	private Request request;
 	@Inject
@@ -72,7 +72,7 @@ public class Statistics {
 	private Integer roomId;
 	@Property
 	@Persist
-    // IF Event type equals 6 - than it is paid
+    // IF Event state equals 6 - than it is paid
 	private Integer state;
 	@Property
 	@Persist
@@ -86,13 +86,12 @@ public class Statistics {
 
 	private List<Event> eventsCache;
 
-	@SuppressWarnings("unchecked")
 	public List<Event> getEvents() {
 		if (eventsCache != null)
 			return eventsCache.subList(0, eventsCache.size());
         eventMed.reset();
 
-        if(date2!=null)date2 = DateUtil.maxOutDayTime(date2);
+        if(date2!=null) ceil(date2);
         eventMed.retainByDatesEntry(date1, date2);
         eventMed.retainByTeacherId(teacherId);
         if(state != null && state == 6) eventMed.retainPaidEvents();
@@ -124,7 +123,6 @@ public class Statistics {
 	}
 
 	Object onValueChangedFromFacilityId(Integer facId) {
-		System.out.println("\n\nInside on value changed\nfacId");
 		facilityId = facId;
 		roomSelect = facilityId == null ? new RoomSelectModel(null)
 				: new RoomSelectModel(dao.find(Facility.class, facilityId));

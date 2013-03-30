@@ -564,4 +564,8 @@ public class Contract implements Comparable<Contract>, Dated {
 	public void setDateUnfreeze(Date unfreezed) {
 		dateUnfreeze = unfreezed;
 	}
+
+    public boolean isTrial() {
+        return contractTypeId==ContractType.Trial;
+    }
 }
