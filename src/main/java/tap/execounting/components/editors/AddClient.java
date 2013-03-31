@@ -19,6 +19,7 @@ import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.ChainMap;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.User;
+import tap.execounting.models.selectmodels.UserSelectModel;
 import tap.execounting.pages.CRUD;
 import tap.execounting.services.Authenticator;
 
@@ -51,11 +52,9 @@ public class AddClient {
     private ComponentResources resources;
     @Property
     private SelectModel selectModel;
-    @Inject
-    SelectModelFactory selectModelFactory;
 
     @Property
-    private BeanModel model;
+    private BeanModel<Client> model;
 
 	public void setup(Client c) {
 		updateMode = true;
@@ -69,11 +68,12 @@ public class AddClient {
 
     public void setupRender(){
         List<User> users = dao.findWithNamedQuery(User.ALL);
-        selectModel = selectModelFactory.create(users,"fullname");
+        selectModel = new UserSelectModel(users);
         model = source.createDisplayModel(Client.class, resources.getMessages());
-        model.exclude("id", "return","balance","date","firstPlannedPaymentDate","firstContractDate","managerName");
+        model.exclude("id", "return","balance","date","firstPlannedPaymentDate",
+                "firstContractDate","managerName","managerId");
         if(authenticator.getLoggedUser().isTop())
-            model.include("manager");
+            model.add("managerId");
     }
 
 	// Submit handling

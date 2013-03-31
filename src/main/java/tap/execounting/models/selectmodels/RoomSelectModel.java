@@ -1,4 +1,4 @@
-package tap.execounting.data.selectmodels;
+package tap.execounting.models.selectmodels;
 
 import java.util.ArrayList;
 import java.util.Arrays;

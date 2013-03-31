@@ -11,7 +11,7 @@ import static tap.execounting.util.DateUtil.fromNowPlusDays
  */
 class ClientSpec extends Specification{
     
-    def "get date returns date of the first contract"(){
+    def 'get date returns date of the first contract'(){
         def date1 = fromNowPlusDays(-20)
         def date2 = fromNowPlusDays(-30)
         def date3 = fromNowPlusDays(-50)
@@ -32,4 +32,5 @@ class ClientSpec extends Specification{
         then: 'we still have date3'
         date.equals date3
     }
+
 }

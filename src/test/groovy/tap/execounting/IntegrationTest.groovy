@@ -150,5 +150,12 @@ class IntegrationTest extends GebSpec{
         then:
         at Statistics
     }
-    // Assert that payroll is working for everybody
+
+    def 'clients page could be clicked and updated'(){
+
+    }
+
+    def 'CRUD sections are accessible, and you could create anything'(){
+
+    }
 }

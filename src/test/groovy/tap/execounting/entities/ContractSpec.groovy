@@ -12,6 +12,7 @@ import tap.execounting.util.DateUtil
 import static tap.execounting.data.ContractState.active
 import static tap.execounting.data.ContractState.canceled
 import static tap.execounting.data.ContractState.complete
+import static tap.execounting.entities.ContractType.Trial
 import static tap.execounting.testutil.Helper.*
 
 /**
@@ -22,60 +23,64 @@ import static tap.execounting.testutil.Helper.*
 @SubModule([TapestryModule, BeanValidatorModule, HibernateCoreModule, HibernateModule, AppModule])
 class ContractSpec extends Specification {
     def "frozen state of a contract is calculated correctly" (){
-        Contract c
+        Contract con
         when: "date of freeze and unfreeze are null"
-        c = new Contract()
+        con = new Contract()
         then: "contract is not frozen"
-        !c.isFrozen()
+        con.frozen
 
         when: "date of freeze and unfreeze are set up and now is between them"
-        c = new Contract(
+        con = new Contract(
                 dateFreeze: DateUtil.fromNowPlusDays(-10),
-                dateUnfreeze: DateUtil.fromNowPlusDays(10)
-                )
+                dateUnfreeze: DateUtil.fromNowPlusDays(10))
         then: "contract is frozen"
-        c.isFrozen()
+        con.isFrozen()
 
         when: "date of freeze and unfreeze are ahead from now"
-        c = new Contract(
+        con = new Contract(
                 dateFreeze: DateUtil.fromNowPlusDays(10),
-                dateUnfreeze: DateUtil.fromNowPlusDays(20)
-        )
+                dateUnfreeze: DateUtil.fromNowPlusDays(20))
         then: "contract is not frozen"
-        !c.isFrozen()
+        !con.isFrozen()
 
         when: "date of freeze and unfreeze are gone"
-        c = new Contract(
+        con = new Contract(
                 dateFreeze: DateUtil.fromNowPlusDays(-20),
-                dateUnfreeze: DateUtil.fromNowPlusDays(-5)
-        )
+                dateUnfreeze: DateUtil.fromNowPlusDays(-5))
         then: "contract is not frozen"
-        !c.isFrozen()
+        !con.isFrozen()
     }
 
     def "completed state of a contract is computed correctly"(){
-        Contract c
+        Contract contract
         when: "contract have X (10) lessons, and X - 1 (9) are completed"
-        c = genContract(10,9)
+        contract = genContract(10,9)
         then: "contract is active"
-        c.getState() == active
+        contract.state.equals active
 
         when: "contract have 10 lessons, and 10 are completed"
-        c = genContract(10,10)
+        contract = genContract(10,10)
         then: "contract is completed"
-        c.state == complete
+        contract.state.equals complete
 
         when: "contract is completed and canceled"
-        c = genContract(10,10)
-        c.canceled = true
+        contract = genContract(10,10)
+        contract.canceled = true
         then: "contract is canceled"
-        c.state == canceled
+        contract.equals canceled
 
         when: "contract is not completed and canceled"
-        c = genContract()
-        assert c.state == active
-        c.canceled = true
-        then:
-        c.state == canceled
+        contract = genContract()
+        assert contract.state == active
+        contract.canceled = true
+        then: 'he is still canceled'
+        contract.state.equals canceled
+
+        when: 'contract type is trial and contract is complete by lessons'
+        contract = genContract(1,1)
+        contract.contractTypeId = Trial
+        then: 'it is complete and state equals complete'
+        contract.isComplete()
+        contract.state.equals complete
     }
 }

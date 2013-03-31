@@ -26,7 +26,7 @@ import tap.execounting.dal.mediators.interfaces.TeacherMed;
 import tap.execounting.data.ContractState;
 import tap.execounting.data.EventRowElement;
 import tap.execounting.data.EventState;
-import tap.execounting.data.selectmodels.FacilitySelectModel;
+import tap.execounting.models.selectmodels.FacilitySelectModel;
 import tap.execounting.entities.Client;
 import tap.execounting.entities.Comment;
 import tap.execounting.entities.Contract;

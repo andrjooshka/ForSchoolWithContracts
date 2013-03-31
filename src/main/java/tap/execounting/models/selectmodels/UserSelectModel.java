@@ -1,10 +1,9 @@
-package tap.execounting.data.selectmodels;
+package tap.execounting.models.selectmodels;
 
 import org.apache.tapestry5.OptionGroupModel;
 import org.apache.tapestry5.OptionModel;
 import org.apache.tapestry5.internal.OptionModelImpl;
 import org.apache.tapestry5.util.AbstractSelectModel;
-import tap.execounting.entities.Teacher;
 import tap.execounting.entities.User;
 
 import java.util.ArrayList;

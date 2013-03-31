@@ -15,6 +15,7 @@ import tap.execounting.dal.HibernateModule;
 import tap.execounting.dal.mediators.MediatorModule;
 import tap.execounting.encoders.UserEncoder;
 import tap.execounting.entities.User;
+import tap.execounting.models.beanmodels.ClientModels;
 import tap.execounting.security.AuthenticationFilter;
 import tap.execounting.security.AuthorizationDispatcher;
 import tap.execounting.security.DispatcherOne;
@@ -33,6 +34,7 @@ public class AppModule {
 		binder.bind(SuperCalendar.class, RusCalendar.class);
 		binder.bind(BroadcastingService.class);
 		binder.bind(AuthorizationDispatcher.class, DispatcherOne.class);
+        binder.bind(ClientModels.class);
 	}
 
     public static void contributeApplicationDefaults(

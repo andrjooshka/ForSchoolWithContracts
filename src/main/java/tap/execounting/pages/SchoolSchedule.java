@@ -18,7 +18,7 @@ import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 
 import tap.execounting.components.editors.AddEvent;
 import tap.execounting.dal.CRUDServiceDAO;
-import tap.execounting.data.selectmodels.FacilitySelectModel;
+import tap.execounting.models.selectmodels.FacilitySelectModel;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Room;

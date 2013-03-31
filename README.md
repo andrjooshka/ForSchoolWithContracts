@@ -27,6 +27,13 @@ At the core of the app are the list of entities:
  Teacher -- represents man who conducts Events with Clients
  Client -- represents a man who conducts
 
-To see the demo:
- All you need to do -- is to import DemoData to your MySQL server, and build gradle script.
- The app is configured to access mysql as root identified by 123258789.
+**The demo:**
+
+To see it in action, after you have downloaded the package, you need to do three things:
+ 1. Import DemoData to your MySQL server.
+  * Note that the app is configured to access mysql service on 3306, as root identified by 123258789. This could be modified at "src/main/resources/hibernate.cfg.xml"
+ 2. Build Gradle script (please be familiar with Gradle).
+  * just type "gradle jettyRun" in the root folder of the app
+ 3. Open localhost:8080/bureau in the browser, login as root identified by "password".
+
+Give me feedbacks.

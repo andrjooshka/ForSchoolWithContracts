@@ -191,6 +191,7 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
         // That means that he did not have contracts in that period at all
         if (countBeforeDate2 < 1)
             return false;
+
         contractMed.retainByDates(null, lowerBound);
         int countBeforeDate1 = contractMed.countGroupSize();
         // If he already has contracts before date1 -- he already tried

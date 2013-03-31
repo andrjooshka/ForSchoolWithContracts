@@ -11,18 +11,16 @@ import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
-import org.hibernate.Session;
 
 import tap.execounting.dal.CRUDServiceDAO;
 import tap.execounting.dal.mediators.interfaces.EventMed;
-import tap.execounting.data.selectmodels.FacilitySelectModel;
-import tap.execounting.data.selectmodels.RoomSelectModel;
-import tap.execounting.data.selectmodels.TeacherSelectModel;
-import tap.execounting.data.selectmodels.TypeTitleSelectModel;
+import tap.execounting.models.selectmodels.FacilitySelectModel;
+import tap.execounting.models.selectmodels.RoomSelectModel;
+import tap.execounting.models.selectmodels.TeacherSelectModel;
+import tap.execounting.models.selectmodels.TypeTitleSelectModel;
 import tap.execounting.entities.Event;
 import tap.execounting.entities.Facility;
 import tap.execounting.entities.Teacher;
-import tap.execounting.util.DateUtil;
 
 import static tap.execounting.util.DateUtil.*;
 
