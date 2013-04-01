@@ -731,14 +731,6 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
         return count;
     }
 
-    public Integer countCompleteLessonsMoney() {
-        return unit.getCompleteLessonsCost();
-    }
-
-    public Integer countMoneyPaid() {
-        return unit.getMoneyPaid();
-    }
-
     // Sorting
     public ContractMed sortByDate(boolean ascending) {
         DateUtil.sort(getGroup(), !ascending);
@@ -761,5 +753,22 @@ public class ContractMediator extends ProtoMediator<Contract> implements Contrac
             if (c.isTrial())
                 sum++;
         return sum;
+    }
+
+    public ContractMed filterByContractType(int contractTypeCode) {
+        List<Contract> cache = this.cache;
+        for(int i = cache.size();--i>=0;)
+            if(cache.get(i).getContractTypeId() == contractTypeCode)
+                cache.remove(i);
+        return this;
+    }
+
+    public ContractMed retainFirstByDate() {
+        sortByDate(true);
+
+        for(int i = cache.size();--i>=1;)
+            cache.remove(i);
+
+        return this;
     }
 }

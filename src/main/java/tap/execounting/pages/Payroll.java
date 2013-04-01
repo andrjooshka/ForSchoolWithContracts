@@ -18,12 +18,7 @@ import tap.execounting.dal.mediators.interfaces.EventMed;
 import tap.execounting.dal.mediators.interfaces.TeacherMed;
 import tap.execounting.data.Const;
 import tap.execounting.data.EventState;
-import tap.execounting.entities.Contract;
-import tap.execounting.entities.ContractType;
-import tap.execounting.entities.Event;
-import tap.execounting.entities.EventType;
-import tap.execounting.entities.EventTypeAddition;
-import tap.execounting.entities.TeacherAddition;
+import tap.execounting.entities.*;
 import tap.execounting.services.Authenticator;
 import tap.execounting.util.DateUtil;
 
@@ -54,7 +49,6 @@ public class Payroll {
     private ContractMed cM;
     @Inject
     private Authenticator auth;
-
     private TeacherAddition addition;
     @Property
     private Date dateOne;
@@ -71,6 +65,12 @@ public class Payroll {
     private int trialMoney;
     private int specialMoney;
     private int freeFromSchoolMoney;
+    // From 28.11.12 -- this method actually also caches the contracts if
+    // cacheMode==true.
+    // StandartContracts makes cachemode true, FreeFromSchoolContracts
+    // makes cachemode==false.
+    private boolean cacheMode;
+    private List<Contract> cache = null;
 
     void onActivate(int teacherId) {
         onActivate(teacherId, null, null, filtration);
@@ -200,13 +200,6 @@ public class Payroll {
             return Const.NO_DATA;
         }
     }
-
-    // From 28.11.12 -- this method actually also caches the contracts if
-    // cacheMode==true.
-    // StandartContracts makes cachemode true, FreeFromSchoolContracts
-    // makes cachemode==false.
-    private boolean cacheMode;
-    private List<Contract> cache = null;
 
     public List<Contract> getContracts() {
         if (cacheMode && cache != null)

@@ -98,7 +98,7 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
     public ClientMed retainByManagerId(int managerId) {
         if (cacheIsNull())
             loadByManagerId(managerId);
-        else for (int i = cache.size() - 1; i >= 0; i--)
+        else for (int i = cache.size(); --i >= 0;)
             if (cache.get(i).getManagerId() != managerId)
                 cache.remove(i);
         return this;
@@ -157,7 +157,7 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
 
     public ClientMed becameContinuers(Date date1, Date date2) {
         List<Client> list = getGroup();
-        for (int i = list.size() - 1; i >= 0; i--) {
+        for (int i = list.size(); --i >= 0;) {
             setUnit(list.get(i));
             if (!becameContinuer(date1, date2))
                 list.remove(i);
@@ -167,7 +167,7 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
 
     public ClientMed becameNovices(Date date1, Date date2) {
         List<Client> list = getGroup();
-        for (int i = list.size() - 1; i >= 0; i--) {
+        for (int i = list.size(); --i >= 0;) {
             setUnit(list.get(i));
             if (!becameNovice(date1, date2))
                 list.remove(i);
@@ -177,7 +177,7 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
 
     public ClientMed becameTrials(Date date1, Date date2) {
         List<Client> list = getGroup();
-        for (int i = list.size() - 1; i >= 0; i--) {
+        for (int i = list.size(); --i >= 0;) {
             setUnit(list.get(i));
             if (!becameTrial(date1, date2))
                 list.remove(i);
@@ -185,88 +185,96 @@ public class ClientMediator extends ProtoMediator<Client> implements ClientMed {
         return this;
     }
 
+    // Charlie did not became trial if he has trial contracts before lower bound.
     public boolean becameTrial(Date lowerBound, Date upperBound) {
-        contractMed.setGroup(getContracts()).retainByDates(null, upperBound);
+        if(lowerBound.after(upperBound)) throw new IllegalArgumentException("Lower bound date should be before upper bound date");
+        List<Contract> cache = new ArrayList<>(getContracts());
+
+        contractMed.setGroup(new ArrayList<>(cache)).retainByDates(null, upperBound);
         int countBeforeDate2 = contractMed.countTrial();
         // That means that he did not have contracts in that period at all
-        if (countBeforeDate2 < 1)
+        if (countBeforeDate2 == 0)
             return false;
 
-        contractMed.retainByDates(null, lowerBound);
-        int countBeforeDate1 = contractMed.countGroupSize();
+        // TODO ask Ivan, should we count trial in previous periods
+        contractMed.setGroup(new ArrayList<Contract>()).retainByDates(null, lowerBound);
+        int countBeforeDate1 = contractMed.countTrial();
         // If he already has contracts before date1 -- he already tried
         // something
-        if (countBeforeDate1 > 0)
+        if (countBeforeDate1 == countBeforeDate2)
             return false;
         int notTrial = contractMed.countNotTrial();
         // If he has more contracts in that period, than he have usual, nontrial
         // contracts
         // That means he have trial contracts here
-        if (countBeforeDate2 > notTrial)
+        if (countBeforeDate2 > notTrial){
+
+            // Filter contracts, to retain only relevant
+            contractMed.setGroup(getContracts()).retainByDates(lowerBound, upperBound).retainByContractType(ContractType.Trial);
+
             return true;
+        }
         return false;
     }
 
     /**
-     * @param date1
-     * @param date2
+     * @param lowerBound
+     * @param upperBound
      * @return true if client (unit) became novice between this two dates
      */
-    public boolean becameNovice(Date date1, Date date2) {
-        contractMed.setGroup(getContracts()).retainByDates(null, date2);
-        int countBeforeDate2 = contractMed.countNotTrial();
-        if (countBeforeDate2 != 1) // he is not novice at all
+    public boolean becameNovice(Date lowerBound, Date upperBound) {
+        List<Contract> cache = getContracts();
+
+        int countBeforeDate2 = contractMed.setGroup(new ArrayList<>(cache)).retainByDates(null, upperBound).countNotTrial();
+        int countBeforeDate1 = contractMed.setGroup(new ArrayList<>(cache)).retainByDates(null, lowerBound).countNotTrial();
+
+        if (countBeforeDate1 > 0) // he is not novice at all
             return false;
-        contractMed.retainByDates(null, date1);
-        int countBeforeDate1 = contractMed.countNotTrial();
-        // If he was a novice before date1 -- he is not interesting for us
-        if (countBeforeDate1 > 0)
+        // else he became novice after lowerBound. But was it before upperBound?
+        if(countBeforeDate2 == 0)
             return false;
+
+        // If we are here, then client became novice between lowerBound and upperBound
+        contractMed.setGroup(cache).retainByDates(lowerBound, upperBound).filterByContractType(ContractType.Trial).retainFirstByDate();
+
         return true;
     }
 
     /**
-     * @param date1
-     * @param date2
+     * @param lowerBound
+     * @param upperBound
      * @return true if client (unit) have acquired continuer status between this
      *         two dates
      */
-    public boolean becameContinuer(Date date1, Date date2) {
-        // We need to say if client have acquired this state
-        // between this dates
+    public boolean becameContinuer(Date lowerBound, Date upperBound) {
+        // We need to say if client have acquired / maintained continuer state in given period
         // This means -- we are not interested in those who acquired this state
         // no before nor after.
-        // First try could be to get all his contracts before date2 and see if
+        // First try could be to get all his contracts before upperBound and see if
         // he has continuer state.
-        // Then we could remove contract after date1 and see if state changed
+        // Then we could remove contract after lowerBound and see if state changed
         // If so -- return true
         // Else return false;
 
+        List<Contract> cache = getContracts();
+
         // So -- take contracts before the second date
-        contractMed.setGroup(getContracts()).retainByDates(null, date2);
-        List<Contract> list = contractMed.getGroup();
-        int countBeforeDate2 = 0;
-        for (int i = 0; i < list.size(); i++)
-            if (list.get(i).notTrial())
-                countBeforeDate2++;
+        int countBeforeDate2 = contractMed.setGroup(new ArrayList<>(cache)).retainByDates(null, upperBound).countNotTrial();
         // If count < 2 -- he is not continuer at all. If count >= 2 -- he is a
         // continuer
         if (countBeforeDate2 < 2)
             return false;
         // OK -- he is a continuer.
         // Lets look if he was a continuer already
-        // Take only those contracts before the date1
-        contractMed.retainByDates(null, date1);
-        list = contractMed.getGroup();
-        int countBeforeDate1 = 0;
-        for (int i = 0; i < list.size(); i++)
-            if (list.get(i).notTrial())
-                countBeforeDate1++;
+        // Take only those contracts before the lowerBound
+        int countBeforeDate1 = contractMed.setGroup(new ArrayList<>(cache)).retainByDates(null, lowerBound).countNotTrial();
+
         // That means -- he already was a continuer, before this date
         if (countBeforeDate1 == countBeforeDate2)
             return false;
-        if (countBeforeDate1 > countBeforeDate2)
-            System.out.println("DAFUQ");
+
+        contractMed.setGroup(cache).retainByDates(lowerBound, upperBound).filterByContractType(ContractType.Trial);
+
         return true;
     }
 

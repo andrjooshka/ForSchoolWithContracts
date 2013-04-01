@@ -97,9 +97,23 @@ class ClientMedSpec extends Specification {
         folks = med.group
 
         then: 'there will be only those who have FIRST STANDARD contract in that ' +
-                'period. Those are: Scott and Mike. Scott and Mike '
-        ['Scott', 'Mike'].containsAll folks.collect {it.name}
-        folks.size().equals two
+                'period. Those are: Scott, Mike and Meg. They also will have only' +
+                'one contract.'
+        ['Scott', 'Mike', 'Meg'].containsAll folks.collect {it.name}
+        folks.size().equals three
+        folks.every { fella -> fella.contracts[first].isBetweenDates lowerBound, upperBound }
+        folks.every { fella -> fella.contracts[first].contractTypeId.equals Standard }
+        folks.every { fella -> fella.contracts.size().equals one }
+
+        when: 'user want to see only those clients who became novices from 50 to 10 days ago'
+        med.setGroup genTrialsNovicesContinuers()
+        lowerBound = fromNowPlusDays(-50, floor)
+        med.becameNovices lowerBound, upperBound
+        folks = med.group
+
+        then: 'we will have also the Mick'
+        ['Scott', 'Mike', 'Meg', 'Mick'].containsAll folks.collect {it.name}
+        folks.size().equals four
         folks.every { fella -> fella.contracts[first].isBetweenDates lowerBound, upperBound }
         folks.every { fella -> fella.contracts[first].contractTypeId.equals Standard }
         folks.every { fella -> fella.contracts.size().equals one }
@@ -109,15 +123,15 @@ class ClientMedSpec extends Specification {
         med.setGroup genTrialsNovicesContinuers()
 
         when: 'user want to see those who became continuers from 40 to 10 days ago'
-        lowerBound = fromNowPlusDays 40, floor
-        upperBound = fromNowPlusDays 10, ceil
+        lowerBound = fromNowPlusDays(-40, floor)
+        upperBound = fromNowPlusDays(-10, ceil)
         med.becameContinuers lowerBound, upperBound
         folks = med.group
 
         then: 'he will see Meg and Mick. They will have only SECOND and following ' +
                 'standard contracts, which also will be filtered by period of 40  ' +
                 'to 10 days ago.'
-        folks.collect {it.name} .containsAll(['Meg','Mick'])
+        ['Meg','Mick'].containsAll folks.collect {it.name}
         folks.size().equals two
         folks.every { man ->
             man.contracts.every { contract ->
@@ -138,7 +152,7 @@ class ClientMedSpec extends Specification {
     }
 
     def 'client state is computed correctly'() {
-        med = new ClientMediator(dao: this.dao, contractMed: new ContractMediator())
+        med = new ClientMediator(contractMed: new ContractMediator())
         when: "client has zero contracts"
         med.unit = genClient(0,0)
         then: "client is inactive"

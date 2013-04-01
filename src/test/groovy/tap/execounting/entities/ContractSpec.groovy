@@ -27,7 +27,7 @@ class ContractSpec extends Specification {
         when: "date of freeze and unfreeze are null"
         con = new Contract()
         then: "contract is not frozen"
-        con.frozen
+        !con.frozen
 
         when: "date of freeze and unfreeze are set up and now is between them"
         con = new Contract(
@@ -67,7 +67,7 @@ class ContractSpec extends Specification {
         contract = genContract(10,10)
         contract.canceled = true
         then: "contract is canceled"
-        contract.equals canceled
+        contract.state.equals canceled
 
         when: "contract is not completed and canceled"
         contract = genContract()

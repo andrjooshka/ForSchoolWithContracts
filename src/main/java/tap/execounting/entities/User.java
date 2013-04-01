@@ -142,12 +142,12 @@ public class User {
     }
 
     public boolean isAdmin(){
-        return group.equals(User.ADMIN);
+        return group.equals(ADMIN);
     }
     public boolean isManager(){
-        return group.equals(User.MANAGER);
+        return group.equals(MANAGER);
     }
     public boolean isTop(){
-        return group.equals(User.TOP);
+        return group.equals(TOP);
     }
 }

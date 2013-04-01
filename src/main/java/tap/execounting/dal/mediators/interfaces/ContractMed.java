@@ -147,4 +147,8 @@ public interface ContractMed {
     public List<ContractType> loadContractTypes();
 
     public int countTrial();
+
+    public ContractMed filterByContractType(int contractTypeCode);
+
+    public ContractMed retainFirstByDate();
 }

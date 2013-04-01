@@ -1,8 +1,7 @@
 package tap.execounting
 
 import geb.spock.GebSpec
-import org.openqa.selenium.firefox.FirefoxDriver
-import spock.lang.Ignore
+
 import tap.execounting.gebpages.ClientPage
 import tap.execounting.gebpages.Clients
 import tap.execounting.gebpages.Home
@@ -15,135 +14,134 @@ import tap.execounting.gebpages.TeacherPage
 import tap.execounting.gebpages.Teachers
 
 class IntegrationTest extends GebSpec{
-    def "simple navigation using links"(){
-        when: "user goes to signin page"
+    def 'simple navigation using links'(){
+        when: 'user goes to signin page'
         to Signin
-        then: "page loaded and everything is fine"
+        then: 'page loaded and everything is fine'
         at Signin
 
-        when: "user signs in"
-        username << 'ivan'
-        password << 'DraGmar91'
+        when: 'user signs in'
+        username << 'root'
+        password << 'password'
         loginButton.click()
-        then: "user is on the Home page"
+        then: 'user is on the Home page'
         at Home
 
-        when: "user goes to teachers"
+        when: 'user goes to teachers'
         to Teachers
-        then: "he is at teachers"
+        then: 'he is at teachers'
         at Teachers
 
-        when: "user goes to the page of specific teacher"
+        when: 'user goes to the page of specific teacher'
         to TeacherPage
-        then: "it loads"
+        then: 'it loads'
         at TeacherPage
 
-        when: "user tries to access payroll"
+        when: 'user tries to access payroll'
         to Payroll
-        then: "it loads"
+        then: 'it loads'
         at Payroll
 
-        when: "user loads reports"
+        when: 'user loads reports'
         to Reports
-        then: "they're loaded"
+        then: 'they"re loaded'
         at Reports
 
-        when: "user goes to the clients page"
+        when: 'user goes to the clients page'
         to Clients
-        then: "it is loaded"
+        then: 'it is loaded'
         at Clients
 
         when: 'user goes to the page of specific client'
         to ClientPage
-        then: "it loads"
+        then: 'it loads'
         at ClientPage
 
-        when: "user goes to statistics"
+        when: 'user goes to statistics'
         to Statistics
-        then: "it loads"
+        then: 'it loads'
         at Statistics
 
-        when: "user goes to settings"
+        when: 'user goes to settings'
         to Settings
-        then: "it loads"
+        then: 'it loads'
         at Settings
     }
 
-    @Ignore
-    def "every page is accessible and navigation is ok"() {
-        when: "user goes to signin page"
+    def 'every page is accessible and navigation is ok'() {
+        when: 'user goes to signin page'
         to Signin
-        then: "page loaded and everything is fine"
+        then: 'page loaded and everything is fine'
         at Signin
 
-        when: "user signs in"
-        username << 'ivan'
-        password << 'DraGmar91'
+        when: 'user signs in'
+        username << 'root'
+        password << 'password'
         loginButton.click()
-        then: "user is on the Home page"
+        then: 'user is on the Home page'
         at Home
 
-        when: "user goes to the 'Teachers' page via navigation bar button"
+        when: 'user goes to the 'Teachers' page via navigation bar button'
         nav.navTeachers.click()
-        then: "he is on 'Teachers' page"
+        then: 'he is on 'Teachers' page'
         at Teachers
 
-        when: "user goes to Clients page"
+        when: 'user goes to Clients page'
         nav.navClients.click()
-        then: "it opens like a boss"
+        then: 'it opens like a boss'
         at Clients
 
-        when: "user clicks on reports button"
+        when: 'user clicks on reports button'
         nav.navReports.click()
-        report "Reports at ${new Date().format("dd.MM.YY")}"
-        then: "he is on reports page"
+        report "Reports at ${new Date().format('dd.MM.YY')}"
+        then: 'he is on reports page'
         at Reports
     }
 
-    def "every teacher page is accessible"(){
-        when: "user goes to signin page"
+    def 'every teacher page is accessible'(){
+        when: 'user goes to signin page'
         to Signin
-        then: "page loaded and everything is fine"
+        then: 'page loaded and everything is fine'
         at Signin
 
-        when: "user signs in"
-        username << 'ivan'
-        password << 'DraGmar91'
+        when: 'user signs in'
+        username << 'root'
+        password << 'password'
         loginButton.click()
-        then: "user is on the Home page"
+        then: 'user is on the Home page'
         at Home
 
-        when: "user goes to the 'Teachers' page via navigation bar button"
+        when: 'user goes to the 'Teachers' page via navigation bar button'
         nav.navTeachers.click()
-        then: "he is on 'Teachers' page"
+        then: 'he is on 'Teachers' page'
         at Teachers
 
         (teacherLinks.size()/5).times { i ->
             to Teachers
-            when: "user clicks on some link"
+            when: 'user clicks on some link'
             teacherLinks[i*4].click()
-            then: "it loads"
+            then: 'it loads'
             at TeacherPage
 
-            when: "user tries to access the payroll"
+            when: 'user tries to access the payroll'
             payrollDateOne.clear()
             payrollDateOne << '01.01.2013'
             payrollDateTwo.clear()
             payrollDateTwo << '30.03.2013'
             payrollSubmit.click()
-            then: "he will get it"
+            then: 'he will get it'
             at Payroll
         }
     }
 
-    def "statistics page could be clicked and updated"(){
+    def 'statistics page could be clicked and updated'(){
         to Signin
-        username << 'ivan'
-        password << 'DraGmar91'
+        username << 'root'
+        password << 'password'
         loginButton.click()
         to Statistics
 
-        when: "user on statistics page"
+        when: 'user on statistics page'
         dateField1 << '01.01.2013'
         dateField2 << '30.03.2013'
         submit.click()
