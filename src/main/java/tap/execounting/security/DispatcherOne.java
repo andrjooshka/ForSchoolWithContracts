@@ -44,6 +44,7 @@ public class DispatcherOne implements AuthorizationDispatcher {
 			permissionMatrix[Entities.PAYMENT] = new byte[] { 1, 1, 1, 0 };
 			permissionMatrix[Entities.TEACHER] = new byte[] { 0, 1, 1, 0 };
 			permissionMatrix[Entities.FACILITY] = new byte[] { 1, 1, 1, 0 };
+            permissionMatrix[Entities.USER] = new byte[] { 0, 0, 0, 0 };
 			return permissionMatrix[row][column] == 1;
 		} else
 			throw new IllegalArgumentException("Group " + group
@@ -165,4 +166,20 @@ public class DispatcherOne implements AuthorizationDispatcher {
 	public boolean canDeleteClients() {
 		return getPermission(loggedUser(), Client.class, Operation.delete);
 	}
+
+    // USER
+    // update
+    public boolean canEditUsers() {
+        return getPermission(loggedUser(), User.class, Operation.update);
+    }
+
+    // create
+    public boolean canCreateUsers() {
+        return getPermission(loggedUser(), User.class, Operation.create);
+    }
+
+    // delete
+    public boolean canDeleteUsers() {
+        return getPermission(loggedUser(), User.class, Operation.delete);
+    }
 }

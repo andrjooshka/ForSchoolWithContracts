@@ -29,6 +29,9 @@
 	        <t:if test="selectedTab.equals('Школы')">
 	        	<t:grids.facilitygrid/>
 	        </t:if>
+	        <t:if test="selectedTab.equals('Пользователи')">
+	        	<t:grids.usergrid/>
+	        </t:if>
         </div>
 
 </html>

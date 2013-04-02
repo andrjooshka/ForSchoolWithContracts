@@ -51,4 +51,10 @@ public interface AuthorizationDispatcher {
 	public boolean canDeleteClients();
 
 	public boolean canCreateContracts();
+
+    public boolean canEditUsers();
+
+    public boolean canCreateUsers();
+
+    public boolean canDeleteUsers();
 }

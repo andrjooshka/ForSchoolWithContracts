@@ -20,15 +20,14 @@ public class CRUD {
 
 	public String[] getTabs() {
 		return new String[] { "Клиенты", "Учителя", "Занятия", "Предметы",
-				"Школы" };
+				"Школы", "Пользователи" };
 	}
-
 	void onSwitchTab(String tab) {
 		selectedTab = tab;
 	}
 
 	public String getLast() {
-		if (tab.equals("Школы"))
+		if (tab.equals("Пользователи"))
 			return "last";
 		return "";
 	}
