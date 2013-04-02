@@ -1,0 +1,39 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_3.xsd" xmlns:p="tapestry:parameter">
+	<t:if test="updatemode">
+		Пользователь ${user.username} : Редактирование
+		<p:else>
+			Новый пользователь
+		</p:else>
+	</t:if>
+	<div>
+	    <t:zone t:id="formaZone">
+            <t:beaneditform t:id="form" zone="^" object="user" exclude="id, password" add="newPassword" submitlabel="message:submit-label">
+                <p:username>
+                    <t:unless test="updateMode">
+                        <div class="t-beaneditor-row">
+                            <label t:type="label" for="username" />
+                            <input t:type="textfield" t:id="username" value="user.username"
+                                validate="username" />
+                        </div>
+                    </t:unless>
+                </p:username>
+                <p:group>
+                    <t:label for="group" />
+                    <t:select t:id="group" model="literal:top,admin,manager" value="user.group" />
+                </p:group>
+                <p:newPassword>
+                    <div class="t-beaneditor-row">
+                        <t:unless test="authenticatedUser">
+                            <label t:type="label" for="newPassword" />
+                            <input t:type="textfield" t:id="newPassword"
+                                validate="newpassword" />
+                            <p:else>
+                                ${message:password-change-not-allowed-here}
+                            </p:else>
+                        </t:unless>
+                    </div>
+                </p:newPassword>
+            </t:beaneditform>
+        </t:zone>
+	</div>
+</t:container>

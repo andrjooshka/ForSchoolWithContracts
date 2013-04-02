@@ -71,5 +71,6 @@ public class AppModule {
 			MappedConfiguration<String, String> configuration) {
 		configuration.add("username", "required, minlength=4, maxlength=15");
 		configuration.add("password", "required, minlength=8, maxlength=12");
+        configuration.add("newpassword", "minlength=8, maxlength=12");
 	}
 }

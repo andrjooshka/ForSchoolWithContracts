@@ -46,7 +46,7 @@ public class Settings {
 		User user = authenticator.getLoggedUser();
 		authenticator.logout();
 
-		user.setPassword(password);
+		user.setPassword(User.generatePasswordHash(password));
 
 		dao.update(user);
 

@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.Email;
 
@@ -19,6 +20,7 @@ import org.hibernate.validator.constraints.Email;
 @NamedQueries({
 		@NamedQuery(name = User.ALL, query = "from User"),
 		@NamedQuery(name = User.BY_USERNAME_OR_EMAIL, query = "Select u from User u where u.username = :username or u.email = :email"),
+        @NamedQuery(name = User.BY_USERNAME, query = "Select u from User u where u.username = :username"),
 		@NamedQuery(name = User.BY_CREDENTIALS, query = "Select u from User u where u.username = :username and u.password = :password"),
 		@NamedQuery(name = User.BY_ID, query = "from User where id=:userId"),
         @NamedQuery(name = User.BY_FULLNAME, query = "from User where fullname=:fullname")})
@@ -27,6 +29,7 @@ public class User {
 
 	public static final String ALL = "User.all";
 	public static final String BY_USERNAME_OR_EMAIL = "User.byUserNameOrEmail";
+    public static final String BY_USERNAME = "User.byUserName";
 	public static final String BY_CREDENTIALS = "User.byCredentials";
     public static final String BY_FULLNAME = "User.byFullname";
     public static final String BY_ID = "User.byId";
@@ -127,6 +130,10 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+    public static String generatePasswordHash(String password) {
+        return DigestUtils.md5Hex(password);
+    }
 
 	public String getGroup() {
 		return group;

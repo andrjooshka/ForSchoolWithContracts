@@ -22,7 +22,7 @@ public class BasicAuthenticator implements Authenticator {
 
 	public void login(String username, String password)
 			throws AuthenticationException {
-		password = DigestUtils.md5Hex(password);
+		password = User.generatePasswordHash(password);
 		User user = crudService.findUniqueWithNamedQuery(
 				User.BY_CREDENTIALS,
 				ChainMap.w("username", username)

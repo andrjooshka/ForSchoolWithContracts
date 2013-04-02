@@ -110,3 +110,7 @@ task webStop << {
 }
 
 test.dependsOn webStart
+
+tasks.withType(Compile) {
+    options.encoding = 'UTF-8'
+}
