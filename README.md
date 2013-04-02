@@ -36,4 +36,10 @@ To see it in action, after you have downloaded the package, you need to do three
   * just type "gradle jettyRun" in the root folder of the app
  3. Open localhost:8080/bureau in the browser, login as root identified by "password".
 
+Prerequisites:
+ 1. MySQL is server is up and running on 3306.
+ 2. JRE 7 or higher is installed and JAVA_HOME is set up.
+ 3. Gradle is installed, and GRADLE_HOME is set up.
+ 4. java and gradle binaries are in the system PATH variable.
+
 Give me feedbacks.
